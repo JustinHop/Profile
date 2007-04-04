@@ -1,0 +1,365 @@
+################################
+# Mah Functions
+################################
+# include version 1.8.4
+
+# Helps formatt file names for files from common
+# non-posix operating systems, not that we can't 
+# handle these chars in a filename....
+# its just really stupid to do so
+
+
+
+no_brack() {       # removes stuff in brackets 1.8.4
+	for i in $* ; do
+	   NEWNAME="$i"
+	   while echo $NEWNAME | grep -q '\[' ; do
+	      if echo $i | cut -d'[' -f2-100 | grep -q '\]' ; then
+	         NEWNAME=`echo $NEWNAME | cut -d'[' -f1``echo $NEWNAME | cut -d']' -f2-100`
+	      fi
+	   done
+	   echo $NEWNAME
+	done
+}
+
+no_par(){         # removes stuff in parenthesis 1.8.4
+for i in $* ; do
+   NEWNAME="$i"
+   while echo $NEWNAME | grep -q '(' ; do
+      if echo $i | cut -d'(' -f2-100 | grep -q ')' ; then
+         NEWNAME=`echo $NEWNAME | cut -d'(' -f1``echo $NEWNAME | cut -d')' -f2-100`
+      fi
+   done
+   echo $NEWNAME
+done
+}
+
+forname() {
+
+   setopt extended_glob
+
+   for qqqZZZ in $@; do
+#     local newname;
+      newname=`echo ${qqqZZZ:l:s/mpeg/mpg/:gs/' '/'_'/:gs/@/AT/} | tr -s ._- | tr -d '!#?
+,'`
+      if [[ `echo ${newname:r}| wc -m` -ge 30 ]]; then
+         echo "${${newname}:r}.${newname:e}"
+      else
+         echo $newname
+      fi
+   done
+}
+
+# me lazy 1.5.6.1
+FORNAME(){
+   for qqqZZ in $@; do
+      if [[ ! -f `forname $qqqZZ` ]]; then
+         echo "Moving $qqqZZ to `forname $qqqZZ`"
+         mv $qqqZZ `forname $qqqZZ`
+      else
+         echo "Cant move $qqqZZ: `forname $qqqZZ` exists"
+      fi
+   done
+}
+      
+# Automatic zsh file updating :-) 1.5.7.0
+zshup(){
+   if [[ $HOSTNAME = ios ]]; then
+      echo "DO NOT RUN ON IOS!!!!"
+      return 1
+   else
+      echo `grep 'export ZSHRC_VERSION=' $ZTCDIR/zshrc | \
+         head -n 1 | awk '{ print $2 }' | tr -d '"'`
+      setopt LOCAL_OPTIONS
+
+      ADDR=`host root-squash.ath.cx | awk '{ print $4 }'`
+      ZTMPD="/tmp/.zshupdate"
+   
+      DOMAIN=`domainname`
+
+      if [[ $DOMAIN = '525sports.com' ]]; then
+         HST="ios:8080"
+      else
+         HST="root-squash.ath.cx"
+      fi
+   
+      if [[ $ADDR = "found:" ]]; then
+         echo "Can not reach host"
+         return 1;
+      fi
+   
+      rm -rf $ZTMPD
+      mkdir $ZTMPD
+   
+      wget -q http://$HST/zsh/list -O /tmp/.zshupdate/list
+   
+      for i in `cat $ZTMPD/list`; do
+         wget -q http://$HST/zsh/$i -O $ZTMPD/$i
+         if [[ ! -f $ZTMPD/$i ]]; then
+            echo "$i not created"
+            return 1;
+         fi
+      done
+      
+      tar -cf /tmp/.zshbkup $ZTCDIR 2> /dev/null
+      mv $ZTMPD/* $ZTCDIR
+      echo `grep 'export ZSHRC_VERSION=' $ZTCDIR/zshrc | \
+         head -n 1 | awk '{ print $2 }' | tr -d '"'`
+   fi
+}
+
+jhelp(){
+   HLP_MSG="Justin Help: usage $0 (help topic)"
+   HLP_ONE=("zsh:\n"
+      "1: pipe stdout and stderr with |&\n"
+      "2: Glob all files not end with foo in curdir   ^*.mp3(.)\n")
+   NO_HELP="There is no help for $1"
+
+   case $1 in
+      "")
+         echo $HLP_MSG
+         ;;
+      zsh)
+         echo $HLP_ONE
+         ;;
+      *)
+         echo $NO_HELP
+         ;;
+   esac
+}  # more help to come
+        
+scmp(){ # 1.6.3.1
+   for OUT in *; do
+      for IN in *; do
+         if [[ ! "$OUT" = "$IN" ]]; then
+            cmp $OUT $IN >& $OUT-$IN.cmp &
+         fi
+      done
+   done
+}
+
+#
+# this is for echoing to the serial port (linuxcentric)
+
+2s0(){
+   sleep .1s
+   echo -n "${1}" > /dev/ttyS0
+}
+
+2s1(){
+   sleep .1s
+   echo -n "${1}" > /dev/ttyS1
+}
+
+grunt_work(){
+   if [ -n $4 ]; then
+      print "entering grunt_work dev=$1 time=$2 cap=$3 verbose=$4"
+   fi
+   print partitioning $1
+   if sfdisk -q $1 <<EOF &> /dev/null
+,,83
+;
+;
+EOF
+   ; then
+   PART=1
+   else
+      print "Could not partition $1; using entire device :-)"
+   fi
+   
+   print "Partition ${1}${PART} created"
+   if mke2fs -q ${1}${PART} ; then
+      print "Ext2 filesystem created on ${1}${PART}"
+   else 
+      print "ERROR ext2 filesystem NOT created on ${1}${PART}"
+      return 1
+   fi
+   if mount ${1}${PART} /mnt$1 ; then
+      print "Mounted ${1}${PART} on /mnt$1"
+   else
+      "ERROR mounting ${1}${PART}"
+      return 1
+   fi
+   print "Executing DISK_INTEGRITY on $1"
+   if disk_integrity /mnt$1 /l=${1:t}.log /t=$2 /f=e,l /m=0 ; then
+      print "DISK_INTEGRITY PASSED on /mnt${1}"
+   else
+      print "DISK_INTEGRITY FAILED on /mnt/${1}"
+      return 1
+   fi
+   if [[ -n $3 ]]; then
+      print "Executing DISK_CAPACITY on $1"
+      if disk_capacity /mnt$1 /f=e /b=1024 /l=${1:t}.cap.log ; then
+         print "DISK_CAPACITY PASSED on $1" 
+      else
+         print "DISK_CAPACITY FAILED on $1"
+      fi
+   fi
+   if umount /mnt${1} ; then
+      print "Unmounted /mnt${1}"
+   else
+      print "ERROR could not umount /mnt${1}"
+   fi
+
+}
+
+jio(){
+   source $ZTCDIR/include
+   JIO_VERSION=0.8
+   PATH=/dvt/bin/linux:$PATH    
+
+   local opt
+   while getopts cfhjlrst:vVz opt; do
+      case $opt in
+         (c)
+            print "Disk Capacity extended test"
+            CAP=CAP
+            ;;
+         (f)
+            print "Force mode"
+            OVERRIDE=1
+            ;;
+         (h)
+            print "$0 version $JIO_VERSION"
+            print "By Justin Hoppensteadt"
+            print "Usage: $0 [opts] [targets]"
+            print "Example: $0 -v -t 24 /dev/sd\[a,b\]"
+            print 'Options:'
+            print '-c   DISK_CAPACITY extended test'
+            print '-f   Force'
+            print '-j   Create bzip2 compressed logfiles'
+            print '-s   Accepts slop'
+            print '-t   Time in hours for DISK_INTEGRITY to run'
+            print '-v   Verbose'
+            print '-V   Prints version information'
+            print '-z   Create gzip compressed logfiles'
+
+            ;;
+         (j)
+            COMPRESS=bzip2
+            ;;
+         (l)
+            LVM=1
+            ;;
+         (r)
+            RAID=1
+            ;;
+         (s)
+            print Accepting sloppy commands.
+            SLOP=1
+            ;;
+         (t)
+            TIME=$OPTARG
+            ;;
+         (v)
+            print Verbose mode
+            VERBOSE=1
+            ;;
+         (V)
+            print $0 version $JIO_VERSION
+            print By Justin Hoppensteadt
+            return 1
+            ;;
+         (z)
+            COMPRESS=gzip
+            ;;
+      esac
+   done
+   (( OPTIND > 1 )) && shift $(( OPTIND - 1 ))
+   print Devices: $* 
+   
+   if [[ -z $TIME ]]; then
+      print You must specify a time with -t
+      return 1
+   fi
+
+   print "Welcome to $0 $JIO_VERSION by Justin Hoppensteadt"
+
+   date
+
+   [[ -n $VERBOSE ]] && print Checking device arguments  
+
+   for i in $* ; do
+      if [[ -b $i ]]; then
+         if [[ -n $VERBOSE ]]; then
+            print device $i is a block special
+         fi
+         if dd if=/dev/zero of=$i count=1 bs=512 &> /dev/null ; then
+            [[ -n $VERBOSE ]] && print Device is accessable and the partition table has been cleared
+            mkdir -p /mnt$i
+         else
+            print ERROR: device $i is not accessable/writable
+            return 1;
+         fi
+      else
+         if [[ -n $OVERRIDE ]]; then
+            print device $i is not a block special but is forced to be accepted
+         else
+            print ERROR: device $i is not a block special
+            if [[ -n $SLOP ]]; then
+               print Accepting slop on device $i
+               [[ -n $VERBOSE ]] && print `file $i`
+            else
+               return 1
+            fi
+         fi
+      fi
+   done
+
+   print All devices checked. Making filesystems and running io.
+
+   CNT=0
+   for i in $*; do
+      grunt_work $i $TIME $CAP $VERBOSE &
+      GRUNT[$CNT]=$!
+      if [ -n $VERBOSE ]; then
+         print "grunt_work $CNT forked. PID $GRUNT[$CNT]"
+      fi
+      CNT=`echo "$CNT + 1"| bc`
+   done
+
+   print "waiting..."
+
+   for i in $GRUNT ; do
+      wait $i 2&> /dev/null
+   done
+
+   print "Completed Tests"
+
+   print `cat s* | grep fail | uniq`
+
+   date
+
+
+}
+
+remod(){
+   for i in $*; do
+      rmmod $i
+   done
+   for i in $*; do
+      modprobe $i
+   done
+}
+
+recurse(){
+
+   unsetopt NOMATCH
+   setopt NO_AUTO_PARAM_SLASH
+
+
+   if ls -d -1 *(-/) 2> /dev/null ; then
+      for i in `unsetopt NOMATCH; ls -d -Q *(-/) | tr -d '/' \
+                  | sed -e 's/\ /@@@@XZM@@@@@/g' 2> /dev/null `; do
+         cd ${i:gs/@@@@XZM@@@@@/\\ /:Q}
+         emulate bash
+         zsh -c "$*"
+         recurse "$i"
+         cd ..
+         setopt LOCAL_OPTIONS
+      done
+   fi
+
+}
+
+# vim:syn=zsh:ft=zsh:
