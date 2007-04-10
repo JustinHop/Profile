@@ -61,7 +61,9 @@ caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%
 #  termcapinfo xterm 'hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
 #
 
-
+#  SSH-AGENT GOODNESS   stolen
+setenv SSH_AUTH_SOCK $HOME/.screen-ssh-agent
+screen ssh-agent -t 8h -a $SSH_AUTH_SOCK $SHELL
 
 
 #terminfo xterm 'vb=\E[?5h$<200/>\E[?5l'
