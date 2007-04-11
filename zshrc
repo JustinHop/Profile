@@ -5,7 +5,7 @@
 #                 use it, or have suggestions/patches.
 #
 #  Justin Hoppensteadt 
-#              <madscience@hotpop.com>
+#              <zshy-goodness@root-squash.ath.cx>
 #              http://root-squash.ath.cx
 #
 #                 free to all
