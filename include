@@ -1,15 +1,22 @@
 ################################
 # Mah Functions
 ################################
-# include version 1.8.4
+# include version 1.8.5
 
-# Helps formatt file names for files from common
-# non-posix operating systems, not that we can't 
-# handle these chars in a filename....
-# its just really stupid to do so
-
-
-
+make_home_dir() {   # updates your home directory to have goodness with rcfiles and whatnot
+                    # 1.8.5 
+    if [[ -f list ]]; then
+        for RCFILE in `cat list` ; do
+            if [[ -f "~/.$RCFILE" ]]; then
+                mv -v "~/.$RCFILE" "~/.$RCFILE.old"
+            fi
+            ln -sfv "`pwd`/$RCFILE" "~/.$RCFILE"
+        done
+    else
+        echo "no list :-("
+    fi
+}
+		
 no_brack() {       # removes stuff in brackets 1.8.4
 	for i in $* ; do
 	   NEWNAME="$i"
@@ -23,15 +30,15 @@ no_brack() {       # removes stuff in brackets 1.8.4
 }
 
 no_par(){         # removes stuff in parenthesis 1.8.4
-for i in $* ; do
-   NEWNAME="$i"
-   while echo $NEWNAME | grep -q '(' ; do
-      if echo $i | cut -d'(' -f2-100 | grep -q ')' ; then
-         NEWNAME=`echo $NEWNAME | cut -d'(' -f1``echo $NEWNAME | cut -d')' -f2-100`
-      fi
-   done
-   echo $NEWNAME
-done
+    for i in $* ; do
+       NEWNAME="$i"
+       while echo $NEWNAME | grep -q '(' ; do
+          if echo $i | cut -d'(' -f2-100 | grep -q ')' ; then
+             NEWNAME=`echo $NEWNAME | cut -d'(' -f1``echo $NEWNAME | cut -d')' -f2-100`
+          fi
+       done
+       echo $NEWNAME
+    done
 }
 
 forname() {
