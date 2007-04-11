@@ -10,7 +10,7 @@ make_home_dir() {   # updates your home directory to have goodness with rcfiles 
             if [[ -f "~/.$RCFILE" ]]; then
                 mv -v "~/.$RCFILE" "~/.$RCFILE.old"
             fi
-            ln -sfv "`pwd`/$RCFILE" "~/.$RCFILE"
+            ln -sfv "`pwd`/$RCFILE" ~/.$RCFILE
         done
     else
         echo "no list :-("

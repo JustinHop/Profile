@@ -1,0 +1,18 @@
+rxvt.font: Lucida Console-14 
+rxvt.boldFont: Lucida Console-14 
+rxvt.scrollBar: False 
+rxvt.visualBell: False 
+rxvt.loginShell: True 
+rxvt.background: Black 
+rxvt.foreground: Green 
+rxvt.saveLines: 3000 
+rxvt.cursorColor: Red 
+
+
+XTerm.VT100.font: -*-lucidatypewriter-medium-*-*-*-14-*-*-*-*-*-*-* 
+XTerm.VT100.boldFont: -*-lucidatypewriter-bold-*-*-*-14-*-*-*-*-*-*-* 
+XTerm.VT100.scrollBar: False 
+XTerm.VT100.visualBell: False 
+XTerm.VT100.loginShell: True 
+XTerm.VT100.background: Black 
+XTerm.VT100.foreground: Green

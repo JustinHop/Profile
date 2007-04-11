@@ -26,7 +26,7 @@ fi
 
 if [[ -n $USER ]]; then
     export LOGNAME=$USER
-    export HOME=`echo ~$USER`
+    export HOME="`echo ~$USER`"
     USERNAME=$LOGNAME
 fi
 
