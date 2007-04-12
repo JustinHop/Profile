@@ -266,11 +266,11 @@ case $TERM in
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
                     '^[[3~' '^[[4~' '^[[6~' )
         VIM_LINUX_TERM=" -c ':set t_Co=16' "
-        if `whence termck` ; then
-            if `termck screen.linux` ; then
-                STM=screen.linux
-            fi
-        fi
+#        if `whence termck` ; then
+#            if `termck screen.linux` ; then
+#                STM=screen.linux
+#            fi
+#        fi
         bindit
     ;;
     (*screen*)
@@ -593,8 +593,10 @@ if [[ $ZSH_VERSION = 4.* ]]; then
     # hostname completion!!!
     if [[ -f $HOME/.ssh/known_hosts ]]; then
         myhosts=( ${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
-        ourhosts=( ${${${${(f)"$(</etc/ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
         zstyle ':completion:*' hosts $myhosts;
+    fi
+    if [[ -f /etc/ssh/known_hosts ]]; then
+        ourhosts=( ${${${${(f)"$(</etc/ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
         zstyle ':completion:*' hosts $ourhosts;
     fi
 fi
