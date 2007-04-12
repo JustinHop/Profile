@@ -22,12 +22,17 @@ if [[ -o login ]]; then
     if [[ -r /etc/profile ]]; then
         . /etc/profile || echo "/etc/profile errored"
     fi
-    # localiazation workarounds & functions
-    for i in "$PROFILE_DIR/include" "$PROFILE_DIR/zshrc.local" "$PROFILE_DIR/zshrc.local.pre" "$HOME/.zshrc"; do
-        if [[ -f $i ]]; then
-            . $i || echo "$i failed execution."
-        fi
-    done
+fi
+
+# localiazation workarounds & functions
+for i in "$PROFILE_DIR/include" "$PROFILE_DIR/zshrc.local" "$PROFILE_DIR/zshrc.local.pre" "$HOME/.zshrc"; do
+    if [[ -f $i ]]; then
+        . $i || echo "$i failed execution."
+    fi
+done
+
+if [[ -f /etc/zsh/include ]]; then
+    source /etc/zsh/include
 fi
 
 ############################
