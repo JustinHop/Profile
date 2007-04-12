@@ -705,3 +705,4 @@ if [[ -f $PROFILE_DIR/zshrc.local.post ]]; then
     . $PROFILE_DIR/zshrc.local.post
 fi
 
+# vim:syn=zsh:ft=zsh:tw=4
