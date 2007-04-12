@@ -3,15 +3,21 @@
 " 
 "  General Operation
 
-" vimrc-1.4.991
+" vimrc-1.5
 
 set nocompatible
 set backspace=2
 set ttyfast
 
-" Backups and undos
-set backup
-set backupdir=~/.undo
+if has("unix")
+    set backup
+    set backupdir="$HOME/.undo"
+endif
+
+if has("win32")
+    set cul
+    set cuc
+endif
 
 set visualbell
 set history=1000
@@ -20,9 +26,12 @@ set history=1000
 set laststatus=2
 set sidescrolloff=1
 set linebreak
-set mouse=a
 set number
 set ruler
+
+if has("mouse")
+    set mouse=a
+endif
 
 set showmatch
 set showmode
@@ -34,8 +43,8 @@ set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=%l,%c
 "set cul
 
 if version >= 700
-"  Virtual Editing
-set virtualedit=block,onemore
+    "  Virtual Editing
+    set virtualedit=block,onemore
 endif
 
 "  Indenting Formating
@@ -54,9 +63,11 @@ set smarttab
 set tabstop=4
 
 " Folding
-set foldenable
-set foldmethod=indent
-set foldminlines=5
+if has("folding")
+    set foldenable
+    set foldmethod=indent
+    set foldminlines=5
+endif
 
 "Searching
 set ignorecase
@@ -76,9 +87,9 @@ set shortmess=a
       
 
 " Booyah
-if &t_Co || has("gui_running")
-	syntax on
-   set t_Co=256
+if &t_Co || has("gui_running") && ( $TERM != "screen.linux")
+    syntax on
+    set t_Co=256
 endif
 
 "
@@ -86,13 +97,9 @@ endif
 "     to set the colorscheme, if not do some 1/2 assed logic
 "
 if $VIM_COLOR 
-   exec ":colorscheme expand($VIM_COLOR)"
+   exec ":colorscheme $VIM_COLOR"
 else
-   if $BASETERM == "linux" || $TERM == "linux" || $TERM == "screen.linux" || $TERM == "screen-bce"
-      colorscheme darkblue
-   else	
-      colorscheme pablo
-   endif
+    colorscheme elflord
 endif
 
 "
@@ -218,7 +225,7 @@ noremap <silent> <F9> :set hlsearch!<cr>
 "  super wraping work around
 nnoremap j gj
 nnoremap k gk
-vnoremap j gj 
+vnoremap j gj
 vnoremap k gk
 nnoremap <Down> gj
 nnoremap <Up> gk
@@ -262,8 +269,8 @@ let java_minlines=50
 "   perl
 let g:Perl_AuthorName      = 'Justin Hoppensteadt'
 let g:Perl_AuthorRef       = 'JH'
-let g:Perl_Email           = 'Justin.Hoppensteadt@endinfosys.com'
-let g:Perl_Company         = 'Endeavor Information Systems, Inc.'
+let g:Perl_Email           = 'jhoppensteadt@valueclick.com'
+let g:Perl_Company         = 'Value Click, Inc.'
 
 "" insert mode : autocomplete brackets and braces
 "imap ( ()<Left>
@@ -298,4 +305,4 @@ if has("autocmd")
   autocmd BufEnter * :lcd %:p:h
 endif " has("autocmd")
 "
- 
+" vim:ft=vim:syn=vim:ts=4

@@ -12,82 +12,23 @@
 #
 #######################################
 #######################################
-#######################################
 
-export ZSHRC_VERSION="1.8.3.15"
-export HOSTNAME=`hostname`
-export UNAME=`uname`
+export ZSHRC_VERSION="1.9.9"
 
-if [[ -x `whence whoami` ]]; then
-    USER=`whoami`
-elif [[ -x `whence id` ]]; then
-    USER=`id | cut -d'(' -f2 | cut -d')' -f1`
-fi
-
-if [[ -n $USER ]]; then
-    export LOGNAME=$USER
-    export HOME="`echo ~$USER`"
-    USERNAME=$LOGNAME
-fi
-
-for i in ~/zsh ~/.zsh /etc /etc/zsh /m1/utility/toolbox/etc ; do
-   if [[ -r $i/zshrc || -r $i/.zshrc ]]; then
-      ZTCDIR="$i"
-      PATH="$PATH:$ZTCDIR/bin"
-   fi 
-done
-
-## this solves many problems
 if [[ -o login ]]; then
     if [[ ! -d ~/.undo ]]; then
         mkdir ~/.undo
     fi
     if [[ -r /etc/profile ]]; then
-        . /etc/profile
+        . /etc/profile || echo "/etc/profile errored"
     fi
     # localiazation workarounds & functions
-    for i in "$ZTCDIR/include" "$ZTCDIR/zshrc.local" "$ZTCDIR/zshrc.local.pre" "$HOME/.zshrc"; do
+    for i in "$PROFILE_DIR/include" "$PROFILE_DIR/zshrc.local" "$PROFILE_DIR/zshrc.local.pre" "$HOME/.zshrc"; do
         if [[ -f $i ]]; then
-            . $i
+            . $i || echo "$i failed execution."
         fi
     done
 fi
-
-if [[ -z $ORI_XTITLE ]]; then
-    export ORI_XTITLE="${USERNAME}@${HOSTNAME}:${UNAME}"
-fi
-
-local COMMON_PATH="$HOME/bin:$PATH:/usr/bin/wrappers:/bin:/usr/bin:/usr/local/bin"
-local ROOT_PATH="/sbin:/usr/sbin:/usr/local/sbin"
-local UNIXWARE_PATH="/usr/dt/bin:/usr/ucb:/usr/X/bin:/opt/vxvm-va/bin"
-local LIN_PATH="/usr/X11R6/bin:/usr/X11/bin"
-local SCO_PATH="/usr/gnu/bin:/usr/gnu/obin:/usr/gnu/sbin:/etc:/usr/bin/X11"
-local JAVA_PATH="/usr/java/bin"
-local KDE_PATH="/usr/kde/3.2/bin"
-local MYSQL_PATH="/usr/local/mysql/bin"
-local DISTCC_PATH="/usr/lib/distcc/bin"
-local SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
-
-typeset -U PATH
-typeset -U LD_LIBRARY_PATH
-typeset -U LD_EXEC_PATH
-typeset -U PKG_CONFIG_PATH
-
-PATH=$COMMON_PATH:$ROOT_PATH
-
-[ -d $MYSQL_PATH ] && PATH="$PATH:$MYSQL_PATH"
-[ -d $DISTCC_PATH ] && PATH="$DISTCC_PATH:$PATH"
-
-if [[ -z ${LD_LIBRARY_PATH} ]]; then
-   LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib"
-fi
-
-for PKGCFG in /usr/local/lib ; do
-   if [[ -d $PKGCFG ]]; then
-      PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$PKGCFG"
-   fi
-done
-export PKG_CONFIG_PATH;
 
 ############################
 ###  OPERATING SYSTEM DEPS
@@ -96,6 +37,7 @@ export PKG_CONFIG_PATH;
 case $UNAME in
     (UnixWare)
         typeset -a BKT
+        BKT=('<' '>' '(' ')' '{' '}')
 
         alias TAT='export TERM=AT386-ie'
         alias TSCO='export TERM=scoansi'
@@ -123,7 +65,6 @@ case $UNAME in
         export MANPATH="/usr/man:/usr/local/man:/usr/gnu/man"
         export PATH="$SCO_PATH:$PATH:$UNIXWARE_PATH"
         export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/gnu/lib"
-        BKT=('<' '>' '(' ')' '{' '}')
 
         TYCOLOR=white
     ;;
@@ -139,18 +80,19 @@ case $UNAME in
     ;;
 
     (SunOS)
-        typeset BKT
         if [[ $ZSH_VERSION = 3.* ]]; then
+            typeset BKT
             BKT='<>[]{}'
         else
-            BKT=('<' '>' '[' ']' '{' '}')
+            typeset -a BKT
+            BKT=('<' '>' '<[' ']>' '{' '}')
             export BKT
         fi
         export DISTRO=Solaris
         export DISTRO_VER=`uname -r`
         export GNU_COREUTILS=
         export PATH="$HOME/usr/local/bin:$HOME/bin:$SUN_PATH:$PATH"
-        TYCOLOR=cyan
+        TYCOLOR=yellow
 
         for i in "$HOME/toolbox" /m1/utility/toolbox ; do
             if [[ -d "$i" ]]; then
@@ -160,7 +102,7 @@ case $UNAME in
 
         if [[ -d $TBOX ]]; then
             box=$TBOX
-            ZTCDIR=$TBOX/etc
+            PROFILE_DIR=$TBOX/etc
             PATH="$TBOX/bin:$PATH"
             MANPATH="$TBOX/man:$TBOX/share/man:/usr/local/man:/usr/local/share/man:/usr/man:/usr/share/man:$MANPATH"
             if [[ -x `whence gls` ]]; then
@@ -236,11 +178,44 @@ case $UNAME in
         if [[ -n $KBD_RATE ]] && [[ -n `whence kbdrate` ]]; then
             alias k="kbdrate $KBD_RATE"
         fi
+        case $DISTRO in
+            (redhat)
+                DISTRO_VER=`cat /etc/redhat-release`
+                TYCOLOR=red
+                if [[ -d /dvt ]]; then
+                    PATH="/dvt/bin/linux:$PATH"
+                fi
+                alias srpm="rpmbuild --target i686 --rebuild"
+                alias rpm="rpm --verbose"
+
+                if [[ $TERM = "linux" ]]; then
+                    if [[ `/sbin/consoletype` = "vt" ]]; then
+                        #   unicode_start default8x9
+                    fi
+                fi
+            ;;
+
+            (slackware)
+                DISTRO_VER=`cat /etc/slackware-version`
+                # mmmmm slackware
+            ;;
+
+            (gentoo)
+                DISTRO_VER=`cat /etc/gentoo-release`
+                TYCOLOR=magenta
+                alias A="ACCEPT_KEYWORDS=\"~x86\" "
+                alias doom3="LD_PRELOAD=/usr/lib/libGL.so.1 doom3"
+                alias m1='xmodmap -e "pointer = 1 2 3 6 7 4 5"'
+                alias m2='xmodmap -e "pointer = 1 2 3 7 6 4 5"'
+                export PATH="$PATH:/usr/games/bin:/usr/lib/wine/bin"
+                export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/win/lib"
+            ;;
+        esac
     ;;
 
     (Darwin)
-        if [[ -f $ZTCDIR/dircolors ]]; then
-            export CLICOLOR=`cat $ZTCDIR/dircolors`
+        if [[ -f $PROFILE_DIR/dircolors ]]; then
+            export CLICOLOR=`cat $PROFILE_DIR/dircolors`
         fi
         alias ls="ls -F "
         BKT=( ':', ':', '<', '>', '{', '}' )
@@ -250,48 +225,11 @@ case $UNAME in
     (CYGWIN_NT-5.1)
         export DISTRO=cygwin
         export GNU_COREUTILS=1
-        BKT=( '[' ']' '<' '>' '{' '}' )
+        typeset -a BKT
+        BKT=( '[' ']' '<' '>' '({' '})' )
         export BKT
         TYCOLOR=green
         LS="/bin/ls"
-    ;;
-esac
-
-############################
-# DISTRIBUTION OR RELEASE
-############################
-
-case $DISTRO in
-    (redhat)
-        DISTRO_VER=`cat /etc/redhat-release`
-        TYCOLOR=red
-        if [[ -d /dvt ]]; then
-            PATH="/dvt/bin/linux:$PATH"
-        fi
-        alias srpm="rpmbuild --target i686 --rebuild"
-        alias rpm="rpm --verbose"
-
-        if [[ $TERM = "linux" ]]; then
-            if [[ `/sbin/consoletype` = "vt" ]]; then
-                #   unicode_start default8x9
-            fi
-        fi
-    ;;
-
-    (slackware)
-        DISTRO_VER=`cat /etc/slackware-version`
-        # mmmmm slackware
-    ;;
-
-    (gentoo)
-        DISTRO_VER=`cat /etc/gentoo-release`
-        TYCOLOR=magenta
-        alias A="ACCEPT_KEYWORDS=\"~x86\" "
-        alias doom3="LD_PRELOAD=/usr/lib/libGL.so.1 doom3"
-        alias m1='xmodmap -e "pointer = 1 2 3 6 7 4 5"'
-        alias m2='xmodmap -e "pointer = 1 2 3 7 6 4 5"'
-        export PATH="$PATH:/usr/games/bin:/usr/lib/wine/bin"
-        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/win/lib"
     ;;
 esac
 
@@ -300,22 +238,6 @@ export PATH
 ###################################
 # TERMINAL SETTINGS AND KEYBINDINGS
 ###################################
- 
-
-# looks like this is safe to run multiple times.
-# Worst case is i get bindings for keys that don't
-# even exit. 1.8.2.1
-bindit(){
-    if [[ -n $FN_CHARS[1] ]]; then
-        bindkey ${FN_CHARS[1]}  overwrite-mode       # insert
-        bindkey ${FN_CHARS[2]}  vi-beginning-of-line # home
-        bindkey ${FN_CHARS[3]}  vi-backward-word     # pg up
-        bindkey ${FN_CHARS[4]}  vi-delete-char       # delete
-        bindkey ${FN_CHARS[5]}  vi-end-of-line       # end
-        bindkey ${FN_CHARS[6]}  vi-forward-word      # pg dn
-    fi
-}
-
 case $TERM in
     # FN_CHARS=( INSERT HOME PGUP DELETE END PGDN )
     (*xterm*||dtterm||Eterm||*rxvt*)
@@ -339,7 +261,7 @@ case $TERM in
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
                     '^[[3~' '^[[4~' '^[[6~' )
         VIM_LINUX_TERM=" -c ':set t_Co=16' "
-        if `$ZTCDIR/bin/termck screen.linux` ; then
+        if `$PROFILE_DIR/bin/termck screen.linux` ; then
             STM=screen.linux
         fi
         bindit
@@ -374,7 +296,6 @@ case $TERM in
     ;;
 esac
 
-
 # reguardless - they CANT mean anything else
 bindkey '^[OH' vi-beginning-of-line             # home
 bindkey '^[OF' vi-end-of-line                   # end
@@ -390,81 +311,19 @@ bindkey '^[OF' vi-end-of-line                   # end
 #  ^P    rev search
 #  ^B    History expansion
 
-#bindkey '^W' accept-and-menu-complete
-#bindkey '^N' vi-repeat-find
-#bindkey '^P' vi-rev-repeat-find
-#bindkey '^B' expand-history
+bindkey '^W' accept-and-menu-complete
+bindkey '^N' vi-repeat-find
+bindkey '^P' vi-rev-repeat-find
+bindkey '^B' expand-history
 
 if [[ $ZSH_VERSION = 4.* ]]; then
-	#bindkey '^X' all-matches
+	bindkey '^O' all-matches
 fi
-
-###################################
-# DIRECTORY SHORTCUTS
-###################################
- 
-squash="/var/www/virtual/squash"
-switch="/var/www/virtual/switch"
-
-if [[ -d "/usr/local/apache-2.2.3/" ]]; then
-    www="/usr/local/apache-2.2.3/"
-fi
-
-adv="/usr/local/apache-2.2.3/virtual/adventures/"
-virt="/usr/local/apache-2.2.3/virtual/"
-
-tunez="/export/home/share/musica"
-lsrc="/usr/local/src"
-dzsh="/etc/zsh"
-
-m16="/m1/incoming/v6/"
-ora9="/oracle/app/oracle/product/9.2.0"
-
-##################################
-# MORE PATH JUNK
-##################################
-
-if [[ $USERNAME == "root" ]]; then PATH="$PATH:$ROOT_PATH" ; fi
-
-fpath=( $fpath "$ZTCDIR/functions" "~/zsh/functions" "~/.zsh/functions" )
-
-# update this to find most recent version
-#if [[ -d /usr/kde/*/bin ]]; then PATH="$PATH:$KDE_PATH" ; fi
-
-if [[ -z $JAVA_HOME ]]; then
-    for i in /usr/java /usr/java/j2re1.4.2_06 /usr/lib/java/bin \
-        /opt/NetBeans3.6/ /opt/NetBeans3.6a/ /opt/blackdown-jdk-1.4.1/ \
-        /opt/blackdown-jre-1.4.1/ /opt/netbeans-3.5.1/  /opt/sun-jdk-1.4.2.06/ \
-        /usr/java/j2re1.4.2_01/ ; do
-        if [[ -d $i ]]; then JAVA_HOME=${i} ; fi
-    done
-fi
-
-export JAVA_HOME
-# Re-arranged per Red Hat's recomendations
-# and fixed by me many... many times. fuck java
-export PATH=$JAVA_HOME:$JAVA_HOME/bin:$PATH
-
     
 ##################################
-# ENVIRONMENT
+# ALIAS
 ##################################
 
-export FTP_PASSIVE=1
-export MINICOM="-c on -m"
-export LESS="-isaFMXR"
-export VISUAL=vi
-export EDITOR=vi
-
-[ -n `whence less` ] && PAGER=less || PAGER=more
-export PAGER
- 
-DIRSTACKSIZE=20
-LISTMAX=1000
-REPORTTIME=10
-
-#alias eterm="Eterm -f green -b black -c red --double-buffer -proportional
-#-F lucidasanstypewriter-bold-14 -B none"
 alias Xterm='xterm +bc -cr red -j +sb -u8 +vb -bd red -bg black -fg green'
 alias flux='xinit `which startfluxbox`'
 
@@ -502,6 +361,8 @@ if [[ $GNU_COREUTILS -eq 1 ]]; then
 
     alias  l="$LS --color=always -C -F "
     alias  l.="$LS $NOR -d .* "
+    alias  ll.="$LS $NOR -dl .* "
+    alias  lh.="$LS $NOR -dsh .* "
     alias  la="$LS $NOR -A "
 
     alias  ls="$LS $NOR -B "
@@ -534,36 +395,16 @@ else
     alias sl="ls -Fr "
 fi
 
-##############################################
-# COLORFUL GNU LS
-##############################################
-if [[ -f $ZTCDIR/dircolors ]]; then
-    ZLS_COLORS=`cat $ZTCDIR/dircolors`
+if [[ -f $PROFILE_DIR/dircolors ]]; then
+    ZLS_COLORS=`cat $PROFILE_DIR/dircolors`
     export LS_COLORS=$ZLS_COLORS
 fi
 unset CDPATH
 
-#######################################
-# GREAT ALIASES
-#######################################
-
 # ViM
 if [[ -x `whence vim` ]]; then
-    if [[ -x `whence vim7` ]]; then
-        VIM7="7"
-    fi
-    if [[ -f "$ZTCDIR/vimrc" ]]; then
-        VIM="vim$VIM7 -u $ZTCDIR/vimrc"
-    else
-        VIM="vim$VIM7"
-    fi
-    if [[ -x $TBOX/bin/vim ]]; then
-        #VIM="${$VIM_TERM:-""}$TBOX/bin/vim"
-        VIM=$TBOX/bin/vim
-    fi
-    if [[ -n $TSCR ]]; then
-        VIM="$VIM$TSCR"
-    fi
+    export EDITOR=vim
+    export VISUAL=vim
     if [[ -n $VIM_COLOR ]]; then
         VIM=$VIM" -c ':colorscheme $VIM_COLOR' "
     fi
@@ -573,16 +414,6 @@ if [[ -x `whence vim` ]]; then
     alias v="$VIM"
     export EDITOR="$VIM"
 fi
-
-# check for my vim7 install
-for VIMCMD in gvim ex view ; do
-    if [[ -x `whence ${i}7` ]]; then
-        eval "alias ${i}=${i}7"
-    fi
-    if [[ -f "$ZTCDIR/gvimrc" ]]; then
-        alias gvim="gvim -u $ZTCDIR/gvimrc -u $ZTCDIR/vimrc"
-    fi
-done
 
 # pagers and cutters
 alias -g L="|less"
@@ -630,18 +461,6 @@ fi
 
 # the mighty screen
 if [[ -x `whence screen` ]]; then
-    if [[ -f "$ZTCDIR/screenrc" ]]; then
-        ZSCR="-c $ZTCDIR/screenrc"
-    else
-        if [[ -f $TBOX/*screenrc ]]; then
-            #   ZSCR=-c $TBOX/.screenrc 
-        fi
-    fi
-    if [[ -d $HOME/.screenlogs ]]; then
-        if [[ -z $NO_SCREEN_LOGS ]]; then
-            SLOGS="-L"
-        fi
-    fi
     alias screen="screen -a -s $0 -O -q $ZSCR $SLOGS $STM"
 fi
 
@@ -650,9 +469,6 @@ alias sqldba="$SQL_TERM sqlplus '/ as sysdba'"
 if [[ -x `whence gqlplus` ]]; then
     alias gqldba="gqlplus '/ as sysdba' -dc "
 fi
-
-# mplayer
-#alias mplayr='esddsp -s alien mplayer -softvol -a52drc 1 -autosync 30 -ao esd -af volnorm,volume=$MVOL -fs -vo xv -double -idx `find -type f |rl`'
 
 #######################################
 # My Options
@@ -770,7 +586,9 @@ if [[ $ZSH_VERSION = 4.* ]]; then
     # hostname completion!!!
     if [[ -f $HOME/.ssh/known_hosts ]]; then
         myhosts=( ${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
+        ourhosts=( ${${${${(f)"$(</etc/ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
         zstyle ':completion:*' hosts $myhosts;
+        zstyle ':completion:*' hosts $ourhosts;
     fi
 fi
 
@@ -793,21 +611,6 @@ if [[ $ZSH_VERSION = 3.* ]]; then
         violet=`echo -n "\033[1;35m"`
     fi
 fi
-
-# stolen from online
-show_ansi(){
-    for attr in 0 1 4 5 7 ; do
-        echo "----------------------------------------------------------------"
-        printf "ESC[%s;Foreground;Background - \n" $attr
-        for fore in 30 31 32 33 34 35 36 37; do
-            for back in 40 41 42 43 44 45 46 47; do
-                printf '\033[%s;%s;%sm %02s;%02s  ' $attr $fore $back $fore $back
-            done
-            printf '\n'
-        done
-        printf '\033[0m'
-    done
-}
 
 ###############################################
 # PROMPT MADNESS
@@ -873,161 +676,6 @@ else
     RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
 fi   
 
-###############################
-# cheap ass host based workarounds :-(
-###############################
-case $HOSTNAME in
-    alien)
-        if [[ `uname -r` = "2.6.10-rc1-8k" ]]; then
-            alias modprobe nvidia="insmod /lib/modules/2.6.10-rc1-8k/video/nvidia.ko"
-        fi
-        PATH="/usr/kde/3.3/bin:$PATH"
-        alias ines="ines -uperiod 1 -sync 60 "
-        #      alias Mplayer='mplayer -softvol -a52drc 1 -ao alsa -af volnorm,volume=-4 -vo gl2 \
-        #      -double `find | egrep \'avi||mpg||mpeg||mov||mp4||wmv\' | rl`'
-    ;;
-    tank)
-        #      alias Mplayer="esddsp -s alien mplayer -softvol -a52drc 1 -ao esd -af volnorm,volume=-4 \
-        #      \`find | egrep \'avi||mpg||mpeg||mov||mp4||wmv\' | rl`"
-    ;;
-    ultra)
-        #      alias Mplayer='esddsp -s alien mplayer -softvol -a52drc 1 -ao esd -af volnorm,volume=-4 \
-        #         -vo directfb:buffermode=triple `find | egrep \'avi||mpg||mpeg||mov||mp4||wmv\' | rl`'
-    ;;
-    ios)
-        alias ztc='/var/www/justin_net/squash/zsh'
-    ;;
-esac
-# this will be replaced by zshrc.local
-
-case $USER in
-    voyager)
-        export SHORTUSER="VOY"
-    ;;
-    oracle)
-        export SHORTUSER="ORA"
-    ;;
-    root)
-        export SHORTUSER="/"
-    ;;
-    remote_ssh)
-        export SHORTUSER="REM"
-    ;;
-esac
-
-################################
-# ZSH UP
-################################
-
-# Commit it for svn sync  1.8.3.14
-commitit(){
-    if [[ $HOSTNAME = "ios" ]]; then
-        cd /var/www/virtual
-        svn commit 
-        cd -
-    fi
-}
-
-# Automatic zsh file updating :-) 1.5.7.0
-zshup(){
-    if [[ $HOSTNAME = ios ]]; then
-        echo "DO NOT RUN ON IOS!!!!"
-        return 1
-    else
-        echo `grep 'export ZSHRC_VERSION=' $ZTCDIR/zshrc | \
-        head -n 1 | awk '{ print $2 }' | tr -d '"'`
-
-        setopt LOCAL_OPTIONS
-
-        ADDR=`host root-squash.ath.cx | awk '{ print $4 }'`
-        ZTMPD="/tmp/.zshupdate"
-
-        DOMAIN=`domainname`
-
-        if [[ $DOMAIN = '525sports.com' ]]; then
-            HST="ios:8080"
-        else
-            HST="root-squash.ath.cx"
-        fi
-
-        if [[ $ADDR = "found:" ]]; then
-            echo "Can not reach host"
-            return 1;
-        fi
-
-        rm -rf $ZTMPD
-        mkdir $ZTMPD
-
-        wget -q http://$HST/zsh/list -O /tmp/.zshupdate/list
-
-        for i in `cat $ZTMPD/list`; do
-            wget -q http://$HST/zsh/$i -O $ZTMPD/$i
-            if [[ ! -f $ZTMPD/$i ]]; then
-                echo "$i not created"
-                return 1;
-            fi
-        done
-
-        tar -cf /tmp/.zshbkup $ZTCDIR 2> /dev/null
-        mv $ZTMPD/* $ZTCDIR
-        echo `grep 'export ZSHRC_VERSION=' $ZTCDIR/zshrc | \
-        head -n 1 | awk '{ print $2 }' | tr -d '"'`
-    fi
-}
-
-# removes your development env 1.8.2.1
-undev(){
-    OLDCC=$CC
-    CC=
-    OLDCXX=$CXX
-    CXX=
-    OLDCFLAGS=$CFLAGS
-    CFLAGS=
-    OLDCXXFLAGS=$CXXFLAGS
-    CXXFLAGS=
-    OLDLDFLAGS=$LDFLAGS
-    LDFLAGS=
-    OLDCPPFLAGS=$CPPFLAGS
-    CPPFLAGS=
-    export CC CXX CFLAGS CXXFLAGS LDFLAGS CPPFLAGS
-}
-
-# resets dev env 1.8.3.11
-redev(){
-    CC=$OLDCC
-    CXX=$OLDCXX
-    CFLAGS=$OLDCFLAGS
-    CXXFLAGS=$OLDCXXFLAGS
-    LDFLAGS=$OLDLDFLAGS
-    CPPFLAGS=$OLDCPPFLAGS
-    export CC CXX CFLAGS CXXFLAGS LDFLAGS CPPFLAGS
-}
-
-# For work at endeavor
-jsetup(){
-    if [[ ! -d ~/.undo ]]; then
-        mkdir ~/.undo
-    fi
-    
-    if [[ ! -f ~/.vimrc ]]; then
-        if [[ -f $ZTCDIR/vimrc ]]; then
-            ln -s $ZTCDIR/vimrc ~/.vimrc
-        fi
-    fi
-
-    if [[ ! -d ~/.vim ]]; then
-        ln -s $ZTCDIR/vim ~/.vim
-    fi
-
-    if [[ ! -f ~/.inputrc ]]; then
-        echo "set editing-mode vi" > ~/.inputrc
-    fi
-
-    if [[ ! -d ~/.screenlogs ]]; then
-        mkdir ~/.screenlogs 
-    fi
-}
-
 ###################################
 ## From zshwiki.org   "its cool"
 ###################################
@@ -1036,53 +684,15 @@ if [[ -f $TBOX/system-name ]]; then
     SYSTEM_NAME="[`cat $TBOX/system-name`] "
 fi
 
-# sets hardlines for screen and xterms
-#   i could have done it... 
-#   but didn't
-title(){
-    if [[ $ZSH_VERSION = 4.* ]]; then
-        if [[ -n $STY$RUNNING_SCREEN$SCREEN_SCREEN ]]; then
-            # Use these two for GNU Screen:
-            print -nR $'\033k'${2/$SCREEN_HOST/}$'\033'\\\
-
-            print -nR $'\033]0;'${*:s/<>//}$'\a'
-        elif [[ $TERM == *xterm* || $TERM == *rxvt* || -n $DISPLAY || $BASETERM == *xterm* || $BASETERM == *rxvt* ]]; then
-            # Use this one instead for XTerms:
-            print -nR $'\033]0;'$*$'\a'
-        fi
-    fi
-}
-
-# I changed this one 1.7.1.2
-precmd(){
-    title "<$ORI_XTITLE>" "${SHORTUSER:-$USER}@${SHORTHOST:-$HOSTNAME}" "$PWD"
-    if [[ -f /sbin/consoletype ]]; then
-        if [[ `/sbin/consoletype` == "vt" ]]; then
-            if [[ -n $KBD_RATE ]]; then
-                kbdrate -s $KBD_RATE
-            fi
-        fi
-    fi
-}
-
-preexec(){
-    if [[ $ZSH_VERSION = 3.* ]]; then
-        #local cmd; cmd=(${1})
-    else
-        local -a cmd; cmd=(${(z)1})
-        title "<$ORI_XTITLE>" $cmd[1]:t "$cmd[2,-1]"
-    fi
-}
-
 ################################################
 #  postexec
 ################################################ 
 
-if [[ -f $ZTCDIR/include ]]; then
-    . $ZTCDIR/include 
+if [[ -f $PROFILE_DIR/include ]]; then
+    . $PROFILE_DIR/include 
 fi
 
-if [[ -f $ZTCDIR/zshrc.local.post ]]; then
-    . $ZTCDIR/zshrc.local.post
+if [[ -f $PROFILE_DIR/zshrc.local.post ]]; then
+    . $PROFILE_DIR/zshrc.local.post
 fi
 
