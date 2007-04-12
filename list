@@ -3,6 +3,7 @@ gvimrc
 inputrc
 screenrc
 vimrc
+vim
 zlogin
 zlogout
 zshrc
