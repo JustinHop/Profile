@@ -261,8 +261,10 @@ case $TERM in
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
                     '^[[3~' '^[[4~' '^[[6~' )
         VIM_LINUX_TERM=" -c ':set t_Co=16' "
-        if `$PROFILE_DIR/bin/termck screen.linux` ; then
-            STM=screen.linux
+        if `whence termck` ; then
+            if `termck screen.linux` ; then
+                STM=screen.linux
+            fi
         fi
         bindit
     ;;

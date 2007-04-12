@@ -11,7 +11,7 @@ set ttyfast
 
 if has("unix")
     set backup
-    set backupdir="$HOME/.undo"
+    set backupdir=~/.undo
 endif
 
 if has("win32")
