@@ -15,6 +15,17 @@
 
 export ZSHRC_VERSION="1.9.9"
 
+bindit(){           # looks like this is safe to run multiple times. 1.8.2.1
+    if [[ -n $FN_CHARS[1] ]]; then
+        bindkey ${FN_CHARS[1]}  overwrite-mode       # insert
+        bindkey ${FN_CHARS[2]}  vi-beginning-of-line # home
+        bindkey ${FN_CHARS[3]}  vi-backward-word     # pg up
+        bindkey ${FN_CHARS[4]}  vi-delete-char       # delete
+        bindkey ${FN_CHARS[5]}  vi-end-of-line       # end
+        bindkey ${FN_CHARS[6]}  vi-forward-word      # pg dn
+    fi
+}
+
 if [[ -o login ]]; then
     if [[ ! -d ~/.undo ]]; then
         mkdir ~/.undo
@@ -25,7 +36,8 @@ if [[ -o login ]]; then
 fi
 
 # localiazation workarounds & functions
-for i in "$PROFILE_DIR/include" "$PROFILE_DIR/zshrc.local" "$PROFILE_DIR/zshrc.local.pre" "$HOME/.zshrc"; do
+local STOP_LOOKING_FOR_INCLUDE=0
+for i in "$PROFILE_DIR/include" "$HOME/.include"  "$PROFILE_DIR/zshrc.local" "$PROFILE_DIR/zshrc.local.pre" "$HOME/.zshrc"; do
     if [[ -f $i ]]; then
         . $i || echo "$i failed execution."
     fi
@@ -410,16 +422,12 @@ unset CDPATH
 
 # ViM
 if [[ -x `whence vim` ]]; then
-    export EDITOR=vim
-    export VISUAL=vim
-    if [[ -n $VIM_COLOR ]]; then
-        VIM=$VIM" -c ':colorscheme $VIM_COLOR' "
-    fi
-    VIM=$VIM$VIM_LINUX_TERM
+    VIM=`whence vim`
+    export EDITOR=$VIM
+    export VISUAL=$VIM
     alias vim="$VIM"
     alias vi="$VIM"
     alias v="$VIM"
-    export EDITOR="$VIM"
 fi
 
 # pagers and cutters
