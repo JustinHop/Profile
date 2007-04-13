@@ -254,8 +254,8 @@ vnoremap <Up> gk
 "  other
 
 " space like more or less
-nnoremap <space> <PageDown>
-nnoremap <c-space> <PageUp>
+nmap <space> <PageDown>
+"nnoremap <c-space> <PageUp>
 
 " Highlight commom java syntax
 let java_highlight_java_lang_ids=1
