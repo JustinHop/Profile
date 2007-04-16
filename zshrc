@@ -13,7 +13,7 @@
 #######################################
 #######################################
 
-export ZSHRC_VERSION="1.9.9"
+export ZSHRC_VERSION="1.9.91"
 
 bindit(){           # looks like this is safe to run multiple times. 1.8.2.1
     if [[ -n $FN_CHARS[1] ]]; then
@@ -36,16 +36,14 @@ if [[ -o login ]]; then
 fi
 
 # localiazation workarounds & functions
-local STOP_LOOKING_FOR_INCLUDE=0
-for i in "$PROFILE_DIR/include" "$HOME/.include"  "$PROFILE_DIR/zshrc.local" "$PROFILE_DIR/zshrc.local.pre" "$HOME/.zshrc"; do
-    if [[ -f $i ]]; then
-        . $i || echo "$i failed execution."
+if [ -f ~/.profile_dir ] && [ -f ~/.include ]; then
+    source ~/.include
+else
+    if [[ -f /etc/zsh/include ]]; then
+        source /etc/zsh/include
     fi
-done
-
-if [[ -f /etc/zsh/include ]]; then
-    source /etc/zsh/include
 fi
+
 
 ############################
 ###  OPERATING SYSTEM DEPS
@@ -421,14 +419,20 @@ fi
 unset CDPATH
 
 # ViM
+VIM=vi
 if [[ -x `whence vim` ]]; then
     VIM=`whence vim`
-    export EDITOR=$VIM
-    export VISUAL=$VIM
-    alias vim="$VIM"
-    alias vi="$VIM"
-    alias v="$VIM"
 fi
+
+if [[ -x ~/profile/bin/`uname`/vim ]]; then
+    VIM=~/profile/bin/`uname`/vim
+fi
+
+export EDITOR=$VIM
+export VISUAL=$VIM
+alias vim=$VIM
+alias vi=$VIM$VIM_LINUX_TERM
+alias v=$VIM
 
 # pagers and cutters
 alias -g L="|less"
