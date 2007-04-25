@@ -1,0 +1,12 @@
+
+- remember colorscheme in vim per term
+
+- run effectivly out of home dir
+
+- handle internal errors
+
+- long and short prompts
+
+- valueclick shortcuts
+
+- fix vim on shell1.la

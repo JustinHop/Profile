@@ -3,6 +3,8 @@
 ################################
 # include version 1.9.9
 
+export __INCLUDE__=1.9.9
+
 bindit(){           # looks like this is safe to run multiple times. 1.8.2.1
     if [[ -n $FN_CHARS[1] ]]; then
         bindkey ${FN_CHARS[1]}  overwrite-mode       # insert
