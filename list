@@ -4,6 +4,7 @@ inputrc
 screenrc
 vimrc
 vim
+zshenv
 zlogin
 zlogout
 zshrc
