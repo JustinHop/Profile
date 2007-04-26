@@ -12,7 +12,6 @@ echo "Welcome $USER, to $HOST on $TTY<$TERM> runnning $OSTYPE"
 echo $DISTRO_VER
 echo "Running: $0 $ZSH_VERSION"
 [[ -n `whence fortune` ]] && echo && fortune && echo
-[[ `domainname` = 'xyus.xyratex.com' ]] && echo "Hello from Justin\n"
 
 if [[ -z $ORI_XTITLE && \
    ( -x `whence xtitle` || -x /usr/local/bin/xtitle ) && \
@@ -30,12 +29,6 @@ if [[ $DISTRO = "redhat" ]]; then
     if [[ `/sbin/consoletype` = "vt" ]]; then
       if [[ -f $DEFMAP ]]; then
          loadkeys defkeymap
-      fi
-      if [[ -f ~/.cybercafe ]]; then
-         echo "Setting console font: cybercafe"
-         setfont cybercafe
-      else
-         #setfont default8x9
       fi
     fi
    fi
