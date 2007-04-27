@@ -1,5 +1,6 @@
 bashrc
 gvimrc
+include
 inputrc
 screenrc
 vimrc
