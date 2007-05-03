@@ -1,0 +1,15 @@
+#
+#   HORRIBLE SSH CONFIGURATION
+#       for the very lazy
+#       and the very reckless
+#
+ForwardAgent yes
+ForwardX11 yes
+StrictHostKeyChecking no
+IdentityFile ~/.ssh/identity
+IdentityFile ~/.ssh/id_rsa
+IdentityFile ~/.ssh/id_dsa
+StrictHostKeyChecking no
+CheckHostIP no
+
+

@@ -51,16 +51,17 @@ endif
 set autoindent
 set copyindent
 set expandtab
-set preserveindent
-set shiftwidth=4
+set formatoptions=r
 set linebreak
 set nolist
-set wrap
+set preserveindent
+set shiftwidth=4
 set showbreak=-->\ 
 set smartindent
 set smarttab
 "set softtabstop=4
 set tabstop=4
+set wrap
 
 " Folding
 if has("folding")

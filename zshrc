@@ -15,16 +15,9 @@
 
 export ZSHRC_VERSION="1.9.91"
 
-bindit(){           # looks like this is safe to run multiple times. 1.8.2.1
-    if [[ -n $FN_CHARS[1] ]]; then
-        bindkey ${FN_CHARS[1]}  overwrite-mode       # insert
-        bindkey ${FN_CHARS[2]}  vi-beginning-of-line # home
-        bindkey ${FN_CHARS[3]}  vi-backward-word     # pg up
-        bindkey ${FN_CHARS[4]}  vi-delete-char       # delete
-        bindkey ${FN_CHARS[5]}  vi-end-of-line       # end
-        bindkey ${FN_CHARS[6]}  vi-forward-word      # pg dn
-    fi
-}
+#######################################
+# Presidence of homedir locations
+##
 
 if [[ -o login ]]; then
     if [[ ! -d ~/.undo ]]; then
@@ -366,6 +359,11 @@ alias -g "......."="../../../../../.."
 alias -g "........"="../../../../../../.."
 alias -g "........."="../../../../../../../.."
 alias -g ".........."="../../../../../../../../.."
+
+#   bad ssh options
+BAD_SSH="$HOME/.ssh/bad_ssh_config"
+[[ -f "$PROFILE_DIR/bad_ssh_config" ]] && BAD_SSH="$PROFILE_DIR/bad_ssh_config" 
+alias ssh-bad="ssh -F $BAD_SSH "
 
 #####################################
 # GNU LS ALIASES
