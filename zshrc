@@ -17,7 +17,7 @@ export ZSHRC_VERSION="1.9.91"
 
 #######################################
 # Presidence of homedir locations
-##
+#######################################
 
 if [[ -o login ]]; then
     if [[ ! -d ~/.undo ]]; then
@@ -29,8 +29,8 @@ if [[ -o login ]]; then
 fi
 
 # localiazation workarounds & functions
-if [ -f ~/.profile_dir ] && [ -f ~/.include ]; then
-    source ~/.include
+if [[ -f ~/.include ]]; then
+    . ~/.include
 else
     if [[ -f /etc/zsh/include ]]; then
         source /etc/zsh/include
@@ -263,7 +263,9 @@ case $TERM in
             alias BT="TERM=screen-bce"
             TSCR=" -T screen-bce "
         fi
-        bindit
+        if [[ $__INCLUDE__ ]]; then
+            bindit
+        fi
     ;;
     (*linux*)
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
