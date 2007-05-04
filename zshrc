@@ -263,9 +263,6 @@ case $TERM in
             alias BT="TERM=screen-bce"
             TSCR=" -T screen-bce "
         fi
-        if [[ $__INCLUDE__ ]]; then
-            bindit
-        fi
     ;;
     (*linux*)
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
@@ -459,8 +456,8 @@ fi
 
 # /dev/nullness
 alias -g NUL=" > /dev/null "
-alias -g NIL=" 2&> /dev/null "
-alias -g NULL=" 2&>1 /dev/null "
+alias -g NIL=" 2> /dev/null "
+alias -g NULL=" >& /dev/null "
 
 # this finds your "best" text browser
 if [[ -n `whence elinks` ]]; then
