@@ -359,6 +359,16 @@ alias -g "........"="../../../../../../.."
 alias -g "........."="../../../../../../../.."
 alias -g ".........."="../../../../../../../../.."
 
+##################################
+# ValueClick Aliases
+##################################
+export vc=valueclick.com
+export s123=search123.com
+export mp=mediaplex.com
+export v=vclk.net
+
+alias vclc=/config/scripts/vclc.py
+
 #   bad ssh options
 BAD_SSH="$HOME/.ssh/bad_ssh_config"
 [[ -f "$PROFILE_DIR/bad_ssh_config" ]] && BAD_SSH="$PROFILE_DIR/bad_ssh_config" 
