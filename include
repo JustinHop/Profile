@@ -1,9 +1,23 @@
 ################################
 # Mah Functions
 ################################
-# include version 1.9.9
+# include version 1.9.91
 
-export __INCLUDE__=1.9.9
+export __INCLUDE__=1.9.91
+
+unexp(){            # unexpires all roles for given users
+    for USERS in $* ; do
+
+        echo $USERS
+        for ROLES in `vclc user role list $USERS | grep expired | awk '{ print $1 }'` ; do
+
+            echo " $ROLES"
+            vclc user role renew $USERS '$ROLES' 365
+
+        done
+
+    done
+}
 
 bindit(){           # looks like this is safe to run multiple times. 1.8.2.1
     if [[ -n $FN_CHARS[1] ]]; then
