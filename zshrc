@@ -13,7 +13,7 @@
 #######################################
 #######################################
 
-export ZSHRC_VERSION="1.9.91"
+export ZSHRC_VERSION="1.9.93"
 
 #######################################
 # Presidence of homedir locations
@@ -28,12 +28,25 @@ if [[ -o login ]]; then
     fi
 fi
 
+# Run
+if [[ -z $__ZSHENV__ ]]; then
+    if [[ -f ~/.zshenv ]]; then
+        . ~/.zshrc
+    else
+        if [[ -f /etc/zsh/zshenv ]]; then
+            . /etc/zsh/zshenv
+        fi
+    fi
+fi
+
 # localiazation workarounds & functions
-if [[ -f ~/.include ]]; then
-    . ~/.include
-else
-    if [[ -f /etc/zsh/include ]]; then
-        source /etc/zsh/include
+if [[ -z $__INCLUDE__ ]]; then
+    if [[ -f ~/.include ]]; then
+        . ~/.include
+    else
+        if [[ -f /etc/zsh/include ]]; then
+            . /etc/zsh/include
+        fi
     fi
 fi
 
@@ -359,13 +372,17 @@ alias -g "........"="../../../../../../.."
 alias -g "........."="../../../../../../../.."
 alias -g ".........."="../../../../../../../../.."
 
+# syncs
+alias sync-d2t = "cd; rsync -avb justin@dallas.525sports.com:/var/www/pictures .; cd -"
+alias sync-t2d = "cd; rsync -avb pictures justin@dallas.525sports.com:/var/www ; cd -"
+
 ##################################
 # ValueClick Aliases
 ##################################
-export vc=valueclick.com
-export s123=search123.com
-export mp=mediaplex.com
-export v=vclk.net
+export VC="valueclick.com"
+export S123="search123.com"
+export MP="mediaplex.com"
+export V="vclk.net"
 
 alias vclc=/config/scripts/vclc.py
 

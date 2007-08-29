@@ -51,7 +51,8 @@ endif
 set autoindent
 set copyindent
 set expandtab
-set formatoptions=r
+set textwidth=80
+set formatoptions=rcq
 set linebreak
 set nolist
 set preserveindent
@@ -67,7 +68,7 @@ set wrap
 if has("folding")
     set foldenable
     set foldmethod=indent
-    set foldminlines=5
+    set foldminlines=4
 endif
 
 "Searching

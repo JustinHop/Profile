@@ -3,14 +3,11 @@
 # http://root-squash.ath.cx
 
 setenv SCREENRC_VERSION 1.2.4
-setenv RUNNING_SCREEN 1
 setenv SCREEN_SCREEN 1
 setenv SCREEN_HOST $HOSTNAME
-#setenv LC_CTYPE en_US.UFT-8
 
 #defutf8 on
 
-#caption always "<%n(%t) - %W>:%C %a $SYSTEM_NAME"
 shelltitle " $ |$SHELL"
 compacthist on
 bufferfile        $HOME/.screenlogs/.screen_exchange
@@ -56,15 +53,6 @@ caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%
   termcapinfo xterm 'VR=\E[?5h:VN=\E[?5l'
   termcapinfo xterm 'k1=\E[11~:k2=\E[12~:k3=\E[13~:k4=\E[14~'
   termcapinfo xterm 'kh=\EOH:kI=\E[2~:kD=\E[3~:kH=\EOF:kP=\E[5~:kN=\E[6~'
-
-# special xterm hardstatus: use the window title.
-#  termcapinfo xterm 'hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
-#
-
-#  SSH-AGENT GOODNESS   stolen
-setenv SSH_AUTH_SOCK $HOME/.screen-ssh-agent
-screen ssh-agent -t 8h -a $SSH_AUTH_SOCK $SHELL
-
 
 #terminfo xterm 'vb=\E[?5h$<200/>\E[?5l'
   termcapinfo xterm 'vi=\E[?25l:ve=\E[34h\E[?25h:vs=\E[34l'
