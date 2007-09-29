@@ -23,29 +23,29 @@ if [[ -o login ]]; then
     if [[ ! -d ~/.undo ]]; then
         mkdir ~/.undo
     fi
-    if [[ -r /etc/profile ]]; then
-        . /etc/profile || echo "/etc/profile errored"
-    fi
+#    if [[ -e /etc/profile ]]; then
+#        source /etc/profile || echo "/etc/profile errored"
+#    fi
 fi
 
 # Run
 if [[ -z $__ZSHENV__ ]]; then
-    if [[ -f ~/.zshenv ]]; then
-        . ~/.zshrc
+    if [[ -e ~/.zshenv ]]; then
+        source ~/.zshrc
     else
         if [[ -f /etc/zsh/zshenv ]]; then
-            . /etc/zsh/zshenv
+        #    . /etc/zsh/zshenv
         fi
     fi
 fi
 
 # localiazation workarounds & functions
 if [[ -z $__INCLUDE__ ]]; then
-    if [[ -f ~/.include ]]; then
-        . ~/.include
+    if [[ -e ~/.include ]]; then
+        source ~/.include
     else
         if [[ -f /etc/zsh/include ]]; then
-            . /etc/zsh/include
+            #. /etc/zsh/include
         fi
     fi
 fi
@@ -286,7 +286,7 @@ case $TERM in
 #                STM=screen.linux
 #            fi
 #        fi
-        bindit
+        whence bindit NULL && bindit
     ;;
     (*screen*)
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
@@ -297,12 +297,12 @@ case $TERM in
         if [[ -z $STY ]]; then
             STY=a
         fi
-        bindit
+        whence bindit NULL && bindit
     ;;
     (*vt*)
         FN_CHARS=( '^[[2~' '^[OH' '^[[5~'
                     '^[[4~' '^[OF' '^[[6~'  )
-        bindit
+        whence bindit NULL && bindit
     ;;
     (*ansi*)
         if [[ -f /etc/termcap ]]; then
@@ -314,7 +314,7 @@ case $TERM in
     (*)
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
                     '^[[3~' '^[[4~' '^[[6~' )
-        bindit
+        whence bindit NULL && bindit
     ;;
 esac
 
