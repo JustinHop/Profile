@@ -112,6 +112,12 @@ make_home_dir() {   # sets up homedir 1.8.5
             fi
             ln -sfv "`pwd`/$RCFILE" ~/.$RCFILE
         done
+        for SSHFILE in ssh/*(-.) ; do
+            if [[ -f "~/.$SSHFILE" ]]; then
+                mv ~/.$SSHFILE ~/.$SSHFILE.old
+            fi
+            ln -sfv "`pwd`/$SSHFILE" ~/.$SSHFILE
+        done
     else
         echo "no list :-("
     fi
