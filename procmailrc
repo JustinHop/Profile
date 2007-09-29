@@ -8,6 +8,14 @@ LOG="--- Logging ${LOGFILE} for ${LOGNAME}, "
 
 REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 
+
+##
+#   Remove Duplicates, from procmailex
+
+:0 Wh: msgid.lock
+| formail -D 8192 msgid.cache
+
+
 ##
 #   Handle Spam
 
