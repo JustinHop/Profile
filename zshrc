@@ -13,7 +13,7 @@
 #######################################
 #######################################
 
-export ZSHRC_VERSION="1.9.93"
+export ZSHRC_VERSION="1.9.94"
 
 #######################################
 # Presidence of homedir locations
@@ -376,20 +376,15 @@ alias -g ".........."="../../../../../../../../.."
 alias sync-d2t="cd ; rsync -avb justin@dallas.525sports.com:/var/www/pictures . ; cd - "
 alias sync-t2d="cd ; rsync -avb pictures justin@dallas.526sports.com:/var/www ; cd - "
 
-##################################
-# ValueClick Aliases
-##################################
-export VC="valueclick.com"
-export S123="search123.com"
-export MP="mediaplex.com"
-export V="vclk.net"
-
-alias vclc=/config/scripts/vclc.py
-
 #   bad ssh options
 BAD_SSH="$HOME/.ssh/bad_ssh_config"
 [[ -f "$PROFILE_DIR/bad_ssh_config" ]] && BAD_SSH="$PROFILE_DIR/bad_ssh_config" 
 alias ssh-bad="ssh -F $BAD_SSH "
+
+# fix ssh stuff
+if [[ -f $HOME/.ssh/*id ]]; then
+    chmod 0600 $HOME/.ssh/{authorized_keys,*id}
+fi
 
 #####################################
 # GNU LS ALIASES
