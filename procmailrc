@@ -44,7 +44,7 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 
 # System Messages
 :0
-* ^From: DenyHosts \<nobody@localhost.justinhoppensteadt.com\>
+* ^From: DenyHosts
 | /usr/libexec/dovecot/deliver -m INBOX.messages
 
 :0
