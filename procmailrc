@@ -1,0 +1,48 @@
+#Preliminaries
+VERBOSE=no
+SHELL=/usr/bin/sh               #Use the Bourne shell (check your path!)
+MAILDIR=${HOME}/Maildir            #First check what your mail directory is!
+DEFAULT=${MAILDIR}/
+LOGFILE=${MAILDIR}/procmail.log
+LOG="--- Logging ${LOGFILE} for ${LOGNAME}, "
+
+RECIEVER=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
+
+
+
+#Whatever recipes you'll use
+#The order of the recipes is significant
+:0
+* ^From: scam@cyberspam\.com
+/dev/null
+
+:0fw
+| /usr/bin/spamassassin 
+
+:0
+* ^X-Spam-Status: Yes
+| /usr/libexec/dovecot/deliver -m .Junk
+
+* ^Subject:\[SPAM\]
+| /usr/libexec/dovecot/deliver -m .Junk
+
+#
+# Test
+#
+#:0
+#| tee -a /home/justin/procmail.log 
+#| /usr/libexec/dovecot/deliver -n INBOX.${RECIEVER} -d justin
+
+#:0:
+#? test -d /home/justin/Maildir/.INBOX.${RECIEVER}
+
+#| tee -a /home/justin/procmail.log &&  /usr/libexec/dovecot/deliver -n INBOX.${RECIEVER}
+#${DEFAULT}
+
+
+:0
+* ? test -d ${MAILDIR}/.INBOX.${RECIEVER}
+| /usr/libexec/dovecot/deliver -m INBOX.${RECIEVER}
+
+:0E:
+| /usr/libexec/dovecot/deliver -m INBOX
