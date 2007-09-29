@@ -1,12 +1,12 @@
 #Preliminaries
 VERBOSE=no
-SHELL=/usr/bin/sh               #Use the Bourne shell (check your path!)
+SHELL=/bin/bash               #Use the Bourne shell (check your path!)
 MAILDIR=${HOME}/Maildir            #First check what your mail directory is!
 DEFAULT=${MAILDIR}/
 LOGFILE=${MAILDIR}/procmail.log
 LOG="--- Logging ${LOGFILE} for ${LOGNAME}, "
 
-RECIEVER=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
+REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 
 
 
@@ -31,18 +31,18 @@ RECIEVER=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 #
 #:0
 #| tee -a /home/justin/procmail.log 
-#| /usr/libexec/dovecot/deliver -n INBOX.${RECIEVER} -d justin
+#| /usr/libexec/dovecot/deliver -n INBOX.${REC} -d justin
 
 #:0:
-#? test -d /home/justin/Maildir/.INBOX.${RECIEVER}
+#? test -d /home/justin/Maildir/.INBOX.${REC}
 
-#| tee -a /home/justin/procmail.log &&  /usr/libexec/dovecot/deliver -n INBOX.${RECIEVER}
+#| tee -a /home/justin/procmail.log &&  /usr/libexec/dovecot/deliver -n INBOX.${REC}
 #${DEFAULT}
 
 
-:0
-* ? test -d ${MAILDIR}/.INBOX.${RECIEVER}
-| /usr/libexec/dovecot/deliver -m INBOX.${RECIEVER}
+:0:
+* ? test -d "/home/justin/Maildir/.INBOX.${REC}"
+| /usr/libexec/dovecot/deliver -m INBOX.${REC}
 
 :0E:
 | /usr/libexec/dovecot/deliver -m INBOX
