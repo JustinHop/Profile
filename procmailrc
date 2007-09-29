@@ -8,10 +8,9 @@ LOG="--- Logging ${LOGFILE} for ${LOGNAME}, "
 
 REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 
+##
+#   Handle Spam
 
-
-#Whatever recipes you'll use
-#The order of the recipes is significant
 :0
 * ^From: scam@cyberspam\.com
 /dev/null
@@ -26,23 +25,27 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 * ^Subject:\[SPAM\]
 | /usr/libexec/dovecot/deliver -m .Junk
 
-#
-# Test
-#
-#:0
-#| tee -a /home/justin/procmail.log 
-#| /usr/libexec/dovecot/deliver -n INBOX.${REC} -d justin
 
-#:0:
-#? test -d /home/justin/Maildir/.INBOX.${REC}
+##
+#   Message Sorting
 
-#| tee -a /home/justin/procmail.log &&  /usr/libexec/dovecot/deliver -n INBOX.${REC}
-#${DEFAULT}
-
+# Yahoo Account
 :0
 * justin_hoppensteadt@yahoo.com
 | /usr/libexec/dovecot/deliver -m INBOX.Justin_Hoppensteadt@Yahoo_com
 
+# System Messages
+:0
+* ^From: DenyHosts \<nobody@localhost.justinhoppensteadt.com\>
+| /usr/libexec/dovecot/deliver -m INBOX.messages
+
+:0
+* ^From: root@(525sports,justinhoppensteadt).com
+| /usr/libexec/dovecot/deliver -m INBOX.messages
+
+
+##
+#   Catch-alls
 :0
 * ? test -d "/home/justin/Maildir/.INBOX.${REC}"
 | /usr/libexec/dovecot/deliver -m INBOX.${REC}
