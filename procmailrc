@@ -48,7 +48,8 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 | /usr/libexec/dovecot/deliver -m INBOX.messages
 
 :0
-* ^From: root@(525sports,justinhoppensteadt).com
+* ^From: (root@(525sports,justinhoppensteadt).com,cron)
+* ^Subject: .*cron
 | /usr/libexec/dovecot/deliver -m INBOX.messages
 
 
