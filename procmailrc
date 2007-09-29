@@ -43,7 +43,7 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 * justin_hoppensteadt@yahoo.com
 | /usr/libexec/dovecot/deliver -m INBOX.Justin_Hoppensteadt@Yahoo_com
 
-:0:
+:0
 * ? test -d "/home/justin/Maildir/.INBOX.${REC}"
 | /usr/libexec/dovecot/deliver -m INBOX.${REC}
 
