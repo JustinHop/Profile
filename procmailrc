@@ -39,6 +39,9 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 #| tee -a /home/justin/procmail.log &&  /usr/libexec/dovecot/deliver -n INBOX.${REC}
 #${DEFAULT}
 
+:0
+* justin_hoppensteadt@yahoo.com
+| /usr/libexec/dovecot/deliver -m INBOX.Justin_Hoppensteadt@Yahoo_com
 
 :0:
 * ? test -d "/home/justin/Maildir/.INBOX.${REC}"
