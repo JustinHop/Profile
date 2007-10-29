@@ -4,11 +4,11 @@
 #   http://root-squash.ath.cx/
 #
 #   c 2007-04-11
-#   v 0.11
+#   v 0.13
 #
 ################################################################################
 
-export __ZSHENV__=0.12
+export __ZSHENV__=0.13
 
 ################################################################################
 #   host based vars
@@ -75,6 +75,8 @@ SCO_PATH="/usr/gnu/bin:/usr/gnu/obin:/usr/gnu/sbin:/etc:/usr/bin/X11"
 JAVA_PATH="/usr/java/bin"
 KDE_PATH="/usr/kde/3.*/bin"
 SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
+
+DEVROOT="$HOME/dev"
 
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
