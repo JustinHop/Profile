@@ -40,15 +40,15 @@ if [[ -z $__ZSHENV__ ]]; then
 fi
 
 # localiazation workarounds & functions
-if [[ -z $__INCLUDE__ ]]; then
+#if [[ -z $__INCLUDE__ ]]; then
     if [[ -e ~/.include ]]; then
-        source ~/.include
+        . ~/.include
     else
         if [[ -f /etc/zsh/include ]]; then
             #. /etc/zsh/include
         fi
     fi
-fi
+#fi
 
 
 ############################
