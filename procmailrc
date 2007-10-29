@@ -42,6 +42,11 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 * justin_hoppensteadt@yahoo.com
 | /usr/libexec/dovecot/deliver -m INBOX.Justin_Hoppensteadt@Yahoo_com
 
+# Buzznet
+:0
+* buzznet@justinhoppensteadt
+| /usr/libexec/dovecot/deliver -m INBOX.buzznet
+
 # System Messages
 :0
 * ^From: DenyHosts
