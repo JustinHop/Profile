@@ -509,6 +509,17 @@ if [[ -x `whence gqlplus` ]]; then
 fi
 
 #######################################
+# Work  Stuff
+#######################################
+SVRCFG=/etc/servers.cfg
+if [ -f $SVRCFG ]; then
+    eval `cat $SVRCFG | /usr/local/bin/class.pl`
+    #SERVERS=`cat $SVRCFG | awk -F\# '{print $1}' | awk -F\= '{print $1}' | xargs`
+fi
+export $BN_KEYS
+
+
+#######################################
 # My Options
 #######################################
 setopt  \
