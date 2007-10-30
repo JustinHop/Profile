@@ -75,6 +75,13 @@ SCO_PATH="/usr/gnu/bin:/usr/gnu/obin:/usr/gnu/sbin:/etc:/usr/bin/X11"
 JAVA_PATH="/usr/java/bin"
 KDE_PATH="/usr/kde/3.*/bin"
 SVN_PATH="/usr/local/svn/bin"
+MYSQL_PATH="/usr/local/mysql/bin"
+POSTFIX="/usr/local/postfix/bin:/usr/local/postfix/sbin"
+PHP_PATH="/usr/local/websites/php/bin"
+APACHE_PATH="/usr/local/websites/apache/bin"
+SVN_PATH="/usr/local/svn/bin"
+LAMEPATH="/usr/local/websites/lame/bin"
+FFMPEGPATH="/usr/local/websites/ffmpeg/bin"
 SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
 
 DEVROOT="$HOME/dev"
@@ -84,7 +91,7 @@ typeset -U LD_LIBRARY_PATH
 typeset -U LD_EXEC_PATH
 typeset -U PKG_CONFIG_PATH
 
-PATH=$COMMON_PATH:$ROOT_PATH:$SVN_PATH
+PATH=$COMMON_PATH:$ROOT_PATH:$SVN_PATH:$MYSQL_PATH:$POSTFIX:$PHP_PATH:$APACHE_PATH:$LAMEPATH:$FFMPEGPATH
 
 [ -d $DISTCC_PATH ] && PATH="$DISTCC_PATH:$PATH"
 
