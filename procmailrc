@@ -45,7 +45,18 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 # Buzznet
 :0
 * buzznet@justinhoppensteadt
-| /usr/libexec/dovecot/deliver -m INBOX.buzznet
+{
+    :0
+    * ^From: Cron Daemon
+    | /usr/libexec/dovecot/deliver -m INBOX.buzznet.cron
+
+    :0
+    * ^From:.*alert@keynote.com
+    | /usr/libexec/dovecot/deliver -m INBOX.buzznet.keynote
+
+    :0
+    | /usr/libexec/dovecot/deliver -m INBOX.buzznet
+}
 
 # System Messages
 :0
@@ -53,7 +64,7 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 | /usr/libexec/dovecot/deliver -m INBOX.messages
 
 :0
-* ^(Subject|From): (root|cron)
+* ^(Subject|From):.*(root|cron)
 | /usr/libexec/dovecot/deliver -m INBOX.messages
 
 
