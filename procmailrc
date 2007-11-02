@@ -55,6 +55,10 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.keynote
 
     :0
+    * ^From:.*cfengine@
+    | /usr/libexec/dovecot/deliver -m INBOX.buzznet.cfengine
+
+    :0
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet
 }
 
