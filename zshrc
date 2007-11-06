@@ -386,6 +386,10 @@ if [[ -f $HOME/.ssh/*id ]]; then
     chmod 0600 $HOME/.ssh/{authorized_keys,*id}
 fi
 
+# work
+alias addroot="sudo ssh-add /root/keys/buzznet-admin"
+
+
 #####################################
 # GNU LS ALIASES
 #####################################
@@ -512,8 +516,8 @@ fi
 # Work  Stuff
 #######################################
 SVRCFG=/etc/servers.cfg
-if [ -f $SVRCFG ]; then
-    eval `cat $SVRCFG | /usr/local/bin/class.pl`
+if [[ -f $SVRCFG ]]; then
+    #eval `cat $SVRCFG | /usr/local/bin/class.pl`
     #SERVERS=`cat $SVRCFG | awk -F\# '{print $1}' | awk -F\= '{print $1}' | xargs`
 fi
 export $BN_KEYS
