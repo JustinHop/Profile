@@ -59,6 +59,10 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.cfengine
 
     :0
+    * ^From:.*mantis@buzznet.com
+    | /usr/libexec/dovecot/deliver -m INBOX.buzznet.mantis
+
+    :0
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet
 }
 
