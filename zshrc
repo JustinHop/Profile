@@ -33,9 +33,9 @@ if [[ -z $__ZSHENV__ ]]; then
     if [[ -e ~/.zshenv ]]; then
         source ~/.zshrc
     else
-        if [[ -f /etc/zsh/zshenv ]]; then
-        #    . /etc/zsh/zshenv
-        fi
+#        if [[ -f /etc/zsh/zshenv ]]; then
+#        #    . /etc/zsh/zshenv
+#        fi
     fi
 fi
 
@@ -520,7 +520,7 @@ if [[ -f $SVRCFG ]]; then
     #eval `cat $SVRCFG | /usr/local/bin/class.pl`
     #SERVERS=`cat $SVRCFG | awk -F\# '{print $1}' | awk -F\= '{print $1}' | xargs`
 fi
-export $BN_KEYS
+#export $BN_KEYS
 
 
 #######################################
