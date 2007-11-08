@@ -1,9 +1,19 @@
 ################################
 # Mah Functions
 ################################
-# include version 1.9.91
+# include version 1.9.92
 
-export __INCLUDE__=1.9.91
+export __INCLUDE__=1.9.92
+
+toos() {           # buzznet to change to machine architechure
+        OSDIR=/tftpboot/OSes/$OS/os/`uname -i`/CentOS/RPMS
+        while [ ! -d "$OSDIR" ]; do 
+                OSDIR=`dirname $OSDIR`
+        done
+        if [ ! -z "$OSDIR" -a "$OSDIR" != "/" ]; then
+                cd $OSDIR
+        fi
+}
 
 unexp(){            # unexpires all roles for given users
     for USERS in $* ; do
