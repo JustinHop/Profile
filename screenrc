@@ -21,6 +21,7 @@ msgwait 2
 version
 
 deflogin off
+deflog on
 logfile $HOME/.screenlogs/screen-%Y-%m-%d-%0c:%s-%H-%n.log
 logtstamp on
 
