@@ -13,7 +13,7 @@ backup(){           # backup files!!!
     [[ ! -d $BACKUPDIR ]] && mkdir $BACKUPDIR
 
     for FILE in $* ; do
-        if [[ -f $BACKUPDIR/$FILE@$HOSTNAME-$DATE-* ]]; then
+        if [[ -f $BACKUPDIR/$FILE@$HOSTNAME@$DATE@* ]]; then
             COUNT=$(( `ls $BACKUPDIR/$FILE@$HOSTNAME@$DATE@* | tail -1 | cut -d@ -f4` + 1 ))
         fi
         cp -av $FILE ~/backup/$FILE@$HOSTNAME@$DATE@$COUNT
