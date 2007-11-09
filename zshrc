@@ -333,6 +333,9 @@ bindkey '^[OF' vi-end-of-line                   # end
 #  ^P    rev search
 #  ^B    History expansion
 
+#  F1 = esc on laptops
+[[ $HOSTNAME == "hoptop" ]] && bindkey -s '^[OP' '\e'
+
 bindkey '^W' accept-and-menu-complete
 bindkey '^N' vi-repeat-find
 bindkey '^P' vi-rev-repeat-find
