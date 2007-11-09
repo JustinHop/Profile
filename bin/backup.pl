@@ -35,16 +35,16 @@ if ( ! -d $DIR ){
 foreach my $FILE (@ARGV){
     my $LS; my $NUMBER;
 
-    if ( -e "$DIR/$FILE\:$HOST\:$DATE\:001" ) {
-        print "exists\n";
+    if ( -e "$DIR/$FILE\:$HOST\:$DATE\:0001" ) {
 
-    $LS = `/bin/ls $DIR/$FILE\:$HOST\:$DATE\:* | tail -1 2>/dev/null`;
-    chomp $LS;
+        $LS = `/bin/ls $DIR/$FILE\:$HOST\:$DATE\:* | tail -1 2>/dev/null`;
+        chomp $LS;
     
-    $LS =~ /.*(\d\d\d\d)$/;
-    
-    if ( $1 ) {
-        $NUMBER = $1 + 1;
+        $LS =~ /.*(\d\d\d\d)$/;
+        
+        if ( $1 ) {
+            $NUMBER = $1 + 1;
+        } 
     } else {
         $NUMBER = 1;
     }
