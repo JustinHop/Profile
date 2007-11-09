@@ -184,7 +184,7 @@ inoremap <esc>[1;2A <C-Y>
 "    C-q  -  Leave the editor with Ctrl-q (see below)
 "-------------------------------------------------------------------------------
 "
-map   <F1>             <Esc>
+map   <silent> <F1>    <Esc>
 map   <silent> <F2>    :write<CR>
 map   <silent> <F3>    :Explore<CR>
 nmap  <silent> <F4>    :exe ":ptag ".expand("<cword>")<CR>
@@ -193,6 +193,7 @@ map   <silent> <F7>    :cp<CR>
 map   <silent> <F8>    :cn<CR>
 map   <silent> <F12>   :let &number=1-&number<CR>
 "
+imap  <silent> <F1>    <ESC>
 imap  <silent> <F2>    <Esc>:write<CR>
 imap  <silent> <F3>    <Esc>:Explore<CR>
 imap  <silent> <F4>    <Esc>:exe ":ptag ".expand("<cword>")<CR>
