@@ -111,9 +111,7 @@ endif
 if $VIM_MOUSE
    ttymouse=$VIM_MOUSE
 else
-   if $BASETERM == "xterm" || $TERM == "xterm" || $TERM == "screen-bce" 
-      set ttymouse=xterm2
-   endif
+    set ttymouse=xterm2
 endif  
 
 "
@@ -129,6 +127,9 @@ if has("autocmd")
       \ if line("'\"") > 0 && line ("'\"") <= line("$") |
       \  exe "normal g'\"" |
       \ endif 
+
+   " ZSH Brokenness
+   au FileType zsh set formatoptions=
 
    " STOLEN!!
    au FileType crontab set nobackup 
@@ -183,6 +184,7 @@ inoremap <esc>[1;2A <C-Y>
 "    C-q  -  Leave the editor with Ctrl-q (see below)
 "-------------------------------------------------------------------------------
 "
+map   <F1>             <Esc>
 map   <silent> <F2>    :write<CR>
 map   <silent> <F3>    :Explore<CR>
 nmap  <silent> <F4>    :exe ":ptag ".expand("<cword>")<CR>
