@@ -33,12 +33,20 @@ if ( ! -d $DIR ){
 }
 
 foreach my $FILE (@ARGV){
-    my $LS = `/bin/ls $DIR/$FILE\:$HOST\:$DATE\:* | tail -1`;
+    my $LS = `/bin/ls $DIR/$FILE\:$HOST\:$DATE\:* | tail -1 2>/dev/null`;
     chomp $LS;
     
-    $LS =~ /.*(\d\d\d\d)$/ && do {
-        $COUNT=sprintf("%04d", ( $1 + 1 ));
-    };
+    my $NUMBER;
+    
+    $LS =~ /.*(\d\d\d\d)$/;
+    
+    if ( $1 ) {
+        $NUMBER = $1 + 1;
+    } else {
+        $NUMBER = 1;
+    }
+    
+    $COUNT=sprintf("%04d", $NUMBER );
 
     #print "Backing up $FILE to $DIR/$FILE\:$HOST\:$DATE\:$COUNT" . "\n";
     print `cp -av $FILE \"$DIR/$FILE\:$HOST\:$DATE\:$COUNT\"`; 
