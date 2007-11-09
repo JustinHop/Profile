@@ -21,7 +21,7 @@
 use strict;
 use warnings;
 
-my $DIR="$ENV{HOME}/backup";
+my $DIR='/home/justin/backup';
 my $DATE=`date +%F`;
 chomp $DATE;
 my $HOST=`hostname`;
@@ -33,11 +33,13 @@ if ( ! -d $DIR ){
 }
 
 foreach my $FILE (@ARGV){
-    my $LS; my $NUMBER;
+    my $LS; 
+    my $NUMBER = 1;
+    my $BACK = $DIR . "/" . join(":", $FILE, $HOST, $DATE, "0001");
 
-    if ( -e "$DIR/$FILE\:$HOST\:$DATE\:0001" ) {
+    if ( -e $BACK )  {
 
-        $LS = `/bin/ls $DIR/$FILE\:$HOST\:$DATE\:* | tail -1 2>/dev/null`;
+        $LS = `/bin/ls $DIR/$FILE\:$HOST\:$DATE\:* | tail -1 `;
         chomp $LS;
     
         $LS =~ /.*(\d\d\d\d)$/;
@@ -45,8 +47,6 @@ foreach my $FILE (@ARGV){
         if ( $1 ) {
             $NUMBER = $1 + 1;
         } 
-    } else {
-        $NUMBER = 1;
     }
     
     $COUNT=sprintf("%04d", $NUMBER );
