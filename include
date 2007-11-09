@@ -5,21 +5,6 @@
 
 export __INCLUDE__=1.9.93
 
-backup(){           # backup files!!!
-    export BACKUPDIR=~/backup
-    DATE=`date +%F`
-    typeset -Z COUNT=0001
-
-    [[ ! -d $BACKUPDIR ]] && mkdir $BACKUPDIR
-
-    for FILE in $* ; do
-        if [[ -f $BACKUPDIR/$FILE@$HOSTNAME@$DATE@* ]]; then
-            COUNT=$(( `ls $BACKUPDIR/$FILE@$HOSTNAME@$DATE@* | tail -1 | cut -d@ -f4` + 1 ))
-        fi
-        cp -av $FILE ~/backup/$FILE@$HOSTNAME@$DATE@$COUNT
-    done
-}
-
 toos() {           # buzznet to change to machine architechure
         OSDIR=/tftpboot/OSes/$OS/os/`uname -i`/CentOS/RPMS
         while [ ! -d "$OSDIR" ]; do 
