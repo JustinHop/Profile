@@ -1,0 +1,13 @@
+#
+#   Vimperatorrc
+#
+#   Firefox Plugin 
+#
+
+set guioptions=m
+
+#   map , and . to cycle through tabs
+map , gT
+map . gt
+
+

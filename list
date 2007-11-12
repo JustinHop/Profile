@@ -5,6 +5,7 @@ gvimrc
 include
 inputrc
 screenrc
+vimperatorrc
 vimrc
 vim
 zshenv
