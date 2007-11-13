@@ -30,6 +30,7 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 * ^X-Spam-Status: Yes
 | /usr/libexec/dovecot/deliver -m .Junk
 
+:0
 * ^Subject:\[SPAM\]
 | /usr/libexec/dovecot/deliver -m .Junk
 
