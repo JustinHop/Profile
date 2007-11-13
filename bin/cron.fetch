@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+if [[ ! -e "$HOME/.fetchmail.pid" ]]; then
+    fetchmail &> $HOME/Maildir/fetchmail.log
+fi
