@@ -19,10 +19,6 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 ##
 #   Handle Spam
 
-:0
-* ^From: scam@cyberspam\.com
-/dev/null
-
 :0fw
 | /usr/bin/spamassassin 
 
@@ -45,18 +41,18 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 
 # Buzznet
 :0
-* buzznet@justinhoppensteadt
+* (buzznet@justinhoppensteadt.com|.*@buzznet.com)
 {
     :0
-    * ^From: Cron Daemon
+    * (^From: Cron Daemon|root@)
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.cron
 
     :0
-    * ^From:.*alert@keynote.com
+    * ^From:.*@keynote.com
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.keynote
 
     :0
-    * ^From:.*cfengine@
+    * ^From:.*cfengine@.*
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.cfengine
 
     :0
