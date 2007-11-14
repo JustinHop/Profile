@@ -12,8 +12,8 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 ##
 #   Remove Duplicates, from procmailex
 
-:0 Wh: msgid.lock
-| formail -D 8192 msgid.cache
+#:0 Wh: msgid.lock
+#| formail -D 8192 msgid.cache
 
 
 ##
@@ -24,11 +24,11 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 
 :0
 * ^X-Spam-Status: Yes
-| /usr/libexec/dovecot/deliver -m .Junk
+| /usr/libexec/dovecot/deliver -m Junk
 
 :0
 * ^Subject:\[SPAM\]
-| /usr/libexec/dovecot/deliver -m .Junk
+| /usr/libexec/dovecot/deliver -m Junk
 
 
 ##
