@@ -60,6 +60,10 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.mantis
 
     :0
+    * ^Subject: www.*DEPLOYED
+    | /usr/libexec/dovecot/deliver -m INBOX.buzznet.deploy
+
+    :0
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet
 }
 
