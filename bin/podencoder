@@ -15,7 +15,7 @@ version="0.20060901.0"
 # set up some reasonable defaults
 appname=`basename "$0"`
 device=/dev/dvd
-outputdir=.
+outputdir="$HOME/output"
 scratchdir=/tmp
 tracks=
 naming="%d-%t"
