@@ -68,7 +68,7 @@ set wrap
 if has("folding")
     set foldenable
     set foldmethod=indent
-    set foldminlines=4
+    set foldminlines=3
 endif
 
 "Searching
@@ -274,8 +274,8 @@ let java_minlines=50
 "   perl
 let g:Perl_AuthorName      = 'Justin Hoppensteadt'
 let g:Perl_AuthorRef       = 'JH'
-let g:Perl_Email           = 'jhoppensteadt@valueclick.com'
-let g:Perl_Company         = 'Value Click, Inc.'
+let g:Perl_Email           = 'justin@buzznet.com'
+let g:Perl_Company         = 'Buzznet, Inc.'
 
 "" insert mode : autocomplete brackets and braces
 "imap ( ()<Left>

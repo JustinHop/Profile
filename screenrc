@@ -6,7 +6,9 @@ setenv SCREENRC_VERSION 1.2.4
 setenv SCREEN_SCREEN 1
 setenv SCREEN_HOST $HOSTNAME
 
-#defutf8 on
+#unsetenv SSH_AUTH_SOCK
+#setenv SSH_AUTH_SOCK "$HOME/.screen/ssh-auth-$HOSTNAME"
+#source $HOME/.ssh/screen-agent-$HOSTNAME
 
 shelltitle " $ |$SHELL"
 compacthist on
@@ -35,6 +37,7 @@ logtstamp on
 defhstatus "$ORI_XTITLE <[ screen ^E (^Et) ]>"
 hardstatus off
 
+#caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d %{yk}%D %{gk}%c %{bk}%l"
 caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d %{yk}%D %{gk}%c %{bk}%l"
 
 # grabbed from gentoo's screenrc
@@ -67,21 +70,6 @@ caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%
 
 # Do not use xterm's alternative window buffer, it breaks scrollback (see bug #61195)
   termcapinfo xterm|xterms|xs ti@:te=\E[2J
-
-# WYSE TERMINALS
-# ===============================================================
-
-#wyse-75-42 must have flow control (xo = "terminal uses xon/xoff")
-#essential to have it here, as this is a slow terminal.
-  termcapinfo wy75-42 xo:hs@
-
-# New termcap sequences for cursor application mode.
-  termcapinfo wy* CS=\E[?1h:CE=\E[?1l:vi=\E[?25l:ve=\E[?25h:VR=\E[?5h:VN=\E[?5l:cb=\E[1K:CD=\E[1J
-# OTHER TERMINALS
-# ===============================================================
-
-# make hp700 termcap/info better
-  termcapinfo  hp700 'Z0=\E[?3h:Z1=\E[?3l:hs:ts=\E[62"p\E[0$~\E[2$~\E[1$}:fs=\E[0}\E[61"p:ds=\E[62"p\E[1$~\E[61"p:ic@'
 
 # Extend the vt100 desciption by some sequences.
   termcap  vt100* ms:AL=\E[%dL:DL=\E[%dM:UP=\E[%dA:DO=\E[%dB:LE=\E[%dD:RI=\E[%dC

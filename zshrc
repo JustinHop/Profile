@@ -500,20 +500,29 @@ else
 fi
 
 # might as well start with the gui crap
-if [[ -x `whence konqueror` ]]; then
-    alias konqu='konqueror --profile filemanagement '
-fi
+alias konqu='konqueror --profile filemanagement '
 
 # the mighty screen
-if [[ -x `whence screen` ]]; then
-    alias screen="screen -a -s $0 -O -q $ZSCR $SLOGS $STM"
-fi
+#alias screen="screen -a -s $0 -O -q $ZSCR $SLOGS $STM"
+screen_prep() {    # prepare for screen
+    [[ ! -d "$HOME/.ssh" ]] && mkdir "$HOME/.ssh"
+    [[ -d "$HOME/.screenlogs" ]] && _SLOG="-L"
 
-# oracle stuff
-alias sqldba="$SQL_TERM sqlplus '/ as sysdba'"
-if [[ -x `whence gqlplus` ]]; then
-    alias gqldba="gqlplus '/ as sysdba' -dc "
-fi
+#    if [ "$SSH_AUTH_SOCK" != "$HOME/.screen/ssh-auth-sock.$HOSTNAME" ]; then
+#        ln -fs "$SSH_AUTH_SOCK" "$HOME/.screen/ssh-auth-sock.$HOSTNAME"
+#    fi
+    
+    if `whence ssh-agent` ; then
+        touch "$HOME/.ssh/screen-agent-$HOSTNAME"
+        
+        ssh-agent | head -2 | cut -d\; -f1 | sed s/^/setenv\ / |\
+        sed s/=/\ /  &>! $HOME/.ssh/screen-agent-$HOSTNAME 
+
+    fi
+
+}
+
+alias new_screen="screen_prep; screen -a -O $_SLOG"
 
 #######################################
 # Work  Stuff
