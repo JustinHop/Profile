@@ -44,12 +44,12 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 * (buzznet@justinhoppensteadt.com|.*@buzznet.com)
 {
     :0
-    * (^From: Cron Daemon|root@)
+    * ^From:.*(Cron Daemon|root@)
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.cron
 
     :0
-    * ^From:.*@keynote.com
-    | /usr/libexec/dovecot/deliver -m INBOX.buzznet.keynote
+    * ^From:.*(@keynote.com|DenyHosts|donotreply@llnw.com)
+    | /usr/libexec/dovecot/deliver -m INBOX.buzznet.monitoring
 
     :0
     * ^From:.*cfengine@.*
