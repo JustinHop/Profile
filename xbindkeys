@@ -60,15 +60,24 @@
     c:233
 
 # Window Lower (towards screen)
-"xvkbd -text "\[Shift_L]\[Control_L]\[Down]""
+#"xvkbd -text "\[F13]""
+"xvkbd -text "\[Shift]\[Control]\[Down]""
     b:13
 
 # Window Raise (away from screen)
+#"xvkbd -text "\[F14]""
 "xvkbd -text "\[Control]\[Shift]\[Up]""
     b:15
 
+# Mapping Button 17 + Button to Alt + Button for wm stuff
+#"echo KeyStrPress Alt_L | xmacroplay $DISPLAY"
+#"xte 'keydown Alt_L' 'sleep 1' 'keyup Alt_L'"
+"xvkbd -text "\[F17]""
+    b:17    
 
-
+#"echo KeyStrRelease Alt_L | xmacroplay $DISPLAY"
+#"xte 'keyup Alt_L' "
+#    Release + b:17 
 
 
 ##################################

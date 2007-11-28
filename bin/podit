@@ -111,7 +111,7 @@ infile="$1"
 ### Requires: Perl::Date-Manip   ###
 ### ... and the script itself :) ###
 ############### EDIT ME ############
-deltadays="/usr/local/bin/deltadays.pl"
+deltadays="${HOME}/bin/deltadays.pl"
 tmpdir="${HOME}/tmp"
 mkdir -p "${tmpdir}"
 
@@ -232,7 +232,7 @@ reverseit "${revnoext_string}"
 ##################
 ###### Main ######
 ##################
-outdir=$(find "${infile}" -printf "%h")
+outdir="${HOME}/output"
 base_name=$(basename "${infile}")
 barename=$(stripext "${base_name}")
 outfile="${outdir}/${barename}.podit.mp4"
