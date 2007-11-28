@@ -4,11 +4,11 @@
 #   http://root-squash.ath.cx/
 #
 #   c 2007-04-11
-#   v 0.13
+#   v 0.14
 #
 ################################################################################
 
-export __ZSHENV__=0.13
+export __ZSHENV__=0.14
 
 ################################################################################
 #   host based vars
@@ -85,7 +85,7 @@ FFMPEGPATH="/usr/local/websites/ffmpeg/bin"
 SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
 USER_PATH="$HOME/bin:$HOME/profile/bin"
 
-DEVROOT="$HOME/dev"
+export DEVROOT="$HOME/dev"
 
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
@@ -122,6 +122,7 @@ export FTP_PASSIVE=1
 export MINICOM="-c on -m"
 export LESS="-isaFMXR"
 export VISUAL=vim
+export SVN_EDITOR=vim
 export EDITOR=vim
 
 [ -n `whence less` ] && PAGER=less || PAGER=more
@@ -138,5 +139,6 @@ fi
 #   shortcuts
 lsrc="/usr/local/src"
 dzsh="/etc/zsh"
+tocf="/home/justin/dev/cfengine/trunk/masterfiles/system/"
 
 # vim:ft=zsh:syn=zsh:tw=4
