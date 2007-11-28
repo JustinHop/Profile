@@ -3,7 +3,7 @@
 " 
 "  General Operation
 
-" vimrc-1.5
+" vimrc-1.6
 
 set nocompatible
 set backspace=2
@@ -128,8 +128,13 @@ if has("autocmd")
       \  exe "normal g'\"" |
       \ endif 
 
+   " DetectIndent
+   "let g:detectindent_preferred_expandtab = 1  
+   "let g:detectindent_preferred_indent = 4 
+   "au BufReadPost * :DetectIndent
+
    " ZSH Brokenness
-   au FileType zsh set formatoptions=
+   au FileType zsh set formatoptions=croq
 
    " STOLEN!!
    au FileType crontab set nobackup 
@@ -173,7 +178,7 @@ inoremap <esc>[1;2A <C-Y>
 "-------------------------------------------------------------------------------
 "  some additional hot keys
 "-------------------------------------------------------------------------------
-"    F2   -  write file without confirmation
+"    F2   -  DetectIndent
 "    F3   -  call file explorer Ex
 "    F4   -  show tag under curser in the preview window (tagfile must exist!)
 "    F6   -  list all errors           
@@ -185,7 +190,7 @@ inoremap <esc>[1;2A <C-Y>
 "-------------------------------------------------------------------------------
 "
 map   <silent> <F1>    <Esc>
-map   <silent> <F2>    :write<CR>
+map   <silent> <F2>    :DetectIndent<CR>
 map   <silent> <F3>    :Explore<CR>
 nmap  <silent> <F4>    :exe ":ptag ".expand("<cword>")<CR>
 map   <silent> <F6>    :copen<CR>
@@ -194,7 +199,7 @@ map   <silent> <F8>    :cn<CR>
 map   <silent> <F12>   :let &number=1-&number<CR>
 "
 imap  <silent> <F1>    <ESC>
-imap  <silent> <F2>    <Esc>:write<CR>
+imap  <silent> <F2>    <Esc>:DetectIndent<CR>
 imap  <silent> <F3>    <Esc>:Explore<CR>
 imap  <silent> <F4>    <Esc>:exe ":ptag ".expand("<cword>")<CR>
 imap  <silent> <F6>    <Esc>:copen<CR>
