@@ -519,7 +519,6 @@ screen_prep() {    # prepare for screen
         sed s/=/\ /  &>! $HOME/.ssh/screen-agent-$HOSTNAME 
 
     fi
-
 }
 
 alias new_screen="screen_prep; screen -a -O $_SLOG"
@@ -534,6 +533,11 @@ if [[ -f $SVRCFG ]]; then
 fi
 #export $BN_KEYS
 
+if [ ! `whence svn` ]; then
+    if `whence bnsvn`; then
+        alias svn="bnsvn"
+    fi
+fi
 
 #######################################
 # My Options
