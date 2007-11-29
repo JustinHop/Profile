@@ -133,7 +133,6 @@ if has("autocmd")
     "let g:detectindent_preferred_expandtab = 1  
     "let g:detectindent_preferred_indent = 4 
     "au BufReadPost * :DetectIndent
-    au FileType cfengine :DetectIndent
 
     " ZSH Brokenness
     au FileType zsh set formatoptions=croq
@@ -171,7 +170,8 @@ endif
 inoremap <esc>[1;2B <C-E>
 inoremap <esc>[1;2A <C-Y>
 
-" [1;2B[1;2A
+"	prevents smartindent from being annoying with #
+inoremap # X<BS>#
 
 " this nice little oneliner toggles number on <F12>
 "noremap <silent> <F12> :set number!<cr> 
