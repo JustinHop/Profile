@@ -3,7 +3,7 @@
 " 
 "  General Operation
 
-" vimrc-1.6
+" vimrc-1.7
 
 set nocompatible
 set backspace=2
@@ -38,7 +38,8 @@ set showmode
 set showcmd
 set lazyredraw
 " STOLEN
-set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=%l,%c%V\ of\ %L\ \ \ \ \ \ \ %P
+"set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=%l,%c%V\ of\ %L\ \ \ \ \ \ \ %P
+set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=<%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}>%<\ \ \ %l,%c%V\ of\ %L\ \ \ %P
 "set statusline=#%n\ %<%F%m%r\ %w\ %y\ \<%{&fileencoding},%{&fileformat}>%=%l,%c%V\ of\ %L\ \ \ \%{VimBuddy()}\ \ \%P
 "set cul
 
@@ -99,7 +100,7 @@ endif
 "     to set the colorscheme, if not do some 1/2 assed logic
 "
 if $VIM_COLOR 
-   exec ":colorscheme $VIM_COLOR"
+    exec ":colorscheme $VIM_COLOR"
 else
     colorscheme elflord
 endif
@@ -121,38 +122,39 @@ filetype on
 filetype indent on
 
 if has("autocmd")
-	filetype plugin indent on
-   "jumpback
-   au BufReadPost *
-      \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-      \  exe "normal g'\"" |
-      \ endif 
+    filetype plugin indent on
+    "jumpback
+    au BufReadPost *
+        \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+        \   exe "normal g'\"" |
+        \ endif 
 
-   " DetectIndent
-   "let g:detectindent_preferred_expandtab = 1  
-   "let g:detectindent_preferred_indent = 4 
-   "au BufReadPost * :DetectIndent
+    " DetectIndent
+    "let g:detectindent_preferred_expandtab = 1  
+    "let g:detectindent_preferred_indent = 4 
+    "au BufReadPost * :DetectIndent
+    au FileType cfengine :DetectIndent
 
-   " ZSH Brokenness
-   au FileType zsh set formatoptions=croq
+    " ZSH Brokenness
+    au FileType zsh set formatoptions=croq
 
-   " STOLEN!!
-   au FileType crontab set nobackup 
+    " STOLEN!!
+    au FileType crontab set nobackup 
 
-   au FileType xml,xslt compiler xmllint " Enables :make for XML and HTML validation
-   au FileType html compiler tidy  "           use :cn & :cp to jump between errors
+    au FileType xml,xslt compiler xmllint " Enables :make for XML and HTML validation
+    au FileType html compiler tidy  "           use :cn & :cp to jump between errors
 
-   let html_use_css=1              "       for standards-compliant :TOhtml output
-   let use_xhtml=1                 "       for standards-compliant :TOhtml output
+    let html_use_css=1              "       for standards-compliant :TOhtml output
+    let use_xhtml=1                 "       for standards-compliant :TOhtml output
 
-"  Use enter to activate help jump points & display line numbers
-"   au FileType help set number     
-   au FileType help nmap <buffer> <Return> <C-]>
-"   au FileType help nmap <buffer> <C-[> <C-O>
+    "  Use enter to activate help jump points & display line numbers
+    "   au FileType help set number     
+    au FileType help nmap <buffer> <Return> <C-]>
+    "   au FileType help nmap <buffer> <C-[> <C-O>
 
-   augroup filetypedetect
-      au BufNewFile,BufRead afiedt.buf      setf sql
-   augroup END
+    augroup filetypedetect
+        au BufNewFile,BufRead afiedt.buf      setf sql
+    augroup END
 
    set cpt=.,k,w,b,t,i
    "set cpt=.,w,b,t,i
@@ -298,10 +300,10 @@ let g:Perl_Company         = 'Buzznet, Inc.'
 " Choose :bprevious or :bnext
 "-------------------------------------------------------------------------------
 "
- map  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
-     \                  &modified <CR> :write<CR> :endif<CR>:bnext<CR>
+map  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
+    \                            &modified <CR> :write<CR> :endif<CR>:bnext<CR>
 imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
-     \                  &modified <CR> :write<CR> :endif<CR>:bnext<CR>
+    \                            &modified <CR> :write<CR> :endif<CR>:bnext<CR>
 "
 "-------------------------------------------------------------------------------
 " Leave the editor with Ctrl-q : Write all changed buffers and exit Vim
@@ -312,7 +314,7 @@ nmap  <C-q>    :wqa<CR>
 " Change the working directory to the directory containing the current file
 "-------------------------------------------------------------------------------
 if has("autocmd")
-  autocmd BufEnter * :lcd %:p:h
+    autocmd BufEnter * :lcd %:p:h
 endif " has("autocmd")
 "
 " vim:ft=vim:syn=vim:ts=4
