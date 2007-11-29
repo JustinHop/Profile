@@ -51,9 +51,9 @@ endif
 "  Indenting Formating
 set autoindent
 set copyindent
-set expandtab
+set noexpandtab
 set textwidth=80
-set formatoptions=rcq
+set formatoptions=croqa
 set linebreak
 set nolist
 set preserveindent
@@ -69,7 +69,7 @@ set wrap
 if has("folding")
     set foldenable
     set foldmethod=indent
-    set foldminlines=3
+    set foldminlines=5
 endif
 
 "Searching
@@ -156,9 +156,9 @@ if has("autocmd")
         au BufNewFile,BufRead afiedt.buf      setf sql
     augroup END
 
-   set cpt=.,k,w,b,t,i
-   "set cpt=.,w,b,t,i
-   au FileType perl set cpt=.,w,b
+   	set cpt=.,k,w,b,t,i
+   	"set cpt=.,w,b,t,i
+   	au FileType perl set cpt=.,w,b
 endif
 
 
