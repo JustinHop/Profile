@@ -1,3 +1,3 @@
-set guioptions=T
+set guioptions=Tb
 map , gT
 map . gt
