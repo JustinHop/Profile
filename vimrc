@@ -51,7 +51,7 @@ endif
 "  Indenting Formating
 set autoindent
 set copyindent
-set noexpandtab
+set expandtab
 set textwidth=80
 set formatoptions=croqa
 set linebreak
