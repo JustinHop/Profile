@@ -48,7 +48,7 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.cron
 
     :0
-    * ^From:.*(@keynote.com|DenyHosts|donotreply@llnw.com)
+    * ^From:.*(@keynote.com|DenyHosts|donotreply@llnw.com|logwatch@idx.buzznet.com)
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.monitoring
 
     :0
