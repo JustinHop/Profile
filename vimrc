@@ -158,6 +158,10 @@ if has("autocmd")
    	set cpt=.,k,w,b,t,i
    	"set cpt=.,w,b,t,i
    	au FileType perl set cpt=.,w,b
+   	if version >= 700
+   		au FileType perl set indentexpr=
+   		au FileType perl set noautoindent
+   	endif
 endif
 
 
@@ -313,8 +317,8 @@ nmap  <C-q>    :wqa<CR>
 "-------------------------------------------------------------------------------
 " Change the working directory to the directory containing the current file
 "-------------------------------------------------------------------------------
-if has("autocmd")
-    autocmd BufEnter * :lcd %:p:h
-endif " has("autocmd")
+"if has("autocmd")
+"    autocmd BufEnter * :lcd %:p:h
+"endif " has("autocmd")
 "
 " vim:ft=vim:syn=vim:ts=4

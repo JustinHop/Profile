@@ -4,4 +4,7 @@ let perl_fold_blocks=1
 " initially all folds open
 set foldlevel=999
 
+if version >= 700
+	set indentexpr=
+endif
 
