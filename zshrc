@@ -473,6 +473,8 @@ alias -g S="|sort"
 alias -g SS="|&sort"
 alias -g U="|uniq"
 alias -g UU="|&uniq"
+alias -g GP="|grep -P"
+alias -g GGP="|&grep -P"
 
 # greppy
 if [[ -x `whence egrep` ]]; then
