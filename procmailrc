@@ -27,7 +27,7 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 | /usr/libexec/dovecot/deliver -m Junk
 
 :0
-* ^Subject:\[SPAM\]
+* ^Subject:.*\[SPAM\]
 | /usr/libexec/dovecot/deliver -m Junk
 
 
@@ -60,7 +60,7 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.mantis
 
     :0
-    * ^Subject: (www|cfengine).*files.*DEPLOYED
+    * ^Subject: (www|cfengine).*(files|).*DEPLOYED
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.deploy
 
     :0
