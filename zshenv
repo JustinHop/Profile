@@ -103,7 +103,7 @@ fi
 fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" )
 
 for MMAN in "/usr/local/{openldap,svn,netperf,mysql,snort}/man" ; do
-    if [ -d $MMAN ]; then
+    if [[ -d $MMAN ]]; then
         export MANPATH=$MMAN:$MANPATH
     fi
 done
