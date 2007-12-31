@@ -102,6 +102,12 @@ fi
 
 fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" )
 
+for MMAN in "/usr/local/{openldap,svn,netperf,mysql,snort}/man" ; do
+    if [ -d $MMAN ]; then
+        export MANPATH=$MMAN:$MANPATH
+    fi
+done
+
 if [[ -z $JAVA_HOME ]]; then
     for i in /usr/java /usr/java/j2re1.4.2_06 /usr/lib/java/bin \
         /opt/NetBeans3.6/ /opt/NetBeans3.6a/ /opt/blackdown-jdk-1.4.1/ \
