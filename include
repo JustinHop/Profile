@@ -2,176 +2,176 @@
 # Mah Functions
 ################################
 
-export __INCLUDE__=1.9.94
+if [[ "$__INCLUDE__"x != "1.9.96x" ]]; then
 
-ldapenv(){          # sets env vars for using openldap buzznet build
-	export PATH=/usr/local/openldap/bin:/usr/local/openldap/sbin:$PATH
-	export LD_LIBRARY_PATH=/usr/local/openldap/lib:/usr/local/openldap/lib64:$LD_LIBRARY_PATH
-	export MANPATH=/usr/local/openldap/man:$MANPATH
-}
+    export __INCLUDE__=1.9.96
 
-toos() {           # buzznet to change to machine architechure
-        OSDIR=/tftpboot/OSes/$OS/os/`uname -i`/CentOS/RPMS
-        while [ ! -d "$OSDIR" ]; do 
-                OSDIR=`dirname $OSDIR`
-        done
-        if [ ! -z "$OSDIR" -a "$OSDIR" != "/" ]; then
-                cd $OSDIR
-        fi
-}
+    ldapenv(){          # sets env vars for using openldap buzznet build
+        export PATH=/usr/local/openldap/bin:/usr/local/openldap/sbin:$PATH
+        export LD_LIBRARY_PATH=/usr/local/openldap/lib:/usr/local/openldap/lib64:$LD_LIBRARY_PATH
+        export MANPATH=/usr/local/openldap/man:$MANPATH
+    }
 
-unexp(){            # unexpires all roles for given users
-    for USERS in $* ; do
-
-        echo $USERS
-        for ROLES in `vclc user role list $USERS | grep expired | awk '{ print $1 }'` ; do
-
-            echo " $ROLES"
-            vclc user role renew $USERS '$ROLES' 365
-
-        done
-
-    done
-}
-
-bindit(){           # looks like this is safe to run multiple times. 1.8.2.1
-    if [[ -n $FN_CHARS[1] ]]; then
-        bindkey ${FN_CHARS[1]}  overwrite-mode       # insert
-        bindkey ${FN_CHARS[2]}  vi-beginning-of-line # home
-        bindkey ${FN_CHARS[3]}  vi-backward-word     # pg up
-        bindkey ${FN_CHARS[4]}  vi-delete-char       # delete
-        bindkey ${FN_CHARS[5]}  vi-end-of-line       # end
-        bindkey ${FN_CHARS[6]}  vi-forward-word      # pg dn
-    fi
-}
-
-show_ansi(){        # stolen from online
-    for attr in 0 1 4 5 7 ; do
-        echo "----------------------------------------------------------------"
-        printf "ESC[%s;Foreground;Background - \n" $attr
-        for fore in 30 31 32 33 34 35 36 37; do
-            for back in 40 41 42 43 44 45 46 47; do
-                printf '\033[%s;%s;%sm %02s;%02s  ' $attr $fore $back $fore $back
+    toos() {           # buzznet to change to machine architechure
+            OSDIR=/tftpboot/OSes/$OS/os/`uname -i`/CentOS/RPMS
+            while [ ! -d "$OSDIR" ]; do 
+                    OSDIR=`dirname $OSDIR`
             done
-            printf '\n'
+            if [ ! -z "$OSDIR" -a "$OSDIR" != "/" ]; then
+                    cd $OSDIR
+            fi
+    }
+
+    unexp(){            # unexpires all roles for given users
+        for USERS in $* ; do
+
+            echo $USERS
+            for ROLES in `vclc user role list $USERS | grep expired | awk '{ print $1 }'` ; do
+
+                echo " $ROLES"
+                vclc user role renew $USERS '$ROLES' 365
+
+            done
+
         done
-        printf '\033[0m'
-    done
-}
+    }
 
-title(){            # sets hardlines for screen and xterms
-    if [[ $ZSH_VERSION = 4.* ]]; then
-        if [[ -n $STY$RUNNING_SCREEN$SCREEN_SCREEN ]]; then
-            # Use these two for GNU Screen:
-            print -nR $'\033k'${2/$SCREEN_HOST/}$'\033'\\\
-
-            print -nR $'\033]0;'${*:s/<>//}$'\a'
-        elif [[ $TERM == *xterm* || $TERM == *rxvt* || -n $DISPLAY || $BASETERM == *xterm* || $BASETERM == *rxvt* ]]; then
-            # Use this one instead for XTerms:
-            print -nR $'\033]0;'$*$'\a'
+    bindit(){           # looks like this is safe to run multiple times. 1.8.2.1
+        if [[ -n $FN_CHARS[1] ]]; then
+            bindkey ${FN_CHARS[1]}  overwrite-mode       # insert
+            bindkey ${FN_CHARS[2]}  vi-beginning-of-line # home
+            bindkey ${FN_CHARS[3]}  vi-backward-word     # pg up
+            bindkey ${FN_CHARS[4]}  vi-delete-char       # delete
+            bindkey ${FN_CHARS[5]}  vi-end-of-line       # end
+            bindkey ${FN_CHARS[6]}  vi-forward-word      # pg dn
         fi
-    fi
-}
+    }
 
-precmd(){           # I changed this one 1.7.1.2
-    title "<$ORI_XTITLE>" "${SHORTUSER:-$USER}@${SHORTHOST:-$HOSTNAME}" "$PWD"
-    if [[ -f /sbin/consoletype ]]; then
-        if [[ `/sbin/consoletype` == "vt" ]]; then
-            if [[ -n $KBD_RATE ]]; then
-                kbdrate -s $KBD_RATE
+    show_ansi(){        # stolen from online
+        for attr in 0 1 4 5 7 ; do
+            echo "----------------------------------------------------------------"
+            printf "ESC[%s;Foreground;Background - \n" $attr
+            for fore in 30 31 32 33 34 35 36 37; do
+                for back in 40 41 42 43 44 45 46 47; do
+                    printf '\033[%s;%s;%sm %02s;%02s  ' $attr $fore $back $fore $back
+                done
+                printf '\n'
+            done
+            printf '\033[0m'
+        done
+    }
+
+    title(){            # sets hardlines for screen and xterms
+        if [[ $ZSH_VERSION = 4.* ]]; then
+            if [[ -n $STY$RUNNING_SCREEN$SCREEN_SCREEN ]]; then
+                # Use these two for GNU Screen:
+                print -nR $'\033k'${2/$SCREEN_HOST/}$'\033'\\\
+
+                print -nR $'\033]0;'${*:s/<>//}$'\a'
+            elif [[ $TERM == *xterm* || $TERM == *rxvt* || -n $DISPLAY || $BASETERM == *xterm* || $BASETERM == *rxvt* ]]; then
+                # Use this one instead for XTerms:
+                print -nR $'\033]0;'$*$'\a'
             fi
         fi
-    fi
-}
+    }
 
-preexec(){
-    if [[ $ZSH_VERSION = 3.* ]]; then
-        #local cmd; cmd=(${1})
-    else
-        local -a cmd; cmd=(${(z)1})
-        title "<$ORI_XTITLE>" $cmd[1]:t "$cmd[2,-1]"
-    fi
-}
-
-undev(){            # removes your development env 1.8.5
-    OLDCC=$CC
-    CC=
-    OLDCXX=$CXX
-    CXX=
-    OLDCFLAGS=$CFLAGS
-    CFLAGS=
-    OLDCXXFLAGS=$CXXFLAGS
-    CXXFLAGS=
-    OLDLDFLAGS=$LDFLAGS
-    LDFLAGS=
-    OLDCPPFLAGS=$CPPFLAGS
-    CPPFLAGS=
-    export CC CXX CFLAGS CXXFLAGS LDFLAGS CPPFLAGS
-}
-
-redev(){            # resets dev env 1.8.5
-    CC=$OLDCC
-    CXX=$OLDCXX
-    CFLAGS=$OLDCFLAGS
-    CXXFLAGS=$OLDCXXFLAGS
-    LDFLAGS=$OLDLDFLAGS
-    CPPFLAGS=$OLDCPPFLAGS
-    export CC CXX CFLAGS CXXFLAGS LDFLAGS CPPFLAGS
-}
-
-make_home_dir() {   # sets up homedir 1.8.5 
-    if [[ -f list ]]; then
-        for RCFILE in `cat list` ; do
-            if [[ -f "~/.$RCFILE" ]]; then
-                mv -v "~/.$RCFILE" "~/.$RCFILE.old"
+    precmd(){           # I changed this one 1.7.1.2
+        title "<$ORI_XTITLE>" "${SHORTUSER:-$USER}@${SHORTHOST:-$HOSTNAME}" "$PWD"
+        if [[ -f /sbin/consoletype ]]; then
+            if [[ `/sbin/consoletype` == "vt" ]]; then
+                if [[ -n $KBD_RATE ]]; then
+                    kbdrate -s $KBD_RATE
+                fi
             fi
-            ln -sfv "`pwd`/$RCFILE" ~/.$RCFILE
-        done
-        for SSHFILE in ssh/*(-.) ; do
-            if [[ -f "~/.$SSHFILE" ]]; then
-                mv ~/.$SSHFILE ~/.$SSHFILE.old
-            fi
-            ln -sfv "`pwd`/$SSHFILE" ~/.$SSHFILE
-        done
-    else
-        echo "no list :-("
-    fi
-}
-		
-no_brack() {        # removes stuff in brackets 1.8.4
-	for i in $* ; do
-	   NEWNAME="$i"
-	   while echo $NEWNAME | grep -q '\[' ; do
-	      if echo $i | cut -d'[' -f2-100 | grep -q '\]' ; then
-	         NEWNAME=`echo $NEWNAME | cut -d'[' -f1``echo $NEWNAME | cut -d']' -f2-100`
-	      fi
-	   done
-	   echo $NEWNAME
-	done
-}
+        fi
+    }
 
-no_par(){           # removes stuff in parenthesis 1.8.4
-    for i in $* ; do
-       NEWNAME="$i"
-       while echo $NEWNAME | grep -q '(' ; do
-          if echo $i | cut -d'(' -f2-100 | grep -q ')' ; then
-             NEWNAME=`echo $NEWNAME | cut -d'(' -f1``echo $NEWNAME | cut -d')' -f2-100`
-          fi
+    preexec(){
+        if [[ $ZSH_VERSION = 3.* ]]; then
+            #local cmd; cmd=(${1})
+        else
+            local -a cmd; cmd=(${(z)1})
+            title "<$ORI_XTITLE>" $cmd[1]:t "$cmd[2,-1]"
+        fi
+    }
+
+    undev(){            # removes your development env 1.8.5
+        OLDCC=$CC
+        CC=
+        OLDCXX=$CXX
+        CXX=
+        OLDCFLAGS=$CFLAGS
+        CFLAGS=
+        OLDCXXFLAGS=$CXXFLAGS
+        CXXFLAGS=
+        OLDLDFLAGS=$LDFLAGS
+        LDFLAGS=
+        OLDCPPFLAGS=$CPPFLAGS
+        CPPFLAGS=
+        export CC CXX CFLAGS CXXFLAGS LDFLAGS CPPFLAGS
+    }
+
+    redev(){            # resets dev env 1.8.5
+        CC=$OLDCC
+        CXX=$OLDCXX
+        CFLAGS=$OLDCFLAGS
+        CXXFLAGS=$OLDCXXFLAGS
+        LDFLAGS=$OLDLDFLAGS
+        CPPFLAGS=$OLDCPPFLAGS
+        export CC CXX CFLAGS CXXFLAGS LDFLAGS CPPFLAGS
+    }
+
+    make_home_dir() {   # sets up homedir 1.8.5 
+        if [[ -f list ]]; then
+            for RCFILE in `cat list` ; do
+                if [[ -f "~/.$RCFILE" ]]; then
+                    mv -v "~/.$RCFILE" "~/.$RCFILE.old"
+                fi
+                ln -sfv "`pwd`/$RCFILE" ~/.$RCFILE
+            done
+            for SSHFILE in ssh/*(-.) ; do
+                if [[ -f "~/.$SSHFILE" ]]; then
+                    mv ~/.$SSHFILE ~/.$SSHFILE.old
+                fi
+                ln -sfv "`pwd`/$SSHFILE" ~/.$SSHFILE
+            done
+        else
+            echo "no list :-("
+        fi
+    }
+            
+    no_brack() {        # removes stuff in brackets 1.8.4
+        for i in $* ; do
+           NEWNAME="$i"
+           while echo $NEWNAME | grep -q '\[' ; do
+              if echo $i | cut -d'[' -f2-100 | grep -q '\]' ; then
+                 NEWNAME=`echo $NEWNAME | cut -d'[' -f1``echo $NEWNAME | cut -d']' -f2-100`
+              fi
+           done
+           echo $NEWNAME
+        done
+    }
+
+    no_par(){           # removes stuff in parenthesis 1.8.4
+        for i in $* ; do
+           NEWNAME="$i"
+           while echo $NEWNAME | grep -q '(' ; do
+              if echo $i | cut -d'(' -f2-100 | grep -q ')' ; then
+                 NEWNAME=`echo $NEWNAME | cut -d'(' -f1``echo $NEWNAME | cut -d')' -f2-100`
+              fi
+           done
+           echo $NEWNAME
+        done
+    }
+          
+    remod(){
+       for i in $*; do
+          rmmod $i
        done
-       echo $NEWNAME
-    done
-}
-      
-remod(){
-    
-   for i in $*; do
-      rmmod $i
-   done
+       for i in $*; do
+          modprobe $i
+       done
+    }
 
-   for i in $*; do
-      modprobe $i
-   done
-
-}
-
+fi
 # vim:syn=zsh:ft=zsh:tw=4
