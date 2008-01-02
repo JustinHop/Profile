@@ -1,0 +1,45 @@
+#!/bin/zsh
+
+#
+#   This is to move pics from the phone to the laptop
+#
+
+SRC=/media/disk/my_pix
+DST=/home/justin/pictures
+TXLIST="${SRC}/transfered_list"
+
+NEWDATE=`date +%F`
+
+if [ ! -d "${DST}/${NEWDATE}" ]; then
+	mkdir -p "${DST}/${NEWDATE}/web"
+fi
+
+cd $SRC
+
+tar -cpf - -X $TXLIST *.jpg | ( cd "$DST/$NEWDATE" ; tar -xvpf - )
+
+cd "$DST/$NEWDATE"
+
+for PIC in *jpg ; do
+	echo ${PIC:t} >> $TXLIST
+	if [ ! -f web/${PIC:s/.jpg/-640x480.jpg/} ]; then
+	    echo "Scaling $PIC"
+	    convert $PIC -geometry 640x480 ./web/${PIC:s/.jpg/-640x480.jpg/}
+	    touch -r $PIC ./web/${PIC:s/.jpg/-640x480.jpg/}
+	fi
+done
+
+chmod -x *jpg web/*jpg
+
+cd $SRC
+cd ../my_flix
+rsync -avb *3g2 $DST/phone
+cd $DST/phone
+chmod 644 *(-.)
+
+for i in *3g2 ; do
+	if [ ! -e gif/${i:s/3g2/gif/} ]; then
+		echo "Creating animated gif for $i"
+		mplayer -vo gif89a:fps=15.0:output=gif/${i:s/3g2/gif/} -ao null $i > /dev/null
+	fi
+done
