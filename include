@@ -1,9 +1,14 @@
 ################################
 # Mah Functions
 ################################
-# include version 1.9.93
 
-export __INCLUDE__=1.9.93
+export __INCLUDE__=1.9.94
+
+ldapenv(){          # sets env vars for using openldap buzznet build
+	export PATH=/usr/local/openldap/bin:/usr/local/openldap/sbin:$PATH
+	export LD_LIBRARY_PATH=/usr/local/openldap/lib:/usr/local/openldap/lib64:$LD_LIBRARY_PATH
+	export MANPATH=/usr/local/openldap/man:$MANPATH
+}
 
 toos() {           # buzznet to change to machine architechure
         OSDIR=/tftpboot/OSes/$OS/os/`uname -i`/CentOS/RPMS
