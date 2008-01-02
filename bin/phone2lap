@@ -39,7 +39,9 @@ chmod 644 *(-.)
 
 for i in *3g2 ; do
 	if [ ! -e gif/${i:s/3g2/gif/} ]; then
-		echo "Creating animated gif for $i"
-		mplayer -vo gif89a:fps=15.0:output=gif/${i:s/3g2/gif/} -ao null $i > /dev/null
+		if echo $i | grep -v b ; then
+		    echo "Creating animated gif for $i"
+		    mplayer -vo gif89a:fps=15.0:output=gif/${i:s/3g2/gif/} -ao null $i > /dev/null
+		fi
 	fi
 done
