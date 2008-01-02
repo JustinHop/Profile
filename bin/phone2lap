@@ -45,3 +45,5 @@ for i in *3g2 ; do
 		fi
 	fi
 done
+
+chmod 644 gif/*(-.)
