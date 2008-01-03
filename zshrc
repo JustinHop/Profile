@@ -19,37 +19,13 @@ export ZSHRC_VERSION="1.9.94"
 # Presidence of homedir locations
 #######################################
 
-if [[ -o login ]]; then
-    if [[ ! -d ~/.undo ]]; then
-        mkdir ~/.undo
-    fi
-#    if [[ -e /etc/profile ]]; then
-#        source /etc/profile || echo "/etc/profile errored"
-#    fi
-fi
+[ ! -d ~/.undo ] && mkdir ~/.undo
 
-# Run
-if [[ -z $__ZSHENV__ ]]; then
-    if [[ -e ~/.zshenv ]]; then
-        source ~/.zshrc
-    else
-#        if [[ -f /etc/zsh/zshenv ]]; then
-#        #    . /etc/zsh/zshenv
-#        fi
+for MMAN in /usr/local/{openldap,svn,netperf,mysql,snort}/man ; do
+    if [[ -d $MMAN ]]; then
+        export MANPATH=$MMAN:$MANPATH
     fi
-fi
-
-# localiazation workarounds & functions
-#if [[ -z $__INCLUDE__ ]]; then
-    if [[ -e ~/.include ]]; then
-        . ~/.include
-    else
-        if [[ -f /etc/zsh/include ]]; then
-            #. /etc/zsh/include
-        fi
-    fi
-#fi
-
+done
 
 ############################
 ###  OPERATING SYSTEM DEPS
