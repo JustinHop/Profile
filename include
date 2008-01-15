@@ -4,6 +4,13 @@
 
 export __INCLUDE__=1.9.97
 
+nagenv(){          # sets env vars for using nagios buzznet build
+    export PATH=/usr/local/nagios/bin:/usr/local/nagios/sbin:$PATH
+    LD_LIBRARY_PATH=/usr/local/nagios/lib:/usr/local/nagios/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/usr/local/bdb/lib64:/usr/local/bdb/lib:$LD_LIBRARY_PATH
+    export MANPATH=/usr/local/nagios/man:$MANPATH
+}
+
 ldapenv(){          # sets env vars for using openldap buzznet build
     export PATH=/usr/local/openldap/bin:/usr/local/openldap/sbin:$PATH
     LD_LIBRARY_PATH=/usr/local/openldap/lib:/usr/local/openldap/lib64:$LD_LIBRARY_PATH
