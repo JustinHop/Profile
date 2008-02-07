@@ -3,7 +3,7 @@
 " 
 "  General Operation
 
-" vimrc-1.7
+" vimrc-1.8
 
 set nocompatible
 set backspace=2
@@ -146,6 +146,23 @@ if has("autocmd")
     let html_use_css=1              "       for standards-compliant :TOhtml output
     let use_xhtml=1                 "       for standards-compliant :TOhtml output
 
+    " vim -b : edit binary using xxd-format!
+    augroup Binary
+        au!
+        au BufReadPre *.bin,*.hex setlocal binary
+        au BufReadPost *
+                    \ if &binary | exe "Hexmode" | endif
+        au BufWritePre *
+                    \ if exists("b:editHex") && b:editHex && &binary |
+                    \  exe "%!xxd -r" |
+                    \ endif
+        au BufWritePost *
+                    \ if exists("b:editHex") && b:editHex && &binary |
+                    \  exe "%!xxd" |
+                    \  exe "set nomod" |
+                    \ endif
+    augroup END
+
     "  Use enter to activate help jump points & display line numbers
     "   au FileType help set number     
     au FileType help nmap <buffer> <Return> <C-]>
@@ -248,8 +265,40 @@ nnoremap <Up> gk
 vnoremap <Down> gj
 vnoremap <Up> gk
 
-" these make completion more sane
-" use arrows and whatnot
+command Hexmode call ToggleHex()
+function ToggleHex()
+    " hex mode should be considered a read-only operation
+    " save values for modified and read-only for restoration later,
+    " and clear the read-only flag for now
+    let l:modified=&mod
+    let l:oldreadonly=&readonly
+    let &readonly=0
+    if !exists("b:editHex") || !b:editHex
+        " save old options
+        let b:oldft=&ft
+        let b:oldbin=&bin
+        " set new options
+        setlocal binary " make sure it overrides any textwidth, etc.
+        let &ft="xxd"
+        " set status
+        let b:editHex=1
+        " switch to hex editor
+        %!xxd
+    else
+        " restore old options
+        let &ft=b:oldft
+        if !b:oldbin
+            setlocal nobinary
+        endif
+        " set status
+        let b:editHex=0
+        " return to normal editing
+        %!xxd -r
+    endif
+    " restore values for modified and read only state
+    let &mod=l:modified
+    let &readonly=l:oldreadonly
+endfunction
 
 "if version >= 700
 "   "  this line makes esc accept a completion
