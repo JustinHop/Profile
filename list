@@ -4,6 +4,7 @@ bad_ssh_config
 gvimrc
 include
 inputrc
+perltidyrc
 screenrc
 vimperatorrc
 vimrc
