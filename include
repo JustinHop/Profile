@@ -2,7 +2,24 @@
 # Mah Functions
 ################################
 
-export __INCLUDE__=1.9.97
+export __INCLUDE__=1.9.98
+
+fixzip(){           # Fixes zip
+    FLAGS=""
+    for PARAMS in $* ; do
+        if [ $PARAMS[1] == "-" ]; then
+            FLAGS="$FLAGS $PARAMS"
+        fi
+    done
+    for FILE in $* ; do
+        if [ -e $FILE ]; then
+            for XFILE in `unzip -l $FILE | grep -P '^\s*\d' | awk '{ print $4 }'` ; do
+                echo $XFILE
+                unzip -p $FILE $XFILE > $XFILE
+            done
+        fi
+    done
+}
 
 nagenv(){          # sets env vars for using nagios buzznet build
     export PATH=/usr/local/nagios/bin:/usr/local/nagios/sbin:$PATH

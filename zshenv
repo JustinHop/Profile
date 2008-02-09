@@ -4,11 +4,11 @@
 #   http://root-squash.ath.cx/
 #
 #   c 2007-04-11
-#   v 0.15
+#   v 0.16
 #
 ################################################################################
 
-export __ZSHENV__=0.15
+export __ZSHENV__=0.16
 
 [ -e ~/.include ] && source ~/.include
 
@@ -118,6 +118,10 @@ fi
 lsrc="/usr/local/src"
 dzsh="/etc/zsh"
 tocf="/home/justin/dev/cfengine/trunk/masterfiles/system/"
+cfetc="/home/justin/dev/cfengine/trunk/masterfiles/system/etc"
+cfin="/home/justin/dev/cfengine/trunk/masterfiles/system/inputs"
 Slap="/usr/local/openldap/etc/openldap/"
+amg="/autofs/isilon1/bnmedia1/amg"
+bnwww="/usr/local/websites/apache/"
 
 # vim:ft=zsh:syn=zsh:tw=4
