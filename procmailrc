@@ -49,7 +49,7 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 
     :0
     * ^From:.*(@keynote.com|DenyHosts|donotreply@llnw.com|logwatch@idx1.buzznet.com|nagios@tools|anonymous@iggy.fringehead.org)
-    | /usr/libexec/dovecot/deliver -m INBOX.buzznet.monitoring
+    | /home/justin/bin/mail2rss.pl | /usr/libexec/dovecot/deliver -m INBOX.buzznet.monitoring
 
     :0
     * ^From:.*cfengine@.*
