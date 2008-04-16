@@ -136,6 +136,7 @@ if has("autocmd")
 
     " ZSH Brokenness
     au FileType zsh set formatoptions=croq
+    au FileType spec set formatoptions-=a
 
     " STOLEN!!
     au FileType crontab set nobackup 

@@ -368,6 +368,9 @@ fi
 # work
 alias addroot="sudo ssh-add /root/keys/buzznet-admin"
 
+if [[ -d /data1/apache_logs ]]; then
+    alias AT="apachetop `find /data1/apache_logs/ -maxdepth 2 -name '*acc*' -exec echo -n "-f {} " \;`"
+fi
 
 #####################################
 # GNU LS ALIASES
@@ -510,12 +513,6 @@ if [[ -f $SVRCFG ]]; then
     #SERVERS=`cat $SVRCFG | awk -F\# '{print $1}' | awk -F\= '{print $1}' | xargs`
 fi
 #export $BN_KEYS
-
-if [ ! `whence svn` ]; then
-    if `whence bnsvn`; then
-        alias svn="bnsvn"
-    fi
-fi
 
 #######################################
 # My Options

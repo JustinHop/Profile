@@ -8,6 +8,10 @@ uptime
 echo "Welcome $USER, to $HOST on $TTY<$TERM> runnning $OSTYPE on $CPUTYPE"
 echo $DISTRO_VER
 echo "Running: $0 $ZSH_VERSION"
+if [[ -d /var/roles ]]; then
+    echo  "Defined Roles `ls /var/roles`"
+fi
+
 [[ -n `whence fortune` ]] && echo && fortune && echo
 
 if [[ -z $ORI_XTITLE && \
