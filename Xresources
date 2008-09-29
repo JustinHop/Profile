@@ -16,3 +16,4 @@ XTerm.VT100.visualBell: False
 XTerm.VT100.loginShell: True 
 XTerm.VT100.background: Black 
 XTerm.VT100.foreground: Green
+XTerm*titeInhibit: true

@@ -66,6 +66,9 @@
 
 # Window Raise (away from screen)
 #"xvkbd -text "\[F14]""
+"xvkbd -text "\[Shift]\[Control]\[Up]""
+    b:14
+
 "xvkbd -text "\[Control]\[Shift]\[Up]""
     b:15
 

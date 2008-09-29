@@ -1,17 +1,16 @@
 #!/bin/zsh
 
-MPLAYER_OPTS=" -fixed-vo -osd-duration 5 -shuffle -af volume=.3:volnorm -osdlevel 0 -fs "
-
 for i in $* ; do 
     echo "Playing $i"
-    mplayer $MPLAYER_OPTS $i > /dev/null
+    mplayer -vo xv -fs $MPLAYER_OPTS $i > /dev/null
     echo "Do you wish to keep $i [Y/n] "
-    read -q answer
-    if [[ "$anwser" != "n" ]]; then
-        echo "Keeping $i"
-        mv -v "$i" nokeep
-    else
+    read -q ans
+    if [[ $ans == "n" ]]; then
         echo "Not Keeping $i"
-        mv -v "$i" keep
+        baz="no"
+    else
+        echo "Keeping $i"
+        baz=""
     fi
+        mv -v "$i" ${baz}keep
 done
