@@ -93,14 +93,7 @@ title(){            # sets hardlines for screen and xterms
 }
 
 precmd(){           # I changed this one 1.7.1.2
-    title "<$ORI_XTITLE>" "${SHORTUSER:-$USER}@${SHORTHOST:-$HOSTNAME}" "$PWD"
-    if [[ -f /sbin/consoletype ]]; then
-        if [[ `/sbin/consoletype` == "vt" ]]; then
-            if [[ -n $KBD_RATE ]]; then
-                kbdrate -s $KBD_RATE
-            fi
-        fi
-    fi
+    title "<$ORI_XTITLE>" "${SHORTUSER:-$USER}@${SHORTHOST:-$SHORTHOST}" "$PWD"
 }
 
 preexec(){

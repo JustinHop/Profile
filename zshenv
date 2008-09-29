@@ -4,11 +4,11 @@
 #   http://root-squash.ath.cx/
 #
 #   c 2007-04-11
-#   v 0.16
+#   v 0.17
 #
 ################################################################################
 
-export __ZSHENV__=0.16
+export __ZSHENV__=0.17
 
 [ -e ~/.include ] && source ~/.include
 
@@ -50,6 +50,8 @@ case $USER in
     ;;
 esac
 export SHORTUSER
+
+export SHORTHOST=`echo $HOSTNAME | sed -e 's/.buzznet.com//' -e 's/justinhoppensteadt.com/.jh/'`
 
 ################################################################################
 #   path
@@ -103,6 +105,7 @@ export LESS="-isaFMXR"
 export VISUAL=vim
 export SVN_EDITOR=vim
 export EDITOR=vim
+export MYSQL_PS1="mysql (\u@$HOST)::\d > "
 
 [ -n `whence less` ] && PAGER=less || PAGER=more
 export PAGER
@@ -124,5 +127,7 @@ cfin="/home/justin/dev/cfengine/trunk/masterfiles/system/inputs"
 Slap="/usr/local/openldap/etc/openldap/"
 amg="/autofs/isilon1/bnmedia1/amg"
 bnwww="/usr/local/websites/apache/"
+www="/usr/local/websites/apache/"
+spec="/home/justin/rpmbuild/SPECS"
 
 # vim:ft=zsh:syn=zsh:tw=4

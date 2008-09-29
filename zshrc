@@ -158,10 +158,10 @@ case $UNAME in
         [[ -a /etc/slackware-version ]] && export DISTRO=slackware
         [[ -a /etc/gentoo-release ]] && export DISTRO=gentoo
 
-        if tty | grep pts > /dev/null ; then
-            if whence fgconsole > /dev/null ; then
+        if tty | grep pts >& /dev/null ; then
+            if whence fgconsole >& /dev/null ; then
                 LIN=`tty|tr '/' ' '|awk '{ print $3 }'`
-                LIN_SCREEN="`fgconsole`:$LIN"
+                LIN_SCREEN="`fgconsole 2> /dev/null`:$LIN"
             fi
         fi
         export GNU_COREUTILS=1
@@ -262,7 +262,7 @@ case $TERM in
 #                STM=screen.linux
 #            fi
 #        fi
-        whence bindit NULL && bindit
+        whence bindit >/dev/null && bindit
     ;;
     (*screen*)
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
@@ -273,12 +273,12 @@ case $TERM in
         if [[ -z $STY ]]; then
             STY=a
         fi
-        whence bindit NULL && bindit
+        whence bindit >/dev/null && bindit
     ;;
     (*vt*)
         FN_CHARS=( '^[[2~' '^[OH' '^[[5~'
                     '^[[4~' '^[OF' '^[[6~'  )
-        whence bindit NULL && bindit
+        whence bindit >/dev/null && bindit
     ;;
     (*ansi*)
         if [[ -f /etc/termcap ]]; then
@@ -290,7 +290,7 @@ case $TERM in
     (*)
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
                     '^[[3~' '^[[4~' '^[[6~' )
-        whence bindit NULL && bindit
+        whence bindit >/dev/null && bindit
     ;;
 esac
 
@@ -316,6 +316,9 @@ bindkey '^W' accept-and-menu-complete
 bindkey '^N' vi-repeat-find
 bindkey '^P' vi-rev-repeat-find
 bindkey '^B' expand-history
+bindkey '^Xx' push-line
+bindkey '^U' undo
+bindkey '^R' redo
 
 if [[ $ZSH_VERSION = 4.* ]]; then
 	bindkey '^O' all-matches
@@ -335,6 +338,7 @@ alias m=mail
 alias j=jobs
 alias psa="ps -A $TREEPS"
 alias kew="echo 'Totally.'"
+alias orly="echo yarly"
 
 # oops'
 alias ,,=".."
@@ -617,8 +621,8 @@ if [[ $ZSH_VERSION = 4.* ]]; then
 
     # CLEAR OUT THAT DAMNED CD COMPLETION GARBAGE!!!
     zstyle ':completion:*:*:*:users' ignored-patterns \
-        adm apache bin daemon games gdm halt ident junkbust \
-        lp mail mailnull named news nobody nscd \
+        adm bin daemon games gdm halt ident junkbust \
+        lp mail mailnull named news nscd \
         ntp operator pcap postgres radvd rpc rpcuser rpm \
         shutdown squid sshd sync uucp vcsa xfs backup  bind  \
         dictd  gnats  identd  irc  man  messagebus  postfix \

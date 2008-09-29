@@ -53,7 +53,7 @@ set autoindent
 set copyindent
 set expandtab
 set textwidth=80
-set formatoptions=croqa
+set formatoptions=roq
 set linebreak
 set nolist
 set preserveindent
@@ -129,14 +129,11 @@ if has("autocmd")
         \   exe "normal g'\"" |
         \ endif 
 
-    " DetectIndent
-    "let g:detectindent_preferred_expandtab = 1  
-    "let g:detectindent_preferred_indent = 4 
-    "au BufReadPost * :DetectIndent
-
     " ZSH Brokenness
     au FileType zsh set formatoptions=croq
     au FileType spec set formatoptions-=a
+
+    au FileType apache set nosmartindent
 
     " STOLEN!!
     au FileType crontab set nobackup 
@@ -148,21 +145,21 @@ if has("autocmd")
     let use_xhtml=1                 "       for standards-compliant :TOhtml output
 
     " vim -b : edit binary using xxd-format!
-    augroup Binary
-        au!
-        au BufReadPre *.bin,*.hex setlocal binary
-        au BufReadPost *
-                    \ if &binary | exe "Hexmode" | endif
-        au BufWritePre *
-                    \ if exists("b:editHex") && b:editHex && &binary |
-                    \  exe "%!xxd -r" |
-                    \ endif
-        au BufWritePost *
-                    \ if exists("b:editHex") && b:editHex && &binary |
-                    \  exe "%!xxd" |
-                    \  exe "set nomod" |
-                    \ endif
-    augroup END
+"    augroup Binary
+"        au!
+"        au BufReadPre *.bin,*.hex setlocal binary
+"        au BufReadPost *
+"                    \ if &binary | exe "Hexmode" | endif
+"        au BufWritePre *
+"                    \ if exists("b:editHex") && b:editHex && &binary |
+"                    \  exe "%!xxd -r" |
+"                    \ endif
+"        au BufWritePost *
+"                    \ if exists("b:editHex") && b:editHex && &binary |
+"                    \  exe "%!xxd" |
+"                    \  exe "set nomod" |
+"                    \ endif
+"    augroup END
 
     "  Use enter to activate help jump points & display line numbers
     "   au FileType help set number     
@@ -254,6 +251,8 @@ map <F10> :call RapNo()<CR>
 
 " <F9> toggle hlsearch
 noremap <silent> <F9> :set hlsearch!<cr>
+
+imap <C-w> <C-o><C-w>
 
 " From vim.org
 "  super wraping work around
