@@ -1,4 +1,4 @@
-README for perl-support.vim (Version 3.2.1) / August 29 2006
+README for perl-support.vim (Version 3.8.1) / June 25 2008
 
   *  INSTALLATION
   *  RELEASE NOTES 
@@ -6,14 +6,16 @@ README for perl-support.vim (Version 3.2.1) / August 29 2006
   *  ADDITIONAL TIPS
   *  CREDITS
 
-Perl Support implements a Perl-IDE for Vim/gVim. It is written to considerably
-speed up writing code in a consistent style.  This is done by inserting
-complete statements, comments, idioms, code snippets, templates, and POD
-documentation.  Reading perldoc is integrated.  Syntax checking, running a
+Perl Support implements a Perl-IDE for Vim/gVim. It has been written to
+considerably speed up writing code in a consistent style.  This is done by
+inserting complete statements, comments, idioms, code snippets, templates, and
+POD documentation.  Reading perldoc is integrated.  Syntax checking, running a
 script, running perltidy,  running perlcritics, starting a debugger and a
 profiler can be done with a keystroke.  There are many additional hints and
 options which can improve speed and comfort when writing Perl. Please read the
 documentation.
+This plugin can be used with Vim version 7.x . Most features should work with
+Vim version 6.x.
 
 =======================================================================================
   INSTALLATION
@@ -27,11 +29,16 @@ or $VIM\vimfiles (on the Windows platforms).
 
       unzip perl-support.zip
 
-    If you have already an older version of perl-support and you have modified the
-    template files you may want to save your templates first or copy the files from the
-    archive by hand.
+    If you have already an older version of perl-support and you have modified
+    the template files you may want to save your templates first or copy the 
+    files from the archive by hand.
 
-(2) Set at least some personal details into .vimrc by overriding some defaults.
+(2) Loading of plugin files must be enabled. If not use
+      :filetype plugin on
+    This is the minimal content of the file '$HOME/.vimrc'. Create one if there
+    is none. 
+
+(3) Set at least some personal details into .vimrc by overriding some defaults.
     Here the minimal personalization (my settings as an example, of course):
 
       let g:Perl_AuthorName      = 'Dr.-Ing. Fritz Mehner'     
@@ -68,16 +75,20 @@ and look at the perlsupport help with
                | +-------------------------------------------+ |
                +-----------------------------------------------+
 
+Any problems ? See the TROUBLESHOOTING section at the end of the help file
+'doc/perlsupport.txt'.
+
+For a system-wide installation please see the help file 'doc/perlsupport.txt'.
 
 =======================================================================================
   RELEASE NOTES 
 =======================================================================================
 
 ---------------------------------------------------------------------------------------
-  RELEASE NOTES FOR VERSION 3.2.1
+  RELEASE NOTES FOR VERSION 3.8.1
 ---------------------------------------------------------------------------------------
-+ Better adaption for 'perlcritic', version 0.19 .
-+ Bugfix: key mappings \cb and \cn are working now.
++ Bugfix: hot keys beginning like references (e.g. \$ ) now inactive in insert mode 
+  for non-empty lines.
 
 =======================================================================================
   OLDER RELEASE NOTES : see file 'ChangeLog'
@@ -87,57 +98,62 @@ and look at the perlsupport help with
   FILES
 =======================================================================================
 
-README.perlsupport        This file.
-ChangeLog                 The change log.
+README.perlsupport                This file.
 
-codesnippets-perl/*       Some Perl code snippets as a starting point.
+doc/perlsupport.txt               The help file for the local online help. 
+                                  
+ftplugin/perl.vim                 A filetype plugin. Define hotkeys, create a local 
+                                  dictionary for each Perl file.
 
-doc/perlsupport.txt       The help file for the local online help. 
-                          
-ftplugin/perl.vim         A filetype plugin. Define hotkeys, create a local 
-                          dictionary for each Perl file.
+plugin/perl-support.vim           The Perl plugin for Vim/gVim.
 
-plugin/perl-support.vim   The Perl plugin for Vim/gVim.
-plugin/pmdesc3.pl         Perl script; generates a list of all installed Perl modules
-plugin/efm_perl.pl        Perl script; Reformats the error messages of the Perl interpreter
-plugin/wrapper.sh         The wrapper script for the use of an xterm.
+perl-support/codesnippets-perl/*  Some Perl code snippets as a starting point.
 
-plugin/templates/perl-file-header           -+-  Perl template files 
-plugin/templates/perl-frame                  |   (see perlsupport.txt)
-plugin/templates/perl-function-description   |
-plugin/templates/perl-module-header          |
-plugin/templates/perl-pod                    |
-plugin/templates/perl-test-header           -+
+perl-support/modules/             Directory for the list of installed Perl modules
 
-wordlists/perl.list       A file used as dictionary for automatic word completion. 
-                          This file is referenced in the file customization.vimrc .
+perl-support/scripts/efm_perl.pl  Perl script; Reformats the error messages of the Perl interpreter
+perl-support/scripts/perltags.vim Vim script; use Perl::Tags (version 0.23) with Vim
+perl-support/scripts/pmdesc3.pl   Perl script; generates a list of all installed Perl modules
+perl-support/scripts/wrapper.sh   The wrapper script for the use of an xterm.
+
+perl-support/templates/perl-file-header           -+-  Perl template files 
+perl-support/templates/perl-frame                  |   (see perlsupport.txt)
+perl-support/templates/perl-function-description   |
+perl-support/templates/perl-module-header          |
+perl-support/templates/perl-pod                    |
+perl-support/templates/perl-test-header           -+
+
+perl-support/wordlists/perl.list  A file used as dictionary for automatic word completion.
+                                  This file is referenced in the file customization.vimrc.
 
 -----------------------   -------------------------------------------------------------
 -----------------------   The following files and extensions are for convenience only.
                           perl-support.vim will work without them.
                           -------------------------------------------------------------
 
-rc/customization.ctags       Additional settings I use in  .ctags to enable navigation
-                             through POD with the plugin taglist.vim.
+perl-support/rc/customization.ctags       Additional settings I use in  .ctags to enable
+                                          navigation through POD with the plugin taglist.vim.
 
-rc/customization.gvimrc      Additional settings I use in  .gvimrc:
-                               hot keys, mouse settings, ...
-                             The file is commented. Append it to your .gvimrc if you like.
+perl-support/rc/customization.gvimrc      Additional settings I use in  .gvimrc:
+                                          hot keys, mouse settings, ...
+                                          The file is commented. Append it to your .gvimrc 
+                                          if you like.
 
-rc/customization.perltidyrc  Additional settings I use in  .perltidyrc to enable 
-                             customize perltidy.
+perl-support/rc/customization.perltidyrc  Additional settings I use in  .perltidyrc to 
+                                          customize perltidy.
 
-rc/customization.smallprof   Additional settings I use to control the profiler 
-                             Devel::SmallProf
+perl-support/rc/customization.smallprof   Additional settings I use to control the profiler 
+                                          Devel::SmallProf
 
-rc/customization.vimrc       Additional settings I use in  .vimrc:  incremental search,
-                             tabstop, hot keys, font, use of dictionaries, ...
-                             The file is commented. Append it to your .vimrc if you like.
+perl-support/rc/customization.vimrc       Additional settings I use in  .vimrc:  incremental search,
+                                          tabstop, hot keys, font, use of dictionaries, ...
+                                          The file is commented. Append it to your .vimrc if you like.
 
-doc/perl-hot-keys.pdf     Reference card for the key mappings. 
-                          The mappings can also be used with the non-GUI Vim, 
-                          where the menus are not available.
-doc/pmdesc3.text          The man page for pmdesc3.
+perl-support/doc/perl-hot-keys.pdf        Reference card for the key mappings. 
+                                          The mappings can also be used with the non-GUI Vim, 
+                                          where the menus are not available.
+perl-support/doc/pmdesc3.text             The man page for pmdesc3.
+perl-support/doc/ChangeLog                The change log.
 
 
 =======================================================================================

@@ -1,142 +1,178 @@
+"===================================================================================
+"         FILE:  .vimrc
+"  DESCRIPTION:  suggestion for a personal configuration file ~/.vimrc
+"       AUTHOR:  Dr.-Ing. Fritz Mehner
+"      VERSION:  1.0
+"      CREATED:  23.05.2008
+"     REVISION:  --
+"===================================================================================
 "
-"===============================================================================
-"==========  load example vimrc from the distribution  =========================
-"===============================================================================
+"===================================================================================
+" GENERAL SETTINGS
+"===================================================================================
 "
-runtime vimrc_example.vim
+"-------------------------------------------------------------------------------
+" Use Vim settings, rather then Vi settings.
+" This must be first, because it changes other options as a side effect.
+"-------------------------------------------------------------------------------
+set nocompatible
 "
-"===============================================================================
-"==========  CUSTOMIZATION (vimrc)  ============================================
-"===============================================================================
+"-------------------------------------------------------------------------------
+" Enable file type detection. Use the default filetype settings.
+" Also load indent files, to automatically do language-dependent indenting.
+"-------------------------------------------------------------------------------
+filetype  plugin on
+"
+"-------------------------------------------------------------------------------
+" Switch syntax highlighting on.
+"-------------------------------------------------------------------------------
+syntax    on            
 "
 " Platform specific items:
 " - central backup directory (has to be created)
 " - default dictionary
 " Uncomment your choice.  
-if  has("win16") || has("win32")     || has("win64") || 
-  \ has("win95") || has("win32unix") 
-    "
-"    runtime mswin.vim
-"    set backupdir =$VIM\vimfiles\backupdir
-"    set dictionary=$VIM\vimfiles\wordlists/german.list
+if  has("win16") || has("win32") || has("win64") || has("win95")
+"
+"  runtime mswin.vim
+"  set backupdir =$VIM\vimfiles\backupdir
+"  set dictionary=$VIM\vimfiles\wordlists/german.list
 else
-"    set backupdir =$HOME/.vim.backupdir
-"    set dictionary=$HOME/.vim/wordlists/german.list
+  set backupdir =$HOME/.vim.backupdir
+  set dictionary=$HOME/.vim/wordlists/german.list,$HOME/.vim/wordlists/english.list
 endif
-"
-"-------------------------------------------------------------------------------
-" Use of dictionaries
-"-------------------------------------------------------------------------------
-"
-set complete+=k           " scan the files given with the 'dictionary' option
 "
 "-------------------------------------------------------------------------------
 " Various settings
 "-------------------------------------------------------------------------------
+set autoindent                  " copy indent from current line
+set autoread                    " read open files again when changed outside Vim
+set autowrite                   " write a modified buffer on each :next , ...
+set backspace=indent,eol,start  " backspacing over everything in insert mode
+set backup                      " keep a backup file
+set browsedir=current           " which directory to use for the file browser
+set complete+=k                 " scan the files given with the 'dictionary' option
+set history=50                  " keep 50 lines of command line history
+set hlsearch                    " highlightthe last used search pattern
+set incsearch                   " do incremental searching
+set listchars=tab:>.,eol:\$     " strings to use in 'list' mode
+set mouse=a                     " enable the use of the mouse
+set nowrap                      " do not wrap lines
+set popt=left:8pc,right:3pc     " print options
+set ruler                       " show the cursor position all the time
+set shiftwidth=2                " number of spaces to use for each step of indent
+set showcmd                     " display incomplete commands
+set smartindent                 " smart autoindenting when starting a new line
+set tabstop=2                   " number of spaces that a <Tab> counts for
+set visualbell                  " visual bell instead of beeping
+set wildignore=*.bak,*.o,*.e,*~ " wildmenu: ignore these extensions
+set wildmenu                    " command-line completion in an enhanced mode
 "
-set autoread              " read open files again when changed outside Vim
-set autowrite             " write a modified buffer on each :next , ...
-set browsedir  =current   " which directory to use for the file browser
-set incsearch             " use incremental search
-set nowrap                " do not wrap lines
-set shiftwidth =2         " number of spaces to use for each step of indent
-set tabstop    =2         " number of spaces that a <Tab> in the file counts for
-set visualbell            " visual bell instead of beeping
-"
+"-------------------------------------------------------------------------------
+"  highlight paired brackets
+"-------------------------------------------------------------------------------
+highlight MatchParen ctermbg=blue guibg=lightyellow
 "
 "-------------------------------------------------------------------------------
 "  some additional hot keys
 "-------------------------------------------------------------------------------
-"    F2   -  write file without confirmation
-"    F3   -  call file explorer Ex
-"    F4   -  show tag under curser in the preview window (tagfile must exist!)
-"    F6   -  list all errors           
-"    F7   -  display previous error
-"    F8   -  display next error   
-"    F12  -  toggle line numbers
-"  S-Tab  -  Fast switching between buffers (see below)
-"    C-q  -  Leave the editor with Ctrl-q (see below)
+"     F2  -  write file without confirmation
+"     F3  -  call file explorer Ex
+"     F4  -  show tag under curser in the preview window (tagfile must exist!)
+"     F6  -  list all errors           
+"     F7  -  display previous error
+"     F8  -  display next error   
+"     F12 -  list buffers and edit n-th buffer
 "-------------------------------------------------------------------------------
+noremap   <silent> <F2>         :write<CR>
+noremap   <silent> <F3>         :Explore<CR>
+noremap   <silent> <F4>         :execute ":ptag ".expand("<cword>")<CR>
+noremap   <silent> <F5>         :copen<CR>
+noremap   <silent> <F6>         :cclose<CR>
+noremap   <silent> <F7>         :cprevious<CR>
+noremap   <silent> <F8>         :cnext<CR>
+noremap            <F12>        :ls<CR>:edit #
 "
-map   <silent> <F2>    :write<CR>
-map   <silent> <F3>    :Explore<CR>
-nmap  <silent> <F4>    :exe ":ptag ".expand("<cword>")<CR>
-map   <silent> <F6>    :copen<CR>
-map   <silent> <F7>    :cp<CR>
-map   <silent> <F8>    :cn<CR>
-map   <silent> <F12>   :let &number=1-&number<CR>
+inoremap  <silent> <F2>    <C-C>:write<CR>
+inoremap  <silent> <F3>    <C-C>:Explore<CR>
+inoremap  <silent> <F4>    <C-C>:execute ":ptag ".expand("<cword>")<CR>
+inoremap  <silent> <F5>    <C-C>:copen<CR>
+inoremap  <silent> <F6>    <C-C>:cclose<CR>
+inoremap  <silent> <F7>    <C-C>:cprevious<CR>
+inoremap  <silent> <F8>    <C-C>:cnext<CR>
+inoremap           <F12>   <C-C>:ls<CR>:edit #
 "
-imap  <silent> <F2>    <Esc>:write<CR>
-imap  <silent> <F3>    <Esc>:Explore<CR>
-imap  <silent> <F4>    <Esc>:exe ":ptag ".expand("<cword>")<CR>
-imap  <silent> <F6>    <Esc>:copen<CR>
-imap  <silent> <F7>    <Esc>:cp<CR>
-imap  <silent> <F8>    <Esc>:cn<CR>
-imap  <silent> <F12>   :let &number=1-&number<CR>
+"-------------------------------------------------------------------------------
+" comma always followed by a space
+"-------------------------------------------------------------------------------
+inoremap  ,  ,<Space>
 "
-" insert mode : autocomplete brackets and braces
-imap ( ()<Left>
-imap [ []<Left>
-imap { {}<Left>
+"-------------------------------------------------------------------------------
+" autocomplete parenthesis, (brackets) and braces
+"-------------------------------------------------------------------------------
+inoremap  (  ()<Left>
+inoremap  [  []<Left>
+inoremap  {  {}<Left>
 "
-" visual mode : frame a selection with brackets and braces
-vmap ( d<Esc>i(<Esc>p
-vmap [ d<Esc>i[<Esc>p
-vmap { d<Esc>i{<Esc>p
+vnoremap  (  s()<Esc>P<Right>%
+vnoremap  [  s[]<Esc>P<Right>%
+vnoremap  {  s{}<Esc>P<Right>%
+"
+" surround content with additional spaces
+"
+vnoremap  )  s(  )<Esc><Left>P<Right><Right>%
+vnoremap  ]  s[  ]<Esc><Left>P<Right><Right>%
+vnoremap  }  s{  }<Esc><Left>P<Right><Right>%
+"
+"-------------------------------------------------------------------------------
+" autocomplete quotes (visual and select mode)
+"-------------------------------------------------------------------------------
+xnoremap  '  s''<Esc>P<Right>
+xnoremap  "  s""<Esc>P<Right>
+xnoremap  `  s``<Esc>P<Right>
+"
+"-------------------------------------------------------------------------------
+" The current directory is the directory of the file in the current window.
+"-------------------------------------------------------------------------------
+if has("autocmd")
+  autocmd BufEnter * :lchdir %:p:h
+endif
 "
 "-------------------------------------------------------------------------------
 " Fast switching between buffers
 " The current buffer will be saved before switching to the next one.
 " Choose :bprevious or :bnext
 "-------------------------------------------------------------------------------
-"
- map  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly && 
-     \                  &modified <CR> :write<CR> :endif<CR>:bnext<CR>
-imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly && 
-     \                  &modified <CR> :write<CR> :endif<CR>:bnext<CR>
-"
-"-------------------------------------------------------------------------------
-" Leave the editor with Ctrl-q : Write all changed buffers and exit Vim
-"-------------------------------------------------------------------------------
-nmap  <C-q>    :wqa<CR>
+ noremap  <silent> <s-tab>       :if &modifiable && !&readonly && 
+     \                      &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
+inoremap  <silent> <s-tab>  <C-C>:if &modifiable && !&readonly && 
+     \                      &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
 "
 "-------------------------------------------------------------------------------
-" Change the working directory to the directory containing the current file
+" Leave the editor with Ctrl-q (KDE): Write all changed buffers and exit Vim
 "-------------------------------------------------------------------------------
-if has("autocmd")
-  autocmd BufEnter * :lcd %:p:h
-endif " has("autocmd")
+nnoremap  <C-q>    :wqall<CR>
 "
-"-------------------------------------------------------------------------------
-" Filename completion
-" 
-"   wildmenu : command-line completion operates in an enhanced mode
-" wildignore : A file that matches with one of these
-"              patterns is ignored when completing file or directory names.
-"-------------------------------------------------------------------------------
-" 
-set wildmenu
-set wildignore=*.bak,*.o,*.e,*~
 "
-"-------------------------------------------------------------------------------
-" print options  (pc = percentage of the media size)
-"-------------------------------------------------------------------------------
-set printoptions=left:8pc,right:3pc
-
+"===================================================================================
+" VARIOUS PLUGIN CONFIGURATIONS
+"===================================================================================
+"
 "-------------------------------------------------------------------------------
 " perl-support.vim
 "-------------------------------------------------------------------------------
-let g:Perl_AuthorName        = 'Dr.-Ing. Fritz Mehner'
-let g:Perl_AuthorRef         = 'Mn'
-let g:Perl_Company           = 'FH Südwestfalen, Iserlohn'
-let g:Perl_Email             = 'mehner@fh-swf.de'
+let g:Perl_AuthorName   = 'Dr.-Ing. Fritz Mehner'     
+let g:Perl_AuthorRef    = 'Mn'                         
+let g:Perl_Company      = 'Fachhochschule Südwestfalen, Iserlohn'    
+let g:Perl_Email        = 'mehner@fh-swf.de'            
 "                         
 "-------------------------------------------------------------------------------
-" taglist.vim : toggle the taglist window
-" taglist.vim : define the title texts for Perl
+" plugin taglist.vim : toggle the taglist window
+" plugin taglist.vim : define the tag file entry for Perl
 "-------------------------------------------------------------------------------
- noremap <silent> <F11>  <Esc><Esc>:Tlist<CR>
-inoremap <silent> <F11>  <Esc><Esc>:Tlist<CR>
-
-let tlist_perl_settings  = 'perl;c:constants;l:labels;p:package;s:subroutines;d:POD'
-
+"-------------------------------------------------------------------------------
+ noremap <silent> <F11>       :TlistToggle<CR>
+inoremap <silent> <F11>  <C-C>:TlistToggle<CR>
+"
+let tlist_perl_settings  = 'perl;c:constants;f:formats;l:labels;p:packages;s:subroutines;d:subroutines;o:POD'
+"

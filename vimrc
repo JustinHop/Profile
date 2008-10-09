@@ -51,19 +51,22 @@ endif
 "  Indenting Formating
 set autoindent
 set copyindent
-set expandtab
+set preserveindent
+set smartindent
 set textwidth=80
 set formatoptions=roq
-set linebreak
 set nolist
-set preserveindent
-set shiftwidth=4
 set showbreak=-->\ 
-set smartindent
-set smarttab
-"set softtabstop=4
-set tabstop=4
 set wrap
+set linebreak
+
+set smarttab
+set softtabstop=4
+set shiftwidth=4
+set tabstop=4
+set expandtab
+
+set complete=.,k,w,b,t,i
 
 " Folding
 if has("folding")
@@ -87,7 +90,6 @@ set wildmenu
 set wildmode=list:longest,full
 
 set shortmess=a
-      
 
 " Booyah
 if &t_Co || has("gui_running") && ( $TERM != "screen.linux")
@@ -115,6 +117,24 @@ else
     set ttymouse=xterm2
 endif  
 
+function! MyPerlSettings()
+    if !did_filetype()
+        set filetype=perl
+    endif
+
+    setlocal nosmartindent
+    setlocal noautoindent
+    setlocal indentexpr=
+    setlocal complete+=k 
+    setlocal cindent 
+    setlocal cinkeys=0{,0},0(,0),:,!^F,o,O,e
+    setlocal formatoptions-=t formatoptions+=croq
+
+    compiler perl
+    colorscheme wuye
+endfunction
+
+
 "
 "  We are using VIM
 "
@@ -131,7 +151,10 @@ if has("autocmd")
 
     " ZSH Brokenness
     au FileType zsh set formatoptions=croq
+    au FileType sh set formatoptions-=t
     au FileType spec set formatoptions-=a
+
+    au FileType perl :call MyPerlSettings()
 
     au FileType apache set nosmartindent
 
@@ -170,13 +193,12 @@ if has("autocmd")
         au BufNewFile,BufRead afiedt.buf      setf sql
     augroup END
 
-   	set cpt=.,k,w,b,t,i
    	"set cpt=.,w,b,t,i
-   	au FileType perl set cpt=.,w,b
-   	if version >= 700
-   		au FileType perl set indentexpr=
-   		au FileType perl set noautoindent
-   	endif
+   	"au FileType perl set cpt=.,w,b
+    "if version >= 700
+    "	au FileType perl set indentexpr=
+    "	au FileType perl set noautoindent
+    "endif
 endif
 
 
@@ -192,40 +214,22 @@ inoremap <esc>[1;2A <C-Y>
 "	prevents smartindent from being annoying with #
 inoremap # X<BS>#
 
-" this nice little oneliner toggles number on <F12>
-"noremap <silent> <F12> :set number!<cr> 
-"
-"
-"-------------------------------------------------------------------------------
-"  some additional hot keys
-"-------------------------------------------------------------------------------
-"    F2   -  DetectIndent
-"    F3   -  call file explorer Ex
-"    F4   -  show tag under curser in the preview window (tagfile must exist!)
-"    F6   -  list all errors           
-"    F7   -  display previous error
-"    F8   -  display next error   
-"    F12  -  toggle line numbers
-"  S-Tab  -  Fast switching between buffers (see below)
-"    C-q  -  Leave the editor with Ctrl-q (see below)
-"-------------------------------------------------------------------------------
-"
 map   <silent> <F1>    <Esc>
-map   <silent> <F2>    :DetectIndent<CR>
-map   <silent> <F3>    :Explore<CR>
-nmap  <silent> <F4>    :exe ":ptag ".expand("<cword>")<CR>
-map   <silent> <F6>    :copen<CR>
-map   <silent> <F7>    :cp<CR>
-map   <silent> <F8>    :cn<CR>
+"map   <silent> <F2>    :DetectIndent<CR>
+"map   <silent> <F3>    :Explore<CR>
+"nmap  <silent> <F4>    :exe ":ptag ".expand("<cword>")<CR>
+"map   <silent> <F6>    :copen<CR>
+"map   <silent> <F7>    :cp<CR>
+"map   <silent> <F8>    :cn<CR>
 map   <silent> <F12>   :let &number=1-&number<CR>
 "
 imap  <silent> <F1>    <ESC>
-imap  <silent> <F2>    <Esc>:DetectIndent<CR>
-imap  <silent> <F3>    <Esc>:Explore<CR>
-imap  <silent> <F4>    <Esc>:exe ":ptag ".expand("<cword>")<CR>
-imap  <silent> <F6>    <Esc>:copen<CR>
-imap  <silent> <F7>    <Esc>:cp<CR>
-imap  <silent> <F8>    <Esc>:cn<CR>
+"imap  <silent> <F2>    <Esc>:DetectIndent<CR>
+"imap  <silent> <F3>    <Esc>:Explore<CR>
+"imap  <silent> <F4>    <Esc>:exe ":ptag ".expand("<cword>")<CR>
+"imap  <silent> <F6>    <Esc>:copen<CR>
+"imap  <silent> <F7>    <Esc>:cp<CR>
+"imap  <silent> <F8>    <Esc>:cn<CR>
 imap  <silent> <F12>   :let &number=1-&number<CR>
 
 " this one maps pastemode toggle to F11
