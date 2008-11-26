@@ -338,8 +338,8 @@ let java_minlines=50
 "   perl
 let g:Perl_AuthorName      = 'Justin Hoppensteadt'
 let g:Perl_AuthorRef       = 'JH'
-let g:Perl_Email           = 'justin@buzznet.com'
-let g:Perl_Company         = 'Buzznet, Inc.'
+let g:Perl_Email           = 'Justin.Hoppensteadt@umgtemp.com'
+let g:Perl_Company         = 'Universal Music Group'
 
 "" insert mode : autocomplete brackets and braces
 "imap ( ()<Left>
