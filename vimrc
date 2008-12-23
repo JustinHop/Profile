@@ -156,7 +156,7 @@ if has("autocmd")
 
     au FileType perl :call MyPerlSettings()
 
-    au FileType apache set nosmartindent
+    au FileType apache set nosmartindent preserveindent
 
     " STOLEN!!
     au FileType crontab set nobackup 

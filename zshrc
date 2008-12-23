@@ -5,8 +5,8 @@
 #                 use it, or have suggestions/patches.
 #
 #  Justin Hoppensteadt 
-#              <zshy-goodness@root-squash.ath.cx>
-#              http://root-squash.ath.cx
+#              <zshy-goodness@justinhoppensteadt.com>
+#              http://justinhoppensteadt.com
 #
 #                 free to all
 #
@@ -20,6 +20,7 @@ export ZSHRC_VERSION="1.9.94"
 #######################################
 
 [ ! -d ~/.undo ] && mkdir ~/.undo
+[ ! -d ~/backup ] && mkdir ~/backup
 
 for MMAN in /usr/local/{openldap,svn,netperf,mysql,snort}/man ; do
     if [[ -d $MMAN ]]; then
@@ -357,7 +358,7 @@ alias -g ".........."="../../../../../../../../.."
 
 # syncs
 alias sync-d2t="cd ; rsync -avb justin@dallas.525sports.com:/var/www/pictures . ; cd - "
-alias sync-t2d="cd ; rsync -avb pictures justin@dallas.526sports.com:/var/www ; cd - "
+alias sync-t2d="cd ; rsync -avb pictures justin@dallas.525sports.com:/var/www ; cd - "
 
 #   bad ssh options
 BAD_SSH="$HOME/.ssh/bad_ssh_config"
@@ -511,12 +512,6 @@ alias new_screen="screen_prep; screen -a -O $_SLOG"
 #######################################
 # Work  Stuff
 #######################################
-SVRCFG=/etc/servers.cfg
-if [[ -f $SVRCFG ]]; then
-    #eval `cat $SVRCFG | /usr/local/bin/class.pl`
-    #SERVERS=`cat $SVRCFG | awk -F\# '{print $1}' | awk -F\= '{print $1}' | xargs`
-fi
-#export $BN_KEYS
 
 #######################################
 # My Options
