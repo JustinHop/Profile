@@ -21,7 +21,7 @@
 use strict;
 use warnings;
 
-my $DIR='/home/justin/backup';
+my $DIR=$ENV{HOME} . '/backup';
 my $DATE=`date +%F`;
 chomp $DATE;
 my $HOST=`hostname`;
