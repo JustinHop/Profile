@@ -7,13 +7,15 @@
 #  Justin Hoppensteadt 
 #              <zshy-goodness@justinhoppensteadt.com>
 #              http://justinhoppensteadt.com
+#              svn
+#              http://justinhoppensteadt.com/svn
 #
 #                 free to all
 #
 #######################################
 #######################################
 
-export ZSHRC_VERSION="1.9.94"
+export ZSHRC_VERSION="1.9.95"
 
 #######################################
 # Presidence of homedir locations
