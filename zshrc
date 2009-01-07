@@ -372,13 +372,6 @@ if [[ -f $HOME/.ssh/*id ]]; then
     chmod 0600 $HOME/.ssh/{authorized_keys,*id}
 fi
 
-# work
-alias addroot="sudo ssh-add /root/keys/buzznet-admin"
-
-if [[ -d /data1/apache_logs ]]; then
-    alias AT="apachetop `find /data1/apache_logs/ -maxdepth 2 -name '*acc*' -exec echo -n "-f {} " \;`"
-fi
-
 #####################################
 # GNU LS ALIASES
 #####################################
@@ -601,7 +594,8 @@ if [[ $ZSH_VERSION = 4.* ]]; then
     zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 
     autoload -U compinit
-    compinit
+    compinit -u
+    #        ^^ shuts it up
 fi
 # End of lines added by compinstall
 
