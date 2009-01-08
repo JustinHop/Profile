@@ -19,6 +19,10 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 ##
 #   Handle Spam
 
+:0
+* ^To:.*(cybererotica|therave|teenybopper|bomb|brazzers|deluxe)
+/dev/null
+
 :0fw
 | /usr/bin/spamassassin 
 
@@ -33,22 +37,34 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 
 ##
 #   Message Sorting
+#
+
+# Sports
+:0
+* ^(To: .*kickball|From:.*worldkickball.com)
+| /usr/libexec/dovecot/deliver -m INBOX.sports
+
+# Ebay
+:0
+* ^From:.*ebay.com
+| mailpipe.pl -from=ebay@525sports.com | /usr/libexec/dovecot/deliver -m INBOX.ebay
 
 # Yahoo Account
 :0
 * justin_hoppensteadt@yahoo.com
 | /usr/libexec/dovecot/deliver -m INBOX.Justin_Hoppensteadt@Yahoo_com
 
-# Buzznet
+# Nagios check testing
 :0
+* ^To:.*test@justinhoppensteadt.com
+| /usr/libexec/dovecot/deliver -m INBOX.test
+
+# Buzznet
+:0:
 * (buzznet@justinhoppensteadt.com|.*@buzznet.com)
 {
     :0
-    * ^From:.*(Cron Daemon|root@)
-    | /usr/libexec/dovecot/deliver -m INBOX.buzznet.cron
-
-    :0
-    * ^From:.*(@keynote.com|DenyHosts|donotreply@llnw.com|logwatch@idx1.buzznet.com|nagios@tools|anonymous@iggy.fringehead.org)
+    * ^From:.*(Cron Daemon|root@|@keynote.com|DenyHosts|donotreply@llnw.com|logwatch@idx1.buzznet.com|Arpwatch|nagios@tools|@iggy.fringehead.org|@pingdom|noreply@akamai.com)
     | /home/justin/bin/mail2rss.pl | /usr/libexec/dovecot/deliver -m INBOX.buzznet.monitoring
 
     :0
@@ -60,8 +76,12 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.mantis
 
     :0
-    * ^Subject: (www|cfengine).*(files|).*DEPLOYED
+    * ^Subject: (www|cfengine|justjared|JJDEPLOY).*(files|).*DEPLOYED
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet.deploy
+
+    :0
+    * ^Reply-To: blogops@buzznet.com
+    | /usr/libexec/dovecot/deliver -m INBOX.buzznet.tickets
 
     :0
     | /usr/libexec/dovecot/deliver -m INBOX.buzznet
@@ -75,6 +95,15 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 :0
 * ^(Subject|From):.*(root|cron)
 | /usr/libexec/dovecot/deliver -m INBOX.messages
+
+:0
+* ^From: .*facebook.*.com
+| /usr/libexec/dovecot/deliver -m INBOX.facebook@justinhoppensteadt_com
+
+:0
+* ^(To:.*match@root|From: .*(@talkmatch.com|connect.match.com))
+| /usr/libexec/dovecot/deliver -m INBOX.match@root-squash_ath_cx
+
 
 
 ##
