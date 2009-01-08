@@ -38,11 +38,11 @@
 #keystate_scrolllock= enable
 
 # Tilt Right
-"xvkbd -xsendevent -text "\[Control]\[Next]""
+"xvkbd -xsendevent -text "\[Control]\[Prior]""
     b:6
 
 # Tilt Left
-"xvkbd -xsendevent -text "\[Control]\[Prior]""
+"xvkbd -xsendevent -text "\[Control]\[Next]""
     b:7
 
 # History Back
@@ -60,27 +60,19 @@
     c:233
 
 # Window Lower (towards screen)
-#"xvkbd -text "\[F13]""
-"xvkbd -text "\[Shift]\[Control]\[Down]""
+#"xvkbd -text "\[Shift_L]\[Control_L]\[Down]""
+"echo "KeyStrPress Super_L KeyStrPress d KeyStrRelease d KeyStrRelease Super_L"| xmacroplay -d 0 :0.0"
     b:13
 
 # Window Raise (away from screen)
-#"xvkbd -text "\[F14]""
-"xvkbd -text "\[Shift]\[Control]\[Up]""
+#"xvkbd -text "\[Control]\[Shift]\[Up]""
+"echo "KeyStrPress Super_L KeyStrPress u KeyStrRelease u KeyStrRelease Super_L"| xmacroplay -d 0 :0.0"
     b:14
 
-"xvkbd -text "\[Control]\[Shift]\[Up]""
-    b:15
 
-# Mapping Button 17 + Button to Alt + Button for wm stuff
-#"echo KeyStrPress Alt_L | xmacroplay $DISPLAY"
-#"xte 'keydown Alt_L' 'sleep 1' 'keyup Alt_L'"
-"xvkbd -text "\[F17]""
-    b:17    
+#"echo "KeyStrPress Super_L KeyStrPress Shift_L KeyStrPress n KeyStrRelease n KeyStrRelease Shift_L KeyStrRelease Super_L" | xmacroplay -d 0 :0.0"
+#    b:6 + b:8
 
-#"echo KeyStrRelease Alt_L | xmacroplay $DISPLAY"
-#"xte 'keyup Alt_L' "
-#    Release + b:17 
 
 
 ##################################
