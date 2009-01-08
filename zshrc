@@ -1,9 +1,7 @@
-#  zshrc - Z Shell Interactive Init Script by
+#  $Id$
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  http://justinhoppensteadt.com/svn/profile/zshrc
 #  Both kinds of free
-#  $Id$
-#######################################
 
 export ZSHRC_VERSION="1.9.95"
 
