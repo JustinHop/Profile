@@ -1,8 +1,9 @@
-################################
-# Mah Functions
-################################
+#  $Id$
+#  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
+#  http://justinhoppensteadt.com/svn/profile/include
+#  Both kinds of free
 
-export __INCLUDE__=1.9.98
+export __INCLUDE__=2
 
 fixzip(){           # Fixes zip
     for FILE in $* ; do
@@ -12,44 +13,6 @@ fixzip(){           # Fixes zip
                 unzip -p $FILE $XFILE > $XFILE
             done
         fi
-    done
-}
-
-nagenv(){          # sets env vars for using nagios buzznet build
-    export PATH=/usr/local/nagios/bin:/usr/local/nagios/sbin:$PATH
-    LD_LIBRARY_PATH=/usr/local/nagios/lib:/usr/local/nagios/lib64:$LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH=/usr/local/bdb/lib64:/usr/local/bdb/lib:$LD_LIBRARY_PATH
-    export MANPATH=/usr/local/nagios/man:$MANPATH
-}
-
-ldapenv(){          # sets env vars for using openldap buzznet build
-    export PATH=/usr/local/openldap/bin:/usr/local/openldap/sbin:$PATH
-    LD_LIBRARY_PATH=/usr/local/openldap/lib:/usr/local/openldap/lib64:$LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH=/usr/local/bdb/lib64:/usr/local/bdb/lib:$LD_LIBRARY_PATH
-    export MANPATH=/usr/local/openldap/man:$MANPATH
-}
-
-toos() {           # buzznet to change to machine architechure
-        OSDIR=/tftpboot/OSes/$OS/os/`uname -i`/CentOS/RPMS
-        while [ ! -d "$OSDIR" ]; do 
-                OSDIR=`dirname $OSDIR`
-        done
-        if [ ! -z "$OSDIR" -a "$OSDIR" != "/" ]; then
-                cd $OSDIR
-        fi
-}
-
-unexp(){            # unexpires all roles for given users
-    for USERS in $* ; do
-
-        echo $USERS
-        for ROLES in `vclc user role list $USERS | grep expired | awk '{ print $1 }'` ; do
-
-            echo " $ROLES"
-            vclc user role renew $USERS '$ROLES' 365
-
-        done
-
     done
 }
 
@@ -139,12 +102,15 @@ make_home_dir() {   # sets up homedir 1.8.5
             fi
             ln -sfv "`pwd`/$RCFILE" ~/.$RCFILE
         done
-        for SSHFILE in ssh/*(-.) ; do
-            if [[ -f "~/.$SSHFILE" ]]; then
-                mv ~/.$SSHFILE ~/.$SSHFILE.old
-            fi
-            ln -sfv "`pwd`/$SSHFILE" ~/.$SSHFILE
-        done
+        if [[ -d ssh ]]; then
+            chmod 700 ssh
+            for SSHFILE in ssh/*(-.) ; do
+                if [[ -f "~/.$SSHFILE" ]]; then
+                    mv ~/.$SSHFILE ~/.$SSHFILE.old
+                fi
+                ln -sfv "`pwd`/$SSHFILE" ~/.$SSHFILE
+            done
+        fi
     else
         echo "no list :-("
     fi
@@ -183,4 +149,4 @@ remod(){
    done
 }
 
-# vim:syn=zsh:ft=zsh:tw=4
+# vim:syn=zsh:ft=zsh

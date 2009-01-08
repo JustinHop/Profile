@@ -3,70 +3,24 @@
 #  http://justinhoppensteadt.com/svn/profile/zshrc
 #  Both kinds of free
 
-export ZSHRC_VERSION="1.9.95"
+export ZSHRC_VERSION="2.0.0"
 
-#######################################
-# Presidence of homedir locations
-#######################################
+#
+# WORKSPACE AND ENVIRONMENT
+#
 
-[ ! -d ~/.undo ] && mkdir ~/.undo
-[ ! -d ~/backup ] && mkdir ~/backup
+if [[ -n "$__ZSHENV__" ]]; then
+    [ -e "$HOME/.zshenv" ] && source "$HOME/.zshenv"
+fi
 
-for MMAN in /usr/local/{openldap,svn,netperf,mysql,snort}/man ; do
-    if [[ -d $MMAN ]]; then
-        export MANPATH=$MMAN:$MANPATH
-    fi
+for SPACE in .undo backup .zsh ; do
+    [ ! -d "$HOME/$SPACE"  ] && ( mkdir "$HOME/$SPACE" || echo "Could not make $HOME/$SPACE" )
 done
 
-############################
-###  OPERATING SYSTEM DEPS
-############################
-
+#
+# UNAME FUN
+#
 case $UNAME in
-    (UnixWare)
-        typeset -a BKT
-        BKT=('<' '>' '(' ')' '{' '}')
-
-        alias TAT='export TERM=AT386-ie'
-        alias TSCO='export TERM=scoansi'
-
-        if [[ -n $TERMINAL_EMULATOR ]]; then
-            export TERM=$TERMINAL_EMULATOR
-        fi
-
-        if [[ -a /usr/gnu/bin/ls ]]; then 
-            LS="/usr/gnu/bin/ls"
-            export GNU_COREUTILS=1
-        else
-            LSO="-F"
-            alias ls="lc $LSO"
-            alias l.="lc $LSO -d .* "
-            alias la="lc $LSO -a"
-            alias ll="lc -l $LSO"
-            alias ll."lc -la $LSO"
-            alias lc="lc $LSO"
-            alias l="lc $LSO"
-            alias lsd="lc */ -d"
-        fi
-
-        export DISTRO=Unixware
-        export MANPATH="/usr/man:/usr/local/man:/usr/gnu/man"
-        export PATH="$SCO_PATH:$PATH:$UNIXWARE_PATH"
-        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/gnu/lib"
-
-        TYCOLOR=white
-    ;;
-
-    (SCO_SV)
-        typeset -a BKT
-        BKT=('{' '}' '<' '>' '[' ']')
-        export DISTRO=OpenServer
-        export DISTRO_VER=`uname -v`  
-        export PATH="$SCO_PATH:$PATH"
-        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/gnu/lib"
-        TYCOLOR=green
-    ;;
-
     (SunOS)
         if [[ $ZSH_VERSION = 3.* ]]; then
             typeset BKT
@@ -82,51 +36,7 @@ case $UNAME in
         export PATH="$HOME/usr/local/bin:$HOME/bin:$SUN_PATH:$PATH"
         TYCOLOR=yellow
 
-        for i in "$HOME/toolbox" /m1/utility/toolbox ; do
-            if [[ -d "$i" ]]; then
-                TBOX="$i"
-            fi
-        done
-
-        if [[ -d $TBOX ]]; then
-            box=$TBOX
-            PROFILE_DIR=$TBOX/etc
-            PATH="$TBOX/bin:$PATH"
-            MANPATH="$TBOX/man:$TBOX/share/man:/usr/local/man:/usr/local/share/man:/usr/man:/usr/share/man:$MANPATH"
-            if [[ -x `whence gls` ]]; then
-                LS=`whence gls`
-                export GNU_COREUTILS=1
-            fi
-        fi
-
         export LD_LIBRARY_PATH="$TBOX/lib:$LD_LIBRARY_PATH:${SUN_PATH:gs/bin/lib/}"
-
-        # I'll use these ones later
-        #CFLAG32="-fast -s -xthreadvar=dynamic -xarch=v8plusa -mc -xbinopt=prepare -xO4"
-        #CFLAG64="-fast -s -xthreadvar=dynamic -xarch=v9a -mc -xbinopt=prepare -xO4"
-
-        if [[ -x `whence cc` ]]; then
-            #if cc -V &| grep -s "Sun" ; then
-                export CC=cc
-                export CFLAGS="-fast -s -xarch=v9a "
-                export ADD_FLAGS=$CFLAGS
-                export LDFLAGS="-L $TBOX/lib \$ADD_FLAGS"
-                export CXX=CC
-                export CXXFLAGS=$CFLAGS
-                #export CPPFLAGS="-I $TBOX/include $CFLAGS"
-            #fi
-        fi
-
-        if [ -n $STY$RUNNING_SCREEN$SCREEN_SCREEN ]; then
-            if [[ -x $TBOX/bin/vim ]]; then
-                #if `toe | grep -s xtermc ` ; then
-                #   VIM_TERM="TERM=xtermc"
-                #fi
-            fi
-            # This needs to be fixed
-            # alias less=" TERM=vt220 less "
-            # alias man=" TERM=vt220 man "
-        fi
 
         # Sun ls. ewww.
         if [[ $GNU_COREUTILS != 1 ]]; then
@@ -224,9 +134,9 @@ esac
 
 export PATH
 
-###################################
+#
 # TERMINAL SETTINGS AND KEYBINDINGS
-###################################
+#
 case $TERM in
     # FN_CHARS=( INSERT HOME PGUP DELETE END PGDN )
     (*xterm*||dtterm||Eterm||*rxvt*)
@@ -316,9 +226,9 @@ if [[ $ZSH_VERSION = 4.* ]]; then
 	bindkey '^O' all-matches
 fi
     
-##################################
+#
 # ALIAS
-##################################
+#
 
 alias Xterm='xterm +bc -cr red -j +sb -u8 +vb -bd red -bg black -fg green'
 alias flux='xinit `which startfluxbox`'
@@ -368,9 +278,9 @@ if [[ -f $HOME/.ssh/*id ]]; then
     chmod 0600 $HOME/.ssh/{authorized_keys,*id}
 fi
 
-#####################################
+#
 # GNU LS ALIASES
-#####################################
+#
 
 if [[ $GNU_COREUTILS -eq 1 ]]; then
     export GREP_COLOR=auto
@@ -411,6 +321,10 @@ else
     alias lss="ls -Fs "
     alias lsh="ls -Fsh "
     alias sl="ls -Fr "
+fi
+
+if [[ -x `whence dircolors` ]]; then
+    eval `dircolors`
 fi
 
 if [[ -f $PROFILE_DIR/dircolors ]]; then
@@ -479,34 +393,17 @@ fi
 # might as well start with the gui crap
 alias konqu='konqueror --profile filemanagement '
 
-# the mighty screen
-#alias screen="screen -a -s $0 -O -q $ZSCR $SLOGS $STM"
-screen_prep() {    # prepare for screen
-    [[ ! -d "$HOME/.ssh" ]] && mkdir "$HOME/.ssh"
-    [[ -d "$HOME/.screenlogs" ]] && _SLOG="-L"
-
-#    if [ "$SSH_AUTH_SOCK" != "$HOME/.screen/ssh-auth-sock.$HOSTNAME" ]; then
-#        ln -fs "$SSH_AUTH_SOCK" "$HOME/.screen/ssh-auth-sock.$HOSTNAME"
-#    fi
-    
-    if `whence ssh-agent` ; then
-        touch "$HOME/.ssh/screen-agent-$HOSTNAME"
-        
-        ssh-agent | head -2 | cut -d\; -f1 | sed s/^/setenv\ / |\
-        sed s/=/\ /  &>! $HOME/.ssh/screen-agent-$HOSTNAME 
-
-    fi
-}
-
-alias new_screen="screen_prep; screen -a -O $_SLOG"
-
-#######################################
+#
 # Work  Stuff
-#######################################
+#
 
-#######################################
+if [[ -f $HOME/.id ]]; then
+    alias huh="cat $HOME/.id"
+fi
+
+#
 # My Options
-#######################################
+#
 setopt  \
     NO_allexport \
     auto_cd \
@@ -596,7 +493,7 @@ fi
 # End of lines added by compinstall
 
 ###############################################
- ### completion goodness from zshwiki.org
+### completion goodness from zshwiki.org
 ##############################################
 if [[ $ZSH_VERSION = 4.* ]]; then
     # use cache
@@ -629,9 +526,9 @@ if [[ $ZSH_VERSION = 4.* ]]; then
     fi
 fi
 
-###############################################
- # COLOR FUNCTIONS
-################################################
+#
+# COLOR FUNCTIONS
+#
 I_WANT_COLORS="yes"
 if [[ $ZSH_VERSION = 3.* ]]; then
     if [[ -n $I_WANT_COLORS ]]; then
@@ -649,9 +546,9 @@ if [[ $ZSH_VERSION = 3.* ]]; then
     fi
 fi
 
-###############################################
+#
 # PROMPT MADNESS
-################################################
+#
 if [[ $ZSH_VERSION = 4.* ]]; then
    autoload -U colors
    colors
@@ -673,7 +570,6 @@ else
     local G="%{${fg_no_bold[green]}%}"
     local B="%{${fg_bold[blue]}%}"
 fi
-
 
 if [[ -n $STY && -n $WINDOW ]]; then
     if [[ -n $LIN_SCREEN ]]; then
@@ -713,24 +609,12 @@ else
     RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
 fi   
 
-###################################
-## From zshwiki.org   "its cool"
-###################################
-
-if [[ -f $TBOX/system-name ]]; then
-    SYSTEM_NAME="[`cat $TBOX/system-name`] "
-fi
-
-################################################
+#
 #  postexec
-################################################ 
+#
 
-if [[ -f $PROFILE_DIR/include ]]; then
-    . $PROFILE_DIR/include 
-fi
-
-if [[ -f $PROFILE_DIR/zshrc.local.post ]]; then
-    . $PROFILE_DIR/zshrc.local.post
+if [[ -e "$PROFILE_DIR/zshrc.local.post" ]]; then
+    source "$PROFILE_DIR/zshrc.local.post"
 fi
 
 # vim:syn=zsh:ft=zsh

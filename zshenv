@@ -1,24 +1,21 @@
-################################################################################
-#   zshenv
-#   justin hoppensteadt
-#   http://root-squash.ath.cx/
-#
-#   c 2007-04-11
-#   v 0.17
-#
-################################################################################
+#  $Id$
+#  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
+#  http://justinhoppensteadt.com/svn/profile/zshenv
+#  Both kinds of free
 
-export __ZSHENV__=0.17
+export __ZSHENV__=0.2
 
-[ -e ~/.include ] && source ~/.include
+if [[ -n "$__INCLUDE__" ]]; then
+    [ -e ~/.include ] && source ~/.include
+fi
 
-################################################################################
-#   host based vars
 export HOSTNAME=`hostname`
 export UNAME=`uname`
 
-################################################################################
-#   user based vars
+#
+# WHO AM I
+#
+
 if [[ -x `whence whoami` ]]; then
     USER=`whoami`
 elif [[ -x `whence id` ]]; then
@@ -45,6 +42,9 @@ case $USER in
     jhoppens)
         SHORTUSER="JH"
     ;;
+    hoppenj)
+        SHORTUSER="H,J"
+    ;;
     jhoppensteadt)
         SHORTUSER="JHop"
     ;;
@@ -53,8 +53,10 @@ export SHORTUSER
 
 export SHORTHOST=`echo $HOSTNAME | sed -e 's/.buzznet.com//' -e 's/justinhoppensteadt.com/.jh/'`
 
-################################################################################
-#   path
+#
+# PATH
+#
+
 COMMON_PATH="$HOME/bin:$PATH:/usr/bin/wrappers:/bin:/usr/bin:/usr/local/bin"
 ROOT_PATH="/sbin:/usr/sbin:/usr/local/sbin"
 UNIXWARE_PATH="/usr/dt/bin:/usr/ucb:/usr/X/bin:/opt/vxvm-va/bin"
@@ -73,8 +75,6 @@ FFMPEGPATH="/usr/local/websites/ffmpeg/bin"
 SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
 USER_PATH="$HOME/bin:$HOME/profile/bin"
 ENCODE_PATH="/usr/local/enctools/bin"
-
-export DEVROOT="$HOME/dev"
 
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
@@ -97,8 +97,10 @@ if [[ -d $MMAN ]]; then
 fi
 done
 
-################################################################################
-#   session
+#
+# PICKY SETTINGS
+#
+
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
 export LESS="-isaFMXR"
@@ -117,8 +119,9 @@ if [[ -z $ORI_XTITLE ]]; then
     export ORI_XTITLE="${USERNAME}@${HOSTNAME}:${UNAME}"
 fi
 
-################################################################################
-#   shortcuts
+#
+# SHORTCUTS
+#
 lsrc="/usr/local/src"
 dzsh="/etc/zsh"
 tocf="/home/justin/dev/cfengine/trunk/masterfiles/system/"
@@ -130,4 +133,4 @@ bnwww="/usr/local/websites/apache/"
 www="/usr/local/websites/apache/"
 spec="/home/justin/rpmbuild/SPECS"
 
-# vim:ft=zsh:syn=zsh:tw=4
+# vim:ft=zsh:syn=zsh
