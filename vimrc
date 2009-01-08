@@ -212,7 +212,7 @@ inoremap <esc>[1;2B <C-E>
 inoremap <esc>[1;2A <C-Y>
 
 "	prevents smartindent from being annoying with #
-inoremap # X<BS>#
+" inoremap # X<BS>#
 
 map   <silent> <F1>    <Esc>
 "map   <silent> <F2>    :DetectIndent<CR>

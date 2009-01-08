@@ -1,18 +1,8 @@
-#######################################
-#  WORLDWIDE zshrc 
-#
-#        email me if you like it,
-#                 use it, or have suggestions/patches.
-#
-#  Justin Hoppensteadt 
-#              <zshy-goodness@justinhoppensteadt.com>
-#              http://justinhoppensteadt.com
-#              svn
-#              http://justinhoppensteadt.com/svn
-#
-#                 free to all
-#
-#######################################
+#  zshrc - Z Shell Interactive Init Script by
+#  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
+#  http://justinhoppensteadt.com/svn/profile/zshrc
+#  Both kinds of free
+#  $Id$
 #######################################
 
 export ZSHRC_VERSION="1.9.95"
@@ -230,6 +220,7 @@ case $UNAME in
         export BKT
         TYCOLOR=green
         LS="/bin/ls"
+        alias ifconfig=ipconfig
     ;;
 esac
 
@@ -339,7 +330,14 @@ alias pu=pushd
 alias po=popd
 alias m=mail
 alias j=jobs
-alias psa="ps -A $TREEPS"
+
+if [[ "$DISTRO" == "cygwin" ]]; then
+    alias psa="ps -a $TREEPS"
+else
+    alias psa="ps -A $TREEPS"
+fi
+
+# silly
 alias kew="echo 'Totally.'"
 alias orly="echo yarly"
 
@@ -737,4 +735,4 @@ if [[ -f $PROFILE_DIR/zshrc.local.post ]]; then
     . $PROFILE_DIR/zshrc.local.post
 fi
 
-# vim:syn=zsh:ft=zsh:tw=4
+# vim:syn=zsh:ft=zsh
