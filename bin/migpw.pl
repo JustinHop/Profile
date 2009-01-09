@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: migrate_passwd.pl,v 1.16 2003/11/25 23:12:52 lukeh Exp $
+# $Id$
 #
 # Copyright (c) 1997-2003 Luke Howard.
 # All rights reserved.
