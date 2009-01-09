@@ -27,17 +27,17 @@ for my $arg (@ARGV) {
     my ( $ip, $hostname );
     if ( $arg =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/ ) {
         $hostname = gethostbyaddr( inet_aton($arg), AF_INET )
-          || warn("1 Could not resolve $arg\n");
+          || warn("Could not resolve $arg\n");
         print "$arg $hostname\n";
     } else {
         if ( $ip = gethostbyname($arg) ) {
             if ( $hostname = inet_ntoa($ip) ) {
                 print "$arg $hostname\n";
             } else {
-                warn("2 Could not resolve $arg\n");
+                warn("Could not resolve $arg\n");
             }
         } else {
-            warn("3 Could not resolve $arg\n");
+            warn("Could not resolve $arg\n");
         }
     }
 }
