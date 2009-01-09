@@ -1,0 +1,44 @@
+#!/usr/bin/perl 
+#===============================================================================
+#
+#         FILE:  getip.pl
+#
+#        USAGE:  ./getip.pl
+#
+#  DESCRIPTION:  I do this all day, just return one ip address for one input.
+#
+#      OPTIONS:  ---
+# REQUIREMENTS:  ---
+#         BUGS:  ---
+#        NOTES:  ---
+#       AUTHOR:  Justin Hoppensteadt (JH), <Justin.Hoppensteadt@umgtemp.com>
+#      COMPANY:  Universal Music Group
+#      VERSION:  1.0
+#      CREATED:  01/09/09 14:29:45 PST
+#     REVISION:  ---
+#===============================================================================
+
+use strict;
+use warnings;
+
+use Socket;
+
+for my $arg (@ARGV) {
+    my ( $ip, $hostname );
+    if ( $arg =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/ ) {
+        $hostname = gethostbyaddr( inet_aton($arg), AF_INET )
+          || warn("1 Could not resolve $arg\n");
+        print "$arg $hostname\n";
+    } else {
+        if ( $ip = gethostbyname($arg) ) {
+            if ( $hostname = inet_ntoa($ip) ) {
+                print "$arg $hostname\n";
+            } else {
+                warn("2 Could not resolve $arg\n");
+            }
+        } else {
+            warn("3 Could not resolve $arg\n");
+        }
+    }
+}
+
