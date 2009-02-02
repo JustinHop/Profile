@@ -10,3 +10,9 @@ ForwardX11      yes
 ForwardX11Trusted yes
 TCPKeepAlive    yes
 
+
+Host umgapp1
+    user jhoppens
+
+Host uk* us* vm* att*
+    user hoppenj
