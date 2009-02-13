@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "KeyStrPress Shift_L KeyStrPress Control_L KeyStrPress Tab KeyStrRelease Tab KeyStrRelease Control_L KeyStrRelease Shift_L" | xmacroplay $DISPLAY 
