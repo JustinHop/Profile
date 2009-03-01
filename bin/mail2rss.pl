@@ -22,26 +22,67 @@ use strict;
 use warnings;
 
 use XML::RSS;
+use Unicode::String qw(utf8 latin1 utf16);
 
 my $file = '/var/www/virtual/adventures/buzznet.xml';
+my $ext = `date | md5sum | awk ' {print \$1 }'`;
+chomp $ext;
+my $tmpfile = '/tmp/buzzxml.' . $ext;
 my $mode = 0;
 my $data = {};
+my $lock = '/tmp/rss.lock';
 
-while (<>){
-    print;
-    /^$/ && $mode++;
+sub do_exit {
+    `rm -rf $lock`;
+    die "Caught signal!";
+}
+$SIG{INT} = \&do_exit;
 
-    if ( $mode == 0 ){
-        /^Subject: (.*)$/ && do { $data->{'subject'} = $1; };
-        /^From: (.*)$/ && do { $data->{'from'} = $1; };
-    }   else    {
-        $data->{'message'} .= $_;
+my $count = 0;
+while ( -e $lock ){
+    sleep 5;
+    if ( $count++ > 10 ) {
+        die "Timed out on lockfile";
     }
 }
 
+$count = 0;
+while (<>){
+    /^$/ && $mode++;
+    my $line = $_;
+    my $u = Unicode::String::latin1($line);
+    $line = $u->utf8;
+    print $line;
+
+    if ( $mode == 0 ){
+        $line =~ /^Subject: (.*)$/ && do { $data->{'subject'} = $1; };
+        $line =~ /^From: (.*)$/ && do { $data->{'from'} = $1; };
+    }   else    {
+        if ( $count++ <= 100 ) {
+            $data->{'message'} .= $line;
+        }
+    }
+}
+
+open( OLDFILE, "<", $file );
+open( NEWFILE, ">", $tmpfile );
+
+while (<OLDFILE>){
+    if ( m!</c! ) {
+        last;
+    }   else    {
+        print NEWFILE;
+    }
+}
+print NEWFILE "</channel>\n</rss>\n";
+
+close NEWFILE;
+close OLDFILE;
+
 my $rss = new XML::RSS;
-$rss->parsefile($file);
-pop(@{$rss->{'items'}}) if (@{$rss->{'items'}} == 17);
+$rss->parsefile($tmpfile);
+#pop(@{$rss->{'items'}}) if (@{$rss->{'items'}} == 25);
+pop(@{$rss->{'items'}}) while (@{$rss->{'items'}} >= 25);
 $rss->add_item(title => $data->{'subject'},
         link  => $data->{'from'},
         description => $data->{'message'},
@@ -50,6 +91,5 @@ $rss->add_item(title => $data->{'subject'},
 
 $rss->save($file);
 
-
-
+`rm -rf $lock $tmpfile`;
 

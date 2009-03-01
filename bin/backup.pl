@@ -15,13 +15,13 @@
 #      COMPANY:  Value Click, Inc.
 #      VERSION:  1.0
 #      CREATED:  11/08/2007 06:41:33 PM PST
-#     REVISION:  ---
+#     REVISION:  $id$
 #===============================================================================
 
 use strict;
 use warnings;
 
-my $DIR=$ENV{HOME} . '/backup';
+my $DIR=$ENV{'HOME'} . '/backup';
 my $DATE=`date +%F`;
 chomp $DATE;
 my $HOST=`hostname`;
