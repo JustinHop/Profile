@@ -12,9 +12,10 @@ export ZSHRC_VERSION="2.0.0"
 if [[ -n "$__ZSHENV__" ]]; then
     [ -e "$HOME/.zshenv" ] && source "$HOME/.zshenv"
 fi
+unset $__ZSHENV__
 
 for SPACE in .undo backup .zsh ; do
-    [ ! -d "$HOME/$SPACE"  ] && ( mkdir "$HOME/$SPACE" || echo "Could not make $HOME/$SPACE" )
+    [ ! -d "$HOME/$SPACE"  ] && mkdir "$HOME/$SPACE" 
 done
 
 #

@@ -8,6 +8,7 @@ export __ZSHENV__=0.2
 if [[ -n "$__INCLUDE__" ]]; then
     [ -e ~/.include ] && source ~/.include
 fi
+unset __INCLUDE__
 
 export HOSTNAME=`hostname`
 export UNAME=`uname`
@@ -85,9 +86,13 @@ PATH=$ENCODE_PATH:$COMMON_PATH:$ROOT_PATH:$SVN_PATH:$MYSQL_PATH:$POSTFIX:$PHP_PA
 
 [ -d $DISTCC_PATH ] && PATH="$DISTCC_PATH:$PATH"
 
-if [[ -z ${LD_LIBRARY_PATH} ]]; then
-   LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib"
+if [[ -z "$DONT_TOUCH_LD" ]]; then
+    LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:/$HOME/lib"
+    if [[ `uname -p` == "x86_64" ]]; then
+        LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib64:/usr/lib64:/usr/local/lib64:/$HOME/lib64
+    fi
 fi
+
 
 fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" )
 
@@ -123,14 +128,6 @@ fi
 # SHORTCUTS
 #
 lsrc="/usr/local/src"
-dzsh="/etc/zsh"
-tocf="/home/justin/dev/cfengine/trunk/masterfiles/system/"
-cfetc="/home/justin/dev/cfengine/trunk/masterfiles/system/etc"
-cfin="/home/justin/dev/cfengine/trunk/masterfiles/system/inputs"
-Slap="/usr/local/openldap/etc/openldap/"
-amg="/autofs/isilon1/bnmedia1/amg"
-bnwww="/usr/local/websites/apache/"
-www="/usr/local/websites/apache/"
-spec="/home/justin/rpmbuild/SPECS"
+spec="$HOME/rpmbuild/SPECS"
 
 # vim:ft=zsh:syn=zsh
