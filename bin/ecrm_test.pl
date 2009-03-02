@@ -81,7 +81,7 @@ my $MESSAGE = "\n"  .
 my $DNS = "DNS TEST DISABLED\n\n";
 if ( $dns == 1 ){
     print "Doing DNS Check\n";
-    $DNS = `dnstest.pl $zone`;
+    $DNS = `ecrm_dns_test.pl $zone`;
     print "Finsihed, mailing\n";
 }
 
