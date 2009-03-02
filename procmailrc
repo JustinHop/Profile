@@ -15,7 +15,6 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 #:0 Wh: msgid.lock
 #| formail -D 8192 msgid.cache
 
-
 ##
 #   Handle Spam
 
@@ -24,7 +23,8 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 /dev/null
 
 :0fw
-| /usr/bin/spamassassin 
+*
+| /usr/bin/spamc 
 
 :0
 * ^X-Spam-Status: Yes
@@ -54,10 +54,18 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 * justin_hoppensteadt@yahoo.com
 | /usr/libexec/dovecot/deliver -m INBOX.Justin_Hoppensteadt@Yahoo_com
 
-# Nagios check testing
+# Universal eCRM Testing
 :0
-* ^To:.*test@justinhoppensteadt.com
-| /usr/libexec/dovecot/deliver -m INBOX.test
+* ^To:.*test.*@justinhoppensteadt.com
+{
+#    EXITCODE=100
+#    :0 Wi
+#    * ^To: test(1.*|2|3|4|5)@justinhoppensteadt.com
+#    | /var/qmail/bin/bouncesaying 'Bouncy Bouncy'
+
+    :0
+    | /usr/libexec/dovecot/deliver -m INBOX.test
+}
 
 # Buzznet
 :0:

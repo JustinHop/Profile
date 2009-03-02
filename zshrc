@@ -9,7 +9,7 @@ export ZSHRC_VERSION="2.0.0"
 # WORKSPACE AND ENVIRONMENT
 #
 
-if [[ -n "$__ZSHENV__" ]]; then
+if [[ -z "$__ZSHENV__" ]]; then
     [ -e "$HOME/.zshenv" ] && source "$HOME/.zshenv"
 fi
 unset $__ZSHENV__
