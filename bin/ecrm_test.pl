@@ -15,7 +15,7 @@
 #      COMPANY:  Buzznet, Inc.
 #      VERSION:  1.0
 #      CREATED:  02/12/2009 08:58:46 PM GMT
-#     REVISION:  $id$
+#     REVISION:  $Id$
 #===============================================================================
 
 use strict;
