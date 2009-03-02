@@ -15,7 +15,7 @@
 #      COMPANY:  Buzznet, Inc.
 #      VERSION:  1.0
 #      CREATED:  02/12/2009 08:58:46 PM GMT
-#     REVISION:  ---
+#     REVISION:  $id$
 #===============================================================================
 
 use strict;
@@ -75,7 +75,7 @@ my $MESSAGE = "\n"  .
     "Test Message From $zone.$dom\n" .
     "Sent: " . `date` . 
     "Sent using: $0 " . join(" ",@ARGV) . "\n" .
-    "Sent To: " . join(" ",@TO) . "\n"a
+    "Sent To: " . join(" ",@TO) . "\n"
     ;
 
 my $DNS = "DNS TEST DISABLED\n\n";
