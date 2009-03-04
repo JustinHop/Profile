@@ -29,7 +29,7 @@ my $debug = 1;
 my $zone;
 my $dom = "musicreg.net";
 my $domnot = "myreg.net";
-my $mx = "ukromlsmx01.internal.musicreg.net";
+my $mx = "ukromlsmx01.internal.music.net";
 my $dns = 1;
 
 if ( exists $ARGV[0] && $ARGV[0] =~ /^\w+$/ ){
