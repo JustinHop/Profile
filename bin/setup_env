@@ -112,7 +112,7 @@ if [ -z "$NO_CHECKOUT" ]; then
     mv -v "$HOME/bin" "$HOME/.bin"
     ln -sfv "$HOME/profile/bin" "$HOME"
     mv -v "$HOME"/.bin/* "$HOME/bin"
-    if [ -d "$HOME/.ssh" ]; then
+    if [ ! -d "$HOME/.ssh" ]; then
         mkdir -v "$HOME/.ssh"
         chmod -v 700 "$HOME/.ssh"
     fi
