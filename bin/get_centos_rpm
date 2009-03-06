@@ -14,6 +14,11 @@ if grep Red /etc/redhat-release ; then
 fi
 REL=${REL::1}
 
+EX=""
+if [ $REL = "4" ]; then
+    EX="/RPMS"
+fi
+
 ARCH="i386"
 if [ `uname -i` = "x86_64" ]; then
     ARCH="x86_64"
@@ -31,7 +36,7 @@ for PACKAGE in $@ ; do
         echo "Trying to download mirrorlist"
         wget -nv -O $MIRRORFILE "http://mirrorlist.centos.org/?release=$REL&arch=$ARCH&repo=os" || exit 1
         echo "Downloading mirror index"
-        wget -nv -O $MIRRORINDEX "`cat $MIRRORFILE | head -n 1`/CentOS" || exit 1
+        wget -nv -O $MIRRORINDEX "`cat $MIRRORFILE | head -n 1`CentOS$EX" || exit 1
     else
         if [ -e $MIRRORFILE -a -e $MIRRORINDEX ]; then
             echo "Set up."
@@ -46,7 +51,7 @@ for PACKAGE in $@ ; do
         else
             RPM=`cat $MIRRORINDEX | P=$PACKAGE perl -ne '/>\s?($ENV{"P"}-\d\S+\.rpm)/ && print $1 . "\n"' | head -n 1`
             echo "Downloading Package: $RPM"
-            wget -nv -O $HOME/src/$RPM "`cat $MIRRORFILE | head -n 1`CentOS/$RPM" || exit 1
+            wget -nv -O $HOME/src/$RPM "`cat $MIRRORFILE | head -n 1`CentOS/$RPM$EX" || exit 1
             if [ x"$INSTALL_RPM" = "xYES" ]; then
                 echo "Installing Package: $RPM"
                 rpm2cpio $HOME/src/$RPM | cpio -id
