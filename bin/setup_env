@@ -25,21 +25,21 @@ if [ -z "$NO_DOWNLOAD" ]; then
     cd src
     echo "Downloading Sources"
     wget -nv -O .index http://www.justinhoppensteadt.com/src || exit 1
-    wget -nv -O get_centos_rpm http://www.justinhoppensteadt.com/svn/profile/bin/get_centos_rpm || exit 1
-    chmod -v +x get_centos_rpm
+    wget -nv -O $HOME/get_centos_rpm http://www.justinhoppensteadt.com/svn/profile/bin/get_centos_rpm || exit 1
+    chmod -v +x $HOME/get_centos_rpm
 
     for DOWNLOAD in `cat .index | perl -ne '/>(\w+-\d\S+\.(:?gz|bz2))/ && print $1 . "\n"'` ; do
         wget -nv -O $DOWNLOAD http://www.justinhoppensteadt.com/src/$DOWNLOAD
         if echo $DOWNLOAD | grep bz2 >/dev/null ; then
-            tar -xvjf $DOWNLOAD
+            tar -xjf $DOWNLOAD
         else
-            tar -xvzf $DOWNLOAD
+            tar -xzf $DOWNLOAD
         fi
     done
     cd
 fi
 
-if [ "$NCURSES" ]; then
+if [ -n "$NCURSES" ]; then
     ./get_centos_rpm mirror install ncurses ncurses-devel screen || exit 1
     export CFLAGS=' -L"$HOME/lib" -L"$HOME/lib64" -I"$HOME/usr/include" '
     export LDFLAGS=' -L"$HOME/lib" -L"$HOME/lib64" '
