@@ -7,7 +7,7 @@
 #
 
 if [ -z "$NO_MKDIR" ]; then
-    mkdir -v ~/bin ~/usr ~/lib ~/.undo ~/backup ~/tmp ~/src 
+    mkdir -vp ~/bin ~/usr ~/lib/cpp ~/.undo ~/backup ~/tmp ~/src 
     ln -sv ~/bin ~/usr
     ln -sv ~/lib ~/usr
     ln -sv ~/bin ~/sbin
@@ -24,7 +24,9 @@ fi
 if [ -z "$NO_DOWNLOAD" ]; then
     cd src
     echo "Downloading Sources"
-    wget -nv -O .index http://www.justinhoppensteadt.com/src/index.html || exit 1
+    wget -nv -O .index http://www.justinhoppensteadt.com/src || exit 1
+    wget -nv -O get_centos_rpm http://www.justinhoppensteadt.com/svn/profile/bin/get_centos_rpm || exit 1
+    chmod -v +x get_centos_rpm
 
     for DOWNLOAD in `cat .index | perl -ne '/>(\w+-\d\S+\.(:?gz|bz2))/ && print $1 . "\n"'` ; do
         wget -nv -O $DOWNLOAD http://www.justinhoppensteadt.com/src/$DOWNLOAD

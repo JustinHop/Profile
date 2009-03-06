@@ -16,13 +16,6 @@ INSTALL_RPM=
 MIRRORFILE=$HOME/.mirrors
 MIRRORINDEX=$HOME/.mirror-index
 
-if [ -e $MIRRORFILE -a -e $MIRRORINDEX ]; then
-    echo "Set up."
-else
-    echo "No mirror files"
-    exit 1
-fi
-
 for PACKAGE in $@ ; do
     echo $PACKAGE
     if [ "$PACKAGE" = "mirror" ]; then
@@ -32,6 +25,13 @@ for PACKAGE in $@ ; do
         echo "Downloading mirror index"
         wget -nv -O $MIRRORINDEX "`cat $MIRRORFILE | head -n 1`/CentOS" || exit 1
     else
+        if [ -e $MIRRORFILE -a -e $MIRRORINDEX ]; then
+            echo "Set up."
+        else
+            echo "No mirror files"
+            exit 1
+        fi
+
         if [ "$PACKAGE" = "install" ]; then
             echo "Install set to YES"
             INSTALL_RPM="YES"
