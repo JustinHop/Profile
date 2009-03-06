@@ -9,13 +9,12 @@
 export LD_LIBRARY_PATH="$HOME/lib:$HOME/lib64:$LD_LIBRARY_PATH"
 
 if [ -z "$NO_MKDIR" ]; then
-    mkdir -vp ~/bin ~/usr ~/lib/cpp ~/.undo ~/backup ~/tmp ~/src
+    mkdir -vp ~/bin ~/usr ~/lib/cpp ~/.undo ~/backup ~/tmp ~/src ~/lib64
     ln -sv ~/bin ~/usr
     ln -sv ~/lib ~/usr
     ln -sv ~/bin ~/sbin
     ln -sv ~/bin ~/usr/sbin
-    ln -sv ~/lib ~/lib64
-    ln -sv ~/usr/lib64 ~/lib64
+    ln -sv ~/lib64 ~/usr/lib64
 fi
 
 if which wget ; then
