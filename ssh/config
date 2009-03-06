@@ -10,9 +10,15 @@ ForwardX11      yes
 ForwardX11Trusted yes
 TCPKeepAlive    yes
 
+host ukmx1 usmx6 usmx7 usmx8
+    user admin
 
 Host umgapp1
     user jhoppens
 
-Host uk* us* vm* att*
+Host uk* us* vm* att* umgmys1
     user hoppenj
+
+Host jh tux-ninja alien justinhoppensteadt.com
+    user justin
+
