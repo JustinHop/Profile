@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+#   This script just downloads the centos mirror
+#   Justin Hoppensteadt 2009
+#   $Id$
+#
+
+REL=`cat /etc/redhat-release | awk '{ print $3 }' | cut -d. -f1`
+ARCH=`uname -i`
+
+MIRRORFILE=$HOME/.mirrors
+MIRRORINDEX=$HOME/.mirror-index
+
+echo "Trying to download mirrorlist"
+wget -nv -O $MIRRORFILE "http://mirrorlist.centos.org/?release=$REL&arch=$ARCH&repo=os" || exit 1
+
+echo "Downloading mirror index"
+wget -nv -O $MIRRORINDEX "`cat $MIRRORFILE | head -n 1`/CentOS" || exit 1
+
+exit 0
