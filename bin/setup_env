@@ -44,6 +44,7 @@ if [ -n "$NCURSES" ]; then
     export CFLAGS="-L$HOME/lib -L$HOME/lib64 -I$HOME/usr/include"
     export LDFLAGS="-L$HOME/lib -L$HOME/lib64"
     export CPPFLAGS="-I$HOME/usr/include"
+    export CC="gcc $CFLAGS "
     ZSH_CONFIG="--enable-ldflags="$LD_FLAGS" --enable-cppflags="$CPPFLAGS""
     VIM_CONFIG="--with-tlib=ncurses --with-local-dir=$HOME"
 fi
@@ -54,7 +55,7 @@ if [ -z "$NO_COMPILE" ]; then
     echo "Configuring ZSH"
     ./configure --prefix=$HOME --enable-pcre $ZSH_CONFIG || exit 1
     echo "Making ZSH"
-    make || exit 1
+    CPPFLAGS="$CPPFLAGS" LDFLAGS="$LDFLAGS" make || exit 1
     echo "Installing ZSH"
     make install || exit 1
     cd ..
