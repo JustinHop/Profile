@@ -51,7 +51,7 @@ for PACKAGE in $@ ; do
         else
             RPM=`cat $MIRRORINDEX | P=$PACKAGE perl -ne '/>\s?($ENV{"P"}-\d\S+\.rpm)/ && print $1 . "\n"' | head -n 1`
             echo "Downloading Package: $RPM"
-            wget -nv -O $HOME/src/$RPM "`cat $MIRRORFILE | head -n 1`CentOS/$RPM$EX" || exit 1
+            wget -nv -O $HOME/src/$RPM "`cat $MIRRORFILE | head -n 1`CentOS$EX/$RPM" || exit 1
             if [ x"$INSTALL_RPM" = "xYES" ]; then
                 echo "Installing Package: $RPM"
                 rpm2cpio $HOME/src/$RPM | cpio -id
