@@ -9,6 +9,10 @@
 cd $HOME
 
 REL=`cat /etc/redhat-release | awk '{ print $3 }' | cut -d. -f1`
+if grep Red /etc/redhat-release ; then
+    REL=`cat /etc/redhat-release | awk '{ print $7 }'`
+fi
+
 ARCH=`uname -i`
 
 INSTALL_RPM=
