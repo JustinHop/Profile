@@ -5,7 +5,7 @@
 
 export __ZSHENV__=0.2
 
-if [[ -z "$__INCLUDE__" ]]; then
+if [ -z "$__INCLUDE__" ]; then
     [ -e ~/.include ] && source ~/.include
 fi
 unset __INCLUDE__
