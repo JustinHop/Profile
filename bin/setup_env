@@ -6,6 +6,8 @@
 #   $Id$
 #
 
+export LD_LIBRARY_PATH="$HOME/lib:$HOME/lib64:$LD_LIBRARY_PATH"
+
 if [ -z "$NO_MKDIR" ]; then
     mkdir -vp ~/bin ~/usr ~/lib/cpp ~/.undo ~/backup ~/tmp ~/src 
     ln -sv ~/bin ~/usr
