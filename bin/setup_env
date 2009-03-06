@@ -84,7 +84,7 @@ if [ -z "$NO_COMPILE" ]; then
     cd 
 fi
 
-SVN=
+SVN=svn
 if [ -z "$NO_SUBVERSION" ]; then
     if which svn ; then
         echo "Subversion Installed. "
@@ -105,13 +105,13 @@ if [ -z "$NO_CHECKOUT" ]; then
         zlogin zlogout zshenv zshrc ; 
     do
         if [ -e "$HOME/.$FILE" ]; then
-            mv -v "$HOME.$FILE" "$HOME/.$FILE-backup"
+            mv -v "$HOME/.$FILE" "$HOME/.$FILE-backup"
         fi
         ln -sfv "$HOME/profile/$FILE" "$HOME/.$FILE"
     done
     mv -v "$HOME/bin" "$HOME/.bin"
     ln -sfv "$HOME/profile/bin" "$HOME"
-    mv -v "$HOME"/.bin/* "$HOME/bin"
+    mv -v $HOME/.bin/* $HOME/bin
     if [ ! -d "$HOME/.ssh" ]; then
         mkdir -v "$HOME/.ssh"
         chmod -v 700 "$HOME/.ssh"
