@@ -54,6 +54,11 @@ REC=`formail -xTo | tr -d "<" | tr -d ">"| tr -d " "|tr "." "_"`
 * justin_hoppensteadt@yahoo.com
 | /usr/libexec/dovecot/deliver -m INBOX.Justin_Hoppensteadt@Yahoo_com
 
+# Universal Music Group
+0:
+* universal@justinhoppensteadt.com
+| /usr/libexec/dovecot/deliver -m INBOX.universal
+
 # Universal eCRM Testing
 :0
 * ^To:.*test.*@justinhoppensteadt.com
