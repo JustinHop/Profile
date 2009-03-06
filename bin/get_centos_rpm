@@ -13,7 +13,10 @@ if grep Red /etc/redhat-release ; then
     REL=`cat /etc/redhat-release | awk '{ print $7 }'`
 fi
 
-ARCH=`uname -i`
+ARCH="i386"
+if [ `uname -i` = "x86_64" ]; then
+    ARCH="x86_64"
+fi
 
 INSTALL_RPM=
 

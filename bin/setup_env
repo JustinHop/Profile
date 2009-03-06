@@ -127,4 +127,5 @@ if [ -z "$NO_CHECKOUT" ]; then
 fi
 
 
-
+echo "ENVIRONMENT SET UP"
+exit 0
