@@ -41,11 +41,11 @@ fi
 
 if [ -n "$NCURSES" ]; then
     ./get_centos_rpm mirror install ncurses ncurses-devel screen || exit 1
-    export CFLAGS=" -L$HOME/lib -L$HOME/lib64 -I$HOME/usr/include "
-    export LDFLAGS=" -L$HOME/lib -L$HOME/lib64 "
-    export CPPFLAGS=" -I$HOME/usr/include "
-    ZSH_CONFIG=" --enable-ldflags=\"$LD_FLAGS\" --enable-cppflags=\"$CPPFLAGS\" "
-    VIM_CONFIG=" --with-tlib=ncurses --with-local-dir=\"$HOME\" "
+    export CFLAGS="-L$HOME/lib -L$HOME/lib64 -I$HOME/usr/include"
+    export LDFLAGS="-L$HOME/lib -L$HOME/lib64"
+    export CPPFLAGS="-I$HOME/usr/include"
+    ZSH_CONFIG="--enable-ldflags="$LD_FLAGS" --enable-cppflags="$CPPFLAGS""
+    VIM_CONFIG="--with-tlib=ncurses --with-local-dir=$HOME"
 fi
 
 if [ -z "$NO_COMPILE" ]; then
