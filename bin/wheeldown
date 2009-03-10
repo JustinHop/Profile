@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+#   handles scrollwheel down
+#
+
+DESKTOPS=
+CURRENT=
+NEXT=
+STRING="x=0 y=0 w=1280 h=1024 d=32 ''"
+
+if xwit -print -current | grep "$STRING" ; then
+	DESKTOPS=`wmctrl -d | wc -l`
+	CURRENT=`wmctrl -d | grep '*' | awk '{ print $1 }'`
+	if [ "$CURRENT" -eq "0" ]; then
+		NEXT=`echo $DESKTOPS -1 | bc`
+	else
+		NEXT=`echo $CURRENT - 1 | bc`
+	fi
+	wmctrl -s $NEXT
+else
+	xdotool click 5
+fi
