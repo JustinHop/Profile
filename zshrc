@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshrc
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.0.0"
+export ZSHRC_VERSION="2.0.1"
 
 #
 # WORKSPACE AND ENVIRONMENT
@@ -570,6 +570,7 @@ else
     local R="%{${fg_no_bold[red]}%}"
     local G="%{${fg_no_bold[green]}%}"
     local B="%{${fg_bold[blue]}%}"
+    local W="%{${fg_no_bold[white]}%}"
 fi
 
 if [[ -n $STY && -n $WINDOW ]]; then
@@ -594,6 +595,10 @@ if [[ $ZSH_VERSION = 3.* ]]; then
     PS1=$(print '$PLVL$PJOB${BKT[3]}$PTT$PUID$PHOS$PPWD${BKT[4]} $PMAR ')
     #RPROMPT="%0(?..${red}%?${default})"
 else
+    local CP=""
+    if [ ! "$MACHTYPE" = "i686" ]; then
+        CP="$D%{${fg_no_bold[${HOSCOL}]}%}$MACHTYPE$D"
+    fi
     local PLVL="$R%2(L.%L.)$D"
     local PJOB="%1(j.$G${BKT[1]}%j${BKT[2]}.)$D"
     local PUID="$R(%(#.$R/.%{${fg_bold[blue]}%}%n)$R)$D"
@@ -606,7 +611,7 @@ else
     fi
     local PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%m$D"
 
-    PS1="$PLVL$PJOB${BKT[3]}$PTT$PUID$PHOS$PPWD${BKT[4]} $PMAR "
+    PS1="$PLVL$PJOB${BKT[3]}$CP$PTT$PUID$PHOS$PPWD${BKT[4]} $PMAR "
     RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
 fi   
 
