@@ -154,7 +154,7 @@ if has("autocmd")
         \ endif 
 
     " Backup EVERYTHING MODE!!!!
-    if expand($BACKUP) ==# "B"
+    if expand($BACKUP) ==# "+"
         if getfsize(expand("%:p")) <= 1024000 
             set nobackup
             if ! expand(&readonly)

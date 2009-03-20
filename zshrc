@@ -240,8 +240,8 @@ alias po=popd
 alias m=mail
 alias j=jobs
 
-alias b='export BACKUP=b'
-alias B='export BACKUP=B'
+alias b='export BACKUP=-'
+alias B='export BACKUP=+'
 
 if [[ "$DISTRO" == "cygwin" ]]; then
     alias psa="ps -a $TREEPS"
