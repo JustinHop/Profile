@@ -1,9 +1,10 @@
 " Justin's vimrc
+" $Id$
 
 " 
 "  General Operation
 
-" vimrc-1.8
+" vimrc-1.9
 
 set nocompatible
 set backspace=2
@@ -163,16 +164,19 @@ if has("autocmd")
                             \ ( expand("$HOME/backup/") . 
                             \ substitute(expand("%:p"),'/','_','g') . 
                             \ strftime("%Y%m%d.%H%M%S") ), '_','','')
+                            " DDDDAAAAYYYUUUMMMMM SON VIM can even handle that
+                            " shit wooooooooo!!!!
             endif
         endif
     endif
 
     " Filetype Detect
     augroup filetypedetect
-        au BufNewFile,BufRead afiedt.buf      setf sql
-        au BufNewFile,BufRead /etc/httpd/conf/*.conf  set filetype=apache
-        au BufNewFile,BufRead /etc/httpd/conf.d/*.conf  set filetype=apache
-        au BufNewFile,BufRead /etc/httpd/virtual/*.conf  set filetype=apache
+        au BufNewFile,BufRead afiedt.buf                set  filetype=sql
+        au BufNewFile,BufRead /etc/httpd/conf/*.conf    set  filetype=apache
+        au BufNewFile,BufRead /etc/httpd/conf.d/*.conf  set  filetype=apache
+        au BufNewFile,BufRead /etc/httpd/virtual/*.conf set  filetype=apache
+        au BufNewFile,BufRead /etc/event.d/*            set  filetype=upstart
     augroup END
 
     " ZSH Brokenness
@@ -184,43 +188,18 @@ if has("autocmd")
 
     au FileType apache set nosmartindent preserveindent
 
-    " STOLEN!!
-    "au FileType crontab set nobackup 
-
     au FileType xml,xslt compiler xmllint " Enables :make for XML and HTML validation
     au FileType html compiler tidy  "           use :cn & :cp to jump between errors
 
-    let html_use_css=1              "       for standards-compliant :TOhtml output
-    let use_xhtml=1                 "       for standards-compliant :TOhtml output
+    au FileType html,css,xhtml let html_use_css=1              "       for standards-compliant :TOhtml output
+    au FileType html,css,xhtml let use_xhtml=1                 "       for standards-compliant :TOhtml output
 
-    " vim -b : edit binary using xxd-format!
-"    augroup Binary
-"        au!
-"        au BufReadPre *.bin,*.hex setlocal binary
-"        au BufReadPost *
-"                    \ if &binary | exe "Hexmode" | endif
-"        au BufWritePre *
-"                    \ if exists("b:editHex") && b:editHex && &binary |
-"                    \  exe "%!xxd -r" |
-"                    \ endif
-"        au BufWritePost *
-"                    \ if exists("b:editHex") && b:editHex && &binary |
-"                    \  exe "%!xxd" |
-"                    \  exe "set nomod" |
-"                    \ endif
-"    augroup END
 
     "  Use enter to activate help jump points & display line numbers
     "   au FileType help set number     
     au FileType help nmap <buffer> <Return> <C-]>
     "   au FileType help nmap <buffer> <C-[> <C-O>
 
-       "set cpt=.,w,b,t,i
-       "au FileType perl set cpt=.,w,b
-    "if version >= 700
-    "    au FileType perl set indentexpr=
-    "    au FileType perl set noautoindent
-    "endif
 endif
 
 
@@ -228,6 +207,10 @@ endif
 " -------------------------
 "  REMAPPING
 "  ------------------------
+nmap <silent> <A-Up> :wincmd k<CR>
+nmap <silent> <A-Down> :wincmd j<CR>
+nmap <silent> <A-Left> :wincmd h<CR>
+nmap <silent> <A-Right> :wincmd l<CR>
 
 " this maps shift up and down to scroll
 inoremap <esc>[1;2B <C-E>
