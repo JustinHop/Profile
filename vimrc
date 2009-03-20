@@ -11,7 +11,7 @@ set ttyfast
 
 if has("unix")
     set backup
-    set backupdir=~/.undo
+    set backupdir=~/backup
 endif
 
 if has("win32")
@@ -28,6 +28,10 @@ set sidescrolloff=1
 set linebreak
 set number
 set ruler
+
+" No Switching to Alt Screen!
+set t_ti= 
+set t_te=
 
 if has("mouse")
     set mouse=a
@@ -149,6 +153,28 @@ if has("autocmd")
         \   exe "normal g'\"" |
         \ endif 
 
+    " Backup EVERYTHING MODE!!!!
+    if expand($BACKUP) ==# "B"
+        if getfsize(expand("%:p")) <= 1024000 
+            set nobackup
+            if ! expand(&readonly)
+                au BufReadPost *
+                            \ exe 'silent write! ' substitute( 
+                            \ ( expand("$HOME/backup/") . 
+                            \ substitute(expand("%:p"),'/','_','g') . 
+                            \ strftime("%Y%m%d.%H%M%S") ), '_','','')
+            endif
+        endif
+    endif
+
+    " Filetype Detect
+    augroup filetypedetect
+        au BufNewFile,BufRead afiedt.buf      setf sql
+        au BufNewFile,BufRead /etc/httpd/conf/*.conf  set filetype=apache
+        au BufNewFile,BufRead /etc/httpd/conf.d/*.conf  set filetype=apache
+        au BufNewFile,BufRead /etc/httpd/virtual/*.conf  set filetype=apache
+    augroup END
+
     " ZSH Brokenness
     au FileType zsh set formatoptions=croq
     au FileType sh set formatoptions-=t
@@ -159,7 +185,7 @@ if has("autocmd")
     au FileType apache set nosmartindent preserveindent
 
     " STOLEN!!
-    au FileType crontab set nobackup 
+    "au FileType crontab set nobackup 
 
     au FileType xml,xslt compiler xmllint " Enables :make for XML and HTML validation
     au FileType html compiler tidy  "           use :cn & :cp to jump between errors
@@ -189,15 +215,11 @@ if has("autocmd")
     au FileType help nmap <buffer> <Return> <C-]>
     "   au FileType help nmap <buffer> <C-[> <C-O>
 
-    augroup filetypedetect
-        au BufNewFile,BufRead afiedt.buf      setf sql
-    augroup END
-
-   	"set cpt=.,w,b,t,i
-   	"au FileType perl set cpt=.,w,b
+       "set cpt=.,w,b,t,i
+       "au FileType perl set cpt=.,w,b
     "if version >= 700
-    "	au FileType perl set indentexpr=
-    "	au FileType perl set noautoindent
+    "    au FileType perl set indentexpr=
+    "    au FileType perl set noautoindent
     "endif
 endif
 
@@ -211,7 +233,7 @@ endif
 inoremap <esc>[1;2B <C-E>
 inoremap <esc>[1;2A <C-Y>
 
-"	prevents smartindent from being annoying with #
+"    prevents smartindent from being annoying with #
 " inoremap # X<BS>#
 
 map   <silent> <F1>    <Esc>

@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshrc
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.0.1"
+export ZSHRC_VERSION="2.0.2"
 
 #
 # WORKSPACE AND ENVIRONMENT
@@ -239,6 +239,9 @@ alias pu=pushd
 alias po=popd
 alias m=mail
 alias j=jobs
+
+alias b='export BACKUP=b'
+alias B='export BACKUP=B'
 
 if [[ "$DISTRO" == "cygwin" ]]; then
     alias psa="ps -a $TREEPS"
@@ -611,7 +614,7 @@ else
     fi
     local PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%m$D"
 
-    PS1="$PLVL$PJOB${BKT[3]}$CP$PTT$PUID$PHOS$PPWD${BKT[4]} $PMAR "
+    PS1="$PLVL$PJOB${BKT[3]}$CP$PTT$PUID$PHOS$PPWD${BKT[4]}\${BACKUP} $PMAR "
     RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
 fi   
 
