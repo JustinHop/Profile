@@ -102,14 +102,9 @@ if &t_Co || has("gui_running") && ( $TERM != "screen.linux")
     set t_Co=256
 endif
 
-"
-"  This section checks for an environmental variable $VIM_COLOR
-"     to set the colorscheme, if not do some 1/2 assed logic
-"
-if $VIM_COLOR 
-    exec ":colorscheme $VIM_COLOR"
-else
-    colorscheme elflord
+if $TERM == "linux" 
+	set t_Co=8
+	colorscheme elflord
 endif
 
 "
@@ -136,7 +131,7 @@ function! MyPerlSettings()
     setlocal formatoptions-=t formatoptions+=croq
 
     compiler perl
-    colorscheme wuye
+    "colorscheme wuye
 endfunction
 
 

@@ -37,27 +37,29 @@
 #keystate_capslock = enable
 #keystate_scrolllock= enable
 
+#"xvkbd -xsendevent -text "\[Control]\[Prior]""
 # Tilt Right
-"xvkbd -xsendevent -text "\[Control]\[Prior]""
+"/home/justin/bin/shiftctrltab"
     b:6
 
+#"xvkbd -xsendevent -text "\[Control]\[Next]""
 # Tilt Left
-"xvkbd -xsendevent -text "\[Control]\[Next]""
+"/home/justin/bin/ctrltab"
     b:7
 
 # History Back
-"xvkbd -xsendevent -text "\[Alt_L]\[Left]""
-    b:8
+#"xvkbd -xsendevent -text "\[Alt_L]\[Left]""
+#    b:8
 
-"xvkbd -xsendevent -text "\[Alt_L]\[Left]""
-    c:234
+#"xvkbd -xsendevent -text "\[Alt_L]\[Left]""
+#    c:234
 
 # History Forward
-"xvkbd -xsendevent -text "\[Alt_L]\[Right]""
-    b:9
+#"xvkbd -xsendevent -text "\[Alt_L]\[Right]""
+#    b:9
 
-"xvkbd -xsendevent -text "\[Alt_L]\[Right]""
-    c:233
+#"xvkbd -xsendevent -text "\[Alt_L]\[Right]""
+#    c:233
 
 # Window Lower (towards screen)
 #"xvkbd -text "\[Shift_L]\[Control_L]\[Down]""
