@@ -1,12 +1,13 @@
 " cfengine syntax file
 " Filename:     cfengine.vim
 " Language:     cfengine configuration file 
-" Maintainer:   Marcus Spading <ms@fragmentum.net>
-" URL:          http://vim.sourceforge.net/scripts/script.php?script_id=329
-" Last Change:  2003 Jan 29
-" Version:      0.3
-"
-" Credits:      Brian Youngstrom <byoung@cs.washington.edu> (minor fixes)
+" Maintainer:   Lance Albertson <ramereth@gentoo.org>
+" Orginal Author: Marcus Spading <ms@fragmentum.net>
+" URL:          http://dev.gentoo.org/~ramereth/vim/syntax/cfengine.vim
+"  * The original url appears to be dead
+" Last Change:  2005 Jan 4
+" Version:      0.1 
+"  * Previous author's last version was 0.2
 "
 " cfengine action
 " action-type:
@@ -49,17 +50,13 @@ syn keyword cfengineKeyword    smtpserver spooldirectories suspiciousnames sysad
 syn keyword cfengineKeyword    verbose warnings warnnonuserfiles warnnonownerfiles warnnonusermail warnnonownermail
 " cfservd keywords
 syn case match
-syn keyword cfengineKeyword    AllowConnectionsFrom AllowMultipleConnectionsFrom AllowUser AutoExecCommand
+syn keyword cfengineKeyword    AllowConnectionsFrom AllowMultipleConnectionsFrom AllowUsers AutoExecCommand
 syn keyword cfengineKeyword    AutoExecInterval cfrunCommand DenyBadClocks DenyConnectionsFrom IfElapsed
 syn keyword cfengineKeyword    LogAllConnections MaxConnections TrustKeysFrom DynamicAddresses 
-syn keyword cfengineKeyword    AllowRedefinitionOf AutoDefine ChecksumPurge DefaultPkgMgr HostnameKeys RPMcommand
-syn keyword cfengineKeyword    SingleCopy SyslogFacility MultipleConnections MaxCfengines AllowUsers SkipVerify
-syn keyword cfengineKeyword    BindToInterface HostnameKeys
 syn case ignore
 
-syn keyword cfengineActions    addmounts checktimezone copy directories disable editfiles files links mailcheck module
+syn keyword cfengineActions    addmounts checktimezone control copy directories disable editfiles groups files links mailcheck module import admit
 syn keyword cfengineActions    mountall mountinfo netconfig required resolve shellcommands tidy unmount processes
-syn keyword cfengineActions    packages
 
 syn region  cfengineHelpers    matchgroup=cfengineKeyword start="FileExists(" end=")"     contained oneline 
 syn region  cfengineHelpers    matchgroup=cfengineKeyword start="IsDir(" end=")"          contained oneline 
@@ -75,8 +72,6 @@ syn keyword cfengineOption     age acl dest m[ode] o[wner] g[roup] act[ion] sile
 syn keyword cfengineOption     chroot chdir symlink incl[ude] excl[ude] ignore filter r[ecurse] type linktype typecheck define elsedefine
 syn keyword cfengineOption     force forcedirs forceipv4 size server trustkey encrypt verify oldserver purge syslog inform
 syn keyword cfengineOption     pat[tern] rotate flags links stop traverse tidy checksum matches dirlinks rmdirs deletedir deletefstab
-syn keyword cfengineOption     xdev failover findertype deadlinks nofile expireafter cmp version useshell umask copytype
-syn keyword cfengineOption     returnvars returnclasses pkgmgr rpm background preview noabspath ifelapsed 
 
 syn keyword cfengineOptionVal  warnall warndirs warnplain
 syn keyword cfengineOptionVal  fixall fixdirs fixplain
@@ -85,8 +80,7 @@ syn keyword cfengineOptionVal  stop traverse tidy md5 sha inf
 syn keyword cfengineOptionVal  hard relative absolute checksum ctime kill force
 syn keyword cfengineOptionVal  true false dump signal do warn bymatch 
 syn keyword cfengineOptionVal  empty truncate all sub
-syn keyword cfengineOptionVal  mtime atime
-syn keyword cfengineOptionVal  symbolic none copy byte binary preserve keep on off
+syn keyword cfengineOptionVal  ctime mtime atime
 
 syn keyword cfengineSigVal     hup int quit ill trap iot emt fpe kill bus segv sys pipe alrm term urg stop
 syn keyword cfengineSigVal     tstp cont chld gttin gttou io xcpu xfsz vtalrm prof winch lost usr1 usr2 
@@ -113,22 +107,19 @@ syn keyword cfengineEditAction SetCommentStart SetCommentEnd SetLine SetScript c
 syn keyword cfengineEditAction SlashCommentLinesContaining SlashCommentLinesMatching SlashCommentLinesStarting contained
 syn keyword cfengineEditAction SplitOn Syslog Umask UnCommentLinesContaining UnCommentLinesMatching UnCommentNLines contained
 syn keyword cfengineEditAction UnsetAbort UseShell WarnIfLineContaining WarnIfLineMatching WarnIfLineStarting contained
-syn keyword cfengineEditAction WarnIfNoLineContaining WarnIfNoLineMatching WarnIfNoLineStarting WarnIfNoSuchLine contained
+syn keyword cfengineEditAction WarnIfLineNoLineContaining WarnIfNoLineMatching WarnIfNoLineStarting WarnIfNoSuchLine contained
 syn keyword cfengineEditAction ReplaceAll WarnIfContainsString WarnIfContainsFile contained
-syn keyword cfengineEditAction DefineInGroup DeleteLinesNotMatching ExpireAfter IfElapsed contained
 
 syn keyword cfengineFilter     Owner Atime Ctime Mtime FromAtime FromCtime FromMtime ToAtime ToCtime ToMtime contained
 syn keyword cfengineFilter     Type reg link dir socket fifo door char block contained
 syn keyword cfengineFilter     ExecRegex NameRegex IsSymLinkTo ExecProgram Result contained
 syn keyword cfengineFilter     PID PPID PGID RSize VSize Status Command FromTTime ToTTime FromSTime ToSTime TTY contained
 syn keyword cfengineFilter     Priority Threads contained
-syn keyword cfengineFilter     Group Mode FromSize ToSize contained
 
 syn keyword cfengineActionType control: files: acl: binservers: broadcast: control: copy: defaultroute:
 syn keyword cfengineActionType disks: directories: disable: editfiles: files: filters: groups: classes:
 syn keyword cfengineActionType homeservers: ignore: import: interfaces: links: mailserver: miscmounts:
 syn keyword cfengineActionType mountables: processes: required: resolve: shellcommands: tidy: unmount: 
-syn keyword cfengineActionType packages: alerts: admit: deny: methods:
 
 " comments last overriding everything else
 syn match   cfengineComment            "\s*#.*$" contains=cfengineTodo
