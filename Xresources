@@ -17,3 +17,39 @@ XTerm.VT100.loginShell: True
 XTerm.VT100.background: Black 
 XTerm.VT100.foreground: Green
 XTerm*titeInhibit: true
+
+#if 1
+*VT100*background      : black
+*VT100*boldColors      : on
+*VT100*colorMode       : on
+*VT100*colorULMode     : on
+*VT100*dynamicColors   : on
+*VT100*foreground      : gray90
+*VT100*metaSendsEscape : true
+*VT100*underline       : off
+*customization         : -color
+*ttyModes              : erase ^H
+#endif
+
+*VT100*translations   : #override \n\
+    Ctrl+   : larger-vt-font()\n\
+    Ctrl-   : smaller-vt-font()\n\
+    MetaF1       : set-vt-font(1)\n\
+    MetaF2       : set-vt-font(2)\n\
+    MetaF3       : set-vt-font(3)\n\
+    MetaF4       : set-vt-font(4)\n\
+    MetaF5       : set-vt-font(5)\n\
+    MetaF6       : set-vt-font(6)\n\
+    MetaF7       : set-vt-font(d)\n\
+    MetaF8       : set-reverse-video(toggle)\n\
+    MetaF9       : set-scrollbar(toggle)\n\
+    MetaF10      : set-autowrap(toggle)\n\
+    MetaF11      : insert-selection(CUT_BUFFER0, PRIMARY)\n\
+    MetaF12      : print()\n\
+
+Xft.antialias : true
+Xft.rgba      : rgb
+Xft.hintstyle : hintfull
+Xft.hinting   : true
+
+

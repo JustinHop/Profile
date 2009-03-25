@@ -13,10 +13,10 @@ TCPKeepAlive    yes
 host ukmx1 usmx6 usmx7 usmx8
     user admin
 
-Host umgapp1
+Host umgapp1 app1
     user jhoppens
 
-Host uk* us* vm* att* umgmys1
+Host uk* us* vm* att* umgmys1 mys1 web*
     user hoppenj
 
 Host jh tux-ninja alien justinhoppensteadt.com

@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshenv
 #  Both kinds of free
 
-export __ZSHENV__=0.2
+export __ZSHENV__=0.2.1
 
 if [ -z "$__INCLUDE__" ]; then
     [ -e ~/.include ] && source ~/.include
@@ -93,7 +93,6 @@ if [[ -z "$DONT_TOUCH_LD" ]]; then
     fi
 fi
 
-
 fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" )
 
 for MMAN in "/usr/local/{openldap,svn,netperf,mysql,snort}/man" ; do
@@ -112,7 +111,7 @@ export LESS="-isaFMXR"
 export VISUAL=vim
 export SVN_EDITOR=vim
 export EDITOR=vim
-export MYSQL_PS1="mysql (\u@$HOST)::\d > "
+export MYSQL_PS1="mysql (\U@\h)::(\d) \c > "
 
 [ -n `whence less` ] && PAGER=less || PAGER=more
 export PAGER
@@ -129,5 +128,6 @@ fi
 #
 lsrc="/usr/local/src"
 spec="$HOME/rpmbuild/SPECS"
-
+pf="$HOME/profile"
+pj="$HOME/projects"
 # vim:ft=zsh:syn=zsh
