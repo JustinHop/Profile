@@ -1,8 +1,9 @@
 hi Normal       ctermfg=247 ctermbg=16
-hi NonText      ctermfg=247 ctermbg=232
+hi NonText      ctermfg=247 
 
 hi LineNr       ctermfg=237 ctermbg=232
-hi VertSplit    ctermfg=234 ctermbg=234
+"hi VertSplit    ctermfg=234 ctermbg=234
+hi VertSplit    ctermfg=246 ctermbg=234
 hi StatusLine   ctermfg=240 ctermbg=234
 hi StatusLineNC ctermfg=234 ctermbg=238 
 

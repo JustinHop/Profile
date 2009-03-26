@@ -25,7 +25,7 @@ endif
 syn case ignore
 
 syn match   cfengineCompoundClass      "^\s*.*::\s*$"
-"syn match   cfengineAssignmentOperator "="
+syn match   cfengineAssignmentOperator "="
 syn match   cfengineLinkOperator       "[-+]>[!]\{0,1}"
 syn match   cfengineVariable           "$(.\{-})"
 syn match   cfengineVariable           "${.\{-}}"
@@ -56,7 +56,7 @@ syn keyword cfengineKeyword    LogAllConnections MaxConnections TrustKeysFrom Dy
 syn case ignore
 
 syn keyword cfengineActions    addmounts checktimezone control copy directories disable editfiles groups files links mailcheck module import admit
-syn keyword cfengineActions    mountall mountinfo netconfig required resolve shellcommands tidy unmount processes
+syn keyword cfengineActions    mountall mountinfo netconfig required resolve shellcommands tidy unmount processes classes
 
 syn region  cfengineHelpers    matchgroup=cfengineKeyword start="FileExists(" end=")"     contained oneline 
 syn region  cfengineHelpers    matchgroup=cfengineKeyword start="IsDir(" end=")"          contained oneline 
@@ -116,7 +116,7 @@ syn keyword cfengineFilter     ExecRegex NameRegex IsSymLinkTo ExecProgram Resul
 syn keyword cfengineFilter     PID PPID PGID RSize VSize Status Command FromTTime ToTTime FromSTime ToSTime TTY contained
 syn keyword cfengineFilter     Priority Threads contained
 
-syn keyword cfengineActionType control: files: acl: binservers: broadcast: control: copy: defaultroute:
+syn keyword cfengineActionType control: files: acl: binservers: broadcast: control: copy: defaultroute: 
 syn keyword cfengineActionType disks: directories: disable: editfiles: files: filters: groups: classes:
 syn keyword cfengineActionType homeservers: ignore: import: interfaces: links: mailserver: miscmounts:
 syn keyword cfengineActionType mountables: processes: required: resolve: shellcommands: tidy: unmount: 
@@ -136,7 +136,7 @@ if version >= 508 || !exists("did_cfengine_syn_inits")
     command -nargs=+ HiLink hi def link <args>
   endif
 
-  "HiLink cfengineAssignmentOperator String
+  HiLink cfengineAssignmentOperator String
   HiLink cfengineLinkOperator       String
   HiLink cfengineVariable           Special
   HiLink cfengineVariableDef        NONE

@@ -311,7 +311,8 @@ hi PMenuThumb                               ctermbg=247             cterm=none
 " -----------
 " status line for current window
 hi StatusLine       guifg=#e0e0e0           guibg=#444444           gui=none
-hi StatusLine       ctermfg=254             ctermbg=238             cterm=none
+"hi StatusLine       ctermfg=254             ctermbg=238             cterm=none
+hi StatusLine       ctermfg=235             ctermbg=238             cterm=none
 " status line for non-current windows
 hi StatusLineNC     guifg=#777777           guibg=#444444           gui=none
 hi StatusLineNC     ctermfg=244             ctermbg=238             cterm=none
