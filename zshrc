@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshrc
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.0.2"
+export ZSHRC_VERSION="2.0.3"
 
 #
 # WORKSPACE AND ENVIRONMENT
@@ -557,67 +557,9 @@ if [[ $ZSH_VERSION = 4.* ]]; then
    autoload -U colors
    colors
 fi
+
+justinprompt
    
-[ -z $BKT[1] ] && BKT=( '[' ']' '{' '}' '<' '>' )
-[ -z $SSH_CLIENT ] && HOSCOL="red" || HOSCOL="green"
-
-if [[ $ZSH_VERSION = 3.* ]]; then
-    local D="${default}"
-    local R="${red}"
-    local G="${green}"
-    local B="${blue}"
-    #local TYCOLOR=`eval echo $"${TYCOLOR}"`
-else 
-    local BL="%{${bg_no_bold[black]}}"
-    local D="%{${fg_no_bold[default]}%}"
-    local R="%{${fg_no_bold[red]}%}"
-    local G="%{${fg_no_bold[green]}%}"
-    local B="%{${fg_bold[blue]}%}"
-    local W="%{${fg_no_bold[white]}%}"
-fi
-
-if [[ -n $STY && -n $WINDOW ]]; then
-    if [[ -n $LIN_SCREEN ]]; then
-        J="${LIN_SCREEN}:${WINDOW}"
-    else
-        J="%l:${WINDOW}"
-    fi
-else
-    J="%l"
-fi
-
-if [[ $ZSH_VERSION = 3.* ]]; then
-    local PLVL="$START$R%2(L.%L.)$D"
-    local PJOB="%1(j.$G${BKT[1]}%j${BKT[2]}.)$D"
-    local PUID="$R(%(#.$R/.${blue}%n)$R)$D"
-    local PPWD="${violet}:$D%1~"
-    local PMAR="${violet}%#${D}"
-    local PTT="\$${TYCOLOR}${BKT[5]}${J}${BKT[6]}${D}"
-    local PHOS="$D@\$${HOSCOL}%m$D"
-
-    PS1=$(print '$PLVL$PJOB${BKT[3]}$PTT$PUID$PHOS$PPWD${BKT[4]} $PMAR ')
-    #RPROMPT="%0(?..${red}%?${default})"
-else
-    local CP=""
-    if [ ! "$MACHTYPE" = "i686" ]; then
-        CP="$D%{${fg_no_bold[${HOSCOL}]}%}$MACHTYPE$D"
-    fi
-    local PLVL="$R%2(L.%L.)$D"
-    local PJOB="%1(j.$G${BKT[1]}%j${BKT[2]}.)$D"
-    local PUID="$R(%(#.$R/.%{${fg_bold[blue]}%}%n)$R)$D"
-    local PPWD="%{${fg_no_bold[violet]}%}:$D%1~"
-    local PMAR="%{${fg_no_bold[violet]}%}%(!.$.%%)$D"
-    if [[ -z $ORACLE_SID ]]; then
-        local PTT="%{${fg[${TYCOLOR}]}%}${BKT[5]}${J}${BKT[6]}$D"
-    else
-        local PTT="%{${fg[${TYCOLOR}]}%}${BKT[5]}\${ORACLE_SID}${BKT[6]}$D"
-    fi
-    local PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%m$D"
-
-    PS1="$PLVL$PJOB${BKT[3]}$CP$PTT$PUID$PHOS$PPWD${BKT[4]}\${BACKUP} $PMAR "
-    RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
-fi   
-
 #
 #  postexec
 #

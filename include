@@ -3,7 +3,71 @@
 #  http://justinhoppensteadt.com/svn/profile/include
 #  Both kinds of free
 
-export __INCLUDE__=2
+export __INCLUDE__=2.1
+
+justinprompt(){     # Sets the JPrompt
+    [ -z $BKT[1] ] && BKT=( '[' ']' '{' '}' '<' '>' )
+    [ -z $SSH_CLIENT ] && HOSCOL="red" || HOSCOL="green"
+
+    if [[ $ZSH_VERSION = 3.* ]]; then
+        local D="${default}"
+        local R="${red}"
+        local G="${green}"
+        local B="${blue}"
+        #local TYCOLOR=`eval echo $"${TYCOLOR}"`
+    else 
+        local BL="%{${bg_no_bold[black]}}"
+        local xDB="%{${bg_no_bold[default]}}"
+        local D="%{${fg_no_bold[default]}%}"
+        local R="%{${fg_no_bold[red]}%}"
+        local G="%{${fg_no_bold[green]}%}"
+        local B="%{${fg_bold[blue]}%}"
+        local W="%{${fg_no_bold[white]}%}"
+    fi
+
+    if [[ -n $STY && -n $WINDOW ]]; then
+        if [[ -n $LIN_SCREEN ]]; then
+            J="${LIN_SCREEN}:${WINDOW}"
+        else
+            J="%l:${WINDOW}"
+        fi
+    else
+        J="%l"
+    fi
+
+    if [[ $ZSH_VERSION = 3.* ]]; then
+        local PLVL="$START$R%2(L.%L.)$D"
+        local PJOB="%1(j.$G${BKT[1]}%j${BKT[2]}.)$D"
+        local PUID="$R(%(#.$R/.${blue}%n)$R)$D"
+        local PPWD="${violet}:$D%1~"
+        local PMAR="${violet}%#${D}"
+        local PTT="\$${TYCOLOR}${BKT[5]}${J}${BKT[6]}${D}"
+        local PHOS="$D@\$${HOSCOL}%m$D"
+
+        PS1=$(print '$PLVL$PJOB${BKT[3]}$PTT$PUID$PHOS$PPWD${BKT[4]} $PMAR ')
+        #RPROMPT="%0(?..${red}%?${default})"
+    else
+        local CP=""
+        if [ ! "$MACHTYPE" = "i686" ]; then
+            CP="$D%{${fg_no_bold[${HOSCOL}]}%}$MACHTYPE$D"
+        fi
+        local PLVL="$R%2(L.%L.)$D"
+        local PJOB="%1(j.$G${BKT[1]}%j${BKT[2]}.)$D"
+        local PUID="$R(%(#.$R/.%{${fg_bold[blue]}%}%n)$R)$D"
+        local PPWD="%{${fg_no_bold[violet]}%}:$D%1~"
+        local PMAR="%{${fg_no_bold[violet]}%}%(!.$.%%)$D"
+        if [[ -z $ORACLE_SID ]]; then
+            local PTT="%{${fg[${TYCOLOR}]}%}${BKT[5]}${J}${BKT[6]}$D"
+        else
+            local PTT="%{${fg[${TYCOLOR}]}%}${BKT[5]}\${ORACLE_SID}${BKT[6]}$D"
+        fi
+        local PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%m$D"
+
+        PS="$PLVL$PJOB${BKT[3]}$CP$PTT\${DISPLAY}$PUID$PHOS$PPWD${BKT[4]}\${BACKUP} $PMAR"
+        PS1="%{${bg_no_bold[black]}%}${PS}%{${bg_no_bold[default]}%} "
+        RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
+    fi   
+}
 
 fixzip(){           # Fixes zip
     for FILE in $* ; do
