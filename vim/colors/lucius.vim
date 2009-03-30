@@ -322,7 +322,8 @@ hi StatusLineNC     ctermfg=244             ctermbg=238             cterm=none
 " ---------
 " tab pages line, not active tab page label
 hi TabLine          guifg=#b6bf98           guibg=#181818           gui=none
-hi TabLine          ctermfg=244             ctermbg=233             cterm=none
+"hi TabLine          ctermfg=244             ctermbg=233             cterm=none
+hi TabLine          ctermfg=182             ctermbg=233             cterm=none
 " tab pages line, where there are no labels
 hi TabLineFill      guifg=#cfcfaf           guibg=#181818           gui=none
 hi TabLineFill      ctermfg=187             ctermbg=233             cterm=none
