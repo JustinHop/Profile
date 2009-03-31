@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshenv
 #  Both kinds of free
 
-export __ZSHENV__=0.2.1
+export __ZSHENV__=0.2.2
 
 if [ -z "$__INCLUDE__" ]; then
     [ -e ~/.include ] && source ~/.include
@@ -93,7 +93,7 @@ if [[ -z "$DONT_TOUCH_LD" ]]; then
     fi
 fi
 
-fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" )
+fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" "$HOME/profile/zsh" )
 
 for MMAN in "/usr/local/{openldap,svn,netperf,mysql,snort}/man" ; do
 if [[ -d $MMAN ]]; then
