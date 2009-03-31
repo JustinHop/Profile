@@ -1,25 +1,43 @@
 -------------------------------------------------------------------------------
 ---- @file rc.lua
----- @author Matthew Wild &lt;mwild1@gmail.com&gt;
+---- @author Justin Hoppensteadt &lt;awesome@justinhoppensteadt.com&gt;
+---- based on script by Matthew Wild &lt;mwild1@gmail.com&gt;
 ---------------------------------------------------------------------------------
+
+myconfs = { "awesomerc", "background" };
+local f = io.open(os.getenv("HOME").."/.awesome.err", "a+")
+f:write( os.date("%c"), "\t----Awesome starting up -----------------------\n\n");
  
-local rc, err =
-    loadfile(os.getenv("HOME").."/.config/awesome/awesomerc.lua");
-if rc then
-    rc, err = pcall(rc);
+for i = 1, #myconfs do
+    local tryfile = (os.getenv("HOME") .. "/.config/awesome/" .. myconfs[i] .. ".lua" );
+    f:write(os.date("%c"), "Compiling:\t",tryfile,"\n");
+
+    local rc, err = loadfile(tryfile);
     if rc then
+        rc, err = pcall(rc);
+        if rc then
+            f:write(os.date("%c"), "Executing:\t",tryfile,"\n");
+        else
+            f:write(os.date("%c"), "Execution FAILED:\t",tryfile,"\nERROR:",err,"\n",
+                "!!!!!!!!! Falling back to default install\n");
+            dofile("/etc/xdg/awesome/rc.lua");
+            return;
+        end
+    else
+        f:write(os.date("%c"), "Compilation FAILED:\t",tryfile,"\nERROR:",err,"\n",
+        "!!!!!!!!! Falling back to default install\n");
+        dofile("/etc/xdg/awesome/rc.lua");
         return;
     end
 end
 
+--for s = 1,screen.count() do
+    --mypromptbox[s].text = awful.util.escape(err:match("[^\n]*"));
+--end
+-- f:write("Awesome crashed during startup on ", os.date("%B %d, %H:%M:\n\n").. " in file " .. rc);
+-- f:write(erro, "\n");
+
 -- dofile("/etc/xdg/awesome/rc.lua");
-
-for s = 1,screen.count() do
-    mypromptbox[s].text = awful.util.escape(err:match("[^\n]*"));
-end
-
-local f = io.open(os.getenv("HOME").."/.awesome.err", "w+")
-f:write("Awesome crashed during startup on ", os.date("%B %d, %H:%M:\n\n"))
-f:write(err, "\n");
 f:close();
 
+-- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80
