@@ -4,27 +4,27 @@
 ---- based on script by Matthew Wild &lt;mwild1@gmail.com&gt;
 ---------------------------------------------------------------------------------
 
-myconfs = { "awesomerc", "background" };
+myconfs = { "include", "background", "env", "tags", "wibox", "mouse", "keys", "hooks" };
 local f = io.open(os.getenv("HOME").."/.awesome.err", "a+")
-f:write( os.date("%c"), "\t----Awesome starting up -----------------------\n\n");
+f:write( "\n\n", os.date("%c"), "\t----Awesome starting up -----------------------\n");
  
 for i = 1, #myconfs do
     local tryfile = (os.getenv("HOME") .. "/.config/awesome/" .. myconfs[i] .. ".lua" );
-    f:write(os.date("%c"), "Compiling:\t",tryfile,"\n");
+    f:write(os.date("%c"), ":\tCompiling:\t",tryfile,"\n");
 
     local rc, err = loadfile(tryfile);
     if rc then
         rc, err = pcall(rc);
         if rc then
-            f:write(os.date("%c"), "Executing:\t",tryfile,"\n");
+            f:write(os.date("%c"), ":\tExecuting:\t",tryfile,"\n");
         else
-            f:write(os.date("%c"), "Execution FAILED:\t",tryfile,"\nERROR:",err,"\n",
+            f:write(os.date("%c"), ":\tExecution FAILED:\t",tryfile,"\nERROR:",err,"\n",
                 "!!!!!!!!! Falling back to default install\n");
             dofile("/etc/xdg/awesome/rc.lua");
             return;
         end
     else
-        f:write(os.date("%c"), "Compilation FAILED:\t",tryfile,"\nERROR:",err,"\n",
+        f:write(os.date("%c"), ":\tCompilation FAILED:\t",tryfile,"\nERROR:",err,"\n",
         "!!!!!!!!! Falling back to default install\n");
         dofile("/etc/xdg/awesome/rc.lua");
         return;
