@@ -130,4 +130,7 @@ lsrc="/usr/local/src"
 spec="$HOME/rpmbuild/SPECS"
 pf="$HOME/profile"
 pj="$HOME/projects"
+cfi="$HOME/dev/systems/cfengine/trunk/inputs"
+cfb="$HOME/dev/systems/cfengine/trunk/build"
+cf="$HOME/dev/systems/cfengine/trunk/"
 # vim:ft=zsh:syn=zsh
