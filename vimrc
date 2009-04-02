@@ -172,11 +172,13 @@ if has("autocmd")
 
     " Filetype Detect
     augroup filetypedetect
-        au BufNewFile,BufRead afiedt.buf                set  filetype=sql
-        au BufNewFile,BufRead /etc/httpd/conf/*.conf    set  filetype=apache
-        au BufNewFile,BufRead /etc/httpd/conf.d/*.conf  set  filetype=apache
-        au BufNewFile,BufRead /etc/httpd/virtual/*.conf set  filetype=apache
-        au BufNewFile,BufRead /etc/event.d/*            set  filetype=upstart
+        au BufNewFile,BufRead afiedt.buf                              set filetype=sql
+        au BufNewFile,BufRead /etc/httpd/conf/*.conf                  set filetype=apache
+        au BufNewFile,BufRead /etc/httpd/conf.d/*.conf                set filetype=apache
+        au BufNewFile,BufRead /etc/httpd/virtual/*.conf               set filetype=apache
+        au BufNewFile,BufRead /usr/local/apache2/conf/*.conf          set filetype=apache
+        au BufNewFile,BufRead /usr/local/apache2/conf/UMG_conf/*.conf set filetype=apache
+        au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
     augroup END
 
     " ZSH Brokenness
