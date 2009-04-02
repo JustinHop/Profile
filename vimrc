@@ -4,7 +4,7 @@
 " 
 "  General Operation
 
-" vimrc-1.9
+" vimrc-1.9.1
 
 set nocompatible
 set backspace=2
@@ -163,6 +163,11 @@ if has("autocmd")
                             " shit wooooooooo!!!!
             endif
         endif
+    endif
+
+    " purdy colors
+    if filereadable( expand("$HOME/.vim/colors/lucius.vim") )
+    	colorscheme lucius
     endif
 
     " Filetype Detect
