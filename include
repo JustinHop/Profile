@@ -63,7 +63,7 @@ justinprompt(){     # Sets the JPrompt
         fi
         local PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%m$D"
 
-        PS="$PLVL$PJOB${BKT[3]}$CP$PTT\${DISPLAY}$PUID$PHOS$PPWD${BKT[4]}\${BACKUP} $PMAR"
+        PS="$PLVL$PJOB${BKT[3]}$CP$PTT\${DISPLAY:s/$HOST/-/}$PUID$PHOS$PPWD${BKT[4]}\${BACKUP} $PMAR"
         PS1="%{${bg_no_bold[black]}%}${PS}%{${bg_no_bold[default]}%} "
         RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
     fi   

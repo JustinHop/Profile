@@ -243,6 +243,10 @@ alias j=jobs
 alias b='export BACKUP=-'
 alias B='export BACKUP=+'
 
+if echo $HOST | grep -ve '(tux-ninja|alien)' > /dev/null ; then
+	export BACKUP=+
+fi
+
 if [[ "$DISTRO" == "cygwin" ]]; then
     alias psa="ps -a $TREEPS"
 else
