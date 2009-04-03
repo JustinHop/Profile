@@ -6,7 +6,6 @@
 
     -- Generate your table at startup or restart
     --theme_menu()
-
     -- Create a laucher widget and a main menu
     myawesomemenu = {
        { "manual", terminal .. " -e man awesome" },
@@ -16,7 +15,7 @@
     }
 
     mymainmenu = awful.menu.new({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                            { "open terminal", terminal }
+                                            { "terminal", terminal }
                                           }
                                 })
 
@@ -26,7 +25,14 @@
     -- Create a systray
     mysystray = widget({ type = "systray", align = "right" })
 
-    -- Create a wibox for each screen and add it
+        -- my space
+        dotbox = widget({ type = "textbox", align = "right" })
+        dotbox.text = "<b><small>:</small></b>"
+
+        ldotbox = widget({ type = "textbox", align = "left" })
+        ldotbox.text = "<b><small>:</small></b>"
+
+    ---{{{ Create a wibox for each screen and add it
     mywibox = {}
     mypromptbox = {}
     mylayoutbox = {}
@@ -54,12 +60,13 @@
                                               awful.client.focus.byidx(-1)
                                               if client.focus then client.focus:raise() end
                                           end) }
+    ---}}}
 
     --[[widgets.mail = widget({ type = "textbox", align = "right", name = "mail", width = 100 })
     mailcheck.register( widgets.mail, settings.env.home .. "/Maildir", "black", "darkgreen" )
     wicked.register(widgets.mail, mailcheck.check, " mail: $1 ")
     ]]--
-
+    --- {{{ The screen loop
     for s = 1, screen.count() do
         -- Create a promptbox for each screen
         mypromptbox[s] = widget({ type = "textbox", align = "left" })
@@ -78,20 +85,28 @@
                                                       return awful.widget.tasklist.label.currenttags(c, s)
                                                   end, mytasklist.buttons)
 
+
         -- Create the wibox
         mywibox[s] = wibox({ position = "top", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
         -- Add widgets to the wibox - order matters
         mywibox[s].widgets = { mylauncher,
+                               ldotbox,
                                mytaglist[s],
+                               ldotbox,
                                mytasklist[s],
                                mypromptbox[s],
                                mytextbox,
+                               s == 1 and included.bat and icon.bat or nil,
+                               s == 1 and included.bat and batterygraphwidget or nil,
+                               dotbox,
                                mylayoutbox[s],
-                               --s == 1 and mysystray or nil }
+                               dotbox,
                                mysystray }
         mywibox[s].screen = s
         -- local t = spawn (bg_cmd, s)
     end
+    --- }}}
 -- }}}
 
+included.wibox = 1;
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker

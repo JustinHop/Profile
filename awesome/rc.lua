@@ -3,8 +3,12 @@
 ---- @author Justin Hoppensteadt &lt;awesome@justinhoppensteadt.com&gt;
 ---- based on script by Matthew Wild &lt;mwild1@gmail.com&gt;
 ---------------------------------------------------------------------------------
+require("awful")
+require("beautiful")
+require("naughty")
+require("wicked")
 
-myconfs = { "include", "background", "env", "tags", "wibox", "mouse", "keys", "hooks" };
+myconfs = {  "background", "env", "ttag", "bat",  "wibox", "mouse", "keys", "hooks" };
 local f = io.open(os.getenv("HOME").."/.awesome.err", "a+")
 f:write( "\n\n", os.date("%c"), "\t----Awesome starting up -----------------------\n");
  
