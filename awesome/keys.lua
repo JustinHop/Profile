@@ -45,6 +45,15 @@ globalkeys =
     key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
+    -- Sun Function Keys
+    key({                   }, "Cancel", function() os.execute("mpc toggle")      end),
+
+    -- Regular Extra Keys
+    key({                   }, "XF86AudioRaiseVolume", function() 
+                                    os.execute("aumix -v+5");
+                                    os.execute("notify-send \"`aumix -v q`\"")
+                                end),
+
     -- Prompt
     key({ modkey }, "F1",
     function ()
