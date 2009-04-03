@@ -13,6 +13,7 @@ unset __INCLUDE__
 export HOSTNAME=`hostname`
 export UNAME=`uname`
 
+export SHELL=$0
 #
 # WHO AM I
 #
