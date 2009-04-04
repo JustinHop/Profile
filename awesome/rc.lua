@@ -8,27 +8,27 @@ require("beautiful")
 require("naughty")
 require("wicked")
 
-myconfs = {  "background", "env", "ttag", "bat",  "wibox", "mouse", "keys", "hooks" };
-local f = io.open(os.getenv("HOME").."/.awesome.err", "a+")
-f:write( "\n\n", os.date("%c"), "\t----Awesome starting up -----------------------\n");
+myconfs = {  "background", "env", "function", "ttag", "bat",  "load", "wibox", "mouse", "keys", "hooks" };
+fdebug = io.open(os.getenv("HOME").."/.awesome.err", "a+")
+fdebug:write( "\n\n", os.date("%c"), "\t----Awesome starting up -----------------------\n");
  
 for i = 1, #myconfs do
     local tryfile = (os.getenv("HOME") .. "/.config/awesome/" .. myconfs[i] .. ".lua" );
-    f:write(os.date("%c"), ":\tCompiling:\t",tryfile,"\n");
+    fdebug:write(os.date("%c"), ":\tCompiling:\t",tryfile,"\n");
 
     local rc, err = loadfile(tryfile);
     if rc then
         rc, err = pcall(rc);
         if rc then
-            f:write(os.date("%c"), ":\tExecuting:\t",tryfile,"\n");
+            fdebug:write(os.date("%c"), ":\tExecuting:\t",tryfile,"\n");
         else
-            f:write(os.date("%c"), ":\tExecution FAILED:\t",tryfile,"\nERROR:",err,"\n",
+            fdebug:write(os.date("%c"), ":\tExecution FAILED:\t",tryfile,"\nERROR:",err,"\n",
                 "!!!!!!!!! Falling back to default install\n");
             dofile("/etc/xdg/awesome/rc.lua");
             return;
         end
     else
-        f:write(os.date("%c"), ":\tCompilation FAILED:\t",tryfile,"\nERROR:",err,"\n",
+        fdebug:write(os.date("%c"), ":\tCompilation FAILED:\t",tryfile,"\nERROR:",err,"\n",
         "!!!!!!!!! Falling back to default install\n");
         dofile("/etc/xdg/awesome/rc.lua");
         return;
@@ -42,6 +42,6 @@ end
 -- f:write(erro, "\n");
 
 -- dofile("/etc/xdg/awesome/rc.lua");
-f:close();
+--fdebug:close();
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80

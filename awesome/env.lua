@@ -1,8 +1,16 @@
--- {{{ ENV --after default-theme
+-- {{{ ENV --after default-theme || background
 -- {{{ Globals
 included = {}
 icon = {}
 -- }}}
+
+-- {{{ Naughy notification objects
+local trans_notify
+local mpd_notify
+local lastfm_notify
+local vol_notify
+-- }}}
+
 -- {{{ Terminal and editor
 -- This is used later as the default terminal and editor to run.
 terminal = "terminator"
@@ -26,8 +34,8 @@ layouts =
     awful.layout.suit.tile.left,
     -- awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
+    -- awful.layout.suit.fair,
+    -- awful.layout.suit.fair.horizontal,
     awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
     -- awful.layout.suit.magnifier,
@@ -59,11 +67,11 @@ apptags =
 {
     -- ["Firefox"] = { screen = 1, tag = 2 },
     -- ["mocp"] = { screen = 2, tag = 4 },
+    ["pidgin"] = { screen = 1, tag = 2 },
 }
 -- Define if we want to use titlebar on all applications.
 use_titlebar = true
 -- }}}
-
 -- }}}
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker

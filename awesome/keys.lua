@@ -53,6 +53,7 @@ globalkeys =
                                     os.execute("aumix -v+5");
                                     os.execute("notify-send \"`aumix -v q`\"")
                                 end),
+    --
 
     -- Prompt
     key({ modkey }, "F1",

@@ -115,9 +115,17 @@ awful.hooks.timer.register(60, function ()
 end)
 -- }}}
 
+--[[
 -- {{{ My Stuff
 awful.hooks.timer.register(60, function ()
     local foo = os.execute("uptime");
 end)
+--]]
+awful.hooks.timer.register(300, function ()
+    -- beautiful.init(theme_path);
+    beautiful.init(local_theme);
+    os.execute(" { sleep 1; uptime; } & ")
+end)
+
 --- }}}
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker
