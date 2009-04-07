@@ -112,6 +112,19 @@
 
         wicked.register(membarwidget, wicked.widgets.mem, '$1', 1, 'mem')
     --- }}}
+    -- {{{ Network widget
+    netwidget = widget({
+        type = 'textbox',
+        name = 'netwidget',
+        align = 'right'
+    })
+
+    netif = 'eth0'
+
+    wicked.register(netwidget, wicked.widgets.net,
+        '<small><span><span color="green">D:</span>${' .. netif ..
+        ' down}<br> <span color="red">U:</span>${' .. netif .. ' up}</small> ')
+    -- }}}
     
 --[[
     -- {{{ Volume widget
@@ -217,6 +230,8 @@
                                     mylauncher,
                                     ldotbox[s],
                                     mypromptbox[s],
+                                    dotbox[s],
+                                    netwidget,
                                     dotbox[s],
                                     icon_mem,
                                     membarwidget,

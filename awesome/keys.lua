@@ -54,14 +54,14 @@ globalkeys =
                                     os.execute("notify-send \"Volume\" \"`aumix -v q`\" -t 400 &")
                                 end),
     key({                   }, "XF86AudioLowerVolume", function() 
-                                    os.execute("aumix -v-5");
+                                    os.execute("aumix -v-5 &");
                                     os.execute("notify-send \"Volume\" \"`aumix -v q`\" -t 400 &")
                                 end),
 
     -- Prompt
     key({ modkey }, "F1",
     function ()
-        awful.prompt.run({ prompt = "<b>Run: </b>" },
+        awful.prompt.run({ prompt = "<b><span color=\"white\">Run: </span></b>" },
         mypromptbox[mouse.screen],
         awful.util.spawn, awful.completion.shell,
         awful.util.getdir("cache") .. "/history")

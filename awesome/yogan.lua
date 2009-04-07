@@ -602,8 +602,8 @@ netwidget = widget({
 })
 
 wicked.register(netwidget, wicked.widgets.net,
-    '<span color="green">▾</span>${' .. netif .. 
-    ' down} <span color="red">▴</span>${' .. netif .. ' up} ')
+    '<span color="green"></span>${' .. netif .. 
+    ' down} <span color="red"></span>${' .. netif .. ' up} ')
 -- }}}
 
 -- {{{ Filesystem usage widget
