@@ -20,8 +20,10 @@
                                           }
                                 })
 
+    --
     mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                          menu = mymainmenu })
+    --
 
     -- Create a systray
     mysystray = widget({ type = "systray", align = "right" })
@@ -110,6 +112,7 @@
 
         wicked.register(membarwidget, wicked.widgets.mem, '$1', 1, 'mem')
     --- }}}
+    
 --[[
     -- {{{ Volume widget
     -- Adapted from http://awesome.naquadah.org/wiki/index.php?title=Farhavens_volume_widget
@@ -169,12 +172,13 @@
         -- Create a taglist widget
         mytaglist[s] = awful.widget.taglist.new(s, awful.widget.taglist.label.all, mytaglist.buttons)
 
-        --[[ Create a tasklist widget
+        -- Create a tasklist widget
         mytasklist[s] = awful.widget.tasklist.new(function(c)
                                                       return awful.widget.tasklist.label.currenttags(c, s)
                                                   end, mytasklist.buttons)
 
-        --]]
+        --
+        --{{{ Spacers
         -- My Spacers, TODO add hooks to change color on screen switch
         dotbox[s] = widget({ type = "textbox", align = "right" })
         dotbox[s].text = "<b><small> : </small></b>"
@@ -182,7 +186,9 @@
         ldotbox[s] = widget({ type = "textbox", align = "left" })
         ldotbox[s].text = "<b><small> : </small></b>"
 
+        --}}}
 
+        -- {{{ Top Bar
         -- Create the wibox
         mywibox[s] = wibox({ position = "top", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
         -- Add widgets to the wibox - order matters
@@ -191,7 +197,7 @@
                                ldotbox[s],
                                mytaglist[s],
                                ldotbox[s],
-                               --mytasklist[s],
+                               mytasklist[s],
                                mytextbox,
                                dotbox[s],
                                mylayoutbox[s],
@@ -201,7 +207,9 @@
                                dotbox[s],
                                mysystray }
         mywibox[s].screen = s
+        -- }}}
 
+        -- {{{ Bottom Bar
         -- Add My Status Bar!!!
         statusbox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
 
@@ -209,19 +217,20 @@
                                     mylauncher,
                                     ldotbox[s],
                                     mypromptbox[s],
-                                    icon.cpu,
-                                    cpugraphwidget,
                                     dotbox[s],
-                                    icon.mem,
+                                    icon_mem,
                                     membarwidget,
                                     dotbox[s],
-                                    included.loadavg and icon.loadavg or nil,
+                                    included.loadavg and icon_load or nil,
                                     included.loadavg and loadwidget or nil,
                                     included.loadavg and dotbox[s] or nil,
                                     included.bat and icon.bat or nil,
                                     included.bat and batterygraphwidget or nil,
+                                    icon_cpu,
+                                    cpugraphwidget,
                                     dotbox[s] }
         statusbox[s].screen = s
+        -- }}}
         -- local t = spawn (bg_cmd, s)
     end
     --- }}}

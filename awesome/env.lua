@@ -3,6 +3,13 @@
 included = {}
 icon = {}
 -- }}}
+-- {{{ Cleaner Icons
+icon_cpu = widget({ type = "imagebox", align = "right" })
+icon_cpu.image = image("/home/justin/.config/awesome/icons/ksim_cpu.png")
+icon_load = widget({ type = "imagebox", align = "right" })
+icon_load.image = image("/home/justin/.config/awesome/icons/linuxconf.png")
+icon_mem = widget({ type = "imagebox", align = "right" })
+icon_mem.image = image("/home/justin/.config/awesome/icons/memory.png")
 
 -- {{{ Naughy notification objects
 local trans_notify

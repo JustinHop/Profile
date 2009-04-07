@@ -29,11 +29,16 @@ tasklist_floating_icon = /home/justin/.config/awesome/themes/zeb/tasklist/floati
 titlebar_close_button_normal = /usr/local/share/awesome/themes/default/titlebar/close.png
 titlebar_close_button_focus = /usr/local/share/awesome/themes/default/titlebar/closer.png
 
+titlebar_border_width = 1
+titlebar_border_normal = white
+titlebar_border_focus  = black
+titlebar_border_marked = orange
+
 menu_submenu_icon = /home/justin/.config/awesome/themes/zeb/icons/submenu.png
 menu_height   = 15
 menu_width    = 100
 
-wallpaper_cmd = awsetbg -f -r /home/justin/pictures/desktops/dark60
+wallpaper_cmd = awsetbg -f -r /home/justin/pictures/linux-desktops/dark40/
 
 layout_dwindle = /home/justin/.config/awesome/themes/zeb/layouts/dwindlew.png
 layout_fairh = /home/justin/.config/awesome/themes/zeb/layouts/fairhw.png

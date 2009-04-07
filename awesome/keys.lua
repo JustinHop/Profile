@@ -46,14 +46,17 @@ globalkeys =
     key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
     -- Sun Function Keys
-    key({                   }, "Cancel", function() os.execute("mpc toggle")      end),
+    key({                   }, "Cancel", function() os.execute("notify-send \"Music Player Daemon\" \"`mpc toggle`\" & ")      end),
 
     -- Regular Extra Keys
     key({                   }, "XF86AudioRaiseVolume", function() 
-                                    os.execute("aumix -v+5");
-                                    os.execute("notify-send \"`aumix -v q`\"")
+                                    os.execute("aumix -v+5 &");
+                                    os.execute("notify-send \"Volume\" \"`aumix -v q`\" -t 400 &")
                                 end),
-    --
+    key({                   }, "XF86AudioLowerVolume", function() 
+                                    os.execute("aumix -v-5");
+                                    os.execute("notify-send \"Volume\" \"`aumix -v q`\" -t 400 &")
+                                end),
 
     -- Prompt
     key({ modkey }, "F1",

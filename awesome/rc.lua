@@ -42,6 +42,6 @@ end
 -- f:write(erro, "\n");
 
 -- dofile("/etc/xdg/awesome/rc.lua");
---fdebug:close();
+fdebug:close();
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80
