@@ -61,7 +61,7 @@ globalkeys =
     -- Prompt
     key({ modkey }, "F1",
     function ()
-        awful.prompt.run({ prompt = "Run: " },
+        awful.prompt.run({ prompt = "<b>Run: </b>" },
         mypromptbox[mouse.screen],
         awful.util.spawn, awful.completion.shell,
         awful.util.getdir("cache") .. "/history")
@@ -69,7 +69,7 @@ globalkeys =
 
     key({ modkey }, "F4",
     function ()
-        awful.prompt.run({ prompt = "Run Lua code: " },
+        awful.prompt.run({ prompt = "<b>Run Lua code: </b>" },
         mypromptbox[mouse.screen],
         awful.util.eval, nil,
         awful.util.getdir("cache") .. "/history_eval")
