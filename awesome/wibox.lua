@@ -1,5 +1,6 @@
 -- wibox.lua
 -- {{{ Wibox -- after tags
+-- {{{ widgets
     -- Create a textbox widget
     mytextbox = widget({ type = "textbox", align = "right" })
     -- Set the default text in textbox
@@ -16,6 +17,7 @@
     }
 
     mymainmenu = awful.menu.new({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                                            { "debian", menu.debian_menu }, 
                                             { "terminal", terminal }
                                           }
                                 })
@@ -24,7 +26,6 @@
     mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                          menu = mymainmenu })
     --
-
     -- Create a systray
     mysystray = widget({ type = "systray", align = "right" })
 
@@ -60,11 +61,17 @@
                                               awful.client.focus.byidx(-1)
                                               if client.focus then client.focus:raise() end
                                           end) }
-    ---}}}
+    --- }}}
     -- {{{ my widgets
     -- uptimebox = widget({ type = "textbox", align = "right" })
     -- Set the default text in textbox
     -- uptimebox.text = "<b><small>X</small></b>"
+
+    -- lockbox
+    lockbox = awful.widget.launcher({ image = icon_lock.image, align = "right", height = 0.8,
+                                        command = "xflock4"})
+    logoutbox = awful.widget.launcher({ image = icon_logout.image, align = "right", height = 0.8,
+                                        command = "xfce-session-logout"})
 
     -- {{{ CPU graph widget
     icon.cpu = widget({ type = "imagebox", align = "right" })
@@ -95,7 +102,7 @@
     icon.mem = widget({ type = "imagebox", align = "right" })
     icon.mem.image = image("/home/justin/.config/awesome/icons/tux-system/memory.png")
     membarwidget = widget({ type = 'progressbar', name = 'membarwidget', align = 'right' })
-    membarwidget.height = 0.85
+    membarwidget.height = 1
     membarwidget.width = 8
     membarwidget.bg = '#33333355'
     membarwidget.border_color = '#0a0a0a'
@@ -112,20 +119,6 @@
 
         wicked.register(membarwidget, wicked.widgets.mem, '$1', 1, 'mem')
     --- }}}
-    -- {{{ Network widget
-    netwidget = widget({
-        type = 'textbox',
-        name = 'netwidget',
-        align = 'right'
-    })
-
-    netif = 'eth0'
-
-    wicked.register(netwidget, wicked.widgets.net,
-        '<small><span><span color="green">D:</span>${' .. netif ..
-        ' down}<br> <span color="red">U:</span>${' .. netif .. ' up}</small> ')
-    -- }}}
-    
 --[[
     -- {{{ Volume widget
     -- Adapted from http://awesome.naquadah.org/wiki/index.php?title=Farhavens_volume_widget
@@ -171,7 +164,8 @@
     mailcheck.register( widgets.mail, settings.env.home .. "/Maildir", "black", "darkgreen" )
     wicked.register(widgets.mail, mailcheck.check, " mail: $1 ")
     ]]--
-    --- {{{ The screen loop
+    --- }}}
+    --- {{{ CREATE IT
     for s = 1, screen.count() do
         -- Create a promptbox for each screen
         mypromptbox[s] = widget({ type = "textbox", align = "left" })
@@ -194,10 +188,10 @@
         --{{{ Spacers
         -- My Spacers, TODO add hooks to change color on screen switch
         dotbox[s] = widget({ type = "textbox", align = "right" })
-        dotbox[s].text = "<b><small> : </small></b>"
+        dotbox[s].text = "<b><small>:</small></b>"
 
         ldotbox[s] = widget({ type = "textbox", align = "left" })
-        ldotbox[s].text = "<b><small> : </small></b>"
+        ldotbox[s].text = "<b><small>:</small></b>"
 
         --}}}
 
@@ -230,26 +224,39 @@
                                     mylauncher,
                                     ldotbox[s],
                                     mypromptbox[s],
+                                    --dotbox[s],
+                                    --netwidget,
                                     dotbox[s],
-                                    netwidget,
-                                    dotbox[s],
+                                    included.bat and s == 1 and icon.bat or nil,
+                                    included.bat and s == 1 and batterygraphwidget or nil,
+                                    included.bat and s == 1 and dotbox[s] or nil,
                                     icon_mem,
                                     membarwidget,
                                     dotbox[s],
-                                    included.loadavg and icon_load or nil,
-                                    included.loadavg and loadwidget or nil,
-                                    included.loadavg and dotbox[s] or nil,
-                                    included.bat and icon.bat or nil,
-                                    included.bat and batterygraphwidget or nil,
                                     icon_cpu,
                                     cpugraphwidget,
-                                    dotbox[s] }
+                                    included.loadavg and dotbox[s] or nil,
+                                    -- included.loadavg and icon_load or nil,
+                                    included.loadavg and loadwidget or nil,
+                                    dotbox[s],
+                                    s == 1 and lockbox,
+                                    s == 1 and logoutbox,
+                                    s == 1 and dotbox[s],
+                                }
         statusbox[s].screen = s
         -- }}}
         -- local t = spawn (bg_cmd, s)
     end
     --- }}}
 -- }}}
+if included.shifty then
+--{{{ SHIFTY: initialize shifty
+-- the assignment of shifty.taglist must always be after its actually initialized 
+-- with awful.widget.taglist.new()
+shifty.taglist = mytaglist
+shifty.init()
+--}}}
+end
 
 included.wibox = 1;
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker

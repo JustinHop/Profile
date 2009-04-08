@@ -2,6 +2,8 @@
 -- {{{ Globals
 included = {}
 icon = {}
+included.shifty = 1
+require("shifty")
 -- }}}
 -- {{{ Cleaner Icons
 icon_cpu = widget({ type = "imagebox", align = "right" })
@@ -10,6 +12,10 @@ icon_load = widget({ type = "imagebox", align = "right" })
 icon_load.image = image("/home/justin/.config/awesome/icons/linuxconf.png")
 icon_mem = widget({ type = "imagebox", align = "right" })
 icon_mem.image = image("/home/justin/.config/awesome/icons/memory.png")
+icon_lock = widget({ type = "imagebox", align = "right" })
+icon_lock.image = image("/home/justin/.config/awesome/icons/lock.png")
+icon_logout = widget({ type = "imagebox", align = "right" })
+icon_logout.image = image("/home/justin/.config/awesome/icons/logout.png")
 
 -- {{{ Naughy notification objects
 local trans_notify
@@ -81,4 +87,5 @@ use_titlebar = true
 -- }}}
 -- }}}
 
+included.env = 1
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker

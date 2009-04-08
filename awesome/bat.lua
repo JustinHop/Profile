@@ -1,5 +1,4 @@
 -- battery monitor for one screen on one battery
-if false then
 batteries = 1
 
 icon.bat = widget({ type = "imagebox", align = "right" })
@@ -45,5 +44,4 @@ for battery=0, batteries-1 do
    wicked.register(batterygraphwidget, read_battery_life(battery), '$1', 1, 'battery')
 end
 included.bat = 1;
-end
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker

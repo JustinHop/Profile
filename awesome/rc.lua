@@ -7,11 +7,13 @@ require("awful")
 require("beautiful")
 require("naughty")
 require("wicked")
+require("menu")
 
 myconfs = {  "background", "env", "function", "ttag", "bat",  "load", "wibox", "mouse", "keys", "hooks" };
 fdebug = io.open(os.getenv("HOME").."/.awesome.err", "a+")
-fdebug:write( "\n\n", os.date("%c"), "\t----Awesome starting up -----------------------\n");
- 
+fdebug:write( "\n", os.date("%c"), "\n"); 
+awful.util.spawn("echo '---- awesome ---'| figlet -f small -c &")
+
 for i = 1, #myconfs do
     local tryfile = (os.getenv("HOME") .. "/.config/awesome/" .. myconfs[i] .. ".lua" );
     fdebug:write(os.date("%c"), ":\tCompiling:\t",tryfile,"\n");
@@ -42,6 +44,6 @@ end
 -- f:write(erro, "\n");
 
 -- dofile("/etc/xdg/awesome/rc.lua");
-fdebug:close();
+-- fdebug:close();
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80
