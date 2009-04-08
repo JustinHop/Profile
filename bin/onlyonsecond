@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if xdpyinfo | grep 'screen #1' > /dev/null ; then
+	DISPLAY=:0.1
+    exec "$@"
+else
+	echo "No Second Window: not running \"$@\""
+fi
+
+
