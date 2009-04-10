@@ -2,8 +2,10 @@
 -- {{{ Globals
 included = {}
 icon = {}
-included.shifty = 1
-require("shifty")
+if false then
+    included.shifty = 1
+    require("shifty")
+end
 -- }}}
 -- {{{ Cleaner Icons
 icon_cpu = widget({ type = "imagebox", align = "right" })
@@ -64,6 +66,7 @@ layouts =
 floatapps =
 {
     -- by class
+    ["Thunderbird Preferences"] = true,
     ["MPlayer"] = true,
     ["pinentry"] = true,
     ["gimp"] = true,

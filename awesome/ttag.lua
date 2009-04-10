@@ -10,13 +10,14 @@ shifty.config.tags = {
     ["chat"]      =   { layout = awful.layout.suit.tile,              exclusive=false, solitary=false, position=2, screen=1, slave=true, spawn="pidgin" },
     ["work"]      =   { layout = awful.layout.suit.tile,              exclusive=false, solitary=false, position=2, screen=2 },
     ["www"]       =   { layout = awful.layout.suit.tile, mwfact=0.75, exclusive=false, solitary=true, position=3, spawn=browser },
-    ["mail"]      =   { layout = awful.layout.suit.tile, mwfact=0.75, exclusive=false, solitary=true, position=4, screen=1, spawn = "thunderbird" },
+    ["mail"]      =   { layout = awful.layout.suit.tile, mwfact=0.75, exclusive=false, solitary=false, position=4, screen=1, spawn = "thunderbird" },
     ["work"]      =   { layout = awful.layout.suit.tile,              exclusive=false, solitary=false, position=4, screen=2 },
     ["work"]      =   { layout = awful.layout.suit.tile,              exclusive=false, solitary=false, position=5, },
     ["work"]      =   { layout = awful.layout.suit.tile,              exclusive=false, solitary=false, position=5, },
     ["office"]    =   { layout = awful.layout.suit.tile, position = 7} ,          
     ["work"]     =   { layout = awful.layout.suit.float,             exclusive=false, solitary=false, position = 8 } ,
-    ["debug"]     =   { layout = awful.layout.suit.tile, mwfact=0.75, exclusive=false, solitary=true, position=9, persist=1, screen=1 },
+    ["debug1"]     =   { layout = awful.layout.suit.tile, mwfact=0.75, exclusive=false, solitary=true, position=9, persist=1, screen=1 },
+    ["debug2"]     =   { layout = awful.layout.suit.tile, mwfact=0.75, exclusive=false, solitary=true, position=9, persist=1, screen=2 },
 
 }
 --}}}

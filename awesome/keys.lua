@@ -69,10 +69,12 @@ globalkeys =
     key({                   }, "XF86AudioPlay", function() 
         os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc toggle`\" & ")
     end),
-    key({                   }, "XF86AudioNext", function() 
+    --key({                   }, "XF86AudioNext", function() 
+    key({                   }, "#171", function() 
         os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc next`\" & ")
     end),
-    key({                   }, "XF86AudioPrev", function() 
+    --key({                   }, "XF86AudioPrev", function() 
+    key({                   }, "#173", function() 
         os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc prev`\" & ")
     end),
 
