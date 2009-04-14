@@ -1,6 +1,4 @@
 bashrc
-procmailrc
-bad_ssh_config
 gvimrc
 include
 inputrc
@@ -9,9 +7,8 @@ screenrc
 vimperatorrc
 vimrc
 vim
+rpmmacros
 zshenv
 zlogin
 zlogout
 zshrc
-Xresources
-xbindkeys
