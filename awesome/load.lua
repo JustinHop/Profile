@@ -26,15 +26,15 @@
                 --fdebug:write(i," NOT GETTING DONE\n")
             else
                 --fdebug:write(i," CORRECT\n")
-                if tonumber(i) > 300 then
+                if tonumber(i) > 3 then
             	    color[count] = "red"
-                elseif tonumber(i) > 200 then
+                elseif tonumber(i) > 2 then
                     color[count] = "yellow"
-                elseif tonumber(i) > 100 then 
+                elseif tonumber(i) > 1 then 
                     color[count] = "white"
-                elseif tonumber(i) > 50 then 
+                elseif tonumber(i) > .5 then 
                     color[count] = "grey90"
-                elseif tonumber(i) > 25 then 
+                elseif tonumber(i) > .25 then 
                     color[count] = "grey70"
                 else
             	    color[count] = "grey50"

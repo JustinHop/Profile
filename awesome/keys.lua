@@ -67,15 +67,29 @@ globalkeys =
         os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Volume\" \"`aumix -v q`\" -t 400 &")
     end),
     key({                   }, "XF86AudioPlay", function() 
-        os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc toggle`\" & ")
+        os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc toggle | sed 's/&/&amp;/g'| sed 's/- D I G I T A L L Y - I M P O R T E D -.*:/-DI-/g'`\" & ")
     end),
     --key({                   }, "XF86AudioNext", function() 
     key({                   }, "#171", function() 
-        os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc next`\" & ")
+        os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc next | sed 's/&/&amp;/g'| sed 's/- D I G I T A L L Y - I M P O R T E D -.*:/-DI-/g'`\" & ")
     end),
     --key({                   }, "XF86AudioPrev", function() 
     key({                   }, "#173", function() 
-        os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc prev`\" & ")
+        os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc prev | sed 's/&/&amp;/g' | sed 's/- D I G I T A L L Y - I M P O R T E D -.*:/-DI-/g' `\" & ")
+    end),
+    key({                   }, "XF86Calculator", function() 
+        os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc status | sed 's/&/&amp;/g'| sed 's/- D I G I T A L L Y - I M P O R T E D .*:/-DI-/g'`\" & ")
+    end),
+
+
+    -- Menu proof of concept 
+    key({ modkey }, "v", function()
+        awful.menu.toggle(sessionmenu, true)
+    end),
+
+    -- Lock
+    key({ modkey }, "Pause", function()
+        os.execute("xflock4 &")
     end),
 
     -- Prompt
@@ -95,6 +109,7 @@ globalkeys =
         awful.util.getdir("cache") .. "/history_eval")
     end),
     --}}}
+    --{{{ Shifty5
         key({ modkey, "Shift" }, "d", included.shifty and shifty.del),    -- delete a tag
         key({ modkey, "Shift" }, "n", included.shifty and shifty.send_prev), -- move client to prev tag
         key({ modkey          }, "n", included.shifty and shifty.send_next), -- move client to next tag
@@ -130,6 +145,7 @@ globalkeys =
             end
             awful.util.spawn(settings.apps.mail) 
         end), --
+    --}}}
 }
 
 -- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them

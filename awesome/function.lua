@@ -2,6 +2,13 @@
 -- by yogan then modified by me
 --
 
+
+--{{{ Justins Clipper   the Jlipper
+--
+
+
+
+
 -- {{{ Global helper functions
 -- {{{ execute_command and return its output in one single line
 function execute_command(command, newlines)
@@ -83,7 +90,7 @@ function mpc_status()
 end
 
 function mpc_get_song()
-    return execute_command("mpc status --format '<b>%artist%</b> - <b>%title%</b> (from <b>%album%</b>)' | head -1")
+    return execute_command("mpc status --format '(<b>%artist%</b>)(<b>%name%</b>) - <b>%title%</b> (from <b>%album%</b>)' | head -1")
 end
 
 function mpc_command(cmd)

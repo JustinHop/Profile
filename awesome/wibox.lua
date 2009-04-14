@@ -22,9 +22,22 @@
                                           }
                                 })
 
+    sessionmenu = awful.menu.new({ items = { 
+                                             { "kde settings", "system-settings" },
+                                             { "xfce settings", "xfce-settings-show" },
+                                             { "snapshot", "ksnapshot" },
+                                             { "logout", "xfce-session-logout" },
+                                             { "lock", "xflock4" },
+                                            }
+                                        })
+
+    sessionlauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
+                                         menu = sessionmenu })
+
     --
     mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                          menu = mymainmenu })
+
     --
     -- Create a systray
     mysystray = widget({ type = "systray", align = "right" })
@@ -74,13 +87,13 @@
                                         command = "xfce-session-logout"})
 
     -- {{{ CPU graph widget
-    icon.cpu = widget({ type = "imagebox", align = "right" })
+    icon.cpu = widget({ type = "imagebox", align = "left" })
     icon.cpu.image = image("/home/justin/.config/awesome/icons/oxy-cpu.png")
 
     cpugraphwidget = widget({
         type = 'graph',
         name = 'cpugraphwidget',
-        align = 'right'
+        align = 'left'
     })
 
     cpugraphwidget.height = 1
@@ -99,9 +112,9 @@
     wicked.register(cpugraphwidget, wicked.widgets.cpu, '$1', 1, 'cpu')
     -- }}}
     -- {{{ Memory Bar Widget
-    icon.mem = widget({ type = "imagebox", align = "right" })
+    icon.mem = widget({ type = "imagebox", align = "left" })
     icon.mem.image = image("/home/justin/.config/awesome/icons/tux-system/memory.png")
-    membarwidget = widget({ type = 'progressbar', name = 'membarwidget', align = 'right' })
+    membarwidget = widget({ type = 'progressbar', name = 'membarwidget', align = 'left' })
     membarwidget.height = 1
     membarwidget.width = 8
     membarwidget.bg = '#33333355'
@@ -221,27 +234,27 @@
         statusbox[s] = wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
 
         statusbox[s].widgets = { ldotbox[s],
-                                    mylauncher,
+                                    sessionlauncher,
+                                    ldotbox[s],
+                                    included.bat and icon.bat or nil,
+                                    included.bat and batterygraphwidget or nil,
+                                    included.bat and ldotbox[s] or nil,
+                                    icon_mem,
+                                    membarwidget,
+                                    ldotbox[s],
+                                    icon_cpu,
+                                    cpugraphwidget,
+                                    ldotbox[s],
                                     ldotbox[s],
                                     mypromptbox[s],
                                     --dotbox[s],
                                     --netwidget,
                                     dotbox[s],
-                                    included.bat and s == 1 and icon.bat or nil,
-                                    included.bat and s == 1 and batterygraphwidget or nil,
-                                    included.bat and s == 1 and dotbox[s] or nil,
-                                    icon_mem,
-                                    membarwidget,
-                                    dotbox[s],
-                                    icon_cpu,
-                                    cpugraphwidget,
-                                    included.loadavg and dotbox[s] or nil,
-                                    -- included.loadavg and icon_load or nil,
                                     included.loadavg and loadwidget or nil,
+                                    included.loadavg and dotbox[s] or nil,
+                                    included.loadavg and dotbox[s] or nil,
+                                    included.loadavg and icon_load or nil,
                                     dotbox[s],
-                                    s == 1 and lockbox,
-                                    s == 1 and logoutbox,
-                                    s == 1 and dotbox[s],
                                 }
         statusbox[s].screen = s
         -- }}}
@@ -259,4 +272,4 @@ shifty.init()
 end
 
 included.wibox = 1;
--- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker
+-- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=4:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker

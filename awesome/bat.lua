@@ -1,7 +1,7 @@
 -- battery monitor for one screen on one battery
 batteries = 1
 
-icon.bat = widget({ type = "imagebox", align = "right" })
+icon.bat = widget({ type = "imagebox", align = "left" })
 icon.bat.image = image("/home/justin/.config/awesome/icons/tux-system/battery.png")
 
 -- Function to extract charge percentage
@@ -25,7 +25,7 @@ end
 for battery=0, batteries-1 do
    batterygraphwidget = widget({ type = 'progressbar',
                                  name = 'batterygraphwidget',
-                                 align = 'right' })
+                                 align = 'left' })
    batterygraphwidget.height = 1
    batterygraphwidget.width = 8
    batterygraphwidget.bg = '#333333'

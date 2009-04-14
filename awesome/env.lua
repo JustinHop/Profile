@@ -8,11 +8,11 @@ if false then
 end
 -- }}}
 -- {{{ Cleaner Icons
-icon_cpu = widget({ type = "imagebox", align = "right" })
+icon_cpu = widget({ type = "imagebox", align = "left" })
 icon_cpu.image = image("/home/justin/.config/awesome/icons/ksim_cpu.png")
 icon_load = widget({ type = "imagebox", align = "right" })
 icon_load.image = image("/home/justin/.config/awesome/icons/linuxconf.png")
-icon_mem = widget({ type = "imagebox", align = "right" })
+icon_mem = widget({ type = "imagebox", align = "left" })
 icon_mem.image = image("/home/justin/.config/awesome/icons/memory.png")
 icon_lock = widget({ type = "imagebox", align = "right" })
 icon_lock.image = image("/home/justin/.config/awesome/icons/lock.png")
