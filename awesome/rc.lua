@@ -12,7 +12,7 @@ require("menu")
 myconfs = {  "background", "env", "function", "ttag", "bat",  "load", "wibox", "mouse", "keys", "hooks" };
 fdebug = io.open(os.getenv("HOME").."/.awesome.err", "a+")
 fdebug:write( "\n", os.date("%c"), "\n"); 
-awful.util.spawn("echo '---- awesome ---'| figlet -f small -c &")
+awful.util.spawn("echo '-+- awesome -+-'| figlet -f small -c &")
 
 for i = 1, #myconfs do
     local tryfile = (os.getenv("HOME") .. "/.config/awesome/" .. myconfs[i] .. ".lua" );

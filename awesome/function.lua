@@ -1,11 +1,8 @@
 -- function.lua
 -- by yogan then modified by me
+-- Justin Hoppensteadt
 --
-
-
---{{{ Justins Clipper   the Jlipper
 --
-
 
 
 
@@ -42,6 +39,17 @@ function debug_notify(_text, _title, _time)
     end
 end
 -- }}}
+
+function getIcon(name)
+    for d, dir in pairs(settings.icon_dirs) do
+        for f, format in pairs(settings.icon_formats) do
+            local icon = dir .. name .. "." .. format
+            if awful.util.file_readable(icon) then
+                return icon
+            end
+        end
+    end
+end
 
 -- {{{ launch_dg_irssi: ssh to donnergurgler on tag 1 (FIXME: check if already there)
 function launch_dg_irssi ()
@@ -177,6 +185,7 @@ function volume (mode, barwidget, textwidget, value)
     end
 end
 -- }}}
+
 
 -- {{{ Very ugly hack to fix XBMC, called by a timer set up in manage hook
 -- The function called by the timer disables the timer then, resulting in a

@@ -401,6 +401,12 @@ fi
 # might as well start with the gui crap
 alias konqu='konqueror --profile filemanagement '
 
+#purdy stuff
+if [[ -o interactive ]]; then
+	for _COLOR in gcc make diff svn ; do 
+		whence "color${_COLOR}" >> /dev/null && alias ${_COLOR}="color${_COLOR}"
+	done
+fi
 #
 # Work  Stuff
 #

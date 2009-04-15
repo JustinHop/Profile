@@ -81,12 +81,25 @@
     -- uptimebox.text = "<b><small>X</small></b>"
 
     -- lockbox
-    lockbox = awful.widget.launcher({ image = icon_lock.image, align = "right", height = 0.8,
+    lockbox = awful.widget.launcher({ image = getIcon("lock"), align = "right", height = 0.8,
                                         command = "xflock4"})
-    logoutbox = awful.widget.launcher({ image = icon_logout.image, align = "right", height = 0.8,
+    logoutbox = awful.widget.launcher({ image = getIcon("logout"), align = "right", height = 0.8,
                                         command = "xfce-session-logout"})
 
     -- {{{ CPU graph widget
+    -- {{{ Cleaner Icons
+    icon_cpu = widget({ type = "imagebox", align = "left" })
+    icon_cpu.image = image("/home/justin/.config/awesome/icons/cpu.png")
+    icon_load = widget({ type = "imagebox", align = "right" })
+    icon_load.image = image("/home/justin/.config/awesome/icons/linuxconf.png")
+    icon_mem = widget({ type = "imagebox", align = "left" })
+    icon_mem.image = image("/home/justin/.config/awesome/icons/memory.png")
+    icon_lock = widget({ type = "imagebox", align = "right" })
+    icon_lock.image = image("/home/justin/.config/awesome/icons/lock.png")
+    icon_logout = widget({ type = "imagebox", align = "right" })
+    icon_logout.image = image("/home/justin/.config/awesome/icons/logout.png")
+    -- }}}
+
     icon.cpu = widget({ type = "imagebox", align = "left" })
     icon.cpu.image = image("/home/justin/.config/awesome/icons/oxy-cpu.png")
 

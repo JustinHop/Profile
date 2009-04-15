@@ -1,16 +1,13 @@
 -- {{{ Key bindings -- after mouse
 shiftykeys = {}
-settings = {}
-settings.apps = {}
-settings.apps.browser = "firefox"
-settings.apps.mail = "thunderbird"
-settings.modkey = modkey
 
 globalkeys =
 {
     --{{{ Globalkeys
     key({ modkey,           }, "Left",   awful.tag.viewprev       ),
+    key({ modkey,           }, "p",      awful.tag.viewprev       ),
     key({ modkey,           }, "Right",  awful.tag.viewnext       ),
+    key({ modkey,           }, "n",      awful.tag.viewnext       ),
     key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     key({ modkey,           }, "j",
@@ -81,6 +78,17 @@ globalkeys =
         os.execute("notify-send -i /home/justin/.config/awesome/icons/audio-headset.png \"Music Player Daemon\" \"`mpc status | sed 's/&/&amp;/g'| sed 's/- D I G I T A L L Y - I M P O R T E D .*:/-DI-/g'`\" & ")
     end),
 
+    -- Transparency
+    key({ modkey }, "[", function()
+        awful.util.spawn(settings.trans.minus)
+    end),
+    key({ modkey }, "]", function()
+        awful.util.spawn(settings.trans.plus)
+    end),
+    key({ modkey }, "\\", function()
+        awful.util.spawn(settings.trans.toggle)
+    end),
+
 
     -- Menu proof of concept 
     key({ modkey }, "v", function()
@@ -109,15 +117,15 @@ globalkeys =
         awful.util.getdir("cache") .. "/history_eval")
     end),
     --}}}
-    --{{{ Shifty5
+    --{{{
+    --[[-- Shifty5
         key({ modkey, "Shift" }, "d", included.shifty and shifty.del),    -- delete a tag
         key({ modkey, "Shift" }, "n", included.shifty and shifty.send_prev), -- move client to prev tag
         key({ modkey          }, "n", included.shifty and shifty.send_next), -- move client to next tag
-        --[[ no workey without xinerama
+        -- no workey without xinerama
         key({ modkey,"Control"}, "n", included.shifty and function() 
             shifty.tagtoscr(awful.util.cycle(screen.count(), mouse.screen +1))
         end), -- move client to next tag
-        ]]--
         key({ modkey          }, "a",     included.shifty and shifty.add), -- create a new tag
         key({ modkey,         }, "r",  included.shifty and shifty.rename), -- rename a tag
         key({ modkey, "Shift" }, "a",                   -- nopopup new tag
@@ -146,6 +154,7 @@ globalkeys =
             awful.util.spawn(settings.apps.mail) 
         end), --
     --}}}
+        ]]--
 }
 
 -- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them

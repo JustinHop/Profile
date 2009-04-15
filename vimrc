@@ -4,7 +4,7 @@
 " 
 "  General Operation
 
-" vimrc-1.9.1
+" vimrc-1.9.2
 
 set nocompatible
 set backspace=2
@@ -33,6 +33,8 @@ set ruler
 " No Switching to Alt Screen!
 set t_ti= 
 set t_te=
+" No More MORE
+set nomore
 
 if has("mouse")
     set mouse=a
@@ -97,14 +99,14 @@ set wildmode=list:longest,full
 set shortmess=a
 
 " Booyah
-if &t_Co || has("gui_running") && ( $TERM != "screen.linux")
+if &t_Co || has("gui_running") && ( expand($TERM) != "screen.linux")
     syntax on
     set t_Co=256
 endif
 
-if $TERM == "linux" 
+if ( expand($TERM) ==# "linux" )
 	set t_Co=8
-	colorscheme elflord
+	colorscheme default
 endif
 
 "
@@ -168,6 +170,11 @@ if has("autocmd")
     " purdy colors
     if filereadable( expand("$HOME/.vim/colors/lucius.vim") )
     	colorscheme lucius
+    endif
+
+    " yank to clipboard
+    if executable("xclip")
+    	vnoremap y  :yank<CR>:call system("xclip -i", getreg("\""))<CR>gv :yank<CR>
     endif
 
     " Filetype Detect

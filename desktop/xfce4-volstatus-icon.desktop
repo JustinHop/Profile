@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Xfce Volstatus Icon
+Comment=Safe removal of removable volumes
+Icon=drive-removable-media
+Exec=xfce4-volstatus-icon
+StartupNotify=false
+Terminal=false
+Hidden=true
+

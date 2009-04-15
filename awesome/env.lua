@@ -7,18 +7,6 @@ if false then
     require("shifty")
 end
 -- }}}
--- {{{ Cleaner Icons
-icon_cpu = widget({ type = "imagebox", align = "left" })
-icon_cpu.image = image("/home/justin/.config/awesome/icons/ksim_cpu.png")
-icon_load = widget({ type = "imagebox", align = "right" })
-icon_load.image = image("/home/justin/.config/awesome/icons/linuxconf.png")
-icon_mem = widget({ type = "imagebox", align = "left" })
-icon_mem.image = image("/home/justin/.config/awesome/icons/memory.png")
-icon_lock = widget({ type = "imagebox", align = "right" })
-icon_lock.image = image("/home/justin/.config/awesome/icons/lock.png")
-icon_logout = widget({ type = "imagebox", align = "right" })
-icon_logout.image = image("/home/justin/.config/awesome/icons/logout.png")
-
 -- {{{ Naughy notification objects
 local trans_notify
 local mpd_notify
@@ -26,11 +14,35 @@ local lastfm_notify
 local vol_notify
 -- }}}
 
+local compmgr = awful.util.spawn("xcompmgr -c -C -o0.2 -t1 -l1 -r2")
+
 -- {{{ Terminal and editor
 -- This is used later as the default terminal and editor to run.
 terminal = "terminator"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
+settings = {}
+settings.apps = {}
+settings.apps.browser = "firefox"
+settings.apps.mail = "thunderbird"
+settings.apps.chat = "pidgin"
+settings.modkey = modkey
+
+settings.icon_dirs = { awful.util.getdir("config") .. "/themes/current_theme/icons/", 
+                        awful.util.getdir("config") .. "/icons/", 
+                        os.getenv("HOME") .. "/.icons/",
+                        "/usr/share/icons/",
+                    }
+settings.icon_formats = { "png", "gif" }
+
+settings.trans = {}
+settings.trans.debug = true
+settings.trans.min = .2
+settings.trans.max = .9
+settings.trans.step = .05
+settings.trans.plus = "transset-df -i `xdotool getwindowfocus` -m .2 -x 1 --inc .05"
+settings.trans.minus = "transset-df -i `xdotool getwindowfocus` -m .2 -x 1 --dec .05"
+settings.trans.toggle = "transset-df -i `xdotool getwindowfocus` -m .2 -t"
 -- }}}
 
 -- {{{ Default modkey.
