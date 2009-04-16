@@ -5,10 +5,13 @@ globalkeys =
 {
     --{{{ Globalkeys
     key({ modkey,           }, "Left",   awful.tag.viewprev       ),
-    key({ modkey,           }, "p",      awful.tag.viewprev       ),
     key({ modkey,           }, "Right",  awful.tag.viewnext       ),
-    key({ modkey,           }, "n",      awful.tag.viewnext       ),
     key({ modkey,           }, "Escape", awful.tag.history.restore),
+
+    -- arrows are for suckers 
+    key({ modkey,           }, "p",      awful.tag.viewprev       ),
+    key({ modkey,           }, "n",      awful.tag.viewnext       ),
+
 
     key({ modkey,           }, "j",
     function ()
@@ -116,6 +119,13 @@ globalkeys =
         awful.util.eval, nil,
         awful.util.getdir("cache") .. "/history_eval")
     end),
+    key({ modkey }, "F5",
+    function ()
+        awful.prompt.run({ prompt = "<b>NEW Run Lua code: </b>" },
+        mypromptbox[mouse.screen],
+        usefuleval, nil,
+        awful.util.getdir("cache") .. "/history_eval")
+    end),
     --}}}
     --{{{
     --[[-- Shifty5
@@ -168,6 +178,17 @@ clientkeys =
     key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     key({ modkey }, "t", awful.client.togglemarked),
+
+    --[[ arrows are for suckers 
+    key({ modkey, "Shift"   }, "p",      awful.tag.viewprev       ),
+    key({ modkey, "Shift"   }, "n",      function (c)
+            if client.focus and tags[client.focus.screen][i] then
+                awful.client.movetotag(tags[client.focus.screen][i])
+            end
+        
+    awful.tag.viewnext       ),
+    ]]--
+
     key({ modkey,}, "m",
     function (c)
         c.maximized_horizontal = not c.maximized_horizontal
@@ -273,5 +294,5 @@ end
 
 -- Set keys
 root.keys(globalkeys)
--- }}}z
--- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=4:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker
+-- }}}
+-- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=4:softtabstop=4:encoding=utf-8:textwidth=80:

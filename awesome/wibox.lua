@@ -8,10 +8,36 @@
 
     -- Generate your table at startup or restart
     --theme_menu()
+    -- {{{ Create a table containing theme files
+    mythememenu = {}
+    function theme_load(theme)
+        local cfg_path = awful.util.getdir("config")
+
+        -- Create a symlink from the given theme to /home/user/.config/awesome/current_theme
+        awful.util.spawn("rm -v" .. cfg_path .. "/themes/current")
+        awful.util.spawn("ln -sf " .. cfg_path .. "/themes/" .. theme .. " " .. cfg_path .. "/themes/current")
+        awesome.restart()
+    end
+
+    function theme_menu()
+        -- List your theme files and feed the menu table
+        local cmd = "ls -1 " .. awful.util.getdir("config") .. "/themes/ | grep -v current"
+        local f = io.popen(cmd)
+
+        for l in f:lines() do
+            local item = { l, function () theme_load(l) end }
+            table.insert(mythememenu, item)
+        end
+
+        f:close()
+    end
+
+    theme_menu()
+    -- }}}
     -- Create a laucher widget and a main menu
     myawesomemenu = {
        { "manual", terminal .. " -e man awesome" },
-       --{ "themes", mythememenu },
+       { "themes", mythememenu },
        { "restart", awesome.restart },
        { "quit", awesome.quit }
     }
@@ -31,11 +57,11 @@
                                             }
                                         })
 
-    sessionlauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
+    sessionlauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                          menu = sessionmenu })
 
     --
-    mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
+    mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                          menu = mymainmenu })
 
     --
@@ -191,7 +217,8 @@
     wicked.register(widgets.mail, mailcheck.check, " mail: $1 ")
     ]]--
     --- }}}
-    --- {{{ CREATE IT
+
+    --- {{{ Screen Loop
     for s = 1, screen.count() do
         -- Create a promptbox for each screen
         mypromptbox[s] = widget({ type = "textbox", align = "left" })
@@ -238,7 +265,8 @@
                                --volumebar,
                                --volumetext,
                                dotbox[s],
-                               mysystray }
+                               s == screen.count() and mysystray , 
+                               s == screen.count() and dotbox[s]}
         mywibox[s].screen = s
         -- }}}
 
