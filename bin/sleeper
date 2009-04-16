@@ -1,0 +1,4 @@
+#!/bin/bash
+# Sleeps then does, Justin Hoppensteadt
+# $Id$
+{ sleep $1; `echo "$@" | perl -ne 'if ( /^(\d+)\s*(.*)$/ ) { print "$2\n" }'` ; } &
