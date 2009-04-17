@@ -174,7 +174,7 @@ if has("autocmd")
 
     " yank to clipboard
     if executable("xclip")
-    	vnoremap y  :yank<CR>:call system("xclip -i", getreg("\""))<CR>gv :yank<CR>
+    	"vnoremap y  :yank<CR>:call system("xclip -i", getreg("\""))<CR>gv :yank<CR>
     endif
 
     " Filetype Detect
@@ -186,6 +186,7 @@ if has("autocmd")
         au BufNewFile,BufRead /usr/local/apache2/conf/*.conf          set filetype=apache
         au BufNewFile,BufRead /usr/local/apache2/conf/UMG_conf/*.conf set filetype=apache
         au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
+        au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
     augroup END
 
     " ZSH Brokenness

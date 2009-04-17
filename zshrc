@@ -444,6 +444,7 @@ setopt  \
     magicequalsubst \
     multios \
     promptsubst \
+    NO_nomatch \
     vi \
     zle 
 
