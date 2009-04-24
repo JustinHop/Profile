@@ -157,12 +157,13 @@ if has("autocmd")
             set nobackup
             if ! expand(&readonly)
                 au BufReadPost *
-                            \ exe 'silent write! ' substitute( 
-                            \ ( expand("$HOME/backup/") . 
-                            \ substitute(expand("%:p"),'/','_','g') . 
-                            \ strftime("%Y%m%d.%H%M%S") ), '_','','')
-                            " DDDDAAAAYYYUUUMMMMM SON VIM can even handle that
-                            " shit wooooooooo!!!!
+                            \ exe 'silent write! ' 
+                            \   substitute( expand( 
+                            \       substitute( expand("$HOME/backup/") .
+                            \           substitute( expand("%:p"), '/','_','g') . 
+                            \           strftime("%Y%m%d.%H%M%S"), 
+                            \       '\s','_', 'g') 
+                            \   ), '_','','')  
             endif
         endif
     endif
@@ -209,7 +210,6 @@ if has("autocmd")
     "   au FileType help set number     
     au FileType help nmap <buffer> <Return> <C-]>
     "   au FileType help nmap <buffer> <C-[> <C-O>
-
 endif
 
 
