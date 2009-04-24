@@ -4,7 +4,17 @@
 --
 --
 
+function time_inc(inc)
+    local num = #settings.times
+    local nnum = settings.time_int + inc
+    if nnum == 0 then
+    	nnum = #settings.times
+    elseif nnum > #settings.times then
+        nnum = 1
+    end
 
+    settings.time=settings.times[nnum]
+end
 
 -- {{{ Global helper functions
 -- {{{ execute_command and return its output in one single line

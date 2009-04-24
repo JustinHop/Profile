@@ -199,7 +199,7 @@ titlebar_close_button_focus = /usr/local/share/awesome/themes/default/titlebar/c
 
 # You can use your own command to set your wallpaper
 -- wallpaper_cmd = awsetbg /usr/local/share/awesome/themes/default/background.png
-wallpaper_cmd = awsetbg -f -r /home/justin/pictures/linux-desktops/dark40/
+-- wallpaper_cmd = awsetbg -f -r /home/justin/pictures/linux-desktops/dark40/
 
 # You can use your own layout icons like this:
 layout_fairh = /usr/local/share/awesome/themes/default/layouts/fairhw.png

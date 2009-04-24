@@ -266,7 +266,10 @@
                                --volumetext,
                                dotbox[s],
                                s == screen.count() and mysystray , 
-                               s == screen.count() and dotbox[s]}
+                               s == screen.count() and dotbox[s]
+                               -- screen.count() and mysystray , 
+                               -- screen.count() and dotbox[s]
+                           }
         mywibox[s].screen = s
         -- }}}
 

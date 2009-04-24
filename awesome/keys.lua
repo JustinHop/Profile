@@ -112,18 +112,19 @@ globalkeys =
         awful.util.getdir("cache") .. "/history")
     end),
 
+    key({ modkey }, "F3",
+    function ()
+        awful.prompt.run({ prompt = "<b>NEW Run Lua code: </b>" },
+        mypromptbox[mouse.screen],
+        usefuleval, nil,
+        awful.util.getdir("cache") .. "/history_eval")
+    end),
+
     key({ modkey }, "F4",
     function ()
         awful.prompt.run({ prompt = "<b>Run Lua code: </b>" },
         mypromptbox[mouse.screen],
         awful.util.eval, nil,
-        awful.util.getdir("cache") .. "/history_eval")
-    end),
-    key({ modkey }, "F5",
-    function ()
-        awful.prompt.run({ prompt = "<b>NEW Run Lua code: </b>" },
-        mypromptbox[mouse.screen],
-        usefuleval, nil,
         awful.util.getdir("cache") .. "/history_eval")
     end),
     --}}}

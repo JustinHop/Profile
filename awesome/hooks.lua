@@ -112,7 +112,7 @@ end)
 -- Hook called every minute
 awful.hooks.timer.register(.5, function ()
     --mytextbox.text = os.date(" %a %b %d, %H:%M ")
-    mytextbox.text = os.date(" %c ")
+    mytextbox.text = os.date(settings.time or "%c")
 end)
 -- }}}
 
@@ -124,9 +124,10 @@ end)
 --]]
 awful.hooks.timer.register(300, function ()
     -- beautiful.init(theme_path);
-    beautiful.init(local_theme);
-    os.execute(" { sleep 1; uptime; } & ")
+    -- beautiful.init(local_theme);
+    -- os.execute(" { sleep 1; uptime; } & ")
+    awful.util.spawn(" { killall -USR1 xfdesktop ; uptime ; } ")
 end)
 
 --- }}}
--- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker
+-- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=4:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker

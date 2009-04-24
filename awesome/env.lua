@@ -14,7 +14,7 @@ local lastfm_notify
 local vol_notify
 -- }}}
 
-local compmgr = awful.util.spawn("xcompmgr -c -C -o0.2 -t1 -l1 -r2")
+-- local compmgr = awful.util.spawn("xcompmgr -c -C -o0.2 -t1 -l1 -r2")
 
 -- {{{ Terminal and editor
 -- This is used later as the default terminal and editor to run.
@@ -28,6 +28,13 @@ settings.apps.mail = "thunderbird"
 settings.apps.chat = "pidgin"
 settings.modkey = modkey
 
+settings.time_int = 2
+settings.time = "%c"
+
+settings.times = {( "%a %b %d %r", "%c","%D %r", "%D %R",
+                    "%F %r", "%F %R", "%s", "%x %X %Y %Z", 
+                    "%u/7 %m/12 %W/52 %r","%u/7 %m/12 %W/52 %R" 
+                )}
 settings.icon_dirs = { awful.util.getdir("config") .. "/themes/current_theme/icons/", 
                         awful.util.getdir("config") .. "/icons/", 
                         os.getenv("HOME") .. "/.icons/",
