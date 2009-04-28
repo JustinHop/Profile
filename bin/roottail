@@ -1,0 +1,3 @@
+#!/bin/bash
+sleep 1
+root-tail -id `xprop -root XFCE_DESKTOP_WINDOW | cut -d'#' -f2` --color green -fn fixed -g 1280x900+0-250 --noinitial -i 1 /home/justin/.xsession-errors,yellow,SESSION /var/log/messages,red,MESSAGES /var/log/syslog,red,SYSLOG /var/log/user.log,yellow,USER /home/justin/.awesome.err,white,AWESOME /home/justin/davmail.log,blue,DAVMAIL

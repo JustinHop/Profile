@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for SCREEN in `xrandr | grep -e '\<connected' | awk '{ print $1 }'` ; do
+	xrandr --output $SCREEN --preferred
+	if [ $SCREEN == "DVI-0" ]; then
+		xrandr --output DVI-0 --auto --right-of LVDS
+	fi
+done

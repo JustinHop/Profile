@@ -32,14 +32,18 @@ if ( ! -d $DIR ){
     mkdir $DIR || die "Can not create $DIR";
 }
 
-foreach my $FILE (@ARGV){
+foreach (@ARGV){
+
+    my ($FILE,$SANEFILE) = ( $_, $_ );
+    $SANEFILE =~ s/[ \!\~\#\$\%?]/_/g;
+    $SANEFILE = lc $SANEFILE;
     my $LS; 
     my $NUMBER = 1;
-    my $BACK = $DIR . "/" . join(":", $FILE, $HOST, $DATE, "0001");
+    my $BACK = $DIR . "/" . join(":", $SANEFILE, $HOST, $DATE, "0001");
 
     if ( -e $BACK )  {
 
-        $LS = `/bin/ls $DIR/$FILE\:$HOST\:$DATE\:* | tail -1 `;
+        $LS = `/bin/ls $DIR/$SANEFILE\:$HOST\:$DATE\:* | tail -1 `;
         chomp $LS;
     
         $LS =~ /.*(\d\d\d\d)$/;
@@ -52,7 +56,7 @@ foreach my $FILE (@ARGV){
     $COUNT=sprintf("%04d", $NUMBER );
 
     #print "Backing up $FILE to $DIR/$FILE\:$HOST\:$DATE\:$COUNT" . "\n";
-    print `cp -av $FILE \"$DIR/$FILE\:$HOST\:$DATE\:$COUNT\"`; 
+    print `cp -av \"$FILE\" \"$DIR/$SANEFILE\:$HOST\:$DATE\:$COUNT\"`; 
         
 }
 
