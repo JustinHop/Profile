@@ -1,0 +1,3 @@
+#!/bin/bash
+mpc play `mpc playlist | dmenu -b -nb "#000" -nf "#7af" -sb "#000" -sf "#bdf" -p "Find:" | cut -d')' -f1`
+

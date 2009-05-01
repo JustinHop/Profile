@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+awbgset -l 
+# davmail &
+
+exec /usr/local/bin/awesome

@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# mpdnotify - put up a notification when song changes.
+# JP St. Pierre
+# November 1, 2008
+
+escapify () { perl -e "use HTML::Entities; print encode_entities(\"${1//\"/\\\"}\", \"<>&\")"; } ;
+
+# Media path. Config this.
+MEDIA_PATH="/var/lib/mpd/music/"
+
+# Current song ID.
+current=""
+
+# Main loop.
+while true; do
+  
+  # Simple variable to check whether the song has changed.
+  test=$(mpc | grep "][ ]*#" | grep -o '[0-9]\+' | head -1)
+  
+  # If it has...
+  if [ "$current" != "$test" ]; then
+    
+    # Get the info.
+    artist=$(mpc --format %artist% | head -1)
+    album=$(mpc --format %album% | head -1)
+    title=$(mpc --format %title% | head -1)
+    track=$(mpc --format %track% | head -1)
+    
+    # Do some magic to get the album art.
+    imagedir=$MEDIA_PATH$(mpc --format %file% | head -1)
+    imagedir=$(dirname "$imagedir")
+    
+    # Get the first .jpg in the directory.
+    image=$(ls "$imagedir" | grep .jpg | head -1)
+    
+    if [ -n "$image" ]; then
+      img="$imagedir/$(basename "$image" .jpg).small.jpg"
+      # Resize it to the size I want.
+      [ ! -e "$img" ] && convert "$imagedir/$image" -resize 100x100 "$img"
+    else
+      img=""
+    fi
+    
+    # Escapify plz.
+    artist="$(escapify "$artist")"
+    album="$(escapify "$album")"
+    # Send our notification.
+    notify-send -i "$img" "$track. $title" "$(echo -e $artist\\n\\n$album)"
+  fi
+  
+  # Set our current ID.
+  current="$test"
+  
+  # Delay our thread a bit.
+  sleep 1
+done
+

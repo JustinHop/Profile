@@ -1,0 +1,442 @@
+#! /usr/bin/env python
+
+import dbus, sys
+from xml.dom import minidom
+from optparse import OptionParser
+
+class Signature(dbus.Signature):
+	def Variant(x):
+		return x
+	
+	_dbus_types = {
+		"{": dbus.Dictionary,
+		"(": dbus.Struct,
+		"a": dbus.Array, 
+		"y": dbus.Byte,
+		"b": dbus.Boolean,
+		"n": dbus.Int16,
+		"q": dbus.UInt16,
+		"i": dbus.Int32,
+		"u": dbus.UInt32,
+		"x": dbus.Int64,
+		"t": dbus.UInt64,
+		"d": dbus.Double,
+		"s": dbus.String,
+		"o": dbus.ObjectPath,
+		"g": dbus.Signature,
+		"v": Variant }
+	
+	def __iter__(self):
+		return ( Signature(x) for x in dbus.Signature.__iter__(self) )
+	
+	def get_type(self):
+		return self._dbus_types[self[0]]
+	
+	def container_type(self):
+		if self.startswith("("): return dbus.Struct
+		elif self.startswith("a{"): return dbus.Dictionary
+		elif self.startswith("a"): return dbus.Array
+		else: return None
+	
+	def container_content(self):
+		if self.container_type() == dbus.Struct: return Signature(self[1:-1])
+		elif self.container_type() == dbus.Dictionary: return Signature(self[2:-1])
+		elif self.container_type() == dbus.Array: return Signature(self[1:])
+		else: return None
+	
+	def tostring(self):
+		if len(tuple(self)) > 1:
+			return ", ".join(( x.tostring() for x in self ))
+		
+		t, c = self.container_type(), self.container_content()
+		if t is None:
+			return self.get_type().__name__
+		else:
+			if t == dbus.Array:
+				return c.tostring() + "[]"
+			else:
+				return t.__name__ + " {" + c.tostring() + "}"
+
+class Object(object):
+	class XMLChild(object):
+		def __init__(self, obj, name):
+			self.obj = obj
+			self.name = name
+			self.xml = None
+		
+		def node(self):
+			if not self.xml:
+				for iface in self.parent().getElementsByTagName(self.tag):
+					if iface.getAttribute('name') == self.name:
+						self.xml = iface
+						return self.xml
+			
+			return self.xml
+		
+		def children(self, tag):
+			for method in self.node().getElementsByTagName(tag):
+				name = method.getAttribute('name')
+				if name:
+					yield name
+	
+	class Interface(XMLChild):
+		tag = "interface"
+		
+		def parent(self):
+			return self.obj.introspect()
+		
+		def methods(self):
+			return self.children('method')
+		
+		def signals(self):
+			return self.children('signal')
+		
+		def method(self, name):
+			return self.obj.method(name, self.name)
+		
+		def signal(self, name):
+			return self.obj.signal(name, self.name)
+	
+	class MethodSignal(XMLChild):
+		class Argument:
+			def __getattr__(self, x):
+				return self.xml.getAttribute(x)
+		
+		def __init__(self, obj, name, iface):
+			Object.XMLChild.__init__(self, obj, name)
+			self.iface = iface
+		
+		def parent(self):
+			return self.obj.interface(self.iface).node()
+			
+		def args(self):
+			for arg in self.node().getElementsByTagName("arg"):
+				argobj = Object.MethodSignal.Argument()
+				argobj.xml = arg
+				assert(argobj.type)
+				argobj.signature = Signature(argobj.type)
+				yield argobj
+	
+	class Method(MethodSignal):
+		tag = "method"
+		
+		def inargs(self):
+			for arg in self.args():
+				if arg.direction == "in":
+					yield arg
+	
+		def outargs(self):
+			for arg in self.args():
+				if arg.direction == "out":
+					yield arg
+	
+	class Signal(MethodSignal):
+		tag = "signal"
+		
+		def outargs(self):
+			for arg in self.args():
+				if arg.direction == "out":
+					assert(0)
+			return []
+		
+		def inargs(self):
+			for arg in self.args():
+				assert(not arg.direction or arg.direction == "in")
+				yield arg
+	
+	def __init__(self, bus, service, path):
+		self.bus = bus
+		self.service = service
+		self.path = path
+		self.object = None
+		self.intr_data = None
+		self.cached_childrens = {}
+		self.cached_interfaces = {}
+		self.cached_methods = {}
+		self.cached_signals = {}
+	
+	def get_object(self):
+		if not self.object:
+			self.object = self.bus.get_object(self.service, self.path)
+		return self.object
+	
+	def introspect(self):
+		if not self.intr_data:
+			self.intr_data = minidom.parseString(self.get_object().Introspect())
+		return self.intr_data
+	
+	def children(self):
+		intr_data = self.introspect()
+		for node in intr_data.getElementsByTagName('node'):
+			name = node.getAttribute("name")
+			if node == intr_data.documentElement or not name:
+				continue
+			else:
+				yield name
+	
+	def interfaces(self):
+		for node in self.introspect().getElementsByTagName('interface'):
+			name = node.getAttribute("name")
+			if name:
+				yield name
+	
+	def methods(self, iface):
+		return self.interface(iface).methods()
+	
+	def signals(self, iface):
+		return self.interface(iface).signals()
+	
+	def _cached(self, list, name, constr, *constr_args):
+		if not (name in list):
+			list[name] = constr(*constr_args)
+		return list[name]
+	
+	def child(self, name):
+		if self.path == '/':
+			full_name = '/' + name
+		else:
+			full_name = self.path + '/' + name
+		return self._cached(self.cached_childrens, full_name, Object, self.bus, self.service, full_name)
+	
+	def interface(self, name):
+		return self._cached(self.cached_interfaces, name, Object.Interface, self, name)
+	
+	def method(self, name, iface):
+		full_name = iface + '.' + name
+		return self._cached(self.cached_methods, full_name, Object.Method, self, name, iface)
+	
+	def signal(self, name, iface):
+		full_name = iface + '.' + name
+		return self._cached(self.cached_methods, full_name, Object.Signal, self, name, iface)
+
+def nonempty_generator(generator):
+	try:
+		x = generator.next()
+		return True
+	except StopIteration:
+		return False
+
+def nonempty_iface(iface):
+	if options.signals and nonempty_generator(iface.signals()):
+		return True
+	if nonempty_generator(iface.methods()):
+		return True
+	return False
+	
+def nonempty_object(obj, recursive = True):
+	# Check wether an object has a method or a signal (of options.signals)
+	# If recursive is True, then it will also return True if the object don't has any method nor signal but one of its child has
+	try:
+		for iface in obj.interfaces():
+			if nonempty_iface(obj.interface(iface)):
+				return  True
+		
+		if not recursive:
+			return False
+		
+		for child in obj.children():
+			if nonempty_object(obj.child(child)):
+				return True
+		
+		return False
+	except: # HACK: HAL returns a non-existent object in the list of chilren, ignore this error
+		return False
+
+opts = OptionParser()
+opts.add_option("-a", "--all", help="Equivalent to -u -e -s -t", action="store_true", default=False)
+opts.add_option("-c", "--completion", help="Set this ON if you are ZSH", action="store_true", default=False)
+opts.add_option("-e", "--empty", help="Also show empty services/objects", action="store_true", default=False)
+opts.add_option("-s", "--signals", help="Also show signals", action="store_true", default=False)
+opts.add_option("-t", "--activatables", help="Also show activatables services", action="store_true", default=False)
+opts.add_option("-u", "--unnamed", help="Also show unnamed services (most likely clients)", action="store_true", default=False)
+opts.add_option("-y", "--system-bus", help="Work on system bus instead of session bus", action="store_true", default=False)
+options, args = opts.parse_args()
+if options.all:
+	options.empty = options.signals = options.unnamed = options.activatables = True
+
+if options.system_bus:
+	bus = dbus.SystemBus()
+else:
+	bus = dbus.SessionBus()
+
+if len(args) == 0:
+	def nonempty_service(service):
+		# A service is empty if all its (registered) objects are empty
+		return nonempty_object(Object(bus, service, '/'))
+	
+	def named(service):
+		return not service.startswith(':')
+	
+	dbusd = Object(bus, 'org.freedesktop.DBus', '/')
+	services = dbusd.get_object().ListNames(dbus_interface = 'org.freedesktop.DBus')
+	if options.activatables:
+		services += dbusd.get_object().ListActivatableNames(dbus_interface = 'org.freedesktop.DBus')
+	if not options.unnamed: # Delete unnamed services if needed
+		services = filter(named, services)
+	if not options.empty: # Delete empty services if needed
+		services = filter(nonempty_service, services)
+	
+	for service in services:
+		print service
+elif len(args) == 1:
+	def obj_path(obj):
+		return obj.path
+	
+	def list_objects(root_obj):
+		# Return a list of objects contained in root_obj, including root_obj
+		# but excluding (including root_obj) empty objects if needed
+		if not options.empty and not nonempty_object(root_obj):
+			# The object and its children are empty, no need to continue
+			return []
+		if not options.empty and not nonempty_object(root_obj, False): 
+			# The object is empty but one of its children isn't, so continue
+			result = []
+		else:
+			result = [root_obj]
+		
+		for child in root_obj.children():
+			result.extend(list_objects(root_obj.child(child)))
+		return result
+	
+	for obj in map(obj_path, list_objects(Object(bus, args[0], '/'))):
+		print obj
+elif len(args) == 2:
+	def pprint(method, signal = False):
+		def pprint_arg(arg):
+			s = arg.signature
+			n = arg.name
+			x = s.tostring()
+			if n:
+				x += " " + n
+			return x
+		
+		inargs = list(method.inargs())
+		outargs = list(method.outargs())
+		
+		if signal:
+			print " signal",
+		elif len(outargs) == 0:
+			print " void",
+		else:
+			print " " + ", ".join(map(pprint_arg, outargs)),
+		
+		print method.name + '(' + ", ".join(map(pprint_arg, inargs)) + ')'
+		
+	
+	obj = Object(bus, args[0], args[1])
+	
+	if options.completion:
+		for ifname in obj.interfaces():
+			iface = obj.interface(ifname)
+			for x in iface.methods():
+				print x
+				print ifname + "." + x
+			if options.signals:
+				for x in iface.signals():
+					print x
+					print ifname + "." + x
+	else:
+		for ifname in obj.interfaces():
+			iface = obj.interface(ifname)
+			if not options.empty and not nonempty_iface(iface):
+				continue
+			print "Interface %s:" % ifname
+			
+			i = 0
+			for methodname in iface.methods():
+				pprint(iface.method(methodname))
+				i += 1
+			if i:
+				print
+			
+			if not options.signals:
+				if not i:
+					print
+				continue
+			
+			j = 0
+			for signalname in iface.signals():
+				pprint(iface.signal(signalname), True)
+				j += 1
+			if j or (not j and not i):
+				print
+else:
+	def indent(level):
+		sys.stdout.write("  "*level)
+
+	def print_arg(arg, name):
+		def dump(data, lvl):
+			indent(lvl)
+			
+			if type(data) in (dbus.Struct, dbus.Array):
+				print type(data).__name__
+				for x in arg:
+					dump(x, lvl + 1)
+					print
+			elif type(data) == dbus.Dictionary:
+				print type(data).__name__
+				for k, v in data.iteritems():
+					dump(k, lvl+1)
+					print ":",
+					dump(v, 0)
+					print
+			else:
+				print data,
+			
+		if name:
+			print name,"= ",
+		dump(arg, 0)
+		print
+
+	service, path, method = args[0:3]
+	obj = Object(bus, service, path)
+	args = args[3:]
+	if "." in method:
+		iface, method = method.rsplit(".", 1)
+	else:
+		iface = None
+		try:
+			for iface in obj.interfaces():
+				if method in list(obj.interface(iface).methods()):
+					break
+		except:
+			raise
+	
+	if options.completion:
+		try:
+			for i, arg in enumerate(obj.interface(iface).method(method).inargs()):
+				if i == len(args):
+					print arg.signature.tostring(),
+					if arg.name:
+						print arg.name,
+					print
+		except:
+			pass
+		
+		sys.exit(0)
+	
+	args2 = []
+	for arg in args:
+		if len(arg) >= 2 and arg[0] == '%':
+			if arg[1] == '%':
+				args2.append('%' + arg[2:])
+			else:
+				args2.append(eval(arg[1:], {}))
+		else:
+			args2.append(arg)
+	args = args2
+	
+	ret = obj.get_object().get_dbus_method(method, iface)(*args)
+	try:
+		outargs = list(obj.method(method, iface).outargs())
+	except:
+		outargs = []
+	
+	if not isinstance(ret, tuple) or isinstance(ret, dbus.Struct):
+		ret = (ret,)
+	
+	for i, arg in enumerate(ret):
+		if len(outargs) > i:
+			print_arg(arg, outargs[i].name)
+		else:
+			print_arg(arg, None)
