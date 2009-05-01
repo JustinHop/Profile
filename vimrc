@@ -4,16 +4,11 @@
 " 
 "  General Operation
 
-" vimrc-1.9.2
+" vimrc-1.9.3
 
 set nocompatible
 set backspace=2
 set ttyfast
-
-if has("unix")
-    set backup
-    set backupdir=~/backup
-endif
 
 if has("win32")
     set cul
@@ -166,10 +161,19 @@ if has("autocmd")
                             \   ), '_','','')  
             endif
         endif
+    else
+        if has("unix")
+            set backup
+            set backupdir=~/backup
+        endif
     endif
 
     " purdy colors
-    if filereadable( expand("$HOME/.vim/colors/lucius.vim") )
+    if expand($TERM) == "linux"
+    	colorscheme elflord
+    elseif filereadable( expand("$HOME/.vim/colors/typofree.vim") )
+    	colorscheme typofree
+    elseif filereadable( expand("$HOME/.vim/colors/lucius.vim") )
     	colorscheme lucius
     endif
 
@@ -254,7 +258,7 @@ set pastetoggle=<F11>
 function! RapNo()
    :set nowrap
    :set list
-   :map <F10> :call RapYes()<CR>
+   :map <silent><F10> :call RapYes()<CR>
 endfunction
 
 " and back
@@ -263,15 +267,19 @@ function! RapYes()
    :set nolist
    :set linebreak
    :set showbreak=>>>\ 
-   :map <F10> :call RapNo()<CR>
+   :map <silent><F10> :call RapNo()<CR>
 endfunction
 
-map <F10> :call RapNo()<CR>
+map <silent><F10> :call RapNo()<CR>
 
 " <F9> toggle hlsearch
 noremap <silent> <F9> :set hlsearch!<cr>
 
 imap <C-w> <C-o><C-w>
+
+vnoremap > >gv
+vnoremap < <gv
+vnoremap = =gv
 
 " From vim.org
 "  super wraping work around

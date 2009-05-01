@@ -31,10 +31,10 @@ settings.modkey = modkey
 settings.time_int = 2
 settings.time = "%c"
 
-settings.times = {( "%a %b %d %r", "%c","%D %r", "%D %R",
+settings.times = { "%a %b %d %r", "%c","%D %r", "%D %R",
                     "%F %r", "%F %R", "%s", "%x %X %Y %Z", 
                     "%u/7 %m/12 %W/52 %r","%u/7 %m/12 %W/52 %R" 
-                )}
+                }
 settings.icon_dirs = { awful.util.getdir("config") .. "/themes/current_theme/icons/", 
                         awful.util.getdir("config") .. "/icons/", 
                         os.getenv("HOME") .. "/.icons/",
