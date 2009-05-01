@@ -266,7 +266,7 @@ function! RapYes()
    :set wrap
    :set nolist
    :set linebreak
-   :set showbreak=>>>\ 
+   :set showbreak=-->\ 
    :map <silent><F10> :call RapNo()<CR>
 endfunction
 
