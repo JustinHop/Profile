@@ -1,0 +1,4 @@
+#!/bin/bash
+
+find -L $1  \( -iname '*mpg' -o -iname '*mpeg' -o -iname '*flv' -iname '*asf' -o -iname '*wmv' -o -iname '*avi' -o -iname '*mp4' -o -iname '*mov' \) -type f -size +1M -not -regex '.*nokeep.*'  $2 $3 $4 $5
+
