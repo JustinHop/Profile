@@ -10,6 +10,39 @@ function escape(text)
     end
     return text
 end
+-- {{{ Global helper functions
+-- {{{ execute_command and return its output in one single line
+function execute_command(command, newlines)
+    local fh = io.popen(command)
+    local str = ""
+    for i in fh:lines() do
+        str = str .. i
+        if newlines then str = str .. '\n' end
+    end
+    io.close(fh)
+    return str
+end
+-- }}}
+
+-- {{{ setFg: put colored span tags around a text, useful for wiboxes
+function setFg(fg,s)
+    return "<span color=\"" .. fg .. "\">" .. s .."</span>"
+end
+colored_on = setFg("green", "on")
+colored_off = setFg("red", "off")
+-- }}}
+
+-- {{{ debug_notify: show a naughty message when settings.debug is on
+function debug_notify(_text, _title, _time)
+    if settings.debug and _text then
+        local mytitle = "Debug"
+        local time = 8
+        if _title then mytitle = mytitle .. ": " .. _title end
+        if _time then time = _time end
+        naughty.notify({ title = mytitle, text = _text, width = 400, timeout = time, icon = beautiful.awesome_icon })
+    end
+end
+-- }}}
 
 -- {{{ Markup helper functions
 -- Inline markup is a tad ugly, so use these functions
