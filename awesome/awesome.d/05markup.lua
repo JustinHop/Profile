@@ -1,4 +1,16 @@
 
+--{{{ Escape a string
+function escape(text)
+    if text then
+        text = text:gsub("&", "&amp;")
+        text = text:gsub("<", "&lt;")
+        text = text:gsub(">", "&gt;")
+        text = text:gsub("'", "&apos;")
+        text = text:gsub("\"", "&quot;")
+    end
+    return text
+end
+
 -- {{{ Markup helper functions
 -- Inline markup is a tad ugly, so use these functions
 -- to dynamically create markup.

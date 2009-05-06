@@ -117,9 +117,11 @@ end
 -- Create a textbox widget
 mytextbox = widget({ type = "textbox", align = "right" })
 myspacebox = widget({ type = "textbox", align = "right" })
+mydebugbox = widget({ type = "textbox", align = "right" })
 -- Set the default text in textbox
 mytextbox.text = "<b><small> " .. AWESOME_RELEASE .. " </small></b>"
 myspacebox.text = " "
+mydebugbox.text = " "
 
 -- Create a laucher widget and a main menu
 myawesomemenu = {
@@ -173,7 +175,7 @@ mytasklist.buttons = { button({ }, 1, function (c)
 
 for s = 1, screen.count() do
     mymousebox[s] = widget({ type = "textbox", align = "right" })
-    mymousebox[s].text = " . "
+    mymousebox[s].text = ":"
     -- Create a promptbox for each screen
     mypromptbox[s] = widget({ type = "textbox", align = "left" })
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
@@ -198,6 +200,8 @@ for s = 1, screen.count() do
                            mytaglist[s],
                            mytasklist[s],
                            mypromptbox[s],
+                           s == 1 and mydebugbox or nil,
+                           bw == 1 and volwidget or nil,
                            mymousebox[s],
                            mytextbox,
                            mylayoutbox[s],
@@ -220,6 +224,10 @@ globalkeys =
     key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     key({ modkey,           }, "Escape", awful.tag.history.restore),
+    
+    -- arrows are for suckers 
+    key({ modkey,           }, "p",      awful.tag.viewprev       ),
+    key({ modkey,           }, "n",      awful.tag.viewnext       ),
 
     key({ modkey,           }, "j",
         function ()
@@ -280,6 +288,14 @@ globalkeys =
             awful.util.getdir("cache") .. "/history")
         end),
 
+    key({ modkey }, "F3",
+        function ()
+            awful.prompt.run({ prompt = "Run Lua code::: " },
+            mypromptbox[mouse.screen],
+            usefuleval, awful.prompt.bash,
+            awful.util.getdir("cache") .. "/history_eval")
+        end),
+
     key({ modkey }, "F4",
         function ()
             awful.prompt.run({ prompt = "Run Lua code: " },
@@ -288,6 +304,7 @@ globalkeys =
             awful.util.getdir("cache") .. "/history_eval")
         end),
 }
+
 
 -- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them
 clientkeys =
@@ -358,9 +375,12 @@ for i = 1, keynumber do
                  end))
 end
 
+
+
 -- Set keys
 root.keys(globalkeys)
 -- }}}
+
 
 -- {{{ Hooks
 -- Hook function to execute when focusing a client.
@@ -477,14 +497,17 @@ awful.hooks.arrange.register(function (screen)
 end)
 
 -- Hook called every minute
-awful.hooks.timer.register(60, function ()
-    mytextbox.text = os.date(" %a %b %d, %H:%M ")
+awful.hooks.timer.register(.5, function ()
+    --mytextbox.text = os.date(" %a %b %d, %H:%M ")
+    mytextbox.text = os.date(" %a %b %d, %r ")
 end)
 
 awful.hooks.timer.register(.2, function ()
-    mymousebox[1].text = " . "
-    mymousebox[2].text = " . "
-    mymousebox[mouse.screen].text = "(@)"
+    if screen.count() >= 2 then
+        mymousebox[1].text = " . "
+        mymousebox[2].text = " . "
+        mymousebox[mouse.screen].text = "(@)"
+    end
 end)
 
 awful.hooks.timer.register(300, function ()
