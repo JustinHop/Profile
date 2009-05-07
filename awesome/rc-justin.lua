@@ -21,7 +21,7 @@ function import(file)
     end
 end
 
-for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/*.lua"):lines() do
+for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/pre*.lua"):lines() do
 	if string.find(file,"%.lua$") then 
 		io.stderr:write("Importing ", file, "\n")
 		import(file)
@@ -117,12 +117,9 @@ end
 -- Create a textbox widget
 mytextbox = widget({ type = "textbox", align = "right" })
 myspacebox = widget({ type = "textbox", align = "right" })
-mydebugbox = widget({ type = "textbox", align = "right" })
 -- Set the default text in textbox
 mytextbox.text = "<b><small> " .. AWESOME_RELEASE .. " </small></b>"
 myspacebox.text = " "
-mydebugbox.text = " "
-
 -- Create a laucher widget and a main menu
 myawesomemenu = {
    { "manual", terminal .. " -e man awesome" },
@@ -149,6 +146,8 @@ mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
 mymousebox = {}
+mydebugbox = {}
+mymsgbox = {}
 mytaglist.buttons = { button({ }, 1, awful.tag.viewonly),
                       button({ modkey }, 1, awful.client.movetotag),
                       button({ }, 3, function (tag) tag.selected = not tag.selected end),
@@ -174,6 +173,12 @@ mytasklist.buttons = { button({ }, 1, function (c)
                                       end) }
 
 for s = 1, screen.count() do
+    mydebugbox[s] = widget({ type = "textbox", align = "right" })
+    mydebugbox[s].text = ""
+
+    mymsgbox[s] = widget({ type = "textbox", align = "left" })
+    mymsgbox[s].text = ""
+
     mymousebox[s] = widget({ type = "textbox", align = "right" })
     mymousebox[s].text = ":"
     -- Create a promptbox for each screen
@@ -199,8 +204,9 @@ for s = 1, screen.count() do
     mywibox[s].widgets = { mylauncher,
                            mytaglist[s],
                            mytasklist[s],
+                           mymsgbox[s],
                            mypromptbox[s],
-                           s == 1 and mydebugbox or nil,
+                           s == 1 and mydebugbox[s] or nil,
                            bw == 1 and volwidget or nil,
                            mymousebox[s],
                            mytextbox,
@@ -375,6 +381,12 @@ for i = 1, keynumber do
                  end))
 end
 
+for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/post*.lua"):lines() do
+	if string.find(file,"%.lua$") then 
+		io.stderr:write("Importing ", file, "\n")
+		import(file)
+	end
+end
 
 
 -- Set keys
