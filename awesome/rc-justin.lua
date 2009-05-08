@@ -327,6 +327,9 @@ clientkeys =
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical
         end),
+    key({ modkey,           }, "-",      function (c) awful.util.spawn("transset-df -i" ..  c.id .." -m .2 --dec .05") end),
+    --key({ modkey,           }, "-",      function (c) naughty.notify{title="Client Debug", text=c.id} end),
+    key({ modkey,           }, "=",      function (c) awful.util.spawn("transset-df -i" .. c.id ..  " -m .2 --inc .05")end),
 }
 
 -- Compute the maximum number of digit we need, limited to 9
@@ -516,14 +519,14 @@ end)
 
 awful.hooks.timer.register(.2, function ()
     if screen.count() >= 2 then
-        mymousebox[1].text = " . "
-        mymousebox[2].text = " . "
-        mymousebox[mouse.screen].text = "(@)"
+        mymousebox[1].text = "[_]"
+        mymousebox[2].text = "[_]"
+        mymousebox[mouse.screen].text = "[+]"
     end
 end)
 
 awful.hooks.timer.register(300, function ()
-    awful.util.spawn("nitrodesk")
+    --awful.util.spawn("nitrodesk")
 end)
 -- }}}
 --

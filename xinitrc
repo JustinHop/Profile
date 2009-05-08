@@ -2,38 +2,44 @@
 
 #eval `dbus-launch --exit-with-session`
 #eval `ssh-agent`
-export MPD_HOST=andlinux
-export MPD_PORT=6600
 
 xfce-mcs-manager 
-[ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
-[ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
-xset r rate 350 50
-jrandr
 
-bash -c 'ssh-agent dbus-launch --exit-with-session awesome' &
-AWESOME_PID=$!
+conky -c /home/justin/profile/awesome-conky-full.conf &
 
 #root-tail -f --color green -fn fixed -g 1280x750+0+25  --noinitial -i 1 /home/justin/.xsession-errors,yellow,SESSION /var/log/messages,red,MESSAGES /var/log/syslog,red,SYSLOG /var/log/user.log,yellow,USER /home/justin/.awesome.err,white,AWESOME >/dev/null 2>&1 || true 
-
-nitrodesk > /dev/null
-xtoolwait conky -c /home/justin/profile/awesome-conky-full.conf &
 
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
+echo "Session: setting Xdefaults and Xmodmap"
+[ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
+[ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
+
+#
+echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
+xset r rate 350 50
+
+echo "Session: Setting xrandr"
+jrandr
+xrandr | grep -e ' connected'
+
+nitrodesk > /dev/null
 xbindkeys || true
-klipper > /dev/null || true
+klipper || true
 numlockx &
 synergys --config /etc/synergy.conf &
 
-xtoolwait awesome-dbus-notify.pl &
+awesome-dbus-notify.pl &
 
-killall xcompmgr 2>/dev/null
-xcompmgr -f -F -c -C -s &
+#killall xcompmgr 2>/dev/null
+#{ sleep 2s; xcompmgr -f -F -c -C -s ; } &
+
+export MPD_HOST=andlinux
+export MPD_PORT=6600
 
 killall mpdas 2>/dev/null 
-mpdas &
+{ sleep 2s; mpdas; } &
 
 xscreensaver-command -exit > /dev/null || true
 xscreensaver -no-splash &
@@ -45,5 +51,5 @@ update-notifier &
 
 #uname -a
 
-wait $AWESOME_PID
+exec ssh-agent dbus-launch bash -c 'while true ; do awesome ; done'            
 

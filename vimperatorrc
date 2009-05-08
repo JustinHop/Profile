@@ -2,6 +2,7 @@
 map , gT
 map . gt
 map ga :open file:///usr/local/share/awesome/lib/index.html<CR>
+map <C-l> <C-z><C-l><Esc>
 set guioptions=rbTB
 set runtimepath=/home/justin/.vimperator
 
