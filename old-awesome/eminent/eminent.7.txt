@@ -1,0 +1,99 @@
+eminent(7)
+==========
+
+NAME
+----
+eminent - a lua library for dynamic tagging in awesome
+
+SYNOPSIS
+--------
+None
+
+DESCRIPTION
+-----------
+*eminent* is a lua library for use with the awesome window manager, which will enable you to use dynamic tagging.
+Dynamic tagging in this instance means that the amount of tags you have is not pre-defined, you can give specific tags names, but simply going to the next tag when you're on the last tag will provide you with a brand new one, allowing you to adapt to various usage situations without changing your configuration file to give you more or less tags.
+
+USAGE
+-----
+To use eminent, you will need to edit portions of your rc.lua configuration file.
+
+Firstly, you will need to add **require(\'eminent')** to the top, this includes the eminent library in your configuration file, and starts up the dynamic tagging.
+
+Secondly, you will need to remove all code that creates tags, tags are now created by eminent, so manually creating them is redundant.
+
+Thirdly, if you use a taglist, you will have to format the label function so that it will only display tags with clients on them, if you use the default taglist function in awful, this will do the trick:
+--------------------
+function mytaglist.label(t) 
+if not eminent.isoccupied(t.screen, t) and not t.selected then return end
+return awful.widget.taglist.label.all(t, bg_focus, fg_focus) end
+--------------------
+
+Lastly, you will have to change your hotkeys or mouse bindings to use eminent.tag.next and eminent.tag.prev for switching to the previous or next tag, and eminent.tag.getn for getting a tag by number.
+
+An example config using eminent is available at **http://awesome.naquadah.org/wiki/index.php/Eminent**.
+
+FUNCTIONS AVAILABLE
+-----------------
+Below is a list of all the noteworthy functions exported by the eminent library, and how to use them
+
+'eminent.newclient(client)'
+
+Adds a new client to be handled by eminent, this is neccesary so eminent knows which tags are occupied.
+
+'eminent.tag.name(tagnumber, screennumber, name)'
+
+Calling this function will give a name to the tag with screennumber and tagnumber.
+
+'eminent.tag.new([screen])'
+
+Returns a new tag at the end of the list, use in a binding with awful.tag.viewonly to go to a new tag regardless of current position.
+If screen is given, the tag will be on that screen.
+
+'eminent.tag.next([screen])'
+
+Switch to the next tag in the list, or a new one if there are none.
+If screen is given, then the switch will occur on that screen.
+
+'eminent.tag.prev([screen])'
+
+Switch to the previous tag in the list.
+If screen is given, then the switch will occur on that screen.
+
+'eminent.tag.getnext([screen])'
+
+Get the next tag in the list, or a new one if there are none.
+If screen is given, then the tag will be on that screen.
+
+'eminent.tag.getprev([screen])'
+
+Get the previous tag in the list.
+If screen is given, then the tag will be on that screen.
+
+'eminent.tag.getn(n, [screen], [absolute])'
+
+Will return the tag on position n.
+If screen is given, then it will return tag n on that screen, otherwise on the current screen.
+If absolute is true (default false) then the number will be including empty tags, if not, only occupied tags are counted.
+
+'eminent.tag.goto(n, [screen], [absolute])'
+
+Will switch to the tag on position n.
+If screen is given, then it will return tag n on that screen, otherwise on the current screen.
+If absolute is true (default false) then the number will be including empty tags, if not, only occupied tags are counted.
+
+'eminent.tag.isoccupied(screen, tag)'
+
+Checks if there are any clients on tag tag on screen screen, and returns a boolean with the result.
+
+WWW
+---
+http://awesome.naquadah.org/wiki/index.php/Eminent
+
+SEE ALSO
+--------
+awesome(1) awesomerc(5)
+
+AUTHORS
+-------
+Lucas de Vries <lucasdevries@gmail.com>

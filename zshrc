@@ -400,7 +400,7 @@ fi
 
 # might as well start with the gui crap
 alias konqu='konqueror --profile filemanagement '
-
+alias rn="rename '$_=lc $_;s/ /_/g' "
 #purdy stuff
 if [[ -o interactive ]]; then
 	for _COLOR in gcc make diff svn ; do 
@@ -431,6 +431,7 @@ setopt  \
     NObgnice \
     braceccl \
     cdablevars \
+    NO_chaselinks \
     completeinword \
     correct \
     NO_nullglob \

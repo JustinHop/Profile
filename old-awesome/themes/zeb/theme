@@ -1,0 +1,56 @@
+-----------------------------
+-- blue/green/purple theme --
+-----------------------------
+
+--font          = lucidasanstypewriter 10
+font            = proggycleantt 12
+
+bg_normal     = #3f3f3f
+bg_focus      = #3f3f3f
+bg_urgent     = #705050
+
+taglist_bg_urgent = #FF0703
+
+fg_normal     = #709080
+fg_focus      = #dfaf8f
+fg_urgent     = #3f3f3f
+
+border_width  = 1
+border_normal = #709080
+border_focus  = #dfaf8f
+border_marked = #705050
+
+taglist_squares_sel = /home/justin/.config/awesome/themes/zeb/taglist/squaree.png
+taglist_squares_unsel = /home/justin/.config/awesome/themes/zeb/taglist/squarec.png
+
+tasklist_floating_icon = /home/justin/.config/awesome/themes/zeb/tasklist/floatingw.png
+
+# Define the image to load
+titlebar_close_button_normal = /usr/local/share/awesome/themes/default/titlebar/close.png
+titlebar_close_button_focus = /usr/local/share/awesome/themes/default/titlebar/closer.png
+
+titlebar_border_width = 1
+titlebar_border_normal = white
+titlebar_border_focus  = black
+titlebar_border_marked = orange
+
+menu_submenu_icon = /home/justin/.config/awesome/themes/zeb/icons/submenu.png
+menu_height   = 15
+menu_width    = 100
+
+wallpaper_cmd = awsetbg -f -r /home/justin/pictures/linux-desktops/dark40/
+
+layout_dwindle = /home/justin/.config/awesome/themes/zeb/layouts/dwindlew.png
+layout_fairh = /home/justin/.config/awesome/themes/zeb/layouts/fairhw.png
+layout_fairv = /home/justin/.config/awesome/themes/zeb/layouts/fairvw.png
+layout_floating = /home/justin/.config/awesome/themes/zeb/layouts/floatingw.png
+layout_magnifier = /home/justin/.config/awesome/themes/zeb/layouts/magnifierw.png
+layout_max = /home/justin/.config/awesome/themes/zeb/layouts/maxw.png
+layout_spiral = /home/justin/.config/awesome/themes/zeb/layouts/spiralw.png
+layout_tilebottom = /home/justin/.config/awesome/themes/zeb/layouts/tilebottomw.png
+layout_tileleft = /home/justin/.config/awesome/themes/zeb/layouts/tileleftw.png
+layout_tile = /home/justin/.config/awesome/themes/zeb/layouts/tilew.png
+layout_tiletop = /home/justin/.config/awesome/themes/zeb/layouts/tiletopw.png
+
+awesome_icon = /home/justin/.config/awesome/themes/zeb/icons/awesome16.png
+-- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80:foldmethod=marker
