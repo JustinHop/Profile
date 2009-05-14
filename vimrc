@@ -147,14 +147,18 @@ if has("autocmd")
         \ endif 
 
     " Backup EVERYTHING MODE!!!!
+    let BACKUPDIR=expand("$HOME/backup/")
+    if expand($SUDO_USER)
+    	let BACKUPDIR=expand("/home/$SUDO_USER/backup/")
+    endif
     if expand($BACKUP) ==# "+"
-        if getfsize(expand("%:p")) <= 1024000 
+        if getfsize(expand("%:p")) <= 8024000
             set nobackup
             if ! expand(&readonly)
                 au BufReadPost *
                             \ exe 'silent write! ' 
                             \   substitute( expand( 
-                            \       substitute( expand("$HOME/backup/") .
+                            \       substitute( BACKUPDIR .
                             \           substitute( expand("%:p"), '/','_','g') . 
                             \           strftime("%Y%m%d.%H%M%S"), 
                             \       '\s','_', 'g') 
@@ -171,7 +175,7 @@ if has("autocmd")
     " purdy colors
     if expand($TERM) == "linux"
     	colorscheme elflord
-    elseif filereadable( expand("$HOME/.vim/colors/typofree.vim") )
+    elseif filereadable( expand("$HOME/.vim/colors/typo.vim") )
     	colorscheme typofree
     elseif filereadable( expand("$HOME/.vim/colors/lucius.vim") )
     	colorscheme lucius

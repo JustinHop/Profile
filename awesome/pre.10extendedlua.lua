@@ -37,6 +37,7 @@ function usefuleval(s)
     end
 end
 
+--[[
 -- {{{ Status bar control
 table.insert(globalkeys, key({ modkey,           }, "b",      function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end))
 -- }}}
@@ -152,7 +153,7 @@ table.insert(globalkeys, key({ modkey, "Control" }, "d",
             naughty.notify({ title = "Debug" , text = "debug mode turned " .. colored_on })
         end
     end))
-
+]]--
 -- Collect client infos
 function get_fixed_client_infos(c)
     local txt = ""
@@ -199,7 +200,7 @@ function show_client_infos(_c)
     txt = txt .. "\n" .. get_dyn_client_infos(c)
     naughty.notify({ title = "Client info", text = txt, timeout = 6 })
 end
-
+--[[
 -- Display the infos with mod+i
 table.insert(globalkeys, key({ modkey, "Control" }, "i", show_client_infos))
 
@@ -219,5 +220,5 @@ table.insert(globalkeys, key({ modkey, "Shift" }, "i", function ()
 end))
 --- }}}
 
-
+]]--
 usefullua = 1

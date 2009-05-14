@@ -39,33 +39,33 @@ wx = {}
         end
     end
     end
-    ]]--
-            volwidget:bar_properties_set("Master",
-                { fg = '#AED8C6',
-                    fg_center = '#287755',
-                    fg_end = '#287755',
-                    fg_off = '#222222',
-                    vertical_gradient = true,
-                    horizontal_gradient = false,
-                    ticks_count = 0,
-                    ticks_gap = 0 })
-            volwidget:bar_properties_set("PCM",
-                { fg = '#AED8C6',
-                    fg_center = '#287755',
-                    fg_end = '#287755',
-                    fg_off = '#222222',
-                    vertical_gradient = true,
-                    horizontal_gradient = false,
-                    ticks_count = 0,
-                    ticks_gap = 0 })
-            volwidget:bar_properties_set("Front",
-                { fg = '#AED8C6',
-                    fg_center = '#287755',
-                    fg_end = '#287755',
-                    fg_off = '#222222',
-                    vertical_gradient = true,
-                    horizontal_gradient = false,
-                    ticks_count = 0,
-                    ticks_gap = 0 })
+]]--
+    volwidget:bar_properties_set("Master",
+        { fg = '#AED8C6',
+            fg_center = '#287755',
+            fg_end = '#287755',
+            fg_off = '#222222',
+            vertical_gradient = true,
+            horizontal_gradient = false,
+            ticks_count = 0,
+            ticks_gap = 0 })
+    volwidget:bar_properties_set("PCM",
+        { fg = '#AED8C6',
+            fg_center = '#287755',
+            fg_end = '#287755',
+            fg_off = '#222222',
+            vertical_gradient = true,
+            horizontal_gradient = false,
+            ticks_count = 0,
+            ticks_gap = 0 })
+    volwidget:bar_properties_set("MPD",
+        { fg = '#AED8C6',
+            fg_center = '#287755',
+            fg_end = '#287755',
+            fg_off = '#222222',
+            vertical_gradient = true,
+            horizontal_gradient = false,
+            ticks_count = 0,
+            ticks_gap = 0 })
     bw=1
 end

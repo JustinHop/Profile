@@ -1,24 +1,25 @@
 
+--[[
 -- {{{ Status bar control
-table.insert(globalkeys, key({ modkey,           }, "b",      function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end))
+table.insert(globalkeys, awful.key({ modkey,           }, "b",      function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end))
 -- }}}
 
 -- {{{ Client manipulation
-table.insert(clientkeys, key({ modkey }, "m", function (c) c.maximized_horizontal = not c.maximized_horizontal
+table.insert(clientkeys, awful.key({ modkey }, "m", function (c) c.maximized_horizontal = not c.maximized_horizontal
                                                            c.maximized_vertical = not c.maximized_vertical
                                                            c:raise()
                                                        end))
-table.insert(clientkeys, key({ modkey, "Control" }, "m", function (c) c.minimized = not c.minimized end))
-table.insert(clientkeys, key({ modkey }, "f", function (c) c.fullscreen = not c.fullscreen end))
-table.insert(clientkeys, key({ modkey, "Shift" }, "c", function (c) c:kill() end))
-table.insert(clientkeys, key({ modkey, "Control" }, "space", awful.client.floating.toggle))
-table.insert(clientkeys, key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end))
-table.insert(clientkeys, key({ modkey, "Shift" }, "o", awful.client.movetoscreen))
-table.insert(clientkeys, key({ modkey, }, "r", function (c) c:redraw() end))
+table.insert(clientkeys, awful.key({ modkey, "Control" }, "m", function (c) c.minimized = not c.minimized end))
+table.insert(clientkeys, awful.key({ modkey }, "f", function (c) c.fullscreen = not c.fullscreen end))
+table.insert(clientkeys, awful.key({ modkey, "Shift" }, "c", function (c) c:kill() end))
+table.insert(clientkeys, awful.key({ modkey, "Control" }, "space", awful.client.floating.toggle))
+table.insert(clientkeys, awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end))
+table.insert(clientkeys, awful.key({ modkey, "Shift" }, "o", awful.client.movetoscreen))
+table.insert(clientkeys, awful.key({ modkey, }, "r", function (c) c:redraw() end))
 -- TODO: Shift+r to redraw all clients in current tag
 
 -- {{{ Toggle titlebar
-table.insert(clientkeys, key({ modkey, "Shift"   }, "t",
+table.insert(clientkeys, awful.key({ modkey, "Shift"   }, "t",
     function (c)
         if c.titlebar then
             awful.titlebar.remove(c)
@@ -31,7 +32,7 @@ table.insert(clientkeys, key({ modkey, "Shift"   }, "t",
 -- }}}
 
 -- {{{ Toggle ontop
-table.insert(clientkeys, key({ modkey }, "o",
+table.insert(clientkeys, awful.key({ modkey }, "o",
     function (c)
         if c.ontop then
             c.ontop = false
@@ -54,7 +55,7 @@ table.insert(clientkeys, key({ modkey }, "o",
 -- }}}
 
 -- Toggle xcompmgr transparency
-table.insert(clientkeys, key({ modkey }, "t", function (c)
+table.insert(clientkeys, awful.key({ modkey }, "t", function (c)
     if clienttable[c].custom_trans then
         clienttable[c].custom_trans = false
         clienttable[c].custom_trans_value = c.opacity
@@ -79,7 +80,7 @@ end))
 -- }}}
 
 -- {{{ Prompts
-table.insert(globalkeys, key({ modkey }, "p", function ()
+table.insert(globalkeys, awful.key({ modkey }, "p", function ()
     if not mywibox[mouse.screen].visible then
         mywibox[mouse.screen].visible = true
     end
@@ -89,7 +90,7 @@ table.insert(globalkeys, key({ modkey }, "p", function ()
                        awful.util.getdir("cache") .. "/history")
 end))
 
-table.insert(globalkeys, key({ modkey, "Shift" }, "p", function ()
+table.insert(globalkeys, awful.key({ modkey, "Shift" }, "p", function ()
     if not mywibox[mouse.screen].visible then
         mywibox[mouse.screen].visible = true
     end
@@ -100,11 +101,9 @@ table.insert(globalkeys, key({ modkey, "Shift" }, "p", function ()
 end))
 -- }}}
 
-settings = {}
-settings.debug = 1;
 -- {{{ Debugging helpers
 -- Toggle debug mode
-table.insert(globalkeys, key({ modkey, "Control" }, "d",
+table.insert(globalkeys, awful.key({ modkey, "Control" }, "d",
     function ()
         if settings.debug then
             settings.debug = false
@@ -117,10 +116,10 @@ table.insert(globalkeys, key({ modkey, "Control" }, "d",
         end
     end))
 -- Display the infos with mod+i
-table.insert(globalkeys, key({ modkey, "Control" }, "i", show_client_infos))
+table.insert(globalkeys, awful.key({ modkey, "Control" }, "i", show_client_infos))
 
 -- Show some client infos in status bar (less verbose)
-table.insert(globalkeys, key({ modkey, "Shift" }, "i", function ()
+table.insert(globalkeys, awful.key({ modkey, "Shift" }, "i", function ()
     local s = mouse.screen
     if mymsgbox[s].text then
         mymsgbox[s].text = nil
@@ -134,3 +133,4 @@ table.insert(globalkeys, key({ modkey, "Shift" }, "i", function ()
     end
 end))
 --- }}}
+]]--
