@@ -147,18 +147,18 @@ if has("autocmd")
         \ endif 
 
     " Backup EVERYTHING MODE!!!!
-    let BACKUPDIR=expand("$HOME/backup/")
-    if expand($SUDO_USER)
-    	let BACKUPDIR=expand("/home/$SUDO_USER/backup/")
-    endif
-    if expand($BACKUP) ==# "+"
+    "let BACKUPDIR=expand("$HOME/backup/")
+    "if expand($SUDO_USER)
+    	"let BACKUPDIR=expand("/home/$SUDO_USER/backup/")
+    "endif
+    if expand($BACKUP) !=# "-"
         if getfsize(expand("%:p")) <= 8024000
             set nobackup
             if ! expand(&readonly)
                 au BufReadPost *
                             \ exe 'silent write! ' 
                             \   substitute( expand( 
-                            \       substitute( BACKUPDIR .
+                            \       substitute( expand("$HOME/backup/") .
                             \           substitute( expand("%:p"), '/','_','g') . 
                             \           strftime("%Y%m%d.%H%M%S"), 
                             \       '\s','_', 'g') 
