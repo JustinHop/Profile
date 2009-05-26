@@ -33,7 +33,7 @@ end
 
 for file in io.popen("ls " .. awful.util.getdir("config") .. "/pre*.lua"):lines() do
 	if string.find(file,"%.lua$") then 
-		io.stderr:write("Importing ", file, "\n")
+		--io.stderr:write("Importing ", file, "\n")
 		import(file)
 	end
 end
@@ -50,7 +50,7 @@ theme_path = "/home/justin/.config/awesome/themes/justin/theme.lua"
 beautiful.init(theme_path)
 
 -- This is used later as the default terminal and editor to run.
-terminal = "x-terminal-emulator"
+terminal = "termit"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -325,15 +325,44 @@ globalkeys = awful.util.table.join(
     awful.key({   }, "XF86AudioMute",      function () awful.util.spawn("echo $EDITOR > /tmp/aw.log") end)  ,
 
     -- Volume
-    awful.key({   }, "XF86AudioLowerVolume",      function () awful.util.spawn("aumix -v -5") volnotify()  end)  ,
-    awful.key({   }, "XF86AudioRaiseVolume",      function () awful.util.spawn("aumix -v +5") volnotify()  end)  ,
-    awful.key({"Control" }, "XF86AudioLowerVolume",      function () awful.util.spawn("mpc volume -5")   end)  ,
-    awful.key({"Control" }, "XF86AudioRaiseVolume",      function () awful.util.spawn("mpc volume +5")   end)  ,
-    awful.key({"Shift"   }, "XF86AudioLowerVolume",      function () awful.util.spawn("aumix -w -5")  volnotify()    end)  ,
-    awful.key({"Shift"   }, "XF86AudioRaiseVolume",      function () awful.util.spawn("aumix -w +5")  volnotify()    end) 
-    
+    awful.key({   }, "XF86AudioLowerVolume",      
+        function () 
+            awful.util.spawn("aumix -v -5") 
+            updatevol()
+            displayvol()  
+        end),
+    awful.key({   }, "XF86AudioRaiseVolume",      
+        function () 
+            awful.util.spawn("aumix -v +5") 
+            updatevol() 
+            displayvol()   
+        end),
+    awful.key({"Control" }, "XF86AudioLowerVolume", 
+        function () 
+            awful.util.spawn("mpc volume -5")   
+            updatevol() 
+            displayvol()  
+        end),
+    awful.key({"Control" }, "XF86AudioRaiseVolume", 
+        function () 
+            awful.util.spawn("mpc volume +5")   
+            updatevol() 
+            displayvol()  
+        end)  ,
+    awful.key({"Shift"   }, "XF86AudioLowerVolume", 
+        function () 
+            awful.util.spawn("aumix -w -5")  
+            updatevol() 
+            displayvol()    
+        end)  ,
+    awful.key({"Shift"   }, "XF86AudioRaiseVolume", 
+        function () 
+            awful.util.spawn("aumix -w +5")  
+            updatevol() 
+            displayvol()    
+        end),
+        
     -- Prompt
-    ,
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
 
     awful.key({ modkey }, "x",
@@ -591,10 +620,10 @@ awful.hooks.manage.register(function (c, startup)
 
     -- Set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
-    -- awful.client.setslave(c)
+    awful.client.setslave(c)
 
     -- Honor size hints: if you want to drop the gaps between windows, set this to false.
-    -- c.size_hints_honor = false
+    c.size_hints_honor = false
 end)
 
 -- Hook function to execute when arranging the screen.

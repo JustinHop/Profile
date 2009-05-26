@@ -3,6 +3,12 @@
 -- bar_data_add
 
 if true then
+
+	voldata = {}
+	voldata.Master = 0
+	voldata.PCM = 0
+	voldata.MPD = 0
+
 wx = {}
 
     volwidget = widget({ type = 'progressbar', name = 'volwidget', align = 'right' })
@@ -68,4 +74,24 @@ wx = {}
             ticks_count = 0,
             ticks_gap = 0 })
     bw=1
+
+    function updatevol()
+        voldata.Master=awful.util.pread("aumix -q | grep vol | awk '{ print $2 }' | tr -d ','")
+        --io.stderr:write(voldata.Master, "\n")
+        voldata.PCM=awful.util.pread("aumix -q | grep pcm | awk '{ print $2 }' | tr -d ','")
+        --io.stderr:write(voldata.PCM, "\n")
+        voldata.MPD=awful.util.pread("mpc | tail -n 1 | awk '{ print $2 }' | tr -d '%'")
+    end
+
+    function displayvol()
+        volwidget:bar_data_add("Master", voldata.Master)
+        volwidget:bar_data_add("PCM", voldata.PCM)
+        volwidget:bar_data_add("MPD", voldata.MPD)
+    end
+
+    awful.hooks.timer.register(1, function ()
+        updatevol()
+        displayvol() 
+    end)
+
 end

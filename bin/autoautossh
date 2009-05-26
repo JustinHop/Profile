@@ -1,4 +1,4 @@
-#!/bin/bash -v
+#!/bin/bash
 if [ "x$OWNER" == "x" ]; then exit 1; fi
 if [ "x$OPTS" == "x" ]; then exit 2; fi
-while true ; do sudo -H -u $OWNER autossh $OPTS ; sleep 15s ; done
+while true ; do sudo -H -u $OWNER autossh $OPTS ; sleep 5s ; done
