@@ -353,20 +353,21 @@ endfunction
 nmap <space> <PageDown>
 "nnoremap <c-space> <PageUp>
 
-" Highlight commom java syntax
-let java_highlight_java_lang_ids=1
-" highlight system.out
-let java_highlight_debug=1
-" Mark Parnthesis
-hi link javaParen Comment
-" Keep scope in memory
-let java_minlines=50
-
 "   perl
 let g:Perl_AuthorName      = 'Justin Hoppensteadt'
 let g:Perl_AuthorRef       = 'JH'
 let g:Perl_Email           = 'Justin.Hoppensteadt@umgtemp.com'
 let g:Perl_Company         = 'Universal Music Group'
+
+let g:BASH_AuthorName      = 'Justin Hoppensteadt'
+let g:BASH_AuthorRef       = 'JH'
+let g:BASH_Email           = 'Justin.Hoppensteadt@umgtemp.com'
+let g:BASH_Company         = 'Universal Music Group'
+
+let g:Lua_AuthorName      = 'Justin Hoppensteadt'
+let g:Lua_AuthorRef       = 'JH'
+let g:Lua_Email           = 'Justin.Hoppensteadt@umgtemp.com'
+let g:Lua_Company         = 'Universal Music Group'
 
 "" insert mode : autocomplete brackets and braces
 "imap ( ()<Left>
@@ -392,7 +393,7 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
 "-------------------------------------------------------------------------------
 " Leave the editor with Ctrl-q : Write all changed buffers and exit Vim
 "-------------------------------------------------------------------------------
-nmap  <C-q>    :wqa<CR>
+"nmap  <C-q>    :wqa<CR>
 "
 "-------------------------------------------------------------------------------
 " Change the working directory to the directory containing the current file
