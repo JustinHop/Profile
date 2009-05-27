@@ -80,7 +80,7 @@ wx = {}
         --io.stderr:write(voldata.Master, "\n")
         voldata.PCM=awful.util.pread("aumix -q | grep pcm | awk '{ print $2 }' | tr -d ','")
         --io.stderr:write(voldata.PCM, "\n")
-        voldata.MPD=awful.util.pread("mpc | tail -n 1 | awk '{ print $2 }' | tr -d '%'")
+        voldata.MPD=awful.util.pread("mpc | grep volume | cut -d: -f2 | cut -d% -f1") 
     end
 
     function displayvol()
@@ -95,3 +95,83 @@ wx = {}
     end)
 
 end
+
+dropdown = {}
+
+function dropdown_toggle(prog, height, screen)
+    if screen == nil then screen = mouse.screen end
+    if height == nil then height = 0.2 end
+
+    if not dropdown[prog] then
+        -- Create table
+        dropdown[prog] = {}
+
+        -- Add unmanage hook for dropdown programs
+        awful.hooks.unmanage.register(function (c)
+            for scr, cl in pairs(dropdown[prog]) do
+                if cl == c then
+                    dropdown[prog][scr] = nil
+                end
+            end
+        end)
+    end
+
+    if not dropdown[prog][screen] then
+        spawnw = function (c)
+            -- Store client
+            dropdown[prog][screen] = c
+
+            -- Float client
+            awful.client.floating.set(c, true)
+
+            -- Get screen geometry
+            screengeom = screen[screen].workarea
+
+            -- Calculate height
+            if height < 1 then
+                height = screengeom.height*height
+            end
+
+            -- Resize client
+            c:geometry({
+                x = screengeom.x,
+                y = screengeom.y,
+                width = screengeom.width,
+                height = height
+            })
+
+            -- Mark terminal as ontop
+            c.ontop = true
+            c.above = true
+
+            -- Focus and raise client
+            c:raise()
+            client.focus = c
+
+            -- Remove hook
+            awful.hooks.manage.unregister(spawnw)
+        end
+
+        -- Add hook
+        awful.hooks.manage.register(spawnw)
+
+        -- Spawn program
+        awful.util.spawn(prog)
+    else
+        -- Get client
+        c = dropdown[prog][screen]
+
+        -- Switch the client to the current workspace
+        awful.client.movetotag(awful.tag.selected(screen), c)
+
+        -- Focus and raise if not hidden
+        if c.hide then
+            c.hide = false
+            c:raise()
+            client.focus = c
+        else
+            c.hide = true
+        end
+    end
+end
+

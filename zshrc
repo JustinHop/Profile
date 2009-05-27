@@ -351,6 +351,8 @@ if [[ -x ~/profile/bin/`uname`/vim ]]; then
     VIM=~/profile/bin/`uname`/vim
 fi
 
+alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
+
 export EDITOR=$VIM
 export VISUAL=$VIM
 alias vim=$VIM

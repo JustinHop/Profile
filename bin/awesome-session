@@ -2,8 +2,8 @@
 
 #eval `dbus-launch --exit-with-session`
 #eval `ssh-agent`
-export MPD_HOST=andlinux
-export MPD_PORT=6600
+#export MPD_HOST=andlinux
+#export MPD_PORT=6600
 
 xfce-mcs-manager 
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults

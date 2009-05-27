@@ -17,7 +17,6 @@ settings.opacity_unfocused = .8
 settings.mouse_marker_not = "[-]"
 settings.synergylocal=1;
 
-
 -- {{{ Load the functions in awesome.d
 function import(file)
     -- local ret = awful.util.checkfile( awful.util.getdir("config") .. file ".lua" );
@@ -318,6 +317,10 @@ globalkeys = awful.util.table.join(
     end),
     --
     -- MPD Controlling
+    awful.key({   }, "XF86AudioPlay",     function () os.execute("mpc toggle") end),
+    awful.key({   }, "Cancel"       ,     function () os.execute("mpc toggle") end),
+    awful.key({   }, "XF86AudioStop",     function () os.execute("mpc stop")   end),
+    awful.key({   }, "Undo"         ,     function () os.execute("mpc stop")   end),
     awful.key({   }, "XF86AudioPlay",      function () awful.util.spawn("mpc toggle") end)  ,
     awful.key({   }, "XF86AudioStop",      function () awful.util.spawn("mpc stop")   end)  ,
     awful.key({   }, "XF86AudioPrev",      function () awful.util.spawn("mpc prev")   end)  ,
@@ -645,7 +648,7 @@ awful.hooks.arrange.register(function (screen)
 end)
 
 -- Hook called every minute
-awful.hooks.timer.register(.5, function ()
+awful.hooks.timer.register(1, function ()
     --mytextbox.text = os.date(" %a %b %d, %H:%M ")
     mytextbox.text = os.date(" %a %b %d, %r ")
 end)

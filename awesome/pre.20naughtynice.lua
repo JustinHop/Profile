@@ -17,3 +17,19 @@ function volnotify ()
     	--icon="/usr/share/icons/Neu/128x128/status/stock_volume.png",
     	timeout=3})
 end
+
+-- Notify All Screens
+naughty.allcounter = 1
+naughty.allnotifications = {}
+
+function naughty.notifyall(args)
+    naughty.allcounter = naughty.allcounter + 1
+    local id = args.replaces_id or naughty.allcounter
+    naughty.allnotifications[id] = {}
+    for s=1, screen.count() do
+    	args.screen = s
+    	naughty.allnotifications[id][s] = naughty.notify(args).id
+    end
+    return id
+end
+

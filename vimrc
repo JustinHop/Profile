@@ -221,6 +221,9 @@ if has("autocmd")
 endif
 
 
+"let html_number_lines = 0
+let html_ignore_folding = 1
+
 
 " -------------------------
 "  REMAPPING
