@@ -18,34 +18,6 @@ wx = {}
     volwidget.border_color = '#0a0a0a'
     volwidget.vertical = true
 
-    --awful.util.spawn("awesome-set-mixers.pl")
---[[
-    mixers = {};
-    mixers[1] = "Master"
-    mixers[2] = "PCM"
-    mixers[3] = "Front"
-    mixers[4] = "Rear"
-    mixers[5] = "Center"
-    mixers[6] = "Sub"
-
-    for m=1, #mixers do
-    	if mixers[m] then
-    		naughty.notify({title=m, text=mixers[m] })
-	    for mixer in rex.match(mix,"(Master|PCM|Front|Sub|Center)", nil, nil, "M") do
-	    	awful.util.spawn("echo " .. mixer .. " > /dev/stderr" )
-            volwidget:bar_properties_set(mixer,
-                { fg = '#AED8C6',
-                    fg_center = '#287755',
-                    fg_end = '#287755',
-                    fg_off = '#222222',
-                    vertical_gradient = true,
-                    horizontal_gradient = false,
-                    ticks_count = 0,
-                    ticks_gap = 0 })
-        end
-    end
-    end
-]]--
     volwidget:bar_properties_set("Master",
         { fg = '#AED8C6',
             fg_center = '#287755',
@@ -84,8 +56,12 @@ wx = {}
     end
 
     function displayvol()
-        volwidget:bar_data_add("Master", voldata.Master)
-        volwidget:bar_data_add("PCM", voldata.PCM)
+        volwidget:bar_data_add("Master", voldata.Master) 
+        volwidget:bar_data_add("PCM", voldata.PCM) 
+        local n = tonumber(voldata.MPD)
+        if n == nil then
+        	voldata.MPD = 0
+        end
         volwidget:bar_data_add("MPD", voldata.MPD)
     end
 

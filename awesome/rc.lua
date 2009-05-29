@@ -317,12 +317,10 @@ globalkeys = awful.util.table.join(
     end),
     --
     -- MPD Controlling
-    awful.key({   }, "XF86AudioPlay",     function () os.execute("mpc toggle") end),
-    awful.key({   }, "Cancel"       ,     function () os.execute("mpc toggle") end),
-    awful.key({   }, "XF86AudioStop",     function () os.execute("mpc stop")   end),
-    awful.key({   }, "Undo"         ,     function () os.execute("mpc stop")   end),
     awful.key({   }, "XF86AudioPlay",      function () awful.util.spawn("mpc toggle") end)  ,
+    --awful.key({   }, "Cancel",             function () awful.util.spawn("mpc toggle") end)  ,
     awful.key({   }, "XF86AudioStop",      function () awful.util.spawn("mpc stop")   end)  ,
+    awful.key({   }, "Undo",               function () awful.util.spawn("mpc stop")   end)  ,
     awful.key({   }, "XF86AudioPrev",      function () awful.util.spawn("mpc prev")   end)  ,
     awful.key({   }, "XF86AudioNext",      function () awful.util.spawn("mpc next")   end)  ,
     awful.key({   }, "XF86AudioMute",      function () awful.util.spawn("echo $EDITOR > /tmp/aw.log") end)  ,
@@ -361,6 +359,18 @@ globalkeys = awful.util.table.join(
     awful.key({"Shift"   }, "XF86AudioRaiseVolume", 
         function () 
             awful.util.spawn("aumix -w +5")  
+            updatevol() 
+            displayvol()    
+        end),
+    awful.key({"Mod1"   }, "XF86AudioLowerVolume", 
+        function () 
+            awful.util.spawn("ssh -oBatchMode=yes usucpwd-hoppenj nircmd changesysvolume -10000")  
+            updatevol() 
+            displayvol()    
+        end)  ,
+    awful.key({"Mod1"   }, "XF86AudioRaiseVolume", 
+        function () 
+            awful.util.spawn("ssh -oBatchMode=yes usucpwd-hoppenj nircmd changesysvolume +10000")  
             updatevol() 
             displayvol()    
         end),

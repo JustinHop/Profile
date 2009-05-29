@@ -22,6 +22,17 @@ end
 naughty.allcounter = 1
 naughty.allnotifications = {}
 
+naughty.config.border_width=5
+naughty.config.spacing=15
+naughty.icon_dirs={ "/usr/share/pixmaps/", 
+        "/usr/share/icons/gnome/22x22/status/", 
+        "/usr/share/icons/gnome/22x22/apps/", 
+        "/usr/share/icons/gnome/22x22/categories/",
+        "/usr/share/icons/gnome/22x22/actions/" 
+    }
+
+--config.presets.normal.border_color = beautiful.bg_focus .. 25
+
 function naughty.notifyall(args)
     naughty.allcounter = naughty.allcounter + 1
     local id = args.replaces_id or naughty.allcounter
@@ -30,6 +41,6 @@ function naughty.notifyall(args)
     	args.screen = s
     	naughty.allnotifications[id][s] = naughty.notify(args).id
     end
-    return id
+    return naughty.allnotifications[id][screen.count()].id
 end
 

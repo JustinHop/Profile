@@ -75,7 +75,7 @@ SVN_PATH="/usr/local/svn/bin"
 LAMEPATH="/usr/local/websites/lame/bin"
 FFMPEGPATH="/usr/local/websites/ffmpeg/bin"
 SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
-USER_PATH="$HOME/bin:$HOME/profile/bin"
+USER_PATH="$HOME/bin:$HOME/profile/bin:/usr/lib/xscreensaver"
 ENCODE_PATH="/usr/local/enctools/bin"
 
 typeset -U PATH
