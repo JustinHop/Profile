@@ -91,3 +91,8 @@ caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%
   bind + resize +3
   bind - resize -3
 
+# Make backspace work
+ termcapinfo xterm ‘bc@:bs@’
+
+ bindkey -d ^? stuff ^H
+ bindkey -d ^@ stuff ^H

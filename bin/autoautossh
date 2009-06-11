@@ -1,4 +1,9 @@
 #!/bin/bash
-if [ "x$OWNER" == "x" ]; then exit 1; fi
-if [ "x$OPTS" == "x" ]; then exit 2; fi
-while true ; do sudo -H -u $OWNER autossh $OPTS ; sleep 5s ; done
+export AUTOSSH_LOGLEVEL=0 
+export AUTOSSH_LOGFILE=/dev/null 
+
+if ps -aux | grep autossh > /dev/null ; then
+	exit 0
+else
+    autossh -M0 -D 5190 -R 14000:localhost:22 -oBatchMode=yes -oExitOnForwardFailure=yes -T -N tunnel@justinhoppensteadt.com
+fi

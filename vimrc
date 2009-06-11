@@ -10,6 +10,8 @@ set nocompatible
 set backspace=2
 set ttyfast
 
+set tabpagemax=25
+
 if has("win32")
     set cul
     set cuc

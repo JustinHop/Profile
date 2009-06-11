@@ -7,6 +7,7 @@ require("awful")
 require("beautiful")
 -- Notification library
 require("naughty")
+
 -- Load Debian menu entries
 require("debian.menu")
 
@@ -16,6 +17,8 @@ settings.opacity_focused = .9
 settings.opacity_unfocused = .8
 settings.mouse_marker_not = "[-]"
 settings.synergylocal=1;
+settings.icon = {}
+settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Terminal-Radioactive.png"
 
 -- {{{ Load the functions in awesome.d
 function import(file)
@@ -75,6 +78,13 @@ layouts =
     awful.layout.suit.floating
 }
 
+-- Override what icons are set for applications
+appicons =
+{
+	["termit"] = image(settings.icon.termit),
+
+}
+
 -- Table of clients that should be set floating. The index may be either
 -- the application class or instance. The instance is useful when running
 -- a console app in a terminal like (Music on Console)
@@ -99,7 +109,10 @@ apptags =
 {
     -- ["Firefox"] = { screen = 1, tag = 2 },
     -- ["mocp"] = { screen = 2, tag = 4 },
-    ["pidgin"]  = { screen = 1, tag = 2 },
+    ["Pidgin"]  = { screen = 1, tag = 2 },
+    ["Tasque"]  = { screen = 1, tag = 2 },
+    ["Thunderbird-bin"]  = { screen = 1, tag = 3 },
+
 }
 
 -- Define if we want to use titlebar on all applications.
@@ -127,9 +140,15 @@ end
 -- {{{ Wibox
 -- Create a textbox widget
 mytextbox = widget({ type = "textbox", align = "right" })
-myspacebox = widget({ type = "textbox", align = "right" })
 -- Set the default text in textbox
 mytextbox.text = "<b><small> " .. awesome.release .. " </small></b>"
+
+-- spacer
+lspace = widget({ type = "textbox", align="left" })
+lspace.text="<sub><b>|</b></sub>"
+
+rspace = widget({ type = "textbox", align="right" })
+rspace.text="<sub><b>|</b></sub>"
 
 -- Create a laucher widget and a main menu
 myawesomemenu = {
@@ -200,8 +219,8 @@ for s = 1, screen.count() do
     mymsgbox[s] = widget({ type = "textbox", align = "left" })
     mymsgbox[s].text = ""
 
-    mymousebox[s] = widget({ type = "textbox", align = "right" })
-    mymousebox[s].text = ":"
+    mymousebox[s] = widget({ type = "textbox", align = "left" })
+    mymousebox[s].text = ""
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt({ align = "left" })
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
@@ -224,15 +243,22 @@ for s = 1, screen.count() do
     mywibox[s] = wibox({ position = "top", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = { mylauncher,
+                           lspace,
+                           mymousebox.text ~= "" and mymousebox[s] or nil,
+                           mymousebox.text ~= "" and lspace or nil,
                            mytaglist[s],
+                           lspace,
                            mytasklist[s],
                            mymsgbox[s],
                            mypromptbox[s],
                            s == 1 and mydebugbox[s] or nil,
-                           mymousebox[s],
+                           rspace,
                            bw == 1 and volwidget or nil,
+                           bw == 1 and rspace or nil, 
                            mytextbox,
+                           rspace,
                            mylayoutbox[s],
+                           s == 1 and rspace or nil,
                            s == 1 and mysystray or nil }
     mywibox[s].screen = s
 end
@@ -501,33 +527,38 @@ for s = 1, screen.count() do
 end
 
 for i = 1, keynumber do
-    table.foreach(awful.key({ modkey }, i,
+    globalkeys = awful.util.table.join(globalkeys,
+        awful.key({ modkey }, i,
                   function ()
                         local screen = mouse.screen
                         if tags[screen][i] then
                             awful.tag.viewonly(tags[screen][i])
                         end
-                  end), function(_, k) table.insert(globalkeys, k) end)
-    table.foreach(awful.key({ modkey, "Control" }, i,
+                  end),
+        awful.key({ modkey, "Control" }, i,
                   function ()
                       local screen = mouse.screen
                       if tags[screen][i] then
                           tags[screen][i].selected = not tags[screen][i].selected
                       end
-                  end), function(_, k) table.insert(globalkeys, k) end)
-    table.foreach(awful.key({ modkey, "Shift" }, i,
+                  end),
+        awful.key({ modkey, "Shift" }, i,
                   function ()
                       if client.focus and tags[client.focus.screen][i] then
                           awful.client.movetotag(tags[client.focus.screen][i])
+                          if client.icon ~= nil then
+                              awful.tag.seticon(client.icon, tags[client.focus.screen][i] )
+                              naughty.notify({ title=client.name, icon=client.icon, text=tostring(tags[client.focus.screen][i])})
+                          end
                       end
-                  end), function(_, k) table.insert(globalkeys, k) end)
-    table.foreach(awful.key({ modkey, "Control", "Shift" }, i,
+                  end),
+        awful.key({ modkey, "Control", "Shift" }, i,
                   function ()
                       if client.focus and tags[client.focus.screen][i] then
                           awful.client.toggletag(tags[client.focus.screen][i])
                       end
-                  end), function(_, k) table.insert(globalkeys, k) end)
-    table.foreach(awful.key({ modkey, "Shift" }, "F" .. i,
+                  end),
+        awful.key({ modkey, "Shift" }, "F" .. i,
                   function ()
                       local screen = mouse.screen
                       if tags[screen][i] then
@@ -535,13 +566,12 @@ for i = 1, keynumber do
                               awful.client.movetotag(tags[screen][i], c)
                           end
                       end
-                   end), function(_, k) table.insert(globalkeys, k) end)
+                   end))
 end
 
 -- Set keys
 root.keys(globalkeys)
 -- }}}
-
 
 -- {{{ Hooks
 -- Hook function to execute when focusing a client.
@@ -549,6 +579,8 @@ awful.hooks.focus.register(function (c)
     if not awful.client.ismarked(c) then
         c.border_color = beautiful.border_focus
     end
+    local m = awful.client.getmaster()
+    awful.tag.seticon(m.icon)
 end)
 
 -- Hook function to execute when unfocusing a client.
@@ -556,6 +588,7 @@ awful.hooks.unfocus.register(function (c)
     if not awful.client.ismarked(c) then
         c.border_color = beautiful.border_normal
     end
+    awful.tag.seticon(nil)
 end)
 
 -- Hook function to execute when marking a client
@@ -607,10 +640,16 @@ awful.hooks.manage.register(function (c, startup)
     -- Check if the application should be floating.
     local cls = c.class
     local inst = c.instance
-    if floatapps[cls] then
+    if floatapps[cls] ~= nil then
         awful.client.floating.set(c, floatapps[cls])
-    elseif floatapps[inst] then
+    elseif floatapps[inst] ~= nil then
         awful.client.floating.set(c, floatapps[inst])
+    end
+
+    if appicons[cls] ~= nil then
+        c.icon = appicons[cls]
+    elseif appicons[inst] ~= nil then
+        c.icon = appicons[inst]
     end
 
     -- Check application->screen/tag mappings.
@@ -658,9 +697,10 @@ awful.hooks.arrange.register(function (screen)
 end)
 
 -- Hook called every minute
-awful.hooks.timer.register(1, function ()
+awful.hooks.timer.register(.5, function ()
     --mytextbox.text = os.date(" %a %b %d, %H:%M ")
-    mytextbox.text = os.date(" %a %b %d, %r ")
+    --mytextbox.text = "<small>&lt;</small>" ..  os.date("%a %b %d, %r") .. "<small>&gt;</small>"
+    mytextbox.text = os.date("%a %b %d, %r") 
 end)
 
 awful.hooks.timer.register(.2, function ()
@@ -676,9 +716,4 @@ awful.hooks.timer.register(.2, function ()
     end
 end)
 
-awful.hooks.timer.register(300, function ()
-    --awful.util.spawn("nitrodesk")
-end)
--- }}}
---
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=4:softtabstop=4:encoding=utf-8
