@@ -81,7 +81,8 @@ layouts =
 -- Override what icons are set for applications
 appicons =
 {
-	["termit"] = image(settings.icon.termit),
+	--["termit"] = image(settings.icon.termit),
+	["termit"] = image(os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Terminal-Radioactive.png"),
 
 }
 
@@ -142,6 +143,12 @@ end
 mytextbox = widget({ type = "textbox", align = "right" })
 -- Set the default text in textbox
 mytextbox.text = "<b><small> " .. awesome.release .. " </small></b>"
+
+myimgbox = {}
+myimgbox = widget({ type = "imagebox", align = "right" })
+
+myalertbox = {}
+myalertbox = widget({ type = "imagebox", align = "right", background = "red" })
 
 -- spacer
 lspace = widget({ type = "textbox", align="left" })
@@ -244,15 +251,18 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = { mylauncher,
                            lspace,
-                           mymousebox.text ~= "" and mymousebox[s] or nil,
-                           mymousebox.text ~= "" and lspace or nil,
+                           mymousebox.text  and mymousebox[s] or nil,
+                           mymousebox.text  and lspace or nil,
                            mytaglist[s],
                            lspace,
                            mytasklist[s],
                            mymsgbox[s],
                            mypromptbox[s],
+                           myalertbox,
                            s == 1 and mydebugbox[s] or nil,
                            rspace,
+                           myimgbox,
+                           myimgbox.image and rspace or nil,
                            bw == 1 and volwidget or nil,
                            bw == 1 and rspace or nil, 
                            mytextbox,
@@ -579,8 +589,22 @@ awful.hooks.focus.register(function (c)
     if not awful.client.ismarked(c) then
         c.border_color = beautiful.border_focus
     end
+
+    local cls = c.class
+    local inst = c.instance
+
+    if appicons[cls] ~= nil then
+        c.icon = appicons[cls]
+    elseif appicons[inst] ~= nil then
+        c.icon = appicons[inst]
+    end
+
+    --awful.tag.seticon(awful.client.getmaster(mouse.screen).icon)
+    awful.tag.seticon(c.icon)
+    --[[
     local m = awful.client.getmaster()
     awful.tag.seticon(m.icon)
+    ]]--
 end)
 
 -- Hook function to execute when unfocusing a client.
@@ -640,6 +664,7 @@ awful.hooks.manage.register(function (c, startup)
     -- Check if the application should be floating.
     local cls = c.class
     local inst = c.instance
+
     if floatapps[cls] ~= nil then
         awful.client.floating.set(c, floatapps[cls])
     elseif floatapps[inst] ~= nil then
@@ -694,6 +719,7 @@ awful.hooks.arrange.register(function (screen)
         local c = awful.client.focus.history.get(screen, 0)
         if c then client.focus = c end
     end
+    local c = awful.client
 end)
 
 -- Hook called every minute
