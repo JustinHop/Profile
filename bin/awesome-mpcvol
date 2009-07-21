@@ -1,0 +1,9 @@
+#!/bin/bash
+
+exit 0
+
+if mpc > /dev/null 2>&1 ; then
+	echo "voldata.MPD=`mpc | grep volume | cut -d: -f2 | cut -d% -f1`" | awesome-client
+fi
+
+echo "voldata.MPDlock=0" | awesome-client

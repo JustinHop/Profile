@@ -23,10 +23,13 @@ use strict;
 use warnings;
 
 my $debug = 0;
+my $last = "";
 
 open (SYNERGY, "synergys -f -d INFO -c /etc/synergys.conf 2>&1 |") || die $!;
 
 while (<SYNERGY>){
+    print;
+    $last = $_;
     if (/^INFO: CServer\.cpp\S+: switch from "([^"]+)" to "([^"]+)"/){
         my $two = $2;
         open(AWESOME, "| awesome-client") || die $!;
@@ -39,6 +42,11 @@ while (<SYNERGY>){
         }
     }
 }
+
+if ( $last =~ /CServer.cpp:442: void CServer/ ) {
+    exec $0
+}
+
 
 warn "$0 has exited";
 # vi: set ts=4 sw=4 et:

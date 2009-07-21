@@ -22,3 +22,5 @@ Host uk* us* vm* att* umgmys1 mys1 web*
 Host jh tux-ninja alien justinhoppensteadt.com
     user justin
 
+Host cloud* hm 
+    user justinh1

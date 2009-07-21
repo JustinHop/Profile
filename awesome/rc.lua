@@ -33,7 +33,7 @@ function import(file)
     end
 end
 
-for file in io.popen("ls " .. awful.util.getdir("config") .. "/pre*.lua"):lines() do
+for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/*.lua"):lines() do
 	if string.find(file,"%.lua$") then 
 		--io.stderr:write("Importing ", file, "\n")
 		import(file)
@@ -149,14 +149,16 @@ myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
 
 myalertbox = {}
-myalertbox = widget({ type = "imagebox", align = "right", background = "red" })
+myalertbox = widget({ type = "textbox", align = "right" })
 
 -- spacer
-lspace = widget({ type = "textbox", align="left" })
-lspace.text=[[<span bgcolor="#30C23D"><sub><b>+</b></sub></span>]]
+lspace = widget({ type = "textbox", align="left", bg = "black" })
+lspace.text=[[<span bgcolor="#30C23D"><sub><b>T</b></sub></span>]]
 
 rspace = widget({ type = "textbox", align="right" })
-rspace.text=[[<span bgcolor="#30C23D"><sub><b>+</b></sub></span>]]
+rspace.text=[[<span bgcolor="#30C23D"><sub><b>T</b></sub></span>]]
+
+
 
 -- Create a laucher widget and a main menu
 myawesomemenu = {

@@ -4,7 +4,7 @@
 " 
 "  General Operation
 
-" vimrc-1.9.3
+" vimrc-1.9.4
 
 set nocompatible
 set backspace=2
@@ -45,7 +45,6 @@ set lazyredraw
 "set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=%l,%c%V\ of\ %L\ \ \ \ \ \ \ %P
 set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=<%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}>%<\ \ \ %l,%c%V\ of\ %L\ \ \ %P
 "set statusline=#%n\ %<%F%m%r\ %w\ %y\ \<%{&fileencoding},%{&fileformat}>%=%l,%c%V\ of\ %L\ \ \ \%{VimBuddy()}\ \ \%P
-"set cul
 
 if version >= 700
     "  Virtual Editing
@@ -186,6 +185,9 @@ if has("autocmd")
     " yank to clipboard
     if executable("xclip")
     	"vnoremap y  :yank<CR>:call system("xclip -i", getreg("\""))<CR>gv :yank<CR>
+        nmap \Y : silent call system("xclip ", getreg("\""))<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
+        nmap \y : silent call system("xclip ", getreg("0"))<CR>:echo "Yanked to clipboard: " . getreg("0")<CR>
+        vmap \cy y: silent call system("xclip ", getreg("\""))<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
     endif
 
     " Filetype Detect
@@ -249,7 +251,7 @@ map   <silent> <F1>    <Esc>
 "map   <silent> <F6>    :copen<CR>
 "map   <silent> <F7>    :cp<CR>
 "map   <silent> <F8>    :cn<CR>
-map   <silent> <F12>   :let &number=1-&number<CR>
+map   <silent> <F12>   :let &number=1-&number<Bar>set number?<CR>
 "
 imap  <silent> <F1>    <ESC>
 "imap  <silent> <F2>    <Esc>:DetectIndent<CR>
@@ -258,32 +260,40 @@ imap  <silent> <F1>    <ESC>
 "imap  <silent> <F6>    <Esc>:copen<CR>
 "imap  <silent> <F7>    <Esc>:cp<CR>
 "imap  <silent> <F8>    <Esc>:cn<CR>
-imap  <silent> <F12>   :let &number=1-&number<CR>
+imap  <silent> <F12>   :let &number=1-&number<Bar>set number?<CR>
+
+
+"imap <F12> :set number! <CR> :set number?<CR>
+"map <F12>  :set number! <CR> :set number?<CR>
+map <F11>  :set paste! <CR> :set paste?<CR>
+map <F10>  :set wrap! <CR> :set wrap?<CR>
+map <F9>   :set hls! <CR> :set hls?<CR>
+
 
 " this one maps pastemode toggle to F11
 set pastetoggle=<F11>
 
 " <F10> do the line wrapping hoobla
-function! RapNo()
-   :set nowrap
-   :set list
-   :map <silent><F10> :call RapYes()<CR>
-endfunction
-
+"function! RapNo()
+"   :set nowrap
+"   :set list
+"   :map <SILENT><F10> :call RapYes()<CR>
+"endfunction
+"
 " and back
-function! RapYes()
-   :set wrap
-   :set nolist
-   :set linebreak
-   :set showbreak=-->\ 
-   :map <silent><F10> :call RapNo()<CR>
-endfunction
-
-map <silent><F10> :call RapNo()<CR>
-
-" <F9> toggle hlsearch
-noremap <silent> <F9> :set hlsearch!<cr>
-
+"function! RapYes()
+"   :set wrap
+"   :set nolist
+"   :set linebreak
+"   :set showbreak=-->\ 
+"   :map <silent><F10> :call RapNo()<CR>
+"endfunction
+"
+"map <silent><F10> :call RapNo()<CR>
+"
+"" <F9> toggle hlsearch
+"noremap <silent> <F9> :set hlsearch!<cr>
+"
 imap <C-w> <C-o><C-w>
 
 vnoremap > >gv
@@ -296,13 +306,23 @@ nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
+
 nnoremap <Down> gj
 nnoremap <Up> gk
 vnoremap <Down> gj
 vnoremap <Up> gk
 
-command Hexmode call ToggleHex()
-function ToggleHex()
+noremap <C-j> gj
+noremap <C-k> gk
+
+" Move around in insert mode!!!
+imap <C-j> <C-o>j
+imap <C-k> <C-o>k
+imap <C-l> <C-o>l
+imap <C-h> <C-o>h
+
+command! Hexmode call ToggleHex()
+function! ToggleHex()
     " hex mode should be considered a read-only operation
     " save values for modified and read-only for restoration later,
     " and clear the read-only flag for now

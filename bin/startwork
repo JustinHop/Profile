@@ -1,0 +1,7 @@
+#!/bin/bash
+
+pidgin &
+tasque &
+thunderbird &
+firefox &
+termit &

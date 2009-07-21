@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshenv
 #  Both kinds of free
 
-export __ZSHENV__=0.2.2
+export __ZSHENV__=0.2.3
 
 if [ -z "$__INCLUDE__" ]; then
     [ -e ~/.include ] && source ~/.include
@@ -134,4 +134,10 @@ pj="$HOME/projects"
 cfi="$HOME/dev/systems/cfengine/trunk/inputs"
 cfb="$HOME/dev/systems/cfengine/trunk/build"
 cf="$HOME/dev/systems/cfengine/trunk/"
+
+if [[ -d /usr/local/apache2 ]]; then
+	www=/usr/local/apache2
+	wwwc=/usr/local/apache2/conf
+	wwwb=/usr/local/apache2/bin
+fi
 # vim:ft=zsh:syn=zsh

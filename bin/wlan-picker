@@ -1,0 +1,58 @@
+#!/bin/bash
+IFACE=$1
+
+ip link set $IFACE up
+
+SCAN=$( \
+iwlist $IFACE scan 2>&1 | grep -v "^$IFACE" | grep -v "^$" | \
+    sed -e "s/^\ *//" \
+        -e "s/^Cell [0-9]\+ - /#/" \
+        -e "s/^#Address: /#AP=/" \
+        -e "s/^Quality:\([0-9]\+\)\/.*$/QUALITY=\1/" \
+        -e "s/^.*Channel \([0-9]\+\).*$/CHANNEL=\1/" \
+        -e "s/^ESSID:/ESSID=/" \
+        -e "s/^Mode:/MODE=/" \
+        -e "s/^Encryption key:/ENC=/" \
+        -e "s/^[^#].*:.*//" | \
+    tr "\n#" "|\n" \
+)
+
+ip link set $IFACE down
+
+which=""
+while read glob scheme; do
+    AP=""; QUALITY=""; CHANNEL=""; ESSID=""; MODE=""; ENC=""
+    for i in $SCAN ; do
+        for j in $(echo $i | sed -e "s/|/ /g" ) ; do
+            case $j in
+                AP=*)
+                    AP=${j#AP=}
+                    ;;
+                QUALITY=*)
+                    QUALITY=${j#QUALITY=}
+                    ;;
+                CHANNEL=*)
+                    CHANNEL=${j#CHANNEL=}
+                    ;;
+                ESSID=*)
+                    ESSID=${j#ESSID=}
+                    ;;
+                MODE=*)
+                    MODE=${j#MODE=}
+                    ;;
+                ENC=*)
+                    ENC=${j#ENC=}
+                    ;;
+            esac
+        done
+
+        case "$AP,$ESSID,$ENC,$MODE,$CHANNEL" in
+            $glob)
+                echo $scheme
+                exit 0
+                ;;
+        esac
+    done
+done
+
+exit 1

@@ -29,6 +29,7 @@ bindKey('Ctrl-Tab', nextTab)
 bindKey('Alt-Left', prevTab)
 bindKey('Shift-Left', prevTab)
 bindKey('CtrlShift-Tab', prevTab)
+bindKey('CtrlShift-ISO_Left_Tab', prevTab)
 bindKey('Ctrl-2', function () print('Hello2!') end)
 bindKey('Ctrl-3', function () print('Hello3!') end)
 bindKey('Ctrl-3', nil) -- remove previous binding

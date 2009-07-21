@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshrc
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.0.3"
+export ZSHRC_VERSION="2.0.4"
 
 #
 # WORKSPACE AND ENVIRONMENT
@@ -533,15 +533,13 @@ if [[ $ZSH_VERSION = 4.* ]]; then
     # no functions for programs i dont have
     zstyle ':completion:*:functions' ignored-patterns '_*'
 
-    # hostname completion!!!
-    if [[ -f $HOME/.ssh/known_hosts ]]; then
-        myhosts=( ${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
-        zstyle ':completion:*' hosts $myhosts;
-    fi
-    if [[ -f /etc/ssh/known_hosts ]]; then
-        ourhosts=( ${${${${(f)"$(</etc/ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
-        zstyle ':completion:*' hosts $ourhosts;
-    fi
+    ### Mine
+    for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts ; do
+        if [[ -f $hostfile ]]; then
+    	    etchosts=( $(sed 's/#.*$//' < /etc/hosts) )
+    	    zstyle ':completion:*' hosts $etchosts;
+        fi
+    done
 fi
 
 #
