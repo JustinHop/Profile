@@ -1,6 +1,7 @@
 # screenrc 
 # by justin hoppensteadt
 # http://root-squash.ath.cx
+#
 
 setenv SCREENRC_VERSION 1.2.4
 setenv SCREEN_SCREEN 1
