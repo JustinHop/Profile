@@ -62,6 +62,7 @@ editor_cmd = terminal .. " -e " .. editor
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
+altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
@@ -152,10 +153,10 @@ myalertbox = widget({ type = "imagebox", align = "right", background = "red" })
 
 -- spacer
 lspace = widget({ type = "textbox", align="left" })
-lspace.text="<sub><b>|</b></sub>"
+lspace.text=[[<span bgcolor="#30C23D"><sub><b>+</b></sub></span>]]
 
 rspace = widget({ type = "textbox", align="right" })
-rspace.text="<sub><b>|</b></sub>"
+rspace.text=[[<span bgcolor="#30C23D"><sub><b>+</b></sub></span>]]
 
 -- Create a laucher widget and a main menu
 myawesomemenu = {
@@ -227,7 +228,9 @@ for s = 1, screen.count() do
     mymsgbox[s].text = ""
 
     mymousebox[s] = widget({ type = "textbox", align = "left" })
-    mymousebox[s].text = ""
+    if screen.count() ~= 1 then 
+    	mymousebox[s].text = "[-]"
+    end
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt({ align = "left" })
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
@@ -249,10 +252,11 @@ for s = 1, screen.count() do
     -- Create the wibox
     mywibox[s] = wibox({ position = "top", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
     -- Add widgets to the wibox - order matters
-    mywibox[s].widgets = { mylauncher,
+    mywibox[s].widgets = { lspace,
+                           mylauncher,
                            lspace,
-                           mymousebox.text  and mymousebox[s] or nil,
-                           mymousebox.text  and lspace or nil,
+                           mymousebox[s].text  and mymousebox[s] or nil,
+                           mymousebox[s].text  and lspace or nil,
                            mytaglist[s],
                            lspace,
                            mytasklist[s],
@@ -269,7 +273,8 @@ for s = 1, screen.count() do
                            rspace,
                            mylayoutbox[s],
                            s == 1 and rspace or nil,
-                           s == 1 and mysystray or nil }
+                           s == 1 and mysystray or nil ,
+                           rspace }
     mywibox[s].screen = s
 end
 -- }}}
@@ -285,7 +290,9 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
+    awful.key({ "Shift" }, "F10",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
+    awful.key({ "Shift" }, "F11",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     awful.key({ modkey,           }, "j",
@@ -600,7 +607,7 @@ awful.hooks.focus.register(function (c)
     end
 
     --awful.tag.seticon(awful.client.getmaster(mouse.screen).icon)
-    awful.tag.seticon(c.icon)
+    --awful.tag.seticon(c.icon)
     --[[
     local m = awful.client.getmaster()
     awful.tag.seticon(m.icon)
@@ -612,7 +619,7 @@ awful.hooks.unfocus.register(function (c)
     if not awful.client.ismarked(c) then
         c.border_color = beautiful.border_normal
     end
-    awful.tag.seticon(nil)
+    --awful.tag.seticon(nil)
 end)
 
 -- Hook function to execute when marking a client
@@ -723,21 +730,21 @@ awful.hooks.arrange.register(function (screen)
 end)
 
 -- Hook called every minute
-awful.hooks.timer.register(.5, function ()
+awful.hooks.timer.register(.2, function ()
     --mytextbox.text = os.date(" %a %b %d, %H:%M ")
     --mytextbox.text = "<small>&lt;</small>" ..  os.date("%a %b %d, %r") .. "<small>&gt;</small>"
-    mytextbox.text = os.date("%a %b %d, %r") 
+    mytextbox.text = [[<span bgcolor="]] .. light_green .. [["><small><b>]] .. os.date("%a %b %d, %r") .. [[</b></small></span>]]
 end)
 
 awful.hooks.timer.register(.2, function ()
     if screen.count() >= 2 then
         if settings.synergylocal == 1 then
-            mymousebox[1].text = "[-]"
-            mymousebox[2].text = "[-]"
-            mymousebox[mouse.screen].text = "[+]"
+            mymousebox[1].text = "[<span bgcolor=" .. [["]] .. dark_blue .. [[">-</span>]] .. "]" 
+            mymousebox[2].text = "[<span bgcolor=" .. [["]] .. dark_blue .. [[">-</span>]] .. "]" 
+            mymousebox[mouse.screen].text = "[<span bgcolor=" .. [["]] .. yellow .. [[">+</span>]] .. "]" 
         else
-            mymousebox[1].text = "[_]"
-            mymousebox[2].text = "[_]"
+            mymousebox[1].text = "[<span bgcolor=" .. [["]] .. light_green .. [[">_</span>]] .. "]" 
+            mymousebox[2].text = "[<span bgcolor=" .. [["]] .. light_green .. [[">_</span>]] .. "]" 
         end
     end
 end)

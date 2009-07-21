@@ -1,9 +1,9 @@
 -- io.stderr:write("This is only a test\n")
-awful.util.spawn_with_shell([[echo '++AWESOME++' | figlet -f small -w 1000]])
-awful.util.spawn_with_shell("awesome --version")
+awful.util.spawn("echo ++AWESOME++ \| figlet -f small -w 1000")
+awful.util.spawn("awesome --version")
 
 function uptime ()
-    awful.util.spawn_with_shell("uptime")
+    awful.util.spawn("uptime")
 end
 
 settings = {}

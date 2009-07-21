@@ -8,6 +8,7 @@ if true then
 	voldata.Master = 0
 	voldata.PCM = 0
 	voldata.MPD = 0
+	voldata.MPDlock = 0
 
 wx = {}
 
@@ -19,29 +20,29 @@ wx = {}
     volwidget.vertical = true
 
     volwidget:bar_properties_set("Master",
-        { fg = '#AED8C6',
-            fg_center = '#287755',
-            fg_end = '#287755',
-            fg_off = '#222222',
-            vertical_gradient = true,
+        { fg = green,
+            --fg_center = green,
+            --fg_end = light_green,
+            fg_off = black,
+            vertical_gradient = false,
             horizontal_gradient = false,
             ticks_count = 0,
             ticks_gap = 0 })
     volwidget:bar_properties_set("PCM",
-        { fg = '#AED8C6',
-            fg_center = '#287755',
-            fg_end = '#287755',
-            fg_off = '#222222',
-            vertical_gradient = true,
+        { fg = yellow,
+            --fg_center = '#287755',
+            --fg_end = '#287755',
+            fg_off = black,
+            vertical_gradient = false,
             horizontal_gradient = false,
             ticks_count = 0,
             ticks_gap = 0 })
     volwidget:bar_properties_set("MPD",
-        { fg = '#AED8C6',
-            fg_center = '#287755',
-            fg_end = '#287755',
-            fg_off = '#222222',
-            vertical_gradient = true,
+        { fg = pink,
+            --fg_center = '#287755',
+            --fg_end = '#287755',
+            fg_off = black,
+            vertical_gradient = false,
             horizontal_gradient = false,
             ticks_count = 0,
             ticks_gap = 0 })
@@ -52,7 +53,11 @@ wx = {}
         --io.stderr:write(voldata.Master, "\n")
         voldata.PCM=awful.util.pread("aumix -q | grep pcm | awk '{ print $2 }' | tr -d ','")
         --io.stderr:write(voldata.PCM, "\n")
-        voldata.MPD=awful.util.pread("mpc | grep volume | cut -d: -f2 | cut -d% -f1") 
+        --voldata.MPD=awful.util.pread("mpc | grep volume | cut -d: -f2 | cut -d% -f1") 
+        if voldata.MPDlock == 0 then
+            voldata.MPDlock = 1 
+            awful.util.spawn( os.getenv("HOME") .. "/bin/awesome-mpcvol" )
+        end
     end
 
     function displayvol()

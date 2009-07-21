@@ -1,26 +1,58 @@
 ---------------------------
--- Default awesome theme --
+-- justin awesome theme  --
 ---------------------------
 
 theme = {}
 
+light_blue          = "#24C4DE"
+hot_pink            = "#E31867"
+green               = "#30C23D"
+yellow              = "#FEE300"
+blue                = "#018ED3"
+pink                = "#FF2583"
+light_green         = "#09E098"
+red                 = "#F61E2B"
+purplepink          = "#FF0099"
+dark_blue           = "#0C22A9"
+strong_red          = "#DC0004"
+purple              = "#CF0FB0"
+black               = "#000000"
+
 theme.font          = "monospace 8"
 
-theme.bg_normal     = "#222222"
-theme.bg_focus      = "#535d6c"
-theme.bg_urgent     = "#ff0000"
-theme.bg_minimize   = "#444444"
+theme.bg_normal     = blue
+theme.bg_focus      = light_blue
+theme.bg_urgent     = yellow
+theme.bg_minimize   = green
 
-theme.fg_normal     = "#aaaaaa"
-theme.fg_focus      = "#ffffff"
+
+theme.fg_normal     = dark_blue
+theme.fg_focus      = black
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize  = " #ffffff"
 
 theme.border_width  = "5"
+theme.border_normal = dark_blue
+theme.border_focus  = purple
+theme.border_marked = hot_pink
+
+--[[
+theme.bg_normal     = "#222222"
+theme.bg_focus      = "#535d6c"
+theme.bg_urgent     = "#ff0000"
+theme.bg_minimize   = "#444444"
+theme.border_width  = "5"
 theme.border_normal = "#000000"
 theme.border_focus  = "#535d6c"
 theme.border_marked = "#91231c"
+]]--
 
+--[[
+theme.fg_normal     = "#aaaaaa"
+theme.fg_focus      = "#ffffff"
+theme.fg_urgent     = "#ffffff"
+theme.fg_minimize  = " #ffffff"
+]]--
 -- There are another variables sets
 -- overriding the default one when
 -- defined, the sets are:

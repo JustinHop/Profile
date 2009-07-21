@@ -1,4 +1,5 @@
 
+if false then
 notifys = {}
 
 -- {{{ Naughy notification objects
@@ -50,3 +51,4 @@ function naughty.notifyall(args)
     return id
 end
 
+end
