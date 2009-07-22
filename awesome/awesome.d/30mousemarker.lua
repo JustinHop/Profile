@@ -15,16 +15,14 @@
 --------------------------------------------------------------------------------
 --
 
-function mousemarker(screens) 
-    for s=1, tonumber(2) do
-    	if s == awful.mouse.screen() then
-    		mymousebox[s].text=[[<sub bgcolor="]] .. beautiful.bg_urgent or red .. [["><small><b>[+]</b></small></sub>]]
+function mousemarker() 
+    for s=1, screen.count() do
+    	if s == mouse.screen then
+    		mymousebox[s].text=[[<span bgcolor="]] .. beautiful.bg_urgent .. [["><small><b> ■ </b></small></span>]]
     	else
-    		mymousebox[s].text=[[<sub bgcolor="]] .. beautiful.bg_normal or blue .. [["><small><b>[-]</b></small></sub>]]
+    		mymousebox[s].text=[[<span bgcolor="]] .. beautiful.bg_normal .. [["><small><b> □ </b></small></span>]]
     	end
     end
 end
 
 mousemark = 1
-
-

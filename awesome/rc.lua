@@ -11,14 +11,8 @@ require("naughty")
 -- Load Debian menu entries
 require("debian.menu")
 
-settings = {}
-settings.debug = 1
-settings.opacity_focused = .9
-settings.opacity_unfocused = .8
-settings.mouse_marker_not = "[-]"
-settings.synergylocal=1;
-settings.icon = {}
-settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Terminal-Radioactive.png"
+theme_path = "/home/justin/.config/awesome/themes/justin/theme.lua"
+beautiful.init(theme_path)
 
 -- {{{ Load the functions in awesome.d
 function import(file)
@@ -30,6 +24,7 @@ function import(file)
     else
     	--io.stderr:write("Returned type: ", type(ret), "\n")
     	pcall(ret)
+    	--require(file)
     end
 end
 
@@ -41,15 +36,18 @@ for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/*.lua")
 end
 -- }}}
 
--- {{{ Variable definitions
--- Themes define colours, icons, and wallpapers
--- The default is a dark theme
-theme_path = "/home/justin/.config/awesome/themes/justin/theme.lua"
--- Uncommment this for a lighter theme
--- theme_path = "/usr/share/awesome/themes/sky/theme.lua"
-
--- Actually load theme
-beautiful.init(theme_path)
+settings = {}
+settings.debug = 1
+settings.opacity_focused = .9
+settings.opacity_unfocused = .8
+settings.mouse_marker_not = "[-]"
+settings.spacer = "~"
+settings.synergylocal=1;
+settings.icon = {}
+settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Terminal-Radioactive.png"
+--settings.mouse_marker_yes = "<span bgcolor=" .. [["]] .. yellow .. [[">[★]</span>]]
+--settings.mouse_marker_no = "[☆]"
+--settings.mouse_marker_synergy = "<span bgcolor=" .. [["]] .. light_green .. [[">[╳]</span>]]
 
 -- This is used later as the default terminal and editor to run.
 terminal = "termit"
@@ -102,6 +100,7 @@ floatapps =
     ["Firefox Preferences"] = true,
     ["imview"] = true,
     ["xev"] = true,
+    ["kruler"] = true,
     
 }
 
@@ -152,11 +151,11 @@ myalertbox = {}
 myalertbox = widget({ type = "textbox", align = "right" })
 
 -- spacer
-lspace = widget({ type = "textbox", align="left", bg = "black" })
-lspace.text=[[<span bgcolor="#30C23D"><sub><b>T</b></sub></span>]]
+lspace = widget({ type = "textbox", align="left", bg = "black", })
+lspace.text=[[<span bgcolor="#30C23D"><sub><b>]] .. "┃" .. [[</b></sub></span>]]
 
 rspace = widget({ type = "textbox", align="right" })
-rspace.text=[[<span bgcolor="#30C23D"><sub><b>T</b></sub></span>]]
+rspace.text=[[<span bgcolor="#30C23D"><sub><b>]] .. "┃" .. [[</b></sub></span>]]
 
 
 
@@ -252,7 +251,10 @@ for s = 1, screen.count() do
                                           end, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = wibox({ position = "top", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
+    mywibox[s] = wibox({    position = "top", 
+                            fg = beautiful.fg_normal, 
+                            bg = beautiful.bg_normal,
+                        })
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = { lspace,
                            mylauncher,
@@ -312,8 +314,8 @@ globalkeys = awful.util.table.join(
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1) end),
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1) end),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus( 1)       end),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus(-1)       end),
+    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus( 1) mousemarker()      end),
+    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus(-1) mousemarker()      end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "Tab",
         function ()
@@ -614,6 +616,7 @@ awful.hooks.focus.register(function (c)
     local m = awful.client.getmaster()
     awful.tag.seticon(m.icon)
     ]]--
+    mousemarker() 
 end)
 
 -- Hook function to execute when unfocusing a client.
@@ -622,16 +625,19 @@ awful.hooks.unfocus.register(function (c)
         c.border_color = beautiful.border_normal
     end
     --awful.tag.seticon(nil)
+    mousemarker() 
 end)
 
 -- Hook function to execute when marking a client
 awful.hooks.marked.register(function (c)
     c.border_color = beautiful.border_marked
+    mousemarker() 
 end)
 
 -- Hook function to execute when unmarking a client.
 awful.hooks.unmarked.register(function (c)
     c.border_color = beautiful.border_focus
+    mousemarker() 
 end)
 
 -- Hook function to execute when the mouse enters a client.
@@ -644,6 +650,7 @@ awful.hooks.mouse_enter.register(function (c)
     if hasdebugclient then
     	debugclient(c)
     end
+    mousemarker() 
 end)
 
 -- Hook function to execute when a new client appears.
@@ -665,19 +672,26 @@ awful.hooks.manage.register(function (c, startup)
         awful.button({ modkey }, 1, awful.mouse.client.move),
         awful.button({ modkey }, 3, awful.mouse.client.resize)
     ))
-    -- New client may not receive focus
-    -- if they're not focusable, so set border anyway.
-    c.border_width = beautiful.border_width
-    c.border_color = beautiful.border_normal
 
     -- Check if the application should be floating.
     local cls = c.class
     local inst = c.instance
 
+    -- New client may not receive focus
+    -- if they're not focusable, so set border anyway.
+    if c.instance ~= "kruler" then
+        c.border_width = beautiful.border_width
+        c.border_color = beautiful.border_normal
+    else
+        c.border_width = 0
+    end
+
     if floatapps[cls] ~= nil then
         awful.client.floating.set(c, floatapps[cls])
+        awful.titlebar.add(c, { modkey = modkey })
     elseif floatapps[inst] ~= nil then
         awful.client.floating.set(c, floatapps[inst])
+        awful.titlebar.add(c, { modkey = modkey })
     end
 
     if appicons[cls] ~= nil then
@@ -710,6 +724,7 @@ awful.hooks.manage.register(function (c, startup)
 
     -- Honor size hints: if you want to drop the gaps between windows, set this to false.
     c.size_hints_honor = false
+    mousemarker() 
 end)
 
 -- Hook function to execute when arranging the screen.
@@ -729,6 +744,7 @@ awful.hooks.arrange.register(function (screen)
         if c then client.focus = c end
     end
     local c = awful.client
+    mousemarker()
 end)
 
 -- Hook called every minute
@@ -738,17 +754,81 @@ awful.hooks.timer.register(.2, function ()
     mytextbox.text = [[<span bgcolor="]] .. light_green .. [["><small><b>]] .. os.date("%a %b %d, %r") .. [[</b></small></span>]]
 end)
 
-awful.hooks.timer.register(.2, function ()
-    if screen.count() >= 2 then
-        if settings.synergylocal == 1 then
-            mymousebox[1].text = "[<span bgcolor=" .. [["]] .. dark_blue .. [[">-</span>]] .. "]" 
-            mymousebox[2].text = "[<span bgcolor=" .. [["]] .. dark_blue .. [[">-</span>]] .. "]" 
-            mymousebox[mouse.screen].text = "[<span bgcolor=" .. [["]] .. yellow .. [[">+</span>]] .. "]" 
-        else
-            mymousebox[1].text = "[<span bgcolor=" .. [["]] .. light_green .. [[">_</span>]] .. "]" 
-            mymousebox[2].text = "[<span bgcolor=" .. [["]] .. light_green .. [[">_</span>]] .. "]" 
-        end
-    end
-end)
-
+function foo () 
+    io.stdout:write([[
+     ‡        
+    ☀ ☁ ☂ ☃ ☄ ★ ☆ ☇ ☈ ☉ ☊ ☋ ☌ ☍ ☎ ☏
+    ☐ ☑ ☒ ☓ ☔ ☕ ☖ ☗ ☘ ☙ ☚ ☛ ☜ ☝ ☞ ☟
+    ☠ ☡ ☢ ☣ ☤ ☥ ☦ ☧ ☨ ☩ ☪ ☫ ☬ ☭ ☮ ☯
+    ☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷ ☸ ☹ ☺ ☻ ☼ ☽ ☾ ☿
+    ♀ ♁ ♂ ♃ ♄ ♅ ♆ ♇ ♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏
+    ♐ ♑ ♒ ♓ ♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟
+    ♠ ♡ ♢ ♣ ♤ ♥ ♦ ♧ ♨ ♩ ♪ ♫ ♬ ♭ ♮ ♯
+    ♰ ♱ ♲ ♳ ♴ ♵ ♶ ♷ ♸ ♹ ♺ ♻ ♼ ♽ ♾ ♿
+    ⚀ ⚁ ⚂ ⚃ ⚄ ⚅ ⚆ ⚇ ⚈ ⚉ ⚊ ⚋ ⚌ ⚍ ⚎ ⚏
+    ⚐ ⚑ ⚒ ⚓ ⚔ ⚕ ⚖ ⚗ ⚘ ⚙ ⚚ ⚛ ⚜
+    ⚠ ⚡ ⚢ ⚣ ⚤ ⚥ ⚦ ⚧ ⚨ ⚩ ⚪ ⚫ ⚬ ⚭ ⚮ ⚯
+    ⚰ ⚱ ⚲ ⚳ ⚴ ⚵ ⚶ ⚷ ⚸
+    ■ □ ▢ ▣ ▤ ▥ ▦ ▧ ▨ ▩ ▪ ▫ ▬ ▭ ▮ ▯
+    ▰ ▱ ▲ △ ▴ ▵ ▶ ▷ ▸ ▹ ► ▻ ▼ ▽ ▾ ▿
+    ◀ ◁ ◂ ◃ ◄ ◅ ◆ ◇ ◈ ◉ ◊ ○ ◌ ◍ ◎ ●
+    ◐ ◑ ◒ ◓ ◔ ◕ ◖ ◗ ◘ ◙ ◚ ◛ ◜ ◝ ◞ ◟
+    ◠ ◡ ◢ ◣ ◤ ◥ ◦ ◧ ◨ ◩ ◪ ◫ ◬ ◭ ◮ ◯
+    ◰ ◱ ◲ ◳ ◴ ◵ ◶ ◷ ◸ ◹ ◺ ◻ ◼ ◽ ◾ ◿
+    ▀ ▁ ▂ ▃ ▄ ▅ ▆ ▇ █ ▉ ▊ ▋ ▌ ▍ ▎ ▏
+    ▐ ░ ▒ ▓ ▔ ▕ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
+    ─ ━ │ ┃ ┄ ┅ ┆ ┇ ┈ ┉ ┊ ┋ ┌ ┍ ┎ ┏
+    ┐ ┑ ┒ ┓ └ ┕ ┖ ┗ ┘ ┙ ┚ ┛ ├ ┝ ┞ ┟
+    ┠ ┡ ┢ ┣ ┤ ┥ ┦ ┧ ┨ ┩ ┪ ┫ ┬ ┭ ┮ ┯
+    ┰ ┱ ┲ ┳ ┴ ┵ ┶ ┷ ┸ ┹ ┺ ┻ ┼ ┽ ┾ ┿
+    ╀ ╁ ╂ ╃ ╄ ╅ ╆ ╇ ╈ ╉ ╊ ╋ ╌ ╍ ╎ ╏
+    ═ ║ ╒ ╓ ╔ ╕ ╖ ╗ ╘ ╙ ╚ ╛ ╜ ╝ ╞ ╟
+    ╠ ╡ ╢ ╣ ╤ ╥ ╦ ╧ ╨ ╩ ╪ ╫ ╬ ╭ ╮ ╯
+    ╰ ╱ ╲ ╳ ╴ ╵ ╶ ╷ ╸ ╹ ╺ ╻ ╼ ╽ ╾ ╿
+    ⓪ ① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩
+    ⌀ ⌁ ⌂ ⌃ ⌄ ⌅ ⌆ ⌇ ⌈ ⌉ ⌊ ⌋ ⌌ ⌍ ⌎ ⌏
+    ⌐ ⌑ ⌒ ⌓ ⌔ ⌕ ⌘ ⌙ ⌚ ⌜ ⌝ ⌞ ⌟
+    ⌠ ⌡ ⌢ ⌣ ⌤ ⌥ ⌦ ⌧ ⌨ 〈 〉 ⌫ ⌬
+    ⌴ ⌵ ⌷ ⌸ ⌹ ⌺ ⌻ ⌼ ⌽ ⌾
+        ⍁ ⍂ ⍃ ⍄ ⍇ ⍈ ⍉ ⍋ ⍌ ⍍
+    ⍐ ⍒ ⍓ ⍔ ⍗ ⍘ ⍙ ⍚ ⍛ ⍜ ⍞ ⍟
+    ⍠ ⍣ ⍤ ⍥ ⍨ ⍩ ⍫ ⍬ ⍭ ⍮ ⍯
+    ⍰ ⍳ ⍴ ⍵ ⍶ ⍷ ⍸ ⍹ ⍺ ⍽
+    ⎀ ⎁ ⎂ ⎃ ⎇ ⎈ ⎉ ⎊ ⎋
+    ⎔ ⎕ ⎛ ⎜ ⎝ ⎞ ⎟
+    ⎠ ⎡ ⎢ ⎣ ⎤ ⎥ ⎦ ⎧ ⎨ ⎩ ⎪ ⎫ ⎬ ⎭ ⎮ ⎯
+    ⎰ ⎱ ⎲ ⎳ ⎷ ⎺ ⎻ ⎼ ⎽
+        ⏎ ⏏
+        ⏣ ⏥
+    ∀ ∁ ∂ ∃ ∄ ∅ ∆ ∇ ∈ ∉ ∊ ∋ ∌ ∍ ∎ ∏
+    ∐ ∑ − ∓ ∔ ∕ ∖ ∗ ∘ ∙ √ ∛ ∜ ∝ ∞ ∟
+    ∠ ∡ ∢ ∣ ∤ ∥ ∦ ∧ ∨ ∩ ∪ ∫ ∬ ∭ ∮ ∯
+    ∰ ∱ ∲ ∳ ∴ ∵ ∶ ∷ ∸ ∹ ∺ ∻ ∼ ∽ ∾ ∿
+    ≀ ≁ ≂ ≃ ≄ ≅ ≆ ≇ ≈ ≉ ≊ ≋ ≌ ≍ ≎ ≏
+    ≐ ≑ ≒ ≓ ≔ ≕ ≖ ≗ ≘ ≙ ≚ ≛ ≜ ≝ ≞ ≟
+    ≠ ≡ ≢ ≣ ≤ ≥ ≦ ≧ ≨ ≩ ≪ ≫ ≬ ≭ ≮ ≯
+    ≰ ≱ ≲ ≳ ≴ ≵ ≶ ≷ ≸ ≹ ≺ ≻ ≼ ≽ ≾ ≿
+    ⊀ ⊁ ⊂ ⊃ ⊄ ⊅ ⊆ ⊇ ⊈ ⊉ ⊊ ⊋ ⊌ ⊍ ⊎ ⊏
+    ⊐ ⊑ ⊒ ⊓ ⊔ ⊕ ⊖ ⊗ ⊘ ⊙ ⊚ ⊛ ⊜ ⊝ ⊞ ⊟
+    ⊠ ⊡ ⊢ ⊣ ⊤ ⊥ ⊦ ⊧ ⊨ ⊩ ⊪ ⊫ ⊬ ⊭ ⊮ ⊯
+    ⊰ ⊱ ⊲ ⊳ ⊴ ⊵ ⊶ ⊷ ⊸ ⊹ ⊺ ⊻ ⊼ ⊽ ⊾ ⊿
+    ⋀ ⋁ ⋂ ⋃ ⋄ ⋅ ⋆ ⋇ ⋈ ⋉ ⋊ ⋋ ⋌ ⋍ ⋎ ⋏
+    ⋐ ⋑ ⋒ ⋓ ⋔ ⋕ ⋖ ⋗ ⋘ ⋙ ⋚ ⋛ ⋜ ⋝ ⋞ ⋟
+    ⋠ ⋡ ⋢ ⋣ ⋤ ⋥ ⋦ ⋧ ⋨ ⋩ ⋪ ⋫ ⋬ ⋭ ⋮ ⋯
+    ⋰ ⋱ ⋲ ⋳ ⋴ ⋵ ⋶ ⋷ ⋸ ⋹ ⋺ ⋻ ⋼ ⋽ ⋾ ⋿
+    ← ↑ → ↓ ↔ ↕ ↖ ↗ ↘ ↙ ↚ ↛ ↜ ↝ ↞ ↟
+    ↠ ↡ ↢ ↣ ↤ ↥ ↦ ↧ ↨ ↩ ↪ ↫ ↬ ↭ ↮ ↯
+    ↰ ↱ ↲ ↳ ↴ ↵ ↶ ↷ ↸ ↹ ↺ ↻ ↼ ↽ ↾ ↿
+    ⇀ ⇁ ⇂ ⇃ ⇄ ⇅ ⇆ ⇇ ⇈ ⇉ ⇊ ⇋ ⇌ ⇍ ⇎ ⇏
+    ⇐ ⇑ ⇒ ⇓ ⇔ ⇕ ⇖ ⇗ ⇘ ⇙ ⇚ ⇛ ⇜ ⇝ ⇞ ⇟
+    ⇠ ⇡ ⇢ ⇣ ⇤ ⇥ ⇦ ⇧ ⇨ ⇩ ⇪ ⇫ ⇬ ⇭ ⇮ ⇯
+    ⇰ ⇱ ⇲ ⇳ ⇴ ⇵ ⇶ ⇷ ⇸ ⇹ ⇺ ⇻ ⇼ ⇽ ⇾ ⇿
+    ‐ ‑ ‒ – — ― ‖ ‗ ‘ ’ ‚ ‛ “ ” „ ‟
+    † ‡ • ‣ ․ ‥ … ‧    
+    ‰ ‱ ′ ″ ‴ ‵ ‶ ‷ ‸ ‹ › ※ ‼ ‽ ‾ ‿
+    ⁀ ⁁ ⁂ ⁃ ⁄ ⁅ ⁆ ⁇ ⁈ ⁉ ⁊ ⁋ ⁌ ⁍ ⁎ ⁏
+    ⁐ ⁑ ⁒ ⁓ ⁔ ⁕ ⁖ ⁗ ⁘ ⁙ ⁚ ⁛ ⁜ ⁝ ⁞  
+    ]])
+end
+mousemarker() 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=4:softtabstop=4:encoding=utf-8
