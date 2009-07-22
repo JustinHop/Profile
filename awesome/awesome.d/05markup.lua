@@ -39,7 +39,7 @@ function debug_notify(_text, _title, _time)
         local time = 8
         if _title then mytitle = mytitle .. ": " .. _title end
         if _time then time = _time end
-        naughty.notifyall({ title = mytitle, text = _text, width = 400, timeout = time, icon = beautiful.awesome_icon })
+        naughty.notify({ title = mytitle, text = _text, width = 400, timeout = time, icon = beautiful.awesome_icon })
     end
 end
 -- }}}
