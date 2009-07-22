@@ -1,0 +1,4 @@
+[submodule "obvious"]
+    path = awesome/obvious
+    url = git://git.mercenariesguild.net/obvious.git
+
