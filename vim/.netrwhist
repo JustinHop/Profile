@@ -1,5 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_cnt =7
 let g:netrw_dirhist_1='/home/justin/profile/awesome'
 let g:netrw_dirhist_2='/home/justin/profile/awesome/awesome.d'
 let g:netrw_dirhist_3='/home/justin/profile/awesome'
+let g:netrw_dirhist_4='/autofs/shareddev/Shared_Artist_Sites_Stage'
+let g:netrw_dirhist_5='/autofs/shareddev'
+let g:netrw_dirhist_6='/autofs/shareddev/UMe_Artist_Sites_Stage'
+let g:netrw_dirhist_7='/autofs/shareddev/UMe_Artist_Sites_Stage/portal'
