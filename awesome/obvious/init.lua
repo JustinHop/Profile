@@ -1,6 +1,7 @@
 -------------------------------------------
 -- Author: Gregor "farhaven" Best"       --
 -- Copyright 2009 Gregor Best            --
+-- Added to my git repo
 -------------------------------------------
 
 require("obvious.clock")
