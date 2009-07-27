@@ -1,0 +1,63 @@
+#!/bin/sh
+#
+#   This script downloads and installs centos rpms into your 
+#   home directory. Nice.
+#   Justin Hoppensteadt 2009
+#   $Id$
+#
+
+cd $HOME
+
+REL=`cat /etc/redhat-release | awk '{ print $3 }'` 
+if grep Red /etc/redhat-release ; then
+    REL=`cat /etc/redhat-release | awk '{ print $7 }'`
+fi
+REL=${REL::1}
+
+EX=""
+if [ $REL = "4" ]; then
+    EX="/RPMS"
+fi
+
+ARCH="i386"
+if [ `uname -i` = "x86_64" ]; then
+    ARCH="x86_64"
+fi
+
+INSTALL_RPM=
+
+MIRRORFILE=$HOME/.mirrors
+MIRRORINDEX=$HOME/.mirror-index
+
+for PACKAGE in $@ ; do
+    echo $PACKAGE
+    if [ "$PACKAGE" = "mirror" ]; then
+        echo "Downloading mirror"
+        echo "Trying to download mirrorlist"
+        wget -nv -O $MIRRORFILE "http://mirrorlist.centos.org/?release=$REL&arch=$ARCH&repo=os" || exit 1
+        echo "Downloading mirror index"
+        wget -nv -O $MIRRORINDEX "`cat $MIRRORFILE | head -n 1`CentOS$EX" || exit 1
+    else
+        if [ -e $MIRRORFILE -a -e $MIRRORINDEX ]; then
+            echo "Set up."
+        else
+            echo "No mirror files"
+            exit 1
+        fi
+
+        if [ "$PACKAGE" = "install" ]; then
+            echo "Install set to YES"
+            INSTALL_RPM="YES"
+        else
+            RPM=`cat $MIRRORINDEX | P=$PACKAGE A=$ARCH perl -ne '/>\s?($ENV{"P"}-\d\S+$ENV{"A"}\.rpm)/ && print $1 . "\n"' | head -n 1`
+            echo "Downloading Package: $RPM"
+            wget -nv -O $HOME/src/$RPM "`cat $MIRRORFILE | head -n 1`CentOS$EX/$RPM" || exit 1
+            if [ x"$INSTALL_RPM" = "xYES" ]; then
+                echo "Installing Package: $RPM"
+                rpm2cpio $HOME/src/$RPM | cpio -id
+            fi
+        fi
+    fi
+done
+
+exit 0

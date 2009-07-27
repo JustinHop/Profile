@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sleep 3 
+xcompmgr -c -C -o0.2 -t1 -l1 -r2 

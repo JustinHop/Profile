@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "KeyStrPress Control_L KeyStrPress Tab KeyStrRelease Tab KeyStrRelease Control_L" | xmacroplay $DISPLAY 

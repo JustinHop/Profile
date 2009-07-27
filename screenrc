@@ -1,0 +1,99 @@
+# screenrc 
+# by justin hoppensteadt
+# http://root-squash.ath.cx
+#
+
+setenv SCREENRC_VERSION 1.2.4
+setenv SCREEN_SCREEN 1
+setenv SCREEN_HOST $HOSTNAME
+
+#unsetenv SSH_AUTH_SOCK
+#setenv SSH_AUTH_SOCK "$HOME/.screen/ssh-auth-$HOSTNAME"
+#source $HOME/.ssh/screen-agent-$HOSTNAME
+
+shelltitle " $ |$SHELL"
+compacthist on
+bufferfile        $HOME/.screenlogs/.screen_exchange
+startup_message   off
+defscrollback     16384
+
+# more stolen stuff
+#sorendition "+b kG"
+#sorendition "kG"
+msgwait 2
+version
+
+deflogin off
+deflog on
+logfile $HOME/.screenlogs/screen-%Y-%m-%d-%0c:%s-%H-%n.log
+logtstamp on
+
+# 256 color xterm
+#attrcolor b ".I"
+#termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+#defbce "on"
+#
+
+#termcapinfo xterm*|Eterm|mlterm 'hs:ts=\E]0;:fs=\007:ds=\E]0;screen\007'
+defhstatus "$ORI_XTITLE <[ screen ^E (^Et) ]>"
+hardstatus off
+
+#caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d %{yk}%D %{gk}%c %{bk}%l"
+caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d %{yk}%D %{gk}%c %{bk}%l"
+
+# grabbed from gentoo's screenrc
+# XTERM TWEAKS
+# ===============================================================
+
+# 80/132 column switching must be enabled for ^AW to work
+# change init sequence to not switch width
+  termcapinfo  xterm Z0=\E[?3h:Z1=\E[?3l:is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l
+
+# Make the output buffer large for (fast) xterms.
+# termcapinfo xterm* OL=10000
+  termcapinfo xterm* OL=10000
+
+# tell screen that xterm can switch to dark background and has function
+# keys.
+  termcapinfo xterm 'VR=\E[?5h:VN=\E[?5l'
+  termcapinfo xterm 'k1=\E[11~:k2=\E[12~:k3=\E[13~:k4=\E[14~'
+  termcapinfo xterm 'kh=\EOH:kI=\E[2~:kD=\E[3~:kH=\EOF:kP=\E[5~:kN=\E[6~'
+
+#terminfo xterm 'vb=\E[?5h$<200/>\E[?5l'
+  termcapinfo xterm 'vi=\E[?25l:ve=\E[34h\E[?25h:vs=\E[34l'
+
+# emulate part of the 'K' charset
+  termcapinfo xterm 'XC=K%,%\E(B,[\304,\\\\\326,]\334,{\344,|\366,}\374,~\337'
+
+# xterm-52 tweaks:
+# - uses background color for delete operations
+  termcapinfo xterm* be
+
+# Do not use xterm's alternative window buffer, it breaks scrollback (see bug #61195)
+  termcapinfo xterm|xterms|xs ti@:te=\E[2J
+
+# Extend the vt100 desciption by some sequences.
+  termcap  vt100* ms:AL=\E[%dL:DL=\E[%dM:UP=\E[%dA:DO=\E[%dB:LE=\E[%dD:RI=\E[%dC
+  terminfo vt100* ms:AL=\E[%p1%dL:DL=\E[%p1%dM:UP=\E[%p1%dA:DO=\E[%p1%dB:LE=\E[%p1%dD:RI=\E[%p1%dC
+  termcapinfo linux C8
+# old rxvt versions also need this
+# termcapinfo rxvt C8
+
+# Yet another hack:
+# Prepend/append register [/] to the paste if ^a^] is pressed.
+# This lets me have autoindent mode in vi.
+  register [ "\033:se noai\015a"
+  register ] "\033:se ai\015a"
+  bind ^] paste [.]
+
+# Resize the current region. The space will be removed from or added to 
+# the region below or if there's not enough space from the region above.
+  bind = resize =
+  bind + resize +3
+  bind - resize -3
+
+# Make backspace work
+ termcapinfo xterm ‘bc@:bs@’
+
+ bindkey -d ^? stuff ^H
+ bindkey -d ^@ stuff ^H

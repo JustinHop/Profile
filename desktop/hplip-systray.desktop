@@ -1,0 +1,17 @@
+[Desktop Entry]
+Version=0.6
+Type=Application
+Name=HP System Tray Service
+Name[en_US]=HP System Tray Service
+GenericName=Printer Status Applet
+Comment=HP System Tray Service
+Comment[en_US]=HP System Tray Service
+Exec=hp-systray --qt4
+Icon=/usr/share/hplip/data/images/48x48/prog.png
+Terminal=false
+Categories=Application;Utility;
+X-KDE-StartupNotify=false
+StartupNotify=false
+X-GNOME-Autostart-enabled=false
+Hidden=true
+

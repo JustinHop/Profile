@@ -1,0 +1,375 @@
+#!/bin/sh
+
+version="0.20060901.0"
+
+# Known bugs:
+# - doesn't properly resize widescreen video
+
+# Revision history:
+# 0.20060901.0 - autodetect whether we are in a tty or graphical environment
+#              - removed useless use of wc -l
+#              - reflowed lines to 79 characters
+# 0.20060831.0 - removed bashisms, changed to /bin/sh
+# 0.20060830.0 - initial release
+
+# set up some reasonable defaults
+appname=`basename "$0"`
+device=/dev/dvd
+outputdir="$HOME/output"
+scratchdir=/tmp
+tracks=
+naming="%d-%t"
+index=1
+
+# import configuration file, possibly overriding defaults
+[ -r ~/.podencoderrc ] && . ~/.podencoderrc
+
+# parse command-line arguments, possibly overriding configuration file
+while getopts ":i:n:o:s:t:v" options; do
+  case $options in
+    i) index=$OPTARG;;
+    n) naming=$OPTARG;;
+    o) outputdir=$OPTARG;;
+    s) scratchdir=$OPTARG;;
+    t) tracks=$OPTARG;;
+    v) cat <<EOF
+$0 $version
+Copyright (C) 2006, Mark Pilgrim
+This is free software.  You may redistribute copies of it under the terms of
+the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
+There is NO WARRANTY, to the extent permitted by law.
+EOF
+       exit 1;;
+    *) cat <<EOF
+Usage: $0 [OPTIONS] [SOURCE]
+Encode video for iPod 5G
+
+SOURCE can be DVD device, directory containing VIDEO_TS, or video file in
+any format.  If no SOURCE, reads from default device (/dev/dvd).
+
+All flags are optional
+  -o    output directory
+  -s    scratch directory for temp files
+  -t    track number, comma-separated list of track numbers, or "all"
+  -n    naming scheme for output files
+  -i    start index for naming scheme
+  -h    display this help and exit
+  -v    display version number and exit
+
+Naming scheme (-n flag) determines output filename(s).  Do not include a
+file extension; it is appended automatically.
+  %d    disc title (from device or directory name)
+  %t    physical track number
+  %i    index number (starts at 1 or -i and increments for each track)
+
+Examples:
+  $0             Encode longest track from default DVD device
+  $0 -t 2        Encode track 2 from default DVD device
+  $0 ./BBSDOC/   Encode longest track from ./BBSDOC/ directory
+  $0 -t "2,3,4"  Encode tracks 2, 3, and 4 from default DVD device
+  $0 -t "2,3,8" -i 4 -n "%d%i" ./BBSDOC/
+       Encode tracks 2, 3, and 8 from ./BBSDOC/ directory
+       and name them BBSDOC4.mp4, BBSDOC5.mp4, and BBSDOC6.mp4 respectively
+
+Also reads configuration settings from ~/.podencoderrc
+  device=        default DVD device
+  outputdir=     output directory (like -o)
+  scratchdir=    scratch directory (like -s)
+  tracks=        track numbers (like -t)
+  naming=        naming scheme (like -n)
+  index=         start index (like -i)
+
+Report bugs to <mark@diveintomark.org>.
+EOF
+       exit 1;;
+  esac
+done
+# remove flags so $1 points to input file or device
+shift $(($OPTIND - 1))
+# get input file or device, if specified (otherwise use the default device)
+[ -n "$1" ] && device="$1"
+# sanity-check output directory
+[ -d "$outputdir" ] || die "Can't find output directory $outputdir"
+# get absolute path of output directory
+outputdir=`cd "$outputdir" 2>/dev/null && pwd`
+# determine whether we should use GUI dialogs or console output
+if tty -s; then :; else gui=1; fi
+
+# clean up temp files on exit or break
+CleanUpTempFiles () {
+  if [ -f "$device" ]; then
+    # if source is file, we don't make a temporary copy,
+    # so don't delete the original!
+    :
+  else
+    [ -n "$tempfile" ] && rm -f "$tempfile"
+    [ -n "$inputfile" ] && rm -f "$inputfile"
+    [ -n "$mplayerlogfile" ] && rm -f "$mplayerlogfile"
+  fi
+  [ -n "$ffmpegoutputfile" ] && rm -f "$ffmpegoutputfile"
+  [ -n "$ffmpeglog" ] && rm -f "$ffmpeglog"
+  [ -n "$h264tempfile" ] && rm -f "$h264tempfile"
+  [ -n "$aactempfile" ] && rm -f "$aactempfile"
+  [ -n "$zenpipe" ] && rm -f "$zenpipe"
+  rm -f ffmpeg2pass-0.log
+  rm -f x264_2pass.log
+  rm -f x264_2pass.log.temp
+}
+
+# clean up processes and temp files on break
+TrapBreak () {
+  trap "" HUP INT TERM
+  # if mplayer or ffmpeg or zenity are still running, kill them
+  [ -n "$zenpid" ] && kill "$zenpid" 2>/dev/null
+  [ -n "$pid" ] && kill "$pid" 2>/dev/null
+  CleanUpTempFiles
+  exit 1
+}
+
+# GUI-aware error function
+die () {
+  if [ $gui ]; then
+    zenity --error --title="$appname" --text="$1.  Encoding failed."
+  else
+    echo "$1.  Encoding failed." >/dev/stderr
+  fi
+  exit 1
+}
+
+warning () {
+  if [ $gui ]; then
+    zenity --warning --title="$appname" --text="$1."
+  else
+    echo "Warning: $1" >/dev/stderr
+  fi
+}
+
+# GUI-aware progress function that parses ffmpeg's output
+# and converts it to a simple percent-complete indicator
+DisplayEncodingProgress () {
+  if [ -z "$track" ]; then
+    progresstext="Encoding $inputfile (pass $pass of 2)"
+  else
+    progresstext="Encoding track $track (pass $pass of 2)"
+  fi
+  if [ $gui ]; then
+    (
+      while ps | grep "$pid " >/dev/null
+      do
+        secondsCompleted=`tail -c 90 "$ffmpeglog" | \
+                          awk -F"time=" {'print $2'} | cut -d"." -f 1`
+        [ -n "$secondsCompleted" ] || secondsCompleted=0
+        percentage=$((100*$secondsCompleted/$inputlength))
+        echo "$percentage"
+        sleep 1
+      done
+      echo 100
+    ) | zenity --progress --title="$appname" \
+               --text="$progresstext" --auto-close
+  else
+    echo "$progresstext"
+    lastpercentage=0
+    while ps | grep "$pid " >/dev/null
+    do
+      secondsCompleted=`tail -c 90 "$ffmpeglog" | \
+                        awk -F"time=" {'print $2'} | cut -d"." -f 1`
+      [ -n "$secondsCompleted" ] || secondsCompleted=0
+      percentage=$((100*$secondsCompleted/$inputlength))
+      if [ $percentage -gt $lastpercentage ]; then
+        echo -ne "$percentage%\r"
+        lastpercentage="$percentage"
+      fi
+      sleep 1
+    done
+  fi
+}
+
+# sanity check helper apps
+if [ $gui ]; then
+  [ -z "$(which zenity)" ] && gui=
+fi
+[ -n "$(which lsdvd)" ] || die 'lsdvd not installed'
+[ -n "$(which mplayer)" ] || die 'mplayer not installed'
+[ -n "$(which ffmpeg)" ] || die 'ffmpeg not installed'
+[ -n "$(which mp4creator)" ] || die 'mp4creator not installed'
+if [ -z "$(ffmpeg -formats 2>/dev/null | grep ' aac$' | grep E)" ]; then
+  die 'ffmpeg can not encode AAC audio'
+fi
+if [ -z "$(ffmpeg -formats 2>/dev/null | grep ' h264$' | grep E)" ]; then
+  die 'ffmpeg can not encode H.264 video'
+fi
+
+# trap signals so we can clean up our background processes and temp files
+trap TrapBreak HUP INT TERM
+
+if [ -f "$device" ]; then
+  # input is file
+  inputfile="$device"
+
+  # check whether output file exists
+  outputfile="$outputdir"/`basename "$inputfile" .VOB`.mp4
+  [ -s "$outputfile" ] && die "$outputfile already exists, will not overwrite"
+
+  # forget tracks parameter so we don't get confused about it later
+  tracks=
+
+  # get video length, truncated to the nearest second
+  inputlength=`mplayer -identify -frames 0 -vc null -vo null -ao null \
+               "$device" 2>/dev/null | \
+               grep ^ID_LENGTH | \
+               sed -e 's/^.*=//' -e 's/[.].*//'`
+  [ -n "$inputlength" ] || die "Could not determine video length"
+else
+  # input is DVD device or directory containing VIDEO_TS
+  
+  # gather some information about the disc
+  discinfo=`lsdvd "$device" 2>/dev/null`
+  longest=`echo "$discinfo" | grep '^Longest track: ' | sed 's/.*: 0*//'`
+
+  # get disc title
+  if [ -b "$device" ]; then
+    # for physical discs, title is volume name
+    disctitle=`echo "$discinfo" | \
+               grep '^Disc Title:' | \
+               sed -e 's/^.*://' -e 's/ //g'`
+    [ -n "$disctitle" ] || die "No DVD found in $device"
+  else
+    # for folders, title is folder name
+    # get absolute path so we can extract the actual folder name
+    device=`cd "$device" 2>/dev/null && pwd`
+    disctitle=`basename "$device"`
+    # if folder is VIDEO_TS, we really want the parent folder
+    if [ $disctitle = "VIDEO_TS" ]; then
+      device=`cd "$device"/.. 2>/dev/null && pwd`
+      disctitle=`basename "$device"`
+    fi
+  fi
+
+  # remove whitespace from track list
+  tracks=`echo "$tracks" | sed 's/\s//g'`
+
+  # auto-encode single-track discs
+  trackcount=`echo "$discinfo" | grep -c '^Title: '`
+  if [ "$trackcount" = 1 ]; then
+    # if there's only one track, auto-selectks" | sed 's/\s//g'`
+  fi
+  
+  # handle some special cases for tracks
+  if [ "$tracks" = 'longest' ]; then
+    # we already cached the longest track (but didn't verify it)
+    tracks="$longest"
+    [ -n "$tracks" ] || die "Could not find the longest track on $device"
+  elif [ "$tracks" = 'all' ]; then
+    # find all tracks on device
+    tracks=`echo "$discinfo" | grep '^Title: ' | \
+                               sed -e 's/^Title: 0*//' -e 's/,.*//'`
+    # don't quote $tracks on next line, we want echo to collapse whitespace
+    tracks=`echo $tracks | sed 's/ /,/g'`
+  fi
+
+  # if we don't have any tracks, just quit gracefully
+  [ -z "$tracks" ] && exit 0
+  
+  # if multiple tracks were specified or found, get the first one
+  track=`echo "$tracks" | cut -d"," -f 1`
+  tracks=`echo "$tracks" | grep "," | cut -d"," -f 2-`
+
+  # get track length, truncated to the nearest second
+  inputlength=`mplayer -identify -frames 0 -vc null -vo null -ao null \
+                       dvd://"$track" -dvd-device "$device" 2>/dev/null | \
+               grep ^ID_DVD_TITLE_"$track"_LENGTH | \
+               cut -d"=" -f 2 | \
+               cut -d"." -f 1`
+  [ -n "$inputlength" ] || die "Could not determine video length"
+
+  # now we have enough information to construct the output filename
+  # and check if it exists
+  outputfile="$outputdir"/`echo "$naming" | \
+                           sed -e "s/%d/$disctitle/g" \
+                               -e "s/%t/\`printf \"%02d\" $track\`/g" \
+                               -e  "s/%i/\`printf \"%02d\" $index\`/g"`.mp4
+  [ -s "$outputfile" ] && die "$outputfile already exists, will not overwrite"
+
+  # rip single track to temporary file
+  tempfile=`mktemp -p "$scratchdir"` || \
+            die "Could not copy video track to $scratchdir"
+  inputfile="$tempfile".VOB
+  mplayerlogfile="$inputfile".copy.log
+  copytext="Copying video track $track"
+  if [ $gui ]; then
+    (
+      echo
+      while [ 1 ]; do sleep 1; done
+    ) | zenity --progress --title="$appname" --text="$copytext" --pulsate &
+    zenpid=$!
+    # Run mplayer in the background and wait.  This way, if the user
+    # clicks Cancel, we can immediately exit (via TrapBreak) without
+    # waiting for mplayer to finish.
+    mplayer dvd://"$track" -dvd-device "$device" -dumpstream \
+            -dumpfile "$inputfile" 1>"$mplayerlogfile" 2>/dev/null &
+    pid=$!
+    wait $pid
+    kill $zenpid
+    zenpid=
+  else
+    echo "$copytext"
+    mplayer dvd://"$track" -dvd-device "$device" -dumpstream \
+            -dumpfile "$inputfile" 1>"$mplayerlogfile" 2>/dev/null &
+    pid=$!
+    wait $pid
+  fi
+  pid=
+
+  # if source is DVD device and this is the last track, eject the disc
+  if [ -b "$device" ]; then
+    if [ -z "$tracks" ]; then
+      eject "$device" &
+    fi
+  fi
+fi
+
+# encode .vob to .mp4 (H.264/AAC)
+ffmpegoutputfile="$scratchdir"/`basename "$inputfile" .VOB`.temp.mp4
+ffmpeglog="$scratchdir"/`basename "$inputfile" .VOB`.ffmpeg.log
+ffmpeg -y -i "$inputfile" -pass 1 -v 1 -vcodec h264 -b 400 -refs 1 -loop 1 \
+       -subq 1 -threads 2 -max_b_frames 0 -level 13 -g 300 -keyint_min 30 \
+       -qcomp 0.6 -qmax 35 -max_qdiff 4 -i_quant_factor 0.71428572 \
+       -b_quant_factor 0.76923078 -rc_max_rate 768 -rc_buffer_size 244 \
+       -cmp 1 -s 320x240 -acodec aac -ab 96 -ar 48000 -ac 2 -f mp4 /dev/null \
+       2>"$ffmpeglog" &
+pid=$!
+pass=1
+DisplayEncodingProgress
+pid=
+
+ffmpeg -y -i "$inputfile" -pass 2 -v 1 -vcodec h264 -b 400 -refs 5 -loop 1 \
+       -deblockalpha 0 -deblockbeta 0 -parti4x4 1 -partp8x8 1 -partb8x8 1 \
+       -me full -subq 6 -brdo 1 -me_range 21 -chroma 1 -threads 2 -slice 2 \
+       -max_b_frames 0 -level 13 -g 300 -keyint_min 30 -sc_threshold 40 \
+       -rc_eq 'blurCplx^(1-qComp)' -qcomp 0.6 -qmax 35 -max_qdiff 4 \
+       -i_quant_factor 0.71428572 -b_quant_factor 0.76923078 \
+       -rc_max_rate 768 -rc_buffer_size 244 -cmp 1 -s 320x240 \
+       -acodec aac -ab 96 -ar 48000 -ac 2 -f mp4 "$ffmpegoutputfile" \
+       2>>"$ffmpeglog" &
+pid=$!
+pass=2
+DisplayEncodingProgress
+pid=
+
+# ffmpeg doesn't always create standards-compliant .mp4 files, a    -rate=`mp4creator -list "$ffmpegoutputfile" | grep fps | \
+                  cut -d"@" -f 3 | cut -d" " -f 2` "$outputfile"
+mp4creator -create="$aactempfile" "$outputfile"
+
+[ -s "$outputfile" ] || die 'Could not create $outputfile'
+
+CleanUpTempFiles
+
+# if multiple tracks were specified, process the next one
+if [ -n "$tracks" ]; then
+  echo
+  index=$(($index+1))
+  exec "$0" -i "$index" -n "$naming" -o "$outputdir" -s "$scratchdir" \
+       -t "$tracks" "$device"
+fi
+
+

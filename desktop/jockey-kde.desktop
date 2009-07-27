@@ -1,0 +1,16 @@
+
+[Desktop Entry]
+Name=Check for new hardware drivers
+Name[de]=Auf neue Hardware-Treiber prüfen
+Comment=Notify about new hardware drivers available for the system
+Comment[de]=Über neue oder aktualisierte Treiber für Ihre Hardware benachrichtigen.
+Icon=jockey-kde
+Exec=jockey-kde --check 60
+Terminal=false
+Type=Application
+Categories=Qt;KDE;System;
+OnlyShowIn=KDE;
+X-Ubuntu-Gettext-Domain=jockey
+Name[en_US]=Check for new hardware drivers
+Comment[en_US]=Notify about new hardware drivers available for the system
+X-GNOME-Autostart-enabled=false

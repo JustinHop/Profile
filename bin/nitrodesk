@@ -1,0 +1,44 @@
+#!/bin/bash 
+
+DIRS="$HOME/pictures/linux-desktops/electro"
+
+if [ "$@" ]; then
+	DIRS="$@"
+fi
+
+for DIR in $DIRS ; do
+	if [ -d "$DIR" ]; then
+		#echo "$DIR is a dir"
+		FILES=`find $DIR -type f \( -iname \*.jpg -o -iname \*.png -o -iname \*.gif \) | rl | head -n 2`
+		FILE1=`echo $FILES | awk '{ print $1 }'`
+		FILE2=`echo $FILES | awk '{ print $2 }'`
+
+        #echo -e "$FILE1\n$FILE2"
+		if [ -e "$FILE1"  -a  -e "$FILE2"  ] ; then
+			#echo "THEY EXIST"
+			echo "
+[xin_0]
+file=$FILE1
+mode=0
+bgcolor=# 0 0 0
+
+[xin_1]
+file=$FILE2
+mode=0
+bgcolor=# 0 0 0
+"           | ( tee "$HOME"/.config/nitrogen/bg-saved.cfg | egrep '(xin|file)' | perl -ne 's/]\n/]/g;print' ) && ( nitrogen --restore; exit 0 ; ) 
+            
+        fi
+
+    fi
+done
+
+
+
+
+            
+
+
+
+
+

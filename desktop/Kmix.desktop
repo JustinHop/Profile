@@ -1,0 +1,15 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.9.4
+Type=Application
+Name=Kmix
+Comment=Kmix
+Exec=maybeonsecond kmix
+StartupNotify=false
+Terminal=false
+Hidden=false
+
+Name[en_US]=Kmix
+Comment[en_US]=Kmix
+X-GNOME-Autostart-enabled=false

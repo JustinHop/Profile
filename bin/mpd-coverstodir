@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+#   This will fetch covers from .covers and put it in the media dir
+#   $Id$
+#
+
+CDIR="$HOME/.covers"
+
+for DB in $CDIR/covers.db*
+

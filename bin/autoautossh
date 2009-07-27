@@ -1,0 +1,9 @@
+#!/bin/bash
+export AUTOSSH_LOGLEVEL=0 
+export AUTOSSH_LOGFILE=/dev/null 
+
+if ps aux | grep autossh > /dev/null ; then
+	exit 0
+else
+    autossh -M0 -D 5190 -R 14014:localhost:22 -oBatchMode=yes -oExitOnForwardFailure=yes -T -N tunnel@justinhoppensteadt.com
+fi

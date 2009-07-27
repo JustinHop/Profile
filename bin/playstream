@@ -1,0 +1,72 @@
+#!/bin/bash -e
+#
+# playstream -- smart handler for m3u/pls files for mpd
+# version 2006.03.15.0005
+#
+# (c) 2006 martin f. krafft <playstream@pobox.madduck.net>
+# Released under the terms of the artistic licence.
+#
+
+### begin host configuration
+# do whatever you want here. note that my default below automatically
+# decides where to play the music based on the ARP cache. it ignores
+# existing MPD_HOST values. i am sure you know what to do if you don't
+# like that.
+#
+export MPD_HOST=${MPD_HOST:-localhost}
+
+if ip neigh | grep -q '192\.168\.14\.1 .\+ 08:00:46:b1:2d:ee REACHABLE'; then
+  MPD_HOST="XXXXXXXXX@yy.cccccc.net"
+fi
+### end host configuration
+
+declare -a lists
+unset verbose
+
+LONGOPTS=replace,append,queue,verbose
+SHORTOPTS=raqv
+ME=${0##*/}
+
+for opt in $(getopt -u -n $ME -l $LONGOPTS -o $SHORTOPTS -- $@); do
+  case $opt in
+    -r) # replace list immediately
+      mpc clear;;
+    -a) # append to list
+      :;;
+    -q) # append, but queue next
+      mpc crop;;
+    -v) # verbose
+      verbose=1;;
+    --) :;;
+    *.m3u|*.pls)
+      if [ -r $opt ]; then
+        lists=(${lists[@]} $opt)
+      else
+        echo "$ME: unreadable file -- $opt" >&2
+        exit 2
+      fi;;
+    *)
+      echo "$ME: invalid argument -- $opt" >&2
+      exit 1;;
+  esac
+done
+
+if [ -z "${lists[@]}" ]; then
+  [ -n "$verbose" ] && echo $ME: no input files. >&2
+  exit 0
+fi
+
+if [ -n "$verbose" ]; then
+  echo "I: playing on host ${MPD_HOST#*@}:"
+  for i in ${lists[@]}; do
+    echo "I:   $i"
+  done
+fi
+
+# pls files have annoying File[[:digit:]]* prefixes
+# m3u files are fine, mpc ignores commented lines
+# thus, the following takes care of all:
+sed -e 's/^File[[:digit:]]*=//' ${lists[@]} | mpc add >/dev/null
+mpc play # doesn't do anything if already playing
+
+exit 0

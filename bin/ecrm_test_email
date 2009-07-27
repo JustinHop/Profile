@@ -1,0 +1,25 @@
+#!/bin/bash
+
+USEAGE="Usage: $0 domainpart [my|music] [us|uk][number]"
+
+[ -z "$1" ] && ( echo $USEAGE; exit 1 )
+DOMPART="$1"
+
+TOP="musicreg.net"
+echo $2 | grep -P '^my' > /dev/null
+[ $? -eq 0 ] && TOP="myreg.net"
+
+MAILER="ukromlsmx01.internal.musicreg.net"
+echo $3 | grep -P '^us\d' >/dev/null
+[ $? -eq 0 ] && MAILER="usfshlxmx0`echo $3 | sed 's/us//'`.internal.myreg.net"
+
+BODY="`date`\n`hostname`\n$0\n`uname -a`\n`uptime`\nYOU STANK!!!!"
+BODY=`echo $BODY | tr '/' '!'`
+
+cat /home/hoppenj/MIMEmail \
+| sed "s/FROM/$DOMPART.$TOP/" \
+| sed "s/MESSAGE/$BODY/" \
+| /home/hoppenj/bin/recordio /usr/local/bin/qmail-remote $MAILER bounce@pobox.$DOMPART.musicreg.net test@justinhoppensteadt.com
+
+
+#| /usr/local/bin/qmail-remote usfshlxmx08.internal.myreg.net bounce-0000103837-634532582@pobox.$AD.musicreg.net test@justinhoppensteadt.com

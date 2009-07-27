@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if xdpyinfo | grep 'screen #1' > /dev/null ; then
+	DISPLAY=:0.1
+fi
+
+exec "$@"
+

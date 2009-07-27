@@ -1,0 +1,97 @@
+rxvt.font: Lucida Console-14 
+rxvt.boldFont: Lucida Console-14 
+rxvt.scrollBar: False 
+rxvt.visualBell: False 
+rxvt.loginShell: True 
+rxvt.background: Black 
+rxvt.foreground: Green 
+rxvt.saveLines: 3000 
+rxvt.cursorColor: Red 
+
+
+XTerm.VT100.font: -*-lucidatypewriter-medium-*-*-*-14-*-*-*-*-*-*-* 
+XTerm.VT100.boldFont: -*-lucidatypewriter-bold-*-*-*-14-*-*-*-*-*-*-* 
+XTerm.VT100.scrollBar: False 
+XTerm.VT100.visualBell: False 
+XTerm.VT100.loginShell: True 
+XTerm.VT100.background: Black 
+XTerm.VT100.foreground: Green
+XTerm*titeInhibit: true
+
+! use xft for drawing fonts
+urxvt.font: xft:Bitstream Vera Sans Mono-12
+urxvt.background: black
+urxvt.foreground: green
+! make a scrollbar thats nearly black
+urxvt*scrollBar:     true
+urxvt*scrollBar_floating:    true
+urxvt*scrollBar_right:   false
+urxvt*scrollColor:       #202020
+urxvt*termName:     xterm
+urxvt*urllauncher:           firefox
+! matcher.button # 3 is a right-click
+urxvt*matcher.button:        3
+urxvt*saveLines:              8192
+urxvt.perl-ext-common:         default,matcher,tabbed
+! black 
+urxvt*color0:      #222222
+urxvt*color8:      #666666
+! red
+urxvt*color1:      #9e1828
+urxvt*color9:      #cf6171
+! green
+urxvt*color2:      #aece92
+urxvt*color10:     #c5f779
+! yellow
+urxvt*color3:      #968a38
+urxvt*color11:     #fff796
+! blue
+urxvt*color4:      #71C5F4
+urxvt*color12:     #67CDE9
+! magenta
+urxvt*color5:      #963c59
+urxvt*color13:     #cf9ebe
+! cyan
+urxvt*color6:      #418179
+urxvt*color14:     #71bebe
+! white
+urxvt*color7:      #bebebe
+urxvt*color15:      #FFFFFF
+
+urxvt*cursorColor:       #d8d8d8
+
+#if 1
+*VT100*background      : black
+*VT100*boldColors      : on
+*VT100*colorMode       : on
+*VT100*colorULMode     : on
+*VT100*dynamicColors   : on
+*VT100*foreground      : gray90
+*VT100*metaSendsEscape : true
+*VT100*underline       : off
+*customization         : -color
+*ttyModes              : erase ^H
+#endif
+
+*VT100*translations   : #override \n\
+    Ctrl+   : larger-vt-font()\n\
+    Ctrl-   : smaller-vt-font()\n\
+    MetaF1       : set-vt-font(1)\n\
+    MetaF2       : set-vt-font(2)\n\
+    MetaF3       : set-vt-font(3)\n\
+    MetaF4       : set-vt-font(4)\n\
+    MetaF5       : set-vt-font(5)\n\
+    MetaF6       : set-vt-font(6)\n\
+    MetaF7       : set-vt-font(d)\n\
+    MetaF8       : set-reverse-video(toggle)\n\
+    MetaF9       : set-scrollbar(toggle)\n\
+    MetaF10      : set-autowrap(toggle)\n\
+    MetaF11      : insert-selection(CUT_BUFFER0, PRIMARY)\n\
+    MetaF12      : print()\n\
+
+Xft.antialias : true
+Xft.rgba      : rgb
+Xft.hintstyle : hintfull
+Xft.hinting   : true
+
+

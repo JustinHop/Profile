@@ -1,0 +1,130 @@
+#!/bin/sh
+# $Id$
+# @(#) SCREENIE - SCREEN(1) session handler (wrapper)
+#
+# 1996/03/28 - written by Marc O. Gloor <mgloor@fhzh.ch>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+
+#global settings
+TMPF=/tmp/.screenie.$$
+ACTIVE_SCREENS="screen \-ls | awk '/tached/ { print \$1}' | sort"
+i=0
+e=0
+
+help() {
+ ( 
+   echo
+   echo -n " Use 'a' to add jobs"
+   if [ $e = 0 ]; then
+     echo "."
+   else
+     if [ $e = 1 ]; then
+       echo " or '1' to choose the"
+     else
+       echo " or '1'-'$e' to choose a currently"
+     fi
+     echo " running (screen) session. Once you're inside the"
+     echo " (screen) session press 'CTRL-a d' to return to the"
+     echo " session selection menu."
+   fi
+ ) | fmt
+}
+
+# starting jobs from commandline
+fork_jobs() {
+ # starting screen job
+ screen -S $sname -dm $pjob
+}
+
+case "$1" in
+  -v) echo \$Revision$ | tr -d "$" && exit 0 ;;  # don't touch rcs ID
+  -j) sname=$(echo $2) ;
+      sname=$(echo $sname | tr " " "_") ;
+      pjob=$(echo $3) ;
+      pjob=$(echo $pjob) ;
+      fork_jobs ; exit 0 ;;
+esac
+
+#cleanup temp files
+if test -f /tmp/.screenie*
+  then
+    rm /tmp/.screenie* >/dev/null 2>&1   
+fi
+
+while :
+  do
+      clear
+      echo "" && echo " SCREENIE - terminal screen-session handler" 
+      echo " written by Marc O. Gloor <mgloor@fhzh.ch>" && echo ""
+    
+      eval $ACTIVE_SCREENS | (
+      
+          while read sessions
+          
+              do
+                e=`expr \( $e + 1 \)` && echo -n " $e) "
+                echo $sessions 
+              done
+        
+          echo ""
+          echo " a) add job"
+          echo " q) quit"
+
+          help e
+      )
+      
+      echo "" ; echo -n " select: "
+      read ANSW
+      
+      case $ANSW in
+        a|a) 
+          echo -n " session name: " && read sname
+          echo -n " job: " && read pjob
+          sname=$(echo $sname | tr " " "_")
+          screen -S $sname -dm $pjob ;;
+        0|Q|q) 
+          echo ""; exit ;;
+      esac  
+    
+      eval $ACTIVE_SCREENS | (
+      
+      while read pat
+        do
+          # display screen session menu no. (int)
+          i=`expr \( $i + 1 \)` && echo -n " $i) " >/dev/null 2>&1 
+          
+          # set internal session 'no sessionid' var (string)
+          sess_id=$(echo $pat|awk 'split($0, token, ".") {print token[1]}')
+          k=$(echo -n  $i" "$sess_id)
+        
+          m=$(echo $k | awk '{print $1}')
+          n=$(echo $k | awk '{print $2}')	
+        
+          case $ANSW in
+            $m) echo $n > $TMPF ; break;
+          esac
+          
+        done
+        
+      )
+
+  screen -r $(cat $TMPF 2>&1) >/dev/null 2>&1 
+	rm $TMPF >/dev/null 2>&1
+	
+done
+
+exit 0
+#eof

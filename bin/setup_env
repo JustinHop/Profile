@@ -1,0 +1,132 @@
+#!/bin/bash
+#
+#   This sets up everything for a new system to have
+#   all my fancy shit in my homedir
+#   Justin Hoppensteadt 2009
+#   $Id$
+#
+
+export LD_LIBRARY_PATH="$HOME/lib:$HOME/lib64:$LD_LIBRARY_PATH"
+
+if [ -z "$NO_MKDIR" ]; then
+    mkdir -vp ~/bin ~/usr ~/lib/cpp ~/.undo ~/backup ~/tmp ~/src ~/lib64 ~/.screenlogs
+    ln -sv ~/bin ~/usr
+    ln -sv ~/lib ~/usr
+    ln -sv ~/bin ~/sbin
+    ln -sv ~/bin ~/usr/sbin
+    ln -sv ~/lib64 ~/usr/lib64
+fi
+
+if which wget ; then
+    echo "WGet installed"
+else
+    echo "No WGet!!"
+    exit 1
+fi
+
+if [ -z "$NO_DOWNLOAD" ]; then
+    cd src
+    echo "Downloading Sources"
+    wget -nv -O .index http://www.justinhoppensteadt.com/src || exit 1
+    wget -nv -O $HOME/get_centos_rpm http://www.justinhoppensteadt.com/svn/profile/bin/get_centos_rpm || exit 1
+    chmod -v +x $HOME/get_centos_rpm
+
+    for DOWNLOAD in `cat .index | perl -ne '/>(\w+-\d\S+\.(:?gz|bz2))/ && print $1 . "\n"'` ; do
+        wget -nv -O $DOWNLOAD http://www.justinhoppensteadt.com/src/$DOWNLOAD
+        if echo $DOWNLOAD | grep bz2 >/dev/null ; then
+            tar -xjf $DOWNLOAD
+        else
+            tar -xzf $DOWNLOAD
+        fi
+    done
+    cd
+fi
+
+if [ -n "$NCURSES" ]; then
+    ./get_centos_rpm mirror install ncurses ncurses-devel screen || exit 1
+    export CFLAGS="-L$HOME/lib -L$HOME/lib64 -I$HOME/usr/include"
+    export LDFLAGS="-L$HOME/lib -L$HOME/lib64"
+    export CPPFLAGS="-I$HOME/usr/include"
+    export CC="gcc $CFLAGS "
+    ZSH_CONFIG="--enable-ldflags="$LD_FLAGS" --enable-cppflags="$CPPFLAGS""
+    VIM_CONFIG="--with-tlib=ncurses --with-local-dir=$HOME"
+fi
+
+if [ -z "$NO_COMPILE" ]; then
+    cd src
+    cd zsh*
+    echo "Configuring ZSH"
+    ./configure --prefix=$HOME --enable-pcre $ZSH_CONFIG || exit 1
+    echo "Making ZSH"
+    CPPFLAGS="$CPPFLAGS" LDFLAGS="$LDFLAGS" make || exit 1
+    echo "Installing ZSH"
+    make install || exit 1
+    cd ..
+
+    cd vim*
+    echo "Configuring VIM"
+    ./configure --prefix=$HOME --with-features=big --enable-perlinterp --disable-selinux $VIM_CONFIG || exit 1
+    echo "Making VIM"
+    make || exit 1
+    echo "Installing VIM"
+    make install || exit 1
+    cd ..
+
+    if [ -z "$NCURSES" ]; then
+        cd screen*
+        echo "Configuring SCREEN"
+        ./configure --prefix=$HOME || exit 1
+        echo "Making SCREEN"
+        make || exit 1
+        echo "Installing SCREEN"
+        make install || exit 1
+    fi
+    cd 
+fi
+
+SVN=svn
+if [ -z "$NO_SUBVERSION" ]; then
+    if which svn ; then
+        echo "Subversion Installed. "
+        SVN=`which svn`
+    else
+        wget -nv -O bin/get_centos_rpm http://www.justinhoppensteadt.com/svn/profile/bin/get_centos_rpm || exit 1
+        chmod +x $HOME/bin/get_centos_rpm || exit 1
+        $HOME/bin/get_centos_rpm mirror install apr apr-util neon subversion || exit 1
+        SVN=$HOME/bin/svn
+    fi
+fi
+
+if [ -z "$NO_CHECKOUT" ]; then
+    cd
+    $SVN checkout http://www.justinhoppensteadt.com/svn/profile || exit 1
+    for FILE in bashrc dircolors gvimrc include inputrc \
+        perltidyrc screenrc vim vimperatorrc vimrc Xresources  \
+        zlogin zlogout zshenv zshrc ; 
+    do
+        if [ -e "$HOME/.$FILE" ]; then
+            mv -v "$HOME/.$FILE" "$HOME/.$FILE-backup"
+        fi
+        ln -sfv "$HOME/profile/$FILE" "$HOME/.$FILE"
+    done
+    mv -v "$HOME/bin" "$HOME/.bin"
+    ln -sfv "$HOME/profile/bin" "$HOME"
+    mv -v $HOME/.bin/* $HOME/bin
+    if [ ! -d "$HOME/.ssh" ]; then
+        mkdir -v "$HOME/.ssh"
+        chmod -v 700 "$HOME/.ssh"
+    fi
+    cat "$HOME/profile/ssh/authorized_keys" >> "$HOME/.ssh/authorized_keys"
+    chmod -v 600 "$HOME/.ssh/authorized_keys"
+    if [ ! -e "$HOME/.ssh/id_dsa.pub" ]; then
+        cp -v "$HOME/profile/ssh/id_dsa.pub" "$HOME/.ssh"
+    fi
+    if [ ! -e "$HOME/.ssh/config" ]; then
+        ln -sfv "$HOME/profile/ssh/config" "$HOME/.ssh"
+        chmod -v 600 "$HOME/profile/ssh/config"
+    fi
+fi
+
+
+echo "ENVIRONMENT SET UP"
+exit 0

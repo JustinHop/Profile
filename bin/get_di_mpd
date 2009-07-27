@@ -1,0 +1,27 @@
+#!/bin/bash
+
+TMP_HTML="/tmp/html.txt"
+TMP_PLSNAMES="/tmp/plsnames.txt"
+TMP_PLSDIR="/tmp/pls/"
+MPC_PLSDIR="/var/lib/mpd/playlists/"
+
+wget www.di.fm -O ${TMP_HTML}
+grep -ioe "[0-9a-z/\.:]*\\.pls" ${TMP_HTML} |\
+  grep -v aacplus| \
+  sed s/^\\//http:\\/\\/di.fm\\// > ${TMP_PLSNAMES}
+
+mkdir ${TMP_PLSDIR}
+wget -i ${TMP_PLSNAMES} -P ${TMP_PLSDIR}
+
+for pls in `ls ${TMP_PLSDIR}`; do
+  out="${MPC_PLSDIR}di.fm-${pls/pls/m3u}"
+  cat ${TMP_PLSDIR}${pls}| \
+    grep File[0-9]*| \
+    sed s/^File[0-9]=// > ${out}
+  chown mpd:audio ${out}
+done
+
+rm -r ${TMP_PLSDIR}
+rm ${TMP_PLSNAMES}
+rm ${TMP_HTML}
+

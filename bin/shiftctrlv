@@ -1,0 +1,14 @@
+#!/bin/bash
+
+
+FOO='
+KeyStrPress Shift_L 
+KeyStrPress Control_L
+KeyStrPress v
+KeyStrRelease v
+KeyStrRelease Control_L
+KeyStrRelease Shift_L 
+'
+
+
+echo $FOO |xmacroplay $DISPLAY 
