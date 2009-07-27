@@ -8,3 +8,6 @@
 [submodule "lib/python-mpd"]
 	path = lib/python-mpd
 	url = http://git.thejat.be/python-mpd.git/
+[submodule "vim/vcscommand"]
+	path = vim/vcscommand
+	url = git://repo.or.cz/vcscommand
