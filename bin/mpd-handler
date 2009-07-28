@@ -1,0 +1,179 @@
+#!/bin/bash
+# mpd-handler: 0.2.0 | 14.02.2009
+# a simple music-add'er for mpd
+#
+# usage: mpd-handler -f -d -m p|n|c <filename.mp3>
+#
+# -f force overwriting file in musik_path without asking
+# -d delete old file after moving
+#
+# the default beheavour (adding at the end without playing)
+# can changed with this switch: 
+# -p play after adding to the playlist
+#
+# and a set of moving commands:
+# -m n place as next song (useless in shuffle/random mode)
+# -m c clear playlist before adding
+# -m u only add to database (dont touch playlist) dont run right now
+#
+# it supports this file types:
+# .mp3 | .flac | .ogg | .wav | .m3u | .pls
+#
+#
+#
+# WARNING there is absolute no waranty for any damage on the system
+# be aware what you are doing and check it first without the -d option
+# (cl) 2009 <johannes.doell / gmail>
+#
+# to do: link/and full path search
+#
+##
+###
+###############################################
+# specifi the mpd musik path:
+mpd_folder="/home/justin/.mymusic"
+# the single path insde the mpd path
+single_folder="/home/justin/.mymusic/singles"
+#
+##########
+
+while getopts 'fdpm:' OPTION
+do
+    case $OPTION in
+        f)  fflag=1
+            ;;
+        d)  dflag=1
+            ;;
+        p)  pflag=1
+            ;;
+        m)  case $OPTARG in
+            n)  nflag=1
+                ;;
+            c)  cflag=1
+                ;;
+            u)  uflag=1
+                ;;
+            ?)  printf "Usage: %s: [-f] [-d] [-p] [-m n|c|u] <filename.mp3|.flac|.wav|.ogg|.m3u|.pls>\n" $(basename $0) >&2
+                exit 2
+                ;;
+            esac
+            ;;
+        c)  cflag=1
+            ;;
+        ?)  printf "Usage: %s: [-f] [-d] [-p] [-m n|c|u] <filename.mp3|.flac|.wav|.ogg|.m3u|.pls>\n" $(basename $0) >&2
+            exit 2
+            ;;
+    esac
+done
+
+# keep the rest arguments 
+shift $(($OPTIND -1))
+
+# check if file argument is given
+if [ "$*" ] 
+then
+    #grep the file ending
+    ending=${1##*.}
+
+    if [ $ending = mp3 ] || [ $ending = m3u ] || [ $ending = pls ] || [ $ending = flac ] || [ $ending = wav ] || [ $ending = ogg ]
+    then
+        
+        musik_path=$single_folder
+        
+        ### tetermine the relative path inside the mpd path
+        c=${mpd_folder%/}
+        d=${c##*/}
+        rel_path="${single_folder##*$d/}"/
+
+        #delete the entire playlist if the flag is ist
+        if [ "$cflag" ]
+        then
+            mpc clear
+        fi
+
+        #handler for pls playlists
+        if [ $ending = pls ]
+        then
+            grep '^File[0-9]*' $1 | sed -e 's/^File[0-9]*=//' | mpc add
+            mpc play
+            exit 0
+        fi
+        #handler for m3u playlists
+        if [ $ending = m3u ]
+        then
+            for line in `grep -v '#' $1`; do
+                mpc add $line
+            done
+            mpc play
+            exit 0
+        fi
+       
+        #
+        #File handling # # # # # # # # # # #
+            #copy (overwrite) file to the single folder
+            if [ "$fflag" ]
+            then
+                cp -v "$1" "$musik_path"
+            else
+                cp -vi "$1" "$musik_path"
+            fi
+            
+            #delete the old file if flag is active
+            if [ "$dflag" ]
+            then
+                rm -v "$1" 
+            fi
+
+        #
+        #mpd/mpc Handling # # # # # # # # # #
+            #update the mpd database
+            mpc update 
+            # exit if uflag is set
+            if [ "$uflag" ]
+            then
+                exit 0
+            fi
+            sleep 1s
+
+            #do this if the playnext flag is set
+            if [ "$nflag" ]
+            then
+                play_nr=$(mpc play | grep '\[playing\]' | sed 's/\[playing\] #\([0-9][0-9]*\)\/.*/\1/')
+                mpc add $rel_path"${1##*/}"
+                last_nr=$(mpc playlist | grep -c "")
+                
+                mpc move $last_nr $((play_nr+1))
+                
+                # if the play flag is active
+                if [ "$pflag" ]
+                then
+                    mpc next
+                fi
+                #end of skript
+                exit 0
+
+            fi
+
+
+            #check if play flag is active 
+            if [ "$pflag" ]
+            then
+                mpc add $rel_path"${1##*/}"
+                mpc play $(mpc playlist | grep -c "")
+            else 
+                mpc add $rel_path"${1##*/}"
+                mpc play
+            fi
+
+        exit 0
+    else
+        echo "wrong file type"
+        echo "support for .mp3 .flac .wav .ogg .m3u .pls"
+        exit 2
+    fi
+else
+   printf "Usage: %s: [-f] [-d] [-p] [-m n|c|u] <filename.mp3|.flac|.wav|.ogg|.m3u|.pls>\n" $(basename $0) >&2
+    exit 2
+   
+fi
+

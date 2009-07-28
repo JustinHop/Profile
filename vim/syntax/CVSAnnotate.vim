@@ -1,1 +1,0 @@
-vcscommand/syntax/CVSAnnotate.vim

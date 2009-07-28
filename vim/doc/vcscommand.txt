@@ -1,1 +1,0 @@
-vcscommand/doc/vcscommand.txt

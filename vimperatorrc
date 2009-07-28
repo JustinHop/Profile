@@ -1,11 +1,21 @@
-"2.0 (created: 2009/03/28 23:48:07)
 map , gT
 map . gt
-map ga :open file:///usr/local/share/awesome/lib/index.html<CR>
 map <C-l> <C-z><C-l><Esc>
+map <C-Tab> gt
+map <C-h> gt
+map <Space> <C-d>
+nmap , gT
+nmap . gt
+nmap <C-l> <C-z><C-l><Esc>
+nmap <C-Tab> gt
+nmap <C-h> gt
+nmap <Space> <C-d>
 set guioptions=rbTB
-set runtimepath=/home/justin/.vimperator
-
-source! ~/.vimperatorrc.local
+vmap , gT
+vmap . gt
+vmap <C-l> <C-z><C-l><Esc>
+vmap <C-Tab> gt
+vmap <C-h> gt
+vmap <Space> <C-d>
 
 " vim: set ft=vimperator:

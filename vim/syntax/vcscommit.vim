@@ -1,1 +1,0 @@
-vcscommand/syntax/vcscommit.vim

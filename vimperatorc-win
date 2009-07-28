@@ -1,0 +1,28 @@
+"2.1 (created: 2009/05/21 13:13:06)
+
+map , gT
+map . gt
+map ga :open file:///usr/local/share/awesome/lib/index.html<CR>
+map <C-l> <C-z><C-l><Esc>
+map <C-Tab> gt
+map <C-h> gt
+map <Space> <C-d>
+nmap , gT
+nmap . gt
+nmap ga :open file:///usr/local/share/awesome/lib/index.html<CR>
+nmap <C-l> <C-z><C-l><Esc>
+nmap <C-Tab> gt
+nmap <C-h> gt
+nmap <Space> <C-d>
+set guioptions=rbTB
+set runtimepath=\\home\\justin\\.vimperator
+vmap , gT
+vmap . gt
+vmap ga :open file:///usr/local/share/awesome/lib/index.html<CR>
+vmap <C-l> <C-z><C-l><Esc>
+vmap <C-Tab> gt
+vmap <C-h> gt
+vmap <Space> <C-d>
+source! C:\\windows\\profiles\\justin\\_vimperatorrc.local
+
+" vim: set ft=vimperator:
