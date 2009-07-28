@@ -536,10 +536,13 @@ if [[ $ZSH_VERSION = 4.* ]]; then
     ### Mine
     for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts ; do
         if [[ -f $hostfile ]]; then
-    	    etchosts=( $(sed 's/#.*$//' < /etc/hosts) )
+    	    etchosts=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < /etc/hosts) )
     	    zstyle ':completion:*' hosts $etchosts;
         fi
     done
+    compdef _hosts getip
+    compdef _modprobe remod
+    compdef _mozilla firefox-3.5
 fi
 
 #
