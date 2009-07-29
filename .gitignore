@@ -5,6 +5,9 @@
 *.a
 *.so
 .*.swp
-vim/.VimballRecord
+*VimballRecord
+*netrwhist
+*.orig
+*BACKUP*
+*LOCAL*
 vim/.netrwhist
-*.netrwhist
