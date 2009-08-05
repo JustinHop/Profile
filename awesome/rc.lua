@@ -251,10 +251,7 @@ for s = 1, screen.count() do
                                           end, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = wibox({    position = "top", 
-                            fg = beautiful.fg_normal, 
-                            bg = beautiful.bg_normal,
-                        })
+    mywibox[s] = wibox({ position = "top", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = { lspace,
                            mylauncher,
@@ -466,7 +463,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    --awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
+    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey }, "t", awful.client.togglemarked),
     awful.key({ modkey,}, "m",
@@ -752,6 +749,7 @@ awful.hooks.timer.register(.2, function ()
     --mytextbox.text = os.date(" %a %b %d, %H:%M ")
     --mytextbox.text = "<small>&lt;</small>" ..  os.date("%a %b %d, %r") .. "<small>&gt;</small>"
     mytextbox.text = [[<span bgcolor="]] .. light_green .. [["><small><b>]] .. os.date("%a %b %d, %r") .. [[</b></small></span>]]
+    mousemarker()
 end)
 
 function foo () 

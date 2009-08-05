@@ -1,9 +1,9 @@
 #!/usr/bin/perl 
 #===============================================================================
 #
-#         FILE:  webcheck.pl
+#         FILE:  www-check.pl
 #
-#        USAGE:  ./webcheck.pl
+#        USAGE:  cat bunchofsites | ./www-check.pl host (hosts)
 #
 #  DESCRIPTION:
 #
@@ -44,7 +44,10 @@ while (<STDIN>) {
         ) || ( print "bad\n" &&  next );
         $s->write_request( GET => "/", 'User-Agent' => "Mozilla/5.0" );
         my ( $code, $mess, %headers ) = $s->read_response_headers();
-        print $code . " \"" . $mess . " \"\n";
+        print $code . " \"" . $mess . " \"  ";
+        if ( ( $code =~ /^3\d\d/ ) && ( exists $headers{"Location"} ) ) {
+            print " = " . $headers{"Location"} . "\n";
+        }
     }
 }
 

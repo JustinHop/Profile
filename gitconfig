@@ -1,0 +1,16 @@
+[color]
+	ui = auto
+	branch = auto
+	status = auto
+	diff = true
+[user]
+	name = Justin Hoppensteadt
+	email = git@justinhoppensteadt.com
+[branch]
+	autosetupmerge = true
+[core]
+	autocrlf = false
+[push]
+	default = current
+[merge]
+	tool = vimdiff
