@@ -1,0 +1,2 @@
+#!/bin/bash
+wine ~/.wine/drive_c/program_files/mozilla_firefox/firefox.exe
