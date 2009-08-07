@@ -1,0 +1,6 @@
+# added vim-git support
+git remote add -f vim-git git://github.com/amjith/git-vim.git
+git merge -s ours --no-commit vim-git/master
+git read-tree --prefix=vim -u vim-git/master
+git commit
+git pull -s subtree vim-git master
