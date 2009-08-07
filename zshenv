@@ -94,7 +94,7 @@ if [[ -z "$DONT_TOUCH_LD" ]]; then
     fi
 fi
 
-fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" "$HOME/profile/zsh" )
+fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" "$HOME/Profile/zsh" )
 
 for MMAN in "/usr/local/{openldap,svn,netperf,mysql,snort}/man" ; do
 if [[ -d $MMAN ]]; then
