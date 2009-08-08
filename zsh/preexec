@@ -1,0 +1,10 @@
+    if [[  = 3.* ]]; then
+
+        local cmd; cmd=()
+
+    else
+
+        title "<justin@tux-ninja:Linux>" [1]:t "[2,-1]"
+
+    fi
+

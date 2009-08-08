@@ -1,0 +1,12 @@
+   for i in ; do
+
+      rmmod 
+
+   done
+
+   for i in ; do
+
+      modprobe 
+
+   done
+

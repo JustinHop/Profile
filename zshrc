@@ -1,9 +1,7 @@
-#  $Id$
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
-#  http://justinhoppensteadt.com/svn/profile/zshrc
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.0.4"
+export ZSHRC_VERSION="2.0.5"
 
 #
 # WORKSPACE AND ENVIRONMENT

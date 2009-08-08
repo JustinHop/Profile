@@ -1,0 +1,18 @@
+    for i in  ; do
+
+       NEWNAME=""
+
+       while echo  | grep -q '\[' ; do
+
+          if echo  | cut -d'[' -f2-100 | grep -q '\]' ; then
+
+             NEWNAME=
+
+          fi
+
+       done
+
+       echo 
+
+    done
+

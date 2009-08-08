@@ -1,0 +1,9 @@
+if [[ -n $FN_CHARS[1] ]]; then
+    bindkey ${FN_CHARS[1]}  overwrite-mode       # insert
+    bindkey ${FN_CHARS[2]}  vi-beginning-of-line # home
+    bindkey ${FN_CHARS[3]}  vi-backward-word     # pg up
+    bindkey ${FN_CHARS[4]}  vi-delete-char       # delete
+    bindkey ${FN_CHARS[5]}  vi-end-of-line       # end
+    bindkey ${FN_CHARS[6]}  vi-forward-word      # pg dn
+fi
+#vim: ft=zsh:syn=zsh

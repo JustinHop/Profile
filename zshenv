@@ -3,12 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshenv
 #  Both kinds of free
 
-export __ZSHENV__=0.2.3
-
-if [ -z "$__INCLUDE__" ]; then
-    [ -e ~/.include ] && source ~/.include
-fi
-unset __INCLUDE__
+export __ZSHENV__=0.2.4
 
 export HOSTNAME=`hostname`
 export UNAME=`uname`

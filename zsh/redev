@@ -1,0 +1,14 @@
+    CC=
+
+    CXX=
+
+    CFLAGS=
+
+    CXXFLAGS=
+
+    LDFLAGS=
+
+    CPPFLAGS=
+
+    export CC CXX CFLAGS CXXFLAGS LDFLAGS CPPFLAGS
+

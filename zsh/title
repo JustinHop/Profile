@@ -1,0 +1,22 @@
+print -nR k\
+    if [[  = 4.* ]]; then
+
+        if [[ -n  ]]; then
+
+            # Use these two for GNU Screen:
+
+            print -nR $'\033k'$'\033'\
+
+
+            print -nR $'\033]0;'$'\a'
+
+        elif [[ xterm == *xterm* || xterm == *rxvt* || -n :0 ||  == *xterm* ||  == *rxvt* ]]; then
+
+            # Use this one instead for XTerms:
+
+            print -nR $'\033]0;'$'\a'
+
+        fi
+
+    fi
+

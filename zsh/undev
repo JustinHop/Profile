@@ -1,0 +1,26 @@
+    OLDCC=
+
+    CC=
+
+    OLDCXX=
+
+    CXX=
+
+    OLDCFLAGS=
+
+    CFLAGS=
+
+    OLDCXXFLAGS=
+
+    CXXFLAGS=
+
+    OLDLDFLAGS=
+
+    LDFLAGS=
+
+    OLDCPPFLAGS=
+
+    CPPFLAGS=
+
+    export CC CXX CFLAGS CXXFLAGS LDFLAGS CPPFLAGS
+
