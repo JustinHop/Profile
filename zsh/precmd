@@ -1,2 +1,3 @@
-    title "<justin@tux-ninja:Linux>" "J@tux-ninja" "/home/justin/git/Profile"
+[[ -o interactive ]] &&  title "<$ORI_XTITLE>" "${SHORTUSER:-$USER}@${SHORTHOST:-$SHORTHOST}" "$PWD"
 
+#vim: ft=zsh
