@@ -571,6 +571,7 @@ if [[ $ZSH_VERSION = 4.* ]]; then
    colors
 fi
 
+autoload -U justinprompt
 justinprompt
    
 #
