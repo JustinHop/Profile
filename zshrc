@@ -571,8 +571,8 @@ if [[ $ZSH_VERSION = 4.* ]]; then
    colors
 fi
 
-autoload -U justinprompt
-justinprompt
+autoload -U prompt_justin_setup
+prompt_justin_setup
    
 #
 #  postexec
