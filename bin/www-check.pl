@@ -22,34 +22,42 @@ use strict;
 use warnings;
 
 use Net::HTTP;
+use Mojo::URL;
 
 help() unless ( $#ARGV > 0 );
 
 my $debug = 1;
 
 while (<STDIN>) {
-    my $url = $_;
-    if ( $_ =~ /^\s*(\S+)\s*$/) {
-        $url = $1;
-        print "Testing : $1\n";
-    } else {
+    for (split(" ")){
+        check($_);
+        print "\n";
+    }
+}
+
+
+sub check {
+	my	( $url )	= Mojo::URL->new("http://$_") || return;
+    if ( $url->host ){
+        print "Testing : " . $_ . "\n";
+    }else{
         print "Bad : $_\n" if $debug;
-        next;
     }
     for my $hostaddr (@ARGV) {
-        print "\thost : $hostaddr = ";
+        print "\t$hostaddr = ";
         my $s = Net::HTTP->new(
             PeerAddr => $hostaddr,
-            Host     => $url
+            Host     => $url->host,
         ) || ( print "bad\n" &&  next );
-        $s->write_request( GET => "/", 'User-Agent' => "Mozilla/5.0" );
+        $s->write_request( GET => $url->path, 'User-Agent' => "Mozilla/5.0" );
         my ( $code, $mess, %headers ) = $s->read_response_headers();
         print $code . " \"" . $mess . " \"  ";
         if ( ( $code =~ /^3\d\d/ ) && ( exists $headers{"Location"} ) ) {
             print " = " . $headers{"Location"} . "\n";
         }
     }
-}
+	return ;
+}	# ----------  end of subroutine check  ----------
 
 sub help {
     print "$0: [host] ..[ (host.. host)] < file_containing_hostnames\n";
