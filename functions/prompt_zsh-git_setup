@@ -111,39 +111,41 @@ prompt_zsh-git_setup() {
 
 	p_line="$pc[line]%y$pc[reset]"
 
-	PROMPT=
+	PROMPT=\$(prompt_zsh-git_setinfo)
 	RPROMPT=
-	if [ $verbose ]; then
-		PROMPT+="$pc[host]%m$pc[reset] "
+
+	prompt_gentoo_prompt=${1:-'blue'}
+	prompt_gentoo_user=${2:-'green'}
+	prompt_gentoo_root=${3:-'red'}
+
+	if [ "$USER" = 'root' ]
+	then
+		base_prompt="%B%F{$prompt_gentoo_root}%m "
+	else
+		base_prompt="%B%F{$prompt_gentoo_user}%n@%m "
 	fi
-	PROMPT+="$pc[path]%(2~.%~.%/)$pc[reset]"
-	PROMPT+="\$(prompt_wunjo_scm_status)"
-	PROMPT+="%(?.. $pc[rc]exited %1v$pc[reset])"
-	PROMPT+="
-"
-	RPROMPT+="$pc[shortpath]%1~$pc[reset]"
-	RPROMPT+="\$(prompt_wunjo_scm_branch)"
+	post_prompt="%b%f"
 
- prompt_gentoo_prompt=${1:-'blue'}
-  prompt_gentoo_user=${2:-'green'}
-  prompt_gentoo_root=${3:-'red'}
+	#setopt noxtrace localoptions
 
-  if [ "$USER" = 'root' ]
-  then
-    base_prompt="%B%F{$prompt_gentoo_root}%m "
-  else
-    base_prompt="%B%F{$prompt_gentoo_user}%n@%m "
-  fi
-  post_prompt="%b%f"
-
-  #setopt noxtrace localoptions
-
-  path_prompt="%B%F{$prompt_gentoo_prompt}%1~"
+	path_prompt="%B%F{$prompt_gentoo_prompt}%1~"
 
 
 	PROMPT+="$base_prompt$path_prompt %# $post_prompt"
 	export PROMPT
 	precmd_functions+='prompt_wunjo_precmd'
+}
+
+prompt_zsh-git_setinfo() {
+	if zgit_isgit; then
+		prompt_info=
+		prompt_info+="$(prompt_wunjo_scm_status)"
+		#prompt_info+="%(?.. $pc[rc]exited %1v$pc[reset])"
+		prompt_info+="
+"
+		#Rprompt_info+="\$(prompt_wunjo_scm_branch)"
+		echo $prompt_info
+	fi
 }
 
 prompt_wunjo_precmd() {
