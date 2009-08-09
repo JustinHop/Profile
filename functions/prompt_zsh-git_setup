@@ -111,7 +111,8 @@ prompt_zsh-git_setup() {
 
 	p_line="$pc[line]%y$pc[reset]"
 
-	PROMPT=\$(prompt_zsh-git_setinfo)
+	PROMPT="\$(prompt_zsh-git_setinfo)
+"
 	RPROMPT=
 
 	prompt_gentoo_prompt=${1:-'blue'}
@@ -141,8 +142,6 @@ prompt_zsh-git_setinfo() {
 		prompt_info=
 		prompt_info+="$(prompt_wunjo_scm_status)"
 		#prompt_info+="%(?.. $pc[rc]exited %1v$pc[reset])"
-		prompt_info+="
-"
 		#Rprompt_info+="\$(prompt_wunjo_scm_branch)"
 		echo $prompt_info
 	fi
