@@ -111,8 +111,7 @@ prompt_zsh-git_setup() {
 
 	p_line="$pc[line]%y$pc[reset]"
 
-	PROMPT="\$(prompt_zsh-git_setinfo)
-"
+	PROMPT="\$(prompt_zsh-git_setinfo)"
 	RPROMPT=
 
 	prompt_gentoo_prompt=${1:-'blue'}
@@ -143,7 +142,8 @@ prompt_zsh-git_setinfo() {
 		prompt_info+="$(prompt_wunjo_scm_status)"
 		#prompt_info+="%(?.. $pc[rc]exited %1v$pc[reset])"
 		#Rprompt_info+="\$(prompt_wunjo_scm_branch)"
-		echo $prompt_info
+		echo -e $prompt_info
+    echo -en "\r\n" 
 	fi
 }
 
@@ -194,10 +194,10 @@ prompt_wunjo_scm_status() {
 
 		if [ -f $zgit_info[dotest]/message ]; then
 			mess=$(head -n1 $zgit_info[dotest]/message)
-			commits+="on $mess"
+			commits+="$mess"
 		fi
 	elif [ -n "$gitcommit" ]; then
-		commits+="on $pc[scm_branch]$head$pc[punc]($pc[scm_commitid]$gitcommit$pc[punc])$pc[reset]"
+		commits+="$pc[scm_branch]$head$pc[punc]($pc[scm_commitid]$gitcommit$pc[punc])$pc[reset]"
 		local track_merge=$(zgit_tracking_merge)
 		if [ -n "$track_merge" ]; then
 			if git rev-parse --verify -q $track_merge >/dev/null; then
@@ -259,7 +259,7 @@ prompt_wunjo_scm_status() {
 	fi
 
 	if [ $#commits -gt 0 ]; then
-		echo -n " ${(j: :)commits}"
+		echo -n "${(j: :)commits} "
 	fi
 }
 
