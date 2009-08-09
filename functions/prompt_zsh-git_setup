@@ -3,10 +3,10 @@
 autoload -U zgitinit
 zgitinit
 
-prompt_wunjo_help () {
+prompt_zsh-git_help () {
   cat <<'EOF'
 
-  prompt wunjo
+  prompt zsh-git
 
 EOF
 }
@@ -36,7 +36,7 @@ colorword() {
 	echo "%{"$'\e['${(j:;:)s}m"%}"
 }
 
-prompt_wunjo_setup() {
+prompt_zsh-git_setup() {
 	local verbose
 	if [[ $TERM == screen* ]] && [ -n "$STY" ]; then
 		verbose=
@@ -125,14 +125,7 @@ prompt_wunjo_setup() {
 	PROMPT+="\$(prompt_wunjo_scm_branch)"
 	PROMPT+=" $pc[#]%#$pc[reset] "
 
-	RPROMPT=
-	if [ $verbose ]; then
-		RPROMPT+="$p_date "
-	fi
-	RPROMPT+="$pc[user]%n$pc[reset]"
-	RPROMPT+=" $p_line"
-
-	export PROMPT RPROMPT
+	export PROMPT
 	precmd_functions+='prompt_wunjo_precmd'
 }
 
@@ -285,6 +278,6 @@ prompt_wunjo_scm_branch() {
 	echo $pc[reset]
 }
 
-prompt_wunjo_setup "$@"
+prompt_zsh-git_setup "$@"
 
 # vim:set ft=zsh:
