@@ -107,12 +107,12 @@ prompt_zsh-git_setup() {
 
 	local p_date p_line p_rc
 
-	p_date="$pc[date]%D{%Y-%m-%d} $pc[time]%D{%T}$pc[reset]"
+	p_date="$pc[time]%D{%T}$pc[reset]"
 
 	p_line="$pc[line]%y$pc[reset]"
 
 	PROMPT="\$(prompt_zsh-git_setinfo)"
-	RPROMPT=
+	RPROMPT=$p_date
 
 	prompt_gentoo_prompt=${1:-'blue'}
 	prompt_gentoo_user=${2:-'green'}
@@ -140,6 +140,7 @@ prompt_zsh-git_setinfo() {
 	if zgit_isgit; then
 		prompt_info=
 		prompt_info+="$(prompt_wunjo_scm_status)"
+		prompt_info+=" $(prompt_wunjo_scm_branch)"
 		#prompt_info+="%(?.. $pc[rc]exited %1v$pc[reset])"
 		#Rprompt_info+="\$(prompt_wunjo_scm_branch)"
 		echo -e $prompt_info
@@ -268,31 +269,29 @@ prompt_wunjo_scm_branch() {
 	local -A pc
 	pc=(${(kv)wunjo_prompt_colors})
 
-	echo -n "$pc[punc]:$pc[scm_branch]$(zgit_head)"
-
 	if zgit_inworktree; then
 		if ! zgit_isindexclean; then
-			echo -n "$pc[scm_status_staged]+"
+			echo -n "$pc[scm_status_staged][uncommited]"
 		fi
 
 		local -a dirty
 		if ! zgit_isworktreeclean; then
-			dirty+='!'
+			dirty+='[not added]'
 		fi
 
 		if zgit_hasunmerged; then
-			dirty+='*'
+			dirty+='[unmerged]'
 		fi
 
 		if zgit_hasuntracked; then
-			dirty+='?'
+			dirty+='[untracked]'
 		fi
 
 		if [ $#dirty -gt 0 ]; then
 			echo -n "$pc[scm_status_dirty]${(j::)dirty}"
 		fi
 	fi
-
+	
 	echo $pc[reset]
 }
 
