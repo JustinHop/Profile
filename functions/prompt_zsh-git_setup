@@ -144,7 +144,7 @@ prompt_zsh-git_setinfo() {
 		#prompt_info+="%(?.. $pc[rc]exited %1v$pc[reset])"
 		#Rprompt_info+="\$(prompt_wunjo_scm_branch)"
 		echo -e $prompt_info
-    echo -en "\r\n" 
+    echo -en "\0" 
 	fi
 }
 
