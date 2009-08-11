@@ -276,7 +276,7 @@ prompt_wunjo_scm_branch() {
 
 		local -a dirty
 		if ! zgit_isworktreeclean; then
-			dirty+='[not added]'
+			dirty+='%B[not added]%b'
 		fi
 
 		if zgit_hasunmerged; then
