@@ -184,6 +184,7 @@ mysystray = widget({ type = "systray", align = "right" })
 
 -- Create a wibox for each screen and add it
 mywibox = {}
+mywibox2 = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -255,6 +256,9 @@ for s = 1, screen.count() do
 
     -- Create the wibox
     mywibox[s] = wibox({ position = "top", fg = beautiful.fg_normal, bg = beautiful.bg_normal })
+    if ( s == 1 ) then
+        mywibox2[s] = wibox({ position = "bottom", fg = "black" or beautiful.bg_normal, bg = beautiful.fg_normal })
+    end
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = { lspace,
                            mylauncher,
@@ -271,15 +275,25 @@ for s = 1, screen.count() do
                            rspace,
                            myimgbox,
                            myimgbox.image and rspace or nil,
-                           bw == 1 and volwidget or nil,
-                           bw == 1 and rspace or nil, 
                            mytextbox,
                            rspace,
-                           mylayoutbox[s],
-                           s == 1 and rspace or nil,
                            s == 1 and mysystray or nil ,
+                           s == 1 and rspace or nil,
+                           mylayoutbox[s],
                            rspace }
+    if ( s == 1 ) then
+     mywibox2[s].widgets = { lspace,
+                           obvious.volume_alsa() or nil,
+                           lspace or nil, 
+                           rspace or nil,
+                           obvious.battery() or nil ,
+                           rspace }
+   end
+
     mywibox[s].screen = s
+    if ( s == 1 ) then
+    mywibox2[s].screen = s
+    end
 end
 -- }}}
 
