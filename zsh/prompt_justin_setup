@@ -1,7 +1,4 @@
 
-autoload -U prompt_wunjo_setup
-prompt_wunjo_setup
-
 [ -z $BKT[1] ] && BKT=( '[' ']' '{' '}' '<' '>' )
 [ -z $SSH_CLIENT ] && HOSCOL="red" || HOSCOL="green"
 
@@ -75,7 +72,7 @@ case "$1" in
     (*)
     PPWD="%{${fg_no_bold[violet]}%}:$D%~"
     PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%M$D"
-    PS="$PLVL$PJOB${BKT[3]}$CP$PTT\${DISPLAY:s/$HOST/-/}$PUID$PHOS$PPWD${BKT[4]}\$CHROOT\$(prompt_wunjo_scm_branch)$PMAR\${BACKUP}"
+    PS="$PLVL$PJOB${BKT[3]}$CP$PTT\${DISPLAY:s/$HOST/-/}$PUID$PHOS$PPWD${BKT[4]}\$CHROOT\$(prompt_zsh-git_scm_branch)$PMAR\${BACKUP}"
     ;;
 esac
 PS1="%{${bg_no_bold[black]}%}${PS}%{${bg_no_bold[default]}%} "
