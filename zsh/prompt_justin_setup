@@ -1,3 +1,7 @@
+
+autoload -U prompt_wunjo_setup
+prompt_wunjo_setup
+
 [ -z $BKT[1] ] && BKT=( '[' ']' '{' '}' '<' '>' )
 [ -z $SSH_CLIENT ] && HOSCOL="red" || HOSCOL="green"
 
@@ -59,9 +63,21 @@ else
     fi
     local PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%m$D"
 
-    PS="$PLVL$PJOB${BKT[3]}$CP$PTT\${DISPLAY:s/$HOST/-/}$PUID$PHOS$PPWD${BKT[4]}\$CHROOT\${BACKUP} $PMAR"
-    PS1="%{${bg_no_bold[black]}%}${PS}%{${bg_no_bold[default]}%} "
-    RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
 fi   
 
-#vim: ft=zsh:syn=zsh
+case "$1" in
+    ("short")
+    PS="${BKT[3]}$PUID$PHOS$PPWD${BKT[4]}\${BACKUP} $PMAR"
+    ;;
+    ("nogit")
+    PS="$PLVL$PJOB${BKT[3]}$CP$PTT\${DISPLAY:s/$HOST/-/}$PUID$PHOS$PPWD${BKT[4]}\$CHROOT\${BACKUP} $PMAR"
+    ;;
+    (*)
+    PPWD="%{${fg_no_bold[violet]}%}:$D%~"
+    PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%M$D"
+    PS="$PLVL$PJOB${BKT[3]}$CP$PTT\${DISPLAY:s/$HOST/-/}$PUID$PHOS$PPWD${BKT[4]}\$CHROOT\$(prompt_wunjo_scm_branch)$PMAR\${BACKUP}"
+    ;;
+esac
+PS1="%{${bg_no_bold[black]}%}${PS}%{${bg_no_bold[default]}%} "
+RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
+# vim:set ft=zsh:

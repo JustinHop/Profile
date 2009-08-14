@@ -1,22 +1,12 @@
-print -nR k\
-    if [[  = 4.* ]]; then
+if [[ $ZSH_VERSION = 4.* ]]; then
+    if [[ -n $STY$RUNNING_SCREEN$SCREEN_SCREEN ]]; then
+        # Use these two for GNU Screen:
+        print -nR $'\033k'${2/$SCREEN_HOST/}$'\033'\\\
 
-        if [[ -n  ]]; then
-
-            # Use these two for GNU Screen:
-
-            print -nR $'\033k'$'\033'\
-
-
-            print -nR $'\033]0;'$'\a'
-
-        elif [[ xterm == *xterm* || xterm == *rxvt* || -n :0 ||  == *xterm* ||  == *rxvt* ]]; then
-
-            # Use this one instead for XTerms:
-
-            print -nR $'\033]0;'$'\a'
-
-        fi
-
+        print -nR $'\033]0;'${*:s/<>//}$'\a'
+    elif [[ $TERM == *xterm* || $TERM == *rxvt* || -n $DISPLAY || $BASETERM == *xterm* || $BASETERM == *rxvt* ]]; then
+        # Use this one instead for XTerms:
+        print -nR $'\033]0;'$*$'\a'
     fi
-
+fi
+#vim: ft=zsh:syn=zsh

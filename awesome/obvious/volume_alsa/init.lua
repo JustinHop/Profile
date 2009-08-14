@@ -26,7 +26,7 @@ local channel = "Master"
 widget = capi.widget({
     type  = "textbox",
     name  = "tb_volume",
-    align = "right"
+    align = "left"
 })
 
 function get_data()

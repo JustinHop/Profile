@@ -1,10 +1,8 @@
-    if [[  = 3.* ]]; then
 
-        local cmd; cmd=()
-
+    if [[ $ZSH_VERSION = 3.* ]]; then
+        #local cmd; cmd=(${1})
     else
-
-        title "<justin@tux-ninja:Linux>" [1]:t "[2,-1]"
-
+        local -a cmd; cmd=(${(z)1})
+        title "<$ORI_XTITLE>" $cmd[1]:t "$cmd[2,-1]"
     fi
-
+#vim: ft=zsh

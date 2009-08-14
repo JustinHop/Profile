@@ -1,2 +1,2 @@
 #!/bin/sh
-klipper | egrep -v '(|QClipboard: Cannot transfer data, no data available)'
+exec klipper | egrep -v '(|QClipboard: Cannot transfer data, no data available)' &

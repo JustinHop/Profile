@@ -407,6 +407,11 @@ sub generate_new {
     my ( $o_c, $o_y, $o_m, $o_d, $o_count ) = ( $o_serial =~
 	/^(19|20|21)?(\d\d)(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])(\d\d?)$/ );
 
+    if ( $o_serial == 1 ) {
+        $o_c = $o_y = $o_m = $o_d = $o_count = 1;
+        $o_count = 01;
+    }
+
     unless ( defined $o_y && defined $o_m && defined $o_d
       && defined $o_count ) {
 	warn "$ARGV: serial $o_serial does not match heuristics, leaving as is";

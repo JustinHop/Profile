@@ -136,6 +136,7 @@ export PATH
 #
 # TERMINAL SETTINGS AND KEYBINDINGS
 #
+autoload -U bindit
 case $TERM in
     # FN_CHARS=( INSERT HOME PGUP DELETE END PGDN )
     (*xterm*||dtterm||Eterm||*rxvt*)
@@ -158,12 +159,6 @@ case $TERM in
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
                     '^[[3~' '^[[4~' '^[[6~' )
         VIM_LINUX_TERM=" -c ':set t_Co=16' "
-#        if `whence termck` ; then
-#            if `termck screen.linux` ; then
-#                STM=screen.linux
-#            fi
-#        fi
-        whence bindit >/dev/null && bindit
     ;;
     (*screen*)
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
@@ -174,12 +169,10 @@ case $TERM in
         if [[ -z $STY ]]; then
             STY=a
         fi
-        whence bindit >/dev/null && bindit
     ;;
     (*vt*)
         FN_CHARS=( '^[[2~' '^[OH' '^[[5~'
                     '^[[4~' '^[OF' '^[[6~'  )
-        whence bindit >/dev/null && bindit
     ;;
     (*ansi*)
         if [[ -f /etc/termcap ]]; then
@@ -191,9 +184,9 @@ case $TERM in
     (*)
         FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
                     '^[[3~' '^[[4~' '^[[6~' )
-        whence bindit >/dev/null && bindit
     ;;
 esac
+bindit
 
 # reguardless - they CANT mean anything else
 bindkey '^[OH' vi-beginning-of-line             # home
@@ -566,8 +559,14 @@ if [[ $ZSH_VERSION = 4.* ]]; then
    colors
 fi
 
-autoload -U prompt_justin_setup
-prompt_justin_setup
+if [[ -o interactive ]]; then
+    autoload -U prompt_justin_setup
+    prompt_justin_setup
+
+    autoload -U title
+    autoload -U precmd
+    autoload -U preexec
+fi
    
 #
 #  postexec
