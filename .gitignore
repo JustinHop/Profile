@@ -1,0 +1,12 @@
+*.swp
+*.todo
+*.o
+*.o.d
+*.a
+*.so
+.*.swp
+
+*BACKUP*
+*.orig
+*.netrwhist
+*.netrwhist~

@@ -6,5 +6,5 @@ setopt promptsubst
 autoload -U promptinit
 promptinit
 
-# Use the wunjo prompt theme
-prompt wunjo
+# Use the git-zsh prompt theme
+prompt zsh-git
