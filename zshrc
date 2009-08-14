@@ -274,11 +274,6 @@ alias -g ".........."="../../../../../../../../.."
 alias sync-d2t="cd ; rsync -avb justin@dallas.525sports.com:/var/www/pictures . ; cd - "
 alias sync-t2d="cd ; rsync -avb pictures justin@dallas.525sports.com:/var/www ; cd - "
 
-#   bad ssh options
-BAD_SSH="$HOME/.ssh/bad_ssh_config"
-[[ -f "$PROFILE_DIR/bad_ssh_config" ]] && BAD_SSH="$PROFILE_DIR/bad_ssh_config" 
-alias ssh-bad="ssh -F $BAD_SSH "
-
 # fix ssh stuff
 if [[ -f $HOME/.ssh/*id ]]; then
     chmod 0600 $HOME/.ssh/{authorized_keys,*id}
