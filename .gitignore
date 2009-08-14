@@ -6,5 +6,7 @@
 *.so
 .*.swp
 
+*BACKUP*
+*.orig
 *.netrwhist
 *.netrwhist~

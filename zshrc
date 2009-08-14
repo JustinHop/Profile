@@ -264,8 +264,8 @@ alias -g "........."="../../../../../../../.."
 alias -g ".........."="../../../../../../../../.."
 
 # syncs
-alias sync-d2t="cd ; rsync -avb justin@dallas.525sports.com:/var/www/pictures . ; cd - "
-alias sync-t2d="cd ; rsync -avb pictures justin@dallas.525sports.com:/var/www ; cd - "
+alias sync-d2t='cd ; rsync -avb justin@dallas.525sports.com:/var/www/pictures . ; cd - '
+alias sync-t2d='cd ; rsync -avb pictures justin@dallas.525sports.com:/var/www ; cd - '
 
 # fix ssh stuff
 if [[ -f $HOME/.ssh/*id ]]; then
@@ -560,8 +560,10 @@ if [[ $ZSH_VERSION = 4.* ]]; then
 fi
 
 if [[ -o interactive ]]; then
-    autoload -U prompt_justin_setup
-    prompt_justin_setup
+    autoload -U promptinit
+    promptinit
+
+    prompt justin
 
     autoload -U title
     autoload -U precmd
