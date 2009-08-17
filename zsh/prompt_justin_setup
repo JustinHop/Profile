@@ -1,64 +1,243 @@
 
-[ -z $BKT[1] ] && BKT=( '[' ']' '{' '}' '<' '>' )
-[ -z $SSH_CLIENT ] && HOSCOL="red" || HOSCOL="green"
+autoload -U zgitinit
+zgitinit
 
-if [[ $ZSH_VERSION = 3.* ]]; then
-    local D="${default}"
-    local R="${red}"
-    local G="${green}"
-    local B="${blue}"
-    #local TYCOLOR=`eval echo $"${TYCOLOR}"`
-else 
-    local BL="%{${bg_no_bold[black]}}"
-    local xDB="%{${bg_no_bold[default]}}"
-    local D="%{${fg_no_bold[default]}%}"
-    local R="%{${fg_no_bold[red]}%}"
-    local G="%{${fg_no_bold[green]}%}"
-    local B="%{${fg_bold[blue]}%}"
-    local W="%{${fg_no_bold[white]}%}"
-fi
+coloratom() {
+	local off=$1 atom=$2
+	if [[ $atom[1] == [[:upper:]] ]]; then
+		off=$(( $off + 60 ))
+	fi
+	echo $(( $off + $colorcode[${(L)atom}] ))
+}
+colorword() {
+	local fg=$1 bg=$2 att=$3
+	local -a s
 
-if echo $SUDO_COMMAND | grep chroot > /dev/null ; then
-    CHROOT="<CHROOT>"
-fi
+	if [ -n "$fg" ]; then
+		s+=$(coloratom 30 $fg)
+	fi
+	if [ -n "$bg" ]; then
+		s+=$(coloratom 40 $bg)
+	fi
+	if [ -n "$att" ]; then
+		s+=$attcode[$att]
+	fi
 
-if [[ -n $STY && -n $WINDOW ]]; then
-    if [[ -n $LIN_SCREEN ]]; then
-        J="${LIN_SCREEN}:${WINDOW}"
+	echo "%{"$'\e['${(j:;:)s}m"%}"
+}
+
+prompt_wunjo_precmd() {
+	local ex=$?
+	psvar=()
+
+	if [[ $ex -ge 128 ]]; then
+		sig=$signals[$ex-127]
+		psvar[1]="sig${(L)sig}"
+	else
+		psvar[1]="$ex"
+	fi
+}
+
+prompt_wunjo_scm_status() {
+	zgit_isgit || return
+	local -A pc
+	pc=(${(kv)wunjo_prompt_colors})
+
+	head=$(zgit_head)
+	gitcommit=$(git describe --always $head 2>/dev/null)
+
+	local -a commits
+
+	if zgit_rebaseinfo; then
+		orig_commit=$(git describe --always $zgit_info[rb_head])
+		orig_name=$(git name-rev --name-only $zgit_info[rb_head])
+		orig="$pc[scm_branch]$orig_name$pc[punc]($pc[scm_commitid]$orig_commit$pc[punc])"
+		onto_commit=$(git describe --always $zgit_info[rb_onto])
+		onto_name=$(git name-rev --name-only $zgit_info[rb_onto])
+		onto="$pc[scm_branch]$onto_name$pc[punc]($pc[scm_commitid]$onto_commit$pc[punc])"
+
+		if [ -n "$zgit_info[rb_upstream]" ] && [ $zgit_info[rb_upstream] != $zgit_info[rb_onto] ]; then
+			upstream_commit=$(git describe --always $zgit_info[rb_upstream])
+			upstream_name=$(git name-rev --name-only $zgit_info[rb_upstream])
+			upstream="$pc[scm_branch]$upstream_name$pc[punc]($pc[scm_commitid]$upstream_commit$pc[punc])"
+			commits+="rebasing $upstream$pc[reset]..$orig$pc[reset] onto $onto$pc[reset]"
+		else
+			commits+="rebasing $onto$pc[reset]..$orig$pc[reset]"
+		fi
+
+		local -a revs
+		revs=($(git rev-list $zgit_info[rb_onto]..HEAD))
+		if [ $#revs -gt 0 ]; then
+			commits+="\n$#revs commits in"
+		fi
+
+		if [ -f $zgit_info[dotest]/message ]; then
+			mess=$(head -n1 $zgit_info[dotest]/message)
+			commits+="$mess"
+		fi
+	elif [ -n "$gitcommit" ]; then
+		commits+="$pc[scm_branch]$head$pc[punc]($pc[scm_commitid]$gitcommit$pc[punc])$pc[reset]"
+		local track_merge=$(zgit_tracking_merge)
+		if [ -n "$track_merge" ]; then
+			if git rev-parse --verify -q $track_merge >/dev/null; then
+				local track_remote=$(zgit_tracking_remote)
+				local tracked=$(git describe --always $track_merge 2>/dev/null)
+
+				local -a revs
+				revs=($(git rev-list --reverse $track_merge..HEAD))
+				if [ $#revs -gt 0 ]; then
+					local base=$(git describe --always $revs[1]~1)
+					local base_name=$(git name-rev --name-only $base)
+					local base_short=$(git describe --always $base)
+					local word_commits
+					if [ $#revs -gt 1 ]; then
+						word_commits='commits'
+					else
+						word_commits='commit'
+					fi
+
+					local conj="since"
+					if [[ "$base" == "$tracked" ]]; then
+						conj+=" tracked"
+						tracked=
+					fi
+					commits+="$#revs $word_commits $conj $pc[scm_branch]$base_name$pc[punc]($pc[scm_commitid]$base_short$pc[punc])$pc[reset]"
+				fi
+
+				if [ -n "$tracked" ]; then
+					local track_name=$track_merge
+					if [[ $track_remote == "." ]]; then
+						track_name=${track_name##*/}
+					fi
+					tracked=$(git describe --always $tracked)
+					commits+="tracking $pc[scm_branch]$track_name$pc[punc]"
+					if [[ "$tracked" != "$gitcommit" ]]; then
+						commits[$#commits]+="($pc[scm_commitid]$tracked$pc[punc])"
+					fi
+					commits[$#commits]+="$pc[reset]"
+				fi
+			fi
+		fi
+	fi
+
+	gitsvn=$(git rev-parse --verify -q --short git-svn)
+	if [ $? -eq 0 ]; then
+		gitsvnrev=$(zgit_svnhead $gitsvn)
+		gitsvn=$(git describe --always $gitsvn)
+		if [ -n "$gitsvnrev" ]; then
+			local svninfo=''
+			local -a revs
+			svninfo+="$pc[default]svn$pc[punc]:$pc[scm_branch]r$gitsvnrev"
+			revs=($(git rev-list git-svn..HEAD))
+			if [ $#revs -gt 0 ]; then
+				svninfo+="$pc[punc]@$pc[default]HEAD~$#revs"
+				svninfo+="$pc[punc]($pc[scm_commitid]$gitsvn$pc[punc])"
+			fi
+			commits+=$svninfo
+		fi
+	fi
+
+	if [ $#commits -gt 0 ]; then
+		echo -n "${(j: :)commits} "
+	fi
+}
+
+prompt_wunjo_scm_branch() {
+	zgit_isgit || return
+	local -A pc
+	pc=(${(kv)wunjo_prompt_colors})
+
+	if zgit_inworktree; then
+		if ! zgit_isindexclean; then
+			echo -n "$pc[scm_status_staged][uncommited]"
+		fi
+
+		local -a dirty
+		if ! zgit_isworktreeclean; then
+			dirty+='%B[not added]%b'
+		fi
+
+		if zgit_hasunmerged; then
+			dirty+='[unmerged]'
+		fi
+
+		if zgit_hasuntracked; then
+			dirty+='[untracked]'
+		fi
+
+		if [ $#dirty -gt 0 ]; then
+			echo -n "$pc[scm_status_dirty]${(j::)dirty}"
+		fi
+	fi
+	
+	echo $pc[reset]
+}
+
+prompt_justin_init() {
+    [ -z $BKT[1] ] && BKT=( '[' ']' '{' '}' '<' '>' )
+    [ -z $SSH_CLIENT ] && HOSCOL="red" || HOSCOL="green"
+
+    if [[ $ZSH_VERSION = 3.* ]]; then
+        local D="${default}"
+        local R="${red}"
+        local G="${green}"
+        local B="${blue}"
+        #local TYCOLOR=`eval echo $"${TYCOLOR}"`
+    else 
+        local BL="%{${bg_no_bold[black]}}"
+        local xDB="%{${bg_no_bold[default]}}"
+        local D="%{${fg_no_bold[default]}%}"
+        local R="%{${fg_no_bold[red]}%}"
+        local G="%{${fg_no_bold[green]}%}"
+        local B="%{${fg_bold[blue]}%}"
+        local W="%{${fg_no_bold[white]}%}"
+    fi
+
+    if echo $SUDO_COMMAND | grep chroot > /dev/null ; then
+        CHROOT="<CHROOT>"
+    fi
+
+    if [[ -n $STY && -n $WINDOW ]]; then
+        if [[ -n $LIN_SCREEN ]]; then
+            J="${LIN_SCREEN}:${WINDOW}"
+        else
+            J="%l:${WINDOW}"
+        fi
     else
-        J="%l:${WINDOW}"
+        J="%l"
     fi
-else
-    J="%l"
-fi
 
-if [[ $ZSH_VERSION = 3.* ]]; then
-    local PLVL="$START$R%2(L.%L.)$D"
-    local PJOB="%1(j.$G${BKT[1]}%j${BKT[2]}.)$D"
-    local PUID="$R(%(#.$R/.${blue}%n)$R)$D"
-    local PPWD="${violet}:$D%1~"
-    local PMAR="${violet}%#${D}"
-    local PTT="\$${TYCOLOR}${BKT[5]}${J}${BKT[6]}${D}"
-    local PHOS="$D@\$${HOSCOL}%m$D"
-
-    PS1=$(print '$PLVL$PJOB${BKT[3]}$PTT$PUID$PHOS$PPWD${BKT[4]} $PMAR ')
-    #RPROMPT="%0(?..${red}%?${default})"
-else
-    local CP=""
-    if [ ! "$MACHTYPE" = "i686" ]; then
-        CP="$D%{${fg_no_bold[${HOSCOL}]}%}$MACHTYPE$D"
-    fi
-    local PLVL="$R%2(L.%L.)$D"
-    local PJOB="%1(j.$G${BKT[1]}%j${BKT[2]}.)$D"
-    local PUID="$R(%(#.$R/.%{${fg_bold[blue]}%}%n)$R)$D"
-    local PPWD="%{${fg_no_bold[violet]}%}:$D%1~"
-    local PMAR="%{${fg_no_bold[violet]}%}%(!.$.%%)$D"
-    if [[ -z $ORACLE_SID ]]; then
-        local PTT="%{${fg[${TYCOLOR}]}%}${BKT[5]}${J}${BKT[6]}$D"
-    else
-        local PTT="%{${fg[${TYCOLOR}]}%}${BKT[5]}\${ORACLE_SID}${BKT[6]}$D"
-    fi
     local PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%m$D"
+    if [[ $ZSH_VERSION = 3.* ]]; then
+        local PLVL="$START$R%2(L.%L.)$D"
+        local PJOB="%1(j.$G${BKT[1]}%j${BKT[2]}.)$D"
+        local PUID="$R(%(#.$R/.${blue}%n)$R)$D"
+        local PPWD="${violet}:$D%1~"
+        local PMAR="${violet}%#${D}"
+        local PTT="\$${TYCOLOR}${BKT[5]}${J}${BKT[6]}${D}"
+        local PHOS="$D@\$${HOSCOL}%m$D"
+
+        PS1=$(print '$PLVL$PJOB${BKT[3]}$PTT$PUID$PHOS$PPWD${BKT[4]} $PMAR ')
+        #RPROMPT="%0(?..${red}%?${default})"
+    else
+        local CP=""
+        if [ ! "$MACHTYPE" = "i686" ]; then
+            CP="$D%{${fg_no_bold[${HOSCOL}]}%}$MACHTYPE$D"
+        fi
+        local PLVL="$R%2(L.%L.)$D"
+        local PJOB="%1(j.$G${BKT[1]}%j${BKT[2]}.)$D"
+        local PUID="$R(%(#.$R/.%{${fg_bold[blue]}%}%n)$R)$D"
+        local PPWD="%{${fg_no_bold[violet]}%}:$D%1~"
+        local PMAR="%{${fg_no_bold[violet]}%}%(!.$.%%)$D"
+        if [[ -z $ORACLE_SID ]]; then
+            local PTT="%{${fg[${TYCOLOR}]}%}${BKT[5]}${J}${BKT[6]}$D"
+        else
+            local PTT="%{${fg[${TYCOLOR}]}%}${BKT[5]}\${ORACLE_SID}${BKT[6]}$D"
+        fi
+        local PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%m$D"
+
+    fi   
+
 
 fi   
 
@@ -77,4 +256,7 @@ case "$1" in
 esac
 PS1="%{${bg_no_bold[black]}%}${PS}%{${bg_no_bold[default]}%} "
 RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
+
+
+prompt_justin_init "$@"
 # vim:set ft=zsh:
