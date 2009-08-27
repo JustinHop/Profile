@@ -306,8 +306,15 @@ prompt_justin2_setup () {
 
     prompt_opts=(cr subst percent)
 
-    add-zsh-hook precmd prompt_justin2_precmd
+    preexec_functions+='prompt_justin2_postcmd'
+	precmd_functions+='prompt_justin2_precmd'
+    #add-zsh-hook precmd prompt_justin2_precmd
 }
+
+prompt_justin2_postcmd() {
+	git_status=
+}
+
 
 prompt_justin2_precmd() {
     setopt noxtrace localoptions extendedglob
