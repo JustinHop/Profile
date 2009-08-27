@@ -4,11 +4,14 @@
 " 
 "  General Operation
 
-" vimrc-1.9.4
+" vimrc-1.9.5
 
 set nocompatible
 set backspace=2
 set ttyfast
+
+filetype plugin indent on
+syntax enable
 
 set tabpagemax=25
 
@@ -75,7 +78,7 @@ set complete=.,k,w,b,t,i
 if has("folding")
     set foldenable
     set foldmethod=indent
-    set foldminlines=5
+    set foldminlines=3
 endif
 
 "Searching
@@ -217,6 +220,10 @@ if has("autocmd")
     au FileType html,css,xhtml let html_use_css=1              "       for standards-compliant :TOhtml output
     au FileType html,css,xhtml let use_xhtml=1                 "       for standards-compliant :TOhtml output
 
+    au FileType php let php_sql_query = 1
+    au FileType php let php_htmlInStrings = 1
+    au FileType php let php_folding = 1
+    au FileType php let php_sync_method = 0
 
     "  Use enter to activate help jump points & display line numbers
     "   au FileType help set number     
@@ -266,7 +273,7 @@ imap  <silent> <F12>   :let &number=1-&number<Bar>set number?<CR>
 "imap <F12> :set number! <CR> :set number?<CR>
 "map <F12>  :set number! <CR> :set number?<CR>
 map <F11>  :set paste! <CR> :set paste?<CR>
-map <F10>  :set wrap! <CR> :set wrap?<CR>
+"map <F10>  :set wrap! <CR> :set wrap?<CR>
 map <F9>   :set hls! <CR> :set hls?<CR>
 
 
@@ -274,23 +281,23 @@ map <F9>   :set hls! <CR> :set hls?<CR>
 set pastetoggle=<F11>
 
 " <F10> do the line wrapping hoobla
-"function! RapNo()
-"   :set nowrap
-"   :set list
-"   :map <SILENT><F10> :call RapYes()<CR>
-"endfunction
-"
+function! RapNo()
+   :set nowrap
+   :set list
+   :map <SILENT><F10> :call RapYes()<CR>
+endfunction
+
 " and back
-"function! RapYes()
-"   :set wrap
-"   :set nolist
-"   :set linebreak
-"   :set showbreak=-->\ 
-"   :map <silent><F10> :call RapNo()<CR>
-"endfunction
-"
-"map <silent><F10> :call RapNo()<CR>
-"
+function! RapYes()
+   :set wrap
+   :set nolist
+   :set linebreak
+   :set showbreak=-->\ 
+   :map <silent><F10> :call RapNo()<CR>
+endfunction
+
+map <silent><F10> :call RapNo()<CR>
+
 "" <F9> toggle hlsearch
 "noremap <silent> <F9> :set hlsearch!<cr>
 "
