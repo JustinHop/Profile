@@ -207,6 +207,7 @@ prompt_justin_init() {
         J="%l"
     fi
 
+    local PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%m$D"
     if [[ $ZSH_VERSION = 3.* ]]; then
         local PLVL="$START$R%2(L.%L.)$D"
         local PJOB="%1(j.$G${BKT[1]}%j${BKT[2]}.)$D"
@@ -247,12 +248,15 @@ prompt_justin_init() {
         (*)
         PPWD="%{${fg_no_bold[violet]}%}:$D%~"
         PHOS="$D@%{${fg_no_bold[${HOSCOL}]}%}%M$D"
-        PS="$PLVL$PJOB${BKT[3]}$CP$PTT\${DISPLAY:s/$HOST/-/}$PUID$PHOS$PPWD${BKT[4]}\$CHROOT\$(prompt_wunjo_scm_status)$PMAR\${BACKUP}"
+        PS="$PLVL$PJOB${BKT[3]}$CP$PTT\${DISPLAY:s/$HOST/-/}$PUID$PHOS$PPWD${BKT[4]}\$CHROOT\$(prompt_wunjo_scm_branch)$PMAR\${BACKUP}"
         ;;
     esac
     PS1="%{${bg_no_bold[black]}%}${PS}%{${bg_no_bold[default]}%} "
     RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
+
 }
 
+
 prompt_justin_init "$@"
+
 # vim:set ft=zsh:

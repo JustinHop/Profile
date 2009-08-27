@@ -387,18 +387,8 @@ globalkeys = awful.util.table.join(
     awful.key({   }, "XF86AudioMute",      function () awful.util.spawn("echo $EDITOR > /tmp/aw.log") end)  ,
 
     -- Volume
-    awful.key({   }, "XF86AudioLowerVolume",      
-        function () 
-            awful.util.spawn("aumix -v -5") 
-            updatevol()
-            displayvol()  
-        end),
-    awful.key({   }, "XF86AudioRaiseVolume",      
-        function () 
-            awful.util.spawn("aumix -v +5") 
-            updatevol() 
-            displayvol()   
-        end),
+    awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower() end),
+    awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise() end),
     awful.key({"Control" }, "XF86AudioLowerVolume", 
         function () 
             awful.util.spawn("mpc volume -5")   
