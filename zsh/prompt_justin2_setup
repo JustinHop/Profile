@@ -1,0 +1,385 @@
+# justin2 prompt theme
+
+autoload -U zgitinit
+zgitinit
+
+prompt_justin2_help () {
+    cat <<'EOF'
+    This prompt is color-scheme-able.  You can invoke it thus:
+
+    prompt justin2 [ 8bit ] [<color1> [<color2> [<color3>] [<color4>]]
+
+    where the colors are for the hyphens, current directory, user@host,
+    and user input bits respectively.  The default colors are cyan, green,
+    cyan, and white.  This theme works best with a dark background.
+
+    If you have either UTF-8 or the `nexus' or `vga' console fonts or similar,
+        you can specify the `8bit' option to use 8-bit replacements for the
+        7-bit characters.
+
+        And you probably thought adam2 was overkill ...
+EOF
+}
+
+coloratom() {
+	local off=$1 atom=$2
+	if [[ $atom[1] == [[:upper:]] ]]; then
+		off=$(( $off + 60 ))
+	fi
+	echo $(( $off + $colorcode[${(L)atom}] ))
+}
+colorword() {
+	local fg=$1 bg=$2 att=$3
+	local -a s
+
+	if [ -n "$fg" ]; then
+		s+=$(coloratom 30 $fg)
+	fi
+	if [ -n "$bg" ]; then
+		s+=$(coloratom 40 $bg)
+	fi
+	if [ -n "$att" ]; then
+		s+=$attcode[$att]
+	fi
+
+	echo "%{"$'\e['${(j:;:)s}m"%}"
+}
+
+prompt_wunjo_scm_status() {
+	zgit_isgit || return
+	local -A pc
+	pc=(${(kv)wunjo_prompt_colors})
+
+	head=$(zgit_head)
+	gitcommit=$(git describe --always $head 2>/dev/null)
+
+	local -a commits
+
+	if zgit_rebaseinfo; then
+		orig_commit=$(git describe --always $zgit_info[rb_head])
+		orig_name=$(git name-rev --name-only $zgit_info[rb_head])
+		orig="$pc[scm_branch]$orig_name$pc[punc]($pc[scm_commitid]$orig_commit$pc[punc])"
+		onto_commit=$(git describe --always $zgit_info[rb_onto])
+		onto_name=$(git name-rev --name-only $zgit_info[rb_onto])
+		onto="$pc[scm_branch]$onto_name$pc[punc]($pc[scm_commitid]$onto_commit$pc[punc])"
+
+		if [ -n "$zgit_info[rb_upstream]" ] && [ $zgit_info[rb_upstream] != $zgit_info[rb_onto] ]; then
+			upstream_commit=$(git describe --always $zgit_info[rb_upstream])
+			upstream_name=$(git name-rev --name-only $zgit_info[rb_upstream])
+			upstream="$pc[scm_branch]$upstream_name$pc[punc]($pc[scm_commitid]$upstream_commit$pc[punc])"
+			commits+="rebasing $upstream$pc[reset]..$orig$pc[reset] onto $onto$pc[reset]"
+		else
+			commits+="rebasing $onto$pc[reset]..$orig$pc[reset]"
+		fi
+
+		local -a revs
+		revs=($(git rev-list $zgit_info[rb_onto]..HEAD))
+		if [ $#revs -gt 0 ]; then
+			commits+="\n$#revs commits in"
+		fi
+
+		if [ -f $zgit_info[dotest]/message ]; then
+			mess=$(head -n1 $zgit_info[dotest]/message)
+			commits+="$mess"
+		fi
+	elif [ -n "$gitcommit" ]; then
+		commits+="$pc[scm_branch]$head$pc[punc]($pc[scm_commitid]$gitcommit$pc[punc])$pc[reset]"
+		local track_merge=$(zgit_tracking_merge)
+		if [ -n "$track_merge" ]; then
+			if git rev-parse --verify -q $track_merge >/dev/null; then
+				local track_remote=$(zgit_tracking_remote)
+				local tracked=$(git describe --always $track_merge 2>/dev/null)
+
+				local -a revs
+				revs=($(git rev-list --reverse $track_merge..HEAD))
+				if [ $#revs -gt 0 ]; then
+					local base=$(git describe --always $revs[1]~1)
+					local base_name=$(git name-rev --name-only $base)
+					local base_short=$(git describe --always $base)
+					local word_commits
+					if [ $#revs -gt 1 ]; then
+						word_commits='commits'
+					else
+						word_commits='commit'
+					fi
+
+					local conj="since"
+					if [[ "$base" == "$tracked" ]]; then
+						conj+=" tracked"
+						tracked=
+					fi
+					commits+="$#revs $word_commits $conj $pc[scm_branch]$base_name$pc[punc]($pc[scm_commitid]$base_short$pc[punc])$pc[reset]"
+				fi
+
+				if [ -n "$tracked" ]; then
+					local track_name=$track_merge
+					if [[ $track_remote == "." ]]; then
+						track_name=${track_name##*/}
+					fi
+					tracked=$(git describe --always $tracked)
+					commits+="tracking $pc[scm_branch]$track_name$pc[punc]"
+					if [[ "$tracked" != "$gitcommit" ]]; then
+						commits[$#commits]+="($pc[scm_commitid]$tracked$pc[punc])"
+					fi
+					commits[$#commits]+="$pc[reset]"
+				fi
+			fi
+		fi
+	fi
+
+	gitsvn=$(git rev-parse --verify -q --short git-svn)
+	if [ $? -eq 0 ]; then
+		gitsvnrev=$(zgit_svnhead $gitsvn)
+		gitsvn=$(git describe --always $gitsvn)
+		if [ -n "$gitsvnrev" ]; then
+			local svninfo=''
+			local -a revs
+			svninfo+="$pc[default]svn$pc[punc]:$pc[scm_branch]r$gitsvnrev"
+			revs=($(git rev-list git-svn..HEAD))
+			if [ $#revs -gt 0 ]; then
+				svninfo+="$pc[punc]@$pc[default]HEAD~$#revs"
+				svninfo+="$pc[punc]($pc[scm_commitid]$gitsvn$pc[punc])"
+			fi
+			commits+=$svninfo
+		fi
+	fi
+
+	if [ $#commits -gt 0 ]; then
+		echo -n "${(j: :)commits} "
+	fi
+}
+
+prompt_wunjo_scm_branch() {
+	zgit_isgit || return
+	local -A pc
+	pc=(${(kv)wunjo_prompt_colors})
+
+	if zgit_inworktree; then
+		if ! zgit_isindexclean; then
+			echo -n "$pc[scm_status_staged][uncommited]"
+		fi
+
+		local -a dirty
+		if ! zgit_isworktreeclean; then
+			dirty+='%B[not added]%b'
+		fi
+
+		if zgit_hasunmerged; then
+			dirty+='[unmerged]'
+		fi
+
+		if zgit_hasuntracked; then
+			dirty+='[untracked]'
+		fi
+
+		if [ $#dirty -gt 0 ]; then
+			echo -n "$pc[scm_status_dirty]${(j::)dirty}"
+		fi
+	fi
+
+	echo $pc[reset]
+}
+
+prompt_justin2_setup () {
+	local verbose
+	if [[ $TERM == screen* ]] && [ -n "$STY" ]; then
+		verbose=
+	else
+		verbose=1
+	fi
+
+	typeset -A colorcode
+	colorcode[black]=0
+	colorcode[red]=1
+	colorcode[green]=2
+	colorcode[yellow]=3
+	colorcode[blue]=4
+	colorcode[magenta]=5
+	colorcode[cyan]=6
+	colorcode[white]=7
+	colorcode[default]=9
+	colorcode[k]=$colorcode[black]
+	colorcode[r]=$colorcode[red]
+	colorcode[g]=$colorcode[green]
+	colorcode[y]=$colorcode[yellow]
+	colorcode[b]=$colorcode[blue]
+	colorcode[m]=$colorcode[magenta]
+	colorcode[c]=$colorcode[cyan]
+	colorcode[w]=$colorcode[white]
+	colorcode[.]=$colorcode[default]
+
+	typeset -A attcode
+	attcode[none]=00
+	attcode[bold]=01
+	attcode[faint]=02
+	attcode[standout]=03
+	attcode[underline]=04
+	attcode[blink]=05
+	attcode[reverse]=07
+	attcode[conceal]=08
+	attcode[normal]=22
+	attcode[no-standout]=23
+	attcode[no-underline]=24
+	attcode[no-blink]=25
+	attcode[no-reverse]=27
+	attcode[no-conceal]=28
+
+	local -A pc
+	pc[default]='default'
+	pc[date]='cyan'
+	pc[time]='Blue'
+	pc[host]='Green'
+	pc[user]='cyan'
+	pc[punc]='yellow'
+	pc[line]='magenta'
+	pc[hist]='green'
+	pc[path]='Cyan'
+	pc[shortpath]='default'
+	pc[rc]='red'
+	pc[scm_branch]='Cyan'
+	pc[scm_commitid]='Yellow'
+	pc[scm_status_dirty]='Red'
+	pc[scm_status_staged]='Green'
+	pc[#]='Yellow'
+	for cn in ${(k)pc}; do
+		pc[${cn}]=$(colorword $pc[$cn])
+	done
+	pc[reset]=$(colorword . . 00)
+
+	typeset -Ag wunjo_prompt_colors
+	wunjo_prompt_colors=(${(kv)pc})
+
+	local p_date p_line p_rc
+
+	p_date="$pc[time]%D{%T}$pc[reset]"
+
+	p_line="$pc[line]%y$pc[reset]"
+
+
+    # Some can't be local
+    local prompt_gfx_tlc prompt_gfx_mlc prompt_gfx_blc
+
+    if [[ $1 == '8bit' ]]; then
+        shift
+        if [[ ${LC_ALL:-${LC_CTYPE:-$LANG}} = *UTF-8* ]]; then
+            prompt_gfx_tlc=$'\xe2\x94\x8c'
+            prompt_gfx_mlc=$'\xe2\x94\x9c'
+            prompt_gfx_blc=$'\xe2\x94\x94'
+            prompt_gfx_hyphen=$'\xe2\x94\x80'
+        else
+            prompt_gfx_tlc=$'\xda'
+            prompt_gfx_mlc=$'\xc3'
+            prompt_gfx_blc=$'\xc0'
+            prompt_gfx_hyphen=$'\xc4'
+        fi
+    else
+        prompt_gfx_tlc='.'
+        prompt_gfx_mlc='|'
+        prompt_gfx_blc='\`'
+        prompt_gfx_hyphen='-'
+    fi
+
+    # Colour scheme
+    prompt_justin2_color1=${1:-'cyan'}    # hyphens
+    prompt_justin2_color2=${2:-'green'}   # current directory
+    prompt_justin2_color3=${3:-'cyan'}    # user@host
+    prompt_justin2_color4=${4:-'white'}   # user input
+
+    local prompt_gfx_bbox 
+    prompt_gfx_tbox="%B%F{$prompt_justin2_color1}${prompt_gfx_tlc}%b%F{$prompt_justin2_color1}${prompt_gfx_hyphen}"
+    prompt_gfx_bbox="%B%F{$prompt_justin2_color1}${prompt_gfx_blc}${prompt_gfx_hyphen}%b%F{$prompt_justin2_color1}"
+
+    # This is a cute hack.  Well I like it, anyway.
+    prompt_gfx_bbox_to_mbox=$'%{\e[A\r'"%}%B%F{$prompt_justin2_color1}${prompt_gfx_mlc}%b%F{$prompt_justin2_color1}${prompt_gfx_hyphen}%{"$'\e[B%}'
+
+    prompt_l_paren="%B%F{black}("
+    prompt_r_paren="%B%F{black})"
+
+    prompt_user_host="%b%F{$prompt_justin2_color3}%n%B%F{$prompt_justin2_color3}@%b%F{$prompt_justin2_color3}%m"
+
+    prompt_line_1a="$prompt_gfx_tbox$prompt_l_paren%B%F{$prompt_justin2_color2}%~$prompt_r_paren%b%F{$prompt_justin2_color1} "
+    prompt_line_1b="$prompt_l_paren$prompt_user_host$prompt_r_paren%b%2(L.%L.)%F{$prompt_justin2_color1}${prompt_gfx_hyphen}"
+
+    prompt_line_2="$prompt_gfx_bbox${prompt_gfx_hyphen}%B%F{white}"
+
+    prompt_char="%(!.#.>)"
+
+    prompt_opts=(cr subst percent)
+
+    add-zsh-hook precmd prompt_justin2_precmd
+}
+
+prompt_justin2_precmd() {
+    setopt noxtrace localoptions extendedglob
+    local prompt_line_1
+
+    prompt_justin2_choose_prompt
+
+    PS1="$prompt_line_1$prompt_newline$prompt_line_2%B%F{white}$prompt_char %b%f%k"
+    PS2="$prompt_line_2$prompt_gfx_bbox_to_mbox%B%F{white}%_> %b%f%k"
+    PS3="$prompt_line_2$prompt_gfx_bbox_to_mbox%B%F{white}?# %b%f%k"
+    zle_highlight[(r)default:*]="default:fg=$prompt_justin2_color4,bold"
+}
+
+prompt_justin2_choose_prompt () {
+	prompt_zsh-git_setinfo
+    local git_status_width=${#${(S%%)git_status//(\%([KF1]|)\{*\}|\%[Bbkf])}}
+    local prompt_line_1a_width=${#${(S%%)prompt_line_1a//(\%([KF1]|)\{*\}|\%[Bbkf])}}
+    local prompt_line_1b_width=${#${(S%%)prompt_line_1b//(\%([KF1]|)\{*\}|\%[Bbkf])}}
+
+    local prompt_padding_size=$(( COLUMNS
+    - prompt_line_1a_width
+    - prompt_line_1b_width
+    - git_status_width  ))
+
+    # Try to fit in long path and user@host.
+    if (( prompt_padding_size > 0 )); then
+        local prompt_padding
+        eval "prompt_padding=\${(l:${prompt_padding_size}::${prompt_gfx_hyphen}:)_empty_zz}"
+        prompt_line_1="$prompt_line_1a$git_status$prompt_padding$prompt_line_1b"
+        return
+    fi
+
+    prompt_padding_size=$(( COLUMNS - prompt_line_1a_width ))
+
+    # Didn't fit; try to fit in just long path.
+    if (( prompt_padding_size > 0 )); then
+        local prompt_padding
+        eval "prompt_padding=\${(l:${prompt_padding_size}::${prompt_gfx_hyphen}:)_empty_zz}"
+        prompt_line_1="$prompt_line_1a$prompt_padding"
+        return
+    fi
+
+    # Still didn't fit; truncate 
+    local prompt_pwd_size=$(( COLUMNS - 5 ))
+    prompt_line_1="$prompt_gfx_tbox$prompt_l_paren%B%F{$prompt_justin2_color2}%$prompt_pwd_size<...<%~%<<$prompt_r_paren%b%F{$prompt_justin2_color1}$prompt_gfx_hyphen"
+
+    RPROMPT="%0(?..%{${fg_no_bold[red]}%}%?%{${fg_no_bold[default]}%})"
+}
+
+prompt_zsh-git_setinfo() {
+	if zgit_isgit; then
+		prompt_info=
+		prompt_info+="$(prompt_wunjo_scm_status)"
+		prompt_info+="$(prompt_wunjo_scm_branch)"
+		#prompt_info+="%(?.. $pc[rc]exited %1v$pc[reset])"
+		#Rprompt_info+="\$(prompt_wunjo_scm_branch)"
+		git_status=$prompt_info
+	fi
+}
+
+prompt_wunjo_precmd() {
+	local ex=$?
+	psvar=()
+
+	if [[ $ex -ge 128 ]]; then
+		sig=$signals[$ex-127]
+		psvar[1]="sig${(L)sig}"
+	else
+		psvar[1]="$ex"
+	fi
+}
+
+prompt_justin2_setup "$@"
+
+# vim: set ft=zsh:
