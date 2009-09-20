@@ -23,7 +23,19 @@ use warnings;
 
 use HTML::TreeBuilder;
 use HTML::Strip;
+use DBI;
 use Data::Dumper;
+
+my $database = 'laweedmap';
+my $hostname = 'localhost';
+my $dsn      = "DBI:mysql:database=$database;host=$hostname";
+
+my $user = "foo";
+my $password = "bar";
+
+my $dbh = DBI->connect( $dsn, $user, $password );
+
+my $sth = $dbh->prepare(qq{INSERT INTO ca (name, address1, phone, hours) VALUES (?, ?, ?, ?)});
 
 my $hs = HTML::Strip->new();
 
@@ -94,14 +106,18 @@ for (@ARGV) {
                 }
             }
 
+            #my $sth = $dbh->prepare(qq{INSERT INTO ca (name, address1, phone, hours) VALUES (?, ?, ?, ?, ?)});
+            $sth->execute(
+                $info->{"name"},  $info->{"address"},  $info->{"phone"},  $info->{"hours"}  ) ;
+
             #my @order = ( "name", "phone", "fax", "hours", "email" );
 
-#            print $info->{"name"} . "\t" . $info->{'address'} . "\t";
-#            for my $key (@order) {
-#                if ( defined $info->{$key} ) {
-#                    print $info->{$key} . "\n";
-#                }
-#            }
+          #            print $info->{"name"} . "\t" . $info->{'address'} . "\t";
+          #            for my $key (@order) {
+          #                if ( defined $info->{$key} ) {
+          #                    print $info->{$key} . "\n";
+          #                }
+          #            }
 
             print "\n";
 
