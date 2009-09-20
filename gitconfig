@@ -14,3 +14,6 @@
 	default = current
 [merge]
 	tool = vimdiff
+[github]
+	user = JustinHop
+	token = 8a7fd39a33a0c83817788483c51bef80
