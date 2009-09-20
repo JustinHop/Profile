@@ -197,6 +197,9 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 3, function (tag) tag.selected = not tag.selected end),
                     awful.button({ modkey }, 3, awful.client.toggletag),
                     awful.button({ }, 4, awful.tag.viewnext),
+                    awful.button({ }, 13, awful.tag.viewnext),
+                    awful.button({ }, 14, awful.tag.viewnext),
+                    awful.button({ }, 15, awful.tag.viewprev),
                     awful.button({ }, 5, awful.tag.viewprev)
                     )
 mytasklist = {}
@@ -301,7 +304,10 @@ end
 root.buttons(awful.util.table.join(
     awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, 5, awful.tag.viewprev),
+                    awful.button({ }, 13, awful.tag.viewnext),
+                    awful.button({ }, 14, awful.tag.viewnext),
+                    awful.button({ }, 15, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -311,6 +317,7 @@ globalkeys = awful.util.table.join(
     awful.key({ "Shift" }, "F10",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ "Shift" }, "F11",  awful.tag.viewnext       ),
+    awful.key({ modkey }, "d",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     awful.key({ modkey,           }, "j",
@@ -545,6 +552,12 @@ clientkeys = awful.util.table.join(
     ]]--
 )
 
+clientbuttons = awful.util.table.join(
+                    awful.button({ }, 13, awful.tag.viewnext),
+                    awful.button({ }, 14, awful.tag.viewnext),
+                    awful.button({ }, 15, awful.tag.viewprev)
+                    )
+
 -- Compute the maximum number of digit we need, limited to 9
 keynumber = 0
 for s = 1, screen.count() do
@@ -674,7 +687,10 @@ awful.hooks.manage.register(function (c, startup)
     c:buttons(awful.util.table.join(
         awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
         awful.button({ modkey }, 1, awful.mouse.client.move),
-        awful.button({ modkey }, 3, awful.mouse.client.resize)
+        awful.button({ modkey }, 3, awful.mouse.client.resize),
+        awful.button({ }, 13, awful.tag.viewnext),
+        awful.button({ }, 14, awful.tag.viewnext),
+        awful.button({ }, 15, awful.tag.viewprev)
     ))
 
     -- Check if the application should be floating.

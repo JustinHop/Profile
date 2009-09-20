@@ -203,6 +203,7 @@ if has("autocmd")
         au BufNewFile,BufRead /usr/local/apache2/conf/UMG_conf/*.conf set filetype=apache
         au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
         au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
+        au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
     augroup END
 
     " ZSH Brokenness

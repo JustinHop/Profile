@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+while true ; do
+    LINES=$(wc -l ~/.xsession-errors | awk '{ print $1 }')
+    if (( $LINES > 1024 )) ; then
+	    for NUM in $(seq 8 1) ; do
+		    if [ -f ~/.xsession-errors-$NUM ]; then 
+			    (( NEWNUM = $NUM + 1 ))
+			    mv ~/.xsession-errors-$NUM ~/.xsession-errors-$NEWNUM
+		    fi
+	    done
+	    mv ~/.xsession-errors ~/.xsession-errors-1
+	    echo "`date` :: Rotated xsession-errors" > ~/.xsession-errors
+	fi
+	sleep 10s
+done
