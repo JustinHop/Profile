@@ -434,4 +434,5 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
 "    autocmd BufEnter * :lcd %:p:h
 "endif " has("autocmd")
 "
+colorscheme typofree
 " vim:ft=vim:syn=vim:ts=4
