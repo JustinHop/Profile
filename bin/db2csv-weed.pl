@@ -40,10 +40,10 @@ my $sth = $dbh->prepare(qq{
 });
 $sth->execute;
 
-my @order = qw{ name address1 phone hours };
+my @order = qw{ address1 phone hours };
 
 while (my $h = $sth->fetchrow_hashref) {
-    print $h->{'name'} . "\t" . $h->{'address1'} . "\t";
+    print '<b>' . $h->{'name'} . '</b>' . "\t" . $h->{'address1'} . "\t";
 
     for (@order) {
         print $h->{$_} . "<br />";
