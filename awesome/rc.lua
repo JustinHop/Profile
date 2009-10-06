@@ -198,7 +198,7 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ modkey }, 3, awful.client.toggletag),
                     awful.button({ }, 4, awful.tag.viewnext),
                     awful.button({ }, 13, awful.tag.viewnext),
-                    awful.button({ }, 14, awful.tag.viewnext),
+                    awful.button({ }, 14, awful.tag.viewprev),
                     awful.button({ }, 15, awful.tag.viewprev),
                     awful.button({ }, 5, awful.tag.viewprev)
                     )
@@ -306,7 +306,7 @@ root.buttons(awful.util.table.join(
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev),
                     awful.button({ }, 13, awful.tag.viewnext),
-                    awful.button({ }, 14, awful.tag.viewnext),
+                    awful.button({ }, 14, awful.tag.viewprev),
                     awful.button({ }, 15, awful.tag.viewprev)
 ))
 -- }}}
@@ -554,7 +554,7 @@ clientkeys = awful.util.table.join(
 
 clientbuttons = awful.util.table.join(
                     awful.button({ }, 13, awful.tag.viewnext),
-                    awful.button({ }, 14, awful.tag.viewnext),
+                    awful.button({ }, 14, awful.tag.viewprev),
                     awful.button({ }, 15, awful.tag.viewprev)
                     )
 
@@ -689,7 +689,7 @@ awful.hooks.manage.register(function (c, startup)
         awful.button({ modkey }, 1, awful.mouse.client.move),
         awful.button({ modkey }, 3, awful.mouse.client.resize),
         awful.button({ }, 13, awful.tag.viewnext),
-        awful.button({ }, 14, awful.tag.viewnext),
+        awful.button({ }, 14, awful.tag.viewprev),
         awful.button({ }, 15, awful.tag.viewprev)
     ))
 
