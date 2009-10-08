@@ -18,15 +18,15 @@
 #      REVISION:  ---
 #===============================================================================
 
-$DIR = "~/storage/x";
+DIR="~/storage/x";
 
 if [ "$1" ]; then
 	if [ -d "$1" ]; then
-		$DIR="$1"
+		DIR="$1"
 	fi
 fi
 
-for i in $(/bin/ls "$DIR/*part1.rar" | tac) ; do 
+for i in $(eval /bin/ls "$DIR"/*part1.rar | tac) ; do 
 	echo $i 
 	if [ -e $i.worked ] ; then 
 		echo ALREADY
