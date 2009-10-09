@@ -1,52 +1,38 @@
-    if [[ -f list ]]; then
+if [ -f list ]; then
 
-        for RCFILE in bashrc
-gvimrc
-gitconfig
-include
-inputrc
-perltidyrc
-screenrc
-vimperatorrc
-vimrc
-vim
-rpmmacros
-zshenv
-zlogin
-zlogout
-zshrc ; do
-
-            if [[ -f "~/." ]]; then
-
-                mv -v "~/." "~/..old"
-
-            fi
-
-            ln -sfv "/home/justin/git/Profile/" ~/.
-
-        done
-
-        if [[ -d ssh ]]; then
-
-            chmod 700 ssh
-
-            for SSHFILE in ssh/*(-.) ; do
-
-                if [[ -f "~/." ]]; then
-
-                    mv ~/. ~/..old
-
-                fi
-
-                ln -sfv "/home/justin/git/Profile/" ~/.
-
-            done
-
+    for RCFILE in bashrc \
+        gvimrc	/
+        gitconfig	/
+        inputrc	/
+        perltidyrc	/
+        rpmmacros	/
+        screenrc	/
+        vimperatorrc	/
+        vimrc	/
+        vim	/
+        rpmmacros	/
+        zsh	/
+        zshenv	/
+        zlogin	/
+        zlogout	/
+        zshrc ; do
+        if [ -e "$HOME/.$RCFILE" ]; then
+            mv -v "$HOME/.$RCFILE" "$HOME/.$RCFILE.old"
         fi
+        ln -sfv $RCFILE "$HOME/.$RCFILE"
+    done
 
-    else
-
-        echo "no list :-("
-
+    if [ -d ssh ]; then
+        chmod 700 ssh
+        for SSHFILE in ssh/*(-.) ; do
+            if [ -f "$HOME/.ssh/$SSHFILE" ]; then
+                mv -v "$HOME/.ssh/$SSHFILE" "$HOME/.ssh/$SSHFILE.old"
+            fi
+        done
     fi
+else
+    echo "no list :-("
+fi
 
+
+# vim: ft=zsh:syn=zsh
