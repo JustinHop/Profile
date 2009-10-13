@@ -24,3 +24,7 @@ Host jh tux-ninja alien justinhoppensteadt.com
 
 Host cloud* hm 
     user justinh1
+
+Host gitproxy
+    hostname ssh.github.com
+    port 443
