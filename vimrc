@@ -130,6 +130,7 @@ function! MyPerlSettings()
     setlocal cindent 
     setlocal cinkeys=0{,0},0(,0),:,!^F,o,O,e
     setlocal formatoptions-=t formatoptions+=croq
+    let perl_extended_vars=1
 
     compiler perl
     "colorscheme wuye

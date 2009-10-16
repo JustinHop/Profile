@@ -34,6 +34,12 @@ for i in $(eval /bin/ls "$DIR"/*part1.rar | tac) ; do
     	if unrar e $i ; then
             touch $i.worked 
             echo touched $i.worked
+            for FILE in `unrar l $i` ; do
+            	if [ -e "$FILE" ]; then
+            		echo "touching $FILE"
+            		touch "$FILE"
+            	fi
+            done
         fi
     fi 
 done
