@@ -9,8 +9,9 @@ while true ; do
 			    mv ~/.xsession-errors-$NUM ~/.xsession-errors-$NEWNUM
 		    fi
 	    done
-	    mv ~/.xsession-errors ~/.xsession-errors-1
-	    echo "`date` :: Rotated xsession-errors" > ~/.xsession-errors
+	    cp ~/.xsession-errors ~/.xsession-errors-1
+	    echo > ~/.xsession-errors
+	    echo "`date` :: Rotated xsession-errors"  
 	fi
-	sleep 10s
+	sleep 1s
 done

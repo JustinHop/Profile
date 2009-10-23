@@ -284,19 +284,19 @@ for s = 1, screen.count() do
                            s == 1 and rspace or nil,
                            mylayoutbox[s],
                            rspace }
-    if ( s == 1 ) then
-     mywibox2[s].widgets = { lspace,
+    --[[     if ( s == 1 ) then
+    mywibox2[s].widgets = { lspace,
                            obvious.volume_alsa() or nil,
                            lspace or nil, 
                            rspace or nil,
                            obvious.battery() or nil ,
-                           rspace }
-   end
+                           rspace } 
+   end]]--
 
     mywibox[s].screen = s
-    if ( s == 1 ) then
+    --[[if ( s == 1 ) then
     mywibox2[s].screen = s
-    end
+    end]]--
 end
 -- }}}
 
@@ -336,7 +336,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1) end),
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1) end),
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus( 1) mousemarker()      end),
+    awful.key({ modkey,           }, "Up", function () awful.screen.focus( 1) mousemarker()      end),
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus(-1) mousemarker()      end),
+    awful.key({ modkey,           }, "Down", function () awful.screen.focus(-1) mousemarker()      end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "Tab",
         function ()
