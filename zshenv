@@ -103,7 +103,7 @@ done
 
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
-export LESS="-isaFMXR"
+export LESS="-isaFMXRU"
 export VISUAL=vim
 export SVN_EDITOR=vim
 export EDITOR=vim

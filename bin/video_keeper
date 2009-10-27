@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-MPLAYER_OPTS=" -really-quiet -fixed-vo -osd-duration 1  -af volume=-15,volnorm -osdlevel 0 "
+MPLAYER_OPTS=" -really-quiet -fixed-vo -osd-duration 1  -af volume=-30,volnorm -osdlevel 0 -ao pulse -vo gl "
 mkdir keep nokeep
 
 for i in "$@" ; do 

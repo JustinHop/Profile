@@ -1,2 +1,2 @@
 #!/bin/bash
-google-chrome --enable-plugins "$@"
+google-chrome --enable-sync --enable-plugins --enable-extensions --enable-user-scripts "$@"

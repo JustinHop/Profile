@@ -63,15 +63,15 @@
 
 # Window Lower (towards screen)
 #"xvkbd -text "\[Shift_L]\[Control_L]\[Down]""
-"echo "KeyStrPress Super_L KeyStrPress d KeyStrRelease d KeyStrRelease Super_L"| xmacroplay -d 0 :0.0"
-    b:13
-
-# Window Raise (away from screen)
-#"xvkbd -text "\[Control]\[Shift]\[Up]""
-"echo "KeyStrPress Super_L KeyStrPress u KeyStrRelease u KeyStrRelease Super_L"| xmacroplay -d 0 :0.0"
-    b:14
-
-
+#"echo "KeyStrPress Super_L KeyStrPress d KeyStrRelease d KeyStrRelease Super_L"| xmacroplay -d 0 :0.0"
+#    b:13
+#
+## Window Raise (away from screen)
+##"xvkbd -text "\[Control]\[Shift]\[Up]""
+#"echo "KeyStrPress Super_L KeyStrPress u KeyStrRelease u KeyStrRelease Super_L"| xmacroplay -d 0 :0.0"
+#    b:14
+#
+#
 #"echo "KeyStrPress Super_L KeyStrPress Shift_L KeyStrPress n KeyStrRelease n KeyStrRelease Shift_L KeyStrRelease Super_L" | xmacroplay -d 0 :0.0"
 #    b:6 + b:8
 
