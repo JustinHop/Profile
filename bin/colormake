@@ -1,0 +1,294 @@
+#! /usr/bin/perl
+
+#
+# colormake
+#
+# Version: 1.0
+#
+# A wrapper to colorize the output from make
+#
+# Requires the ANSIColor module from CPAN.
+#
+# Usage:
+#
+# In a directory that occurs in your PATH _before_ the directory
+# where make lives, create a softlink to colormake:
+#
+#    make -> colormake
+#
+# That's it. When "make" is invoked, colormake is run instead.
+#
+# The default settings can be overridden with ~/.colorgccrc.
+# See the comments in the sample .colorgccrc for more information.
+#
+# Note:
+#
+# colormake will only emit color codes if:
+#    (1) Its STDOUT is a tty and
+#    (2) the value of $TERM is not listed in the "nocolor" option.
+#
+# Otherwise, colormake just passes the output from make through
+# without modification (other than to group both STDOUT and STDERR
+# onto STDOUT).
+# 
+# Author: Matthew D. Campbell <campbell@gizmonet.net>
+# Started: May, 1999
+# Licence: GNU Public License
+#
+# Credits:
+#
+#    This is largely hacked from colorgcc 1.3 by Jamie Moyers <jmoyers@geeks.com>
+
+# Changes:
+#
+# 1.0 Initial Version
+
+use Term::ANSIColor;
+use IPC::Open3;
+
+sub initDefaults
+{
+   $compilerPaths{"make"} = "/usr/bin/make";
+
+   $nocolor{"dumb"} = "true";
+   $reversevideo{"xterm"} = "true";
+
+   $colors{"srcColor"} = color("cyan");
+   $colors{"introColor"} = color("blue");
+
+   $colors{"warningFileNameColor"} = color("green");
+   $colors{"warningNumberColor"}   = color("green");
+   $colors{"warningMessageColor"}  = color("green");
+
+   $colors{"errorFileNameColor"} = color("bold red");
+   $colors{"errorNumberColor"}   = color("bold red");
+   $colors{"errorMessageColor"}  = color("bold red");
+
+
+   $colors{"reverseSrcColor"} = color("cyan");
+   $colors{"reverseIntroColor"} = color("blue");
+
+   $colors{"reverseWarningFileNameColor"} = color("green");
+   $colors{"reverseWarningNumberColor"}   = color("green");
+   $colors{"reverseWarningMessageColor"}  = color("green");
+
+   $colors{"reverseErrorFileNameColor"} = color("bold red");
+   $colors{"reverseErrorNumberColor"}   = color("bold red");
+   $colors{"reverseErrorMessageColor"}  = color("bold red");
+}
+
+sub loadPreferences
+{
+# Usage: loadPreferences("filename");
+
+   my($filename) = @_;
+
+   open(PREFS, "<$filename") || return;
+
+   while(<PREFS>)
+   {
+      next if (m/^\#.*/);          # It's a comment.
+      next if (!m/(.*):\s*(.*)/);  # It's not of the form "foo: bar" (no quotes).
+
+      $option = $1;
+      $value = $2;
+
+      if ($option =~ m/cc|c\+\+|gcc|g\+\+/)
+      {
+	 $compilerPaths{$option} = $value;
+      }
+      elsif ($option eq "nocolor")
+      {
+	 # The nocolor option lists terminal types, separated by spaces, not to do color on.
+	 foreach $termtype (split(/\s+/, $value))
+	 {
+	    $nocolor{$termtype} = "true";
+	 }
+      }
+      elsif ($option eq "reversevideo")
+      {
+         # Same syntax as "nocolor" above
+         foreach $termtype (split(/\s+/, $value))
+	 {
+	    $reversevideo{$termtype} = "true";
+	 }
+      }
+      else
+      {
+	 $colors{$option} = color($value);
+      }
+   }
+   close(PREFS);
+}
+
+sub srcscan
+{
+# Usage: srcscan($text, $normalColor)
+#    $text -- the text to colorize
+#    $normalColor -- The escape sequence to use for non-source text.
+
+# Looks for text between ` and ', and colors it srcColor.
+
+   my($line, $normalColor) = @_;
+
+   my($srcon) = color("reset") . $colors{"srcColor"};
+   my($srcoff) = color("reset") . $normalColor;
+
+   $line = $normalColor . $line;
+
+   # This substitute replaces `foo' with `AfooB' where A is the escape
+   # sequence that turns on the the desired source color, and B is the
+   # escape sequence that returns to $normalColor.
+   $line =~ s/\`(.*?)\'/\`$srcon$1$srcoff\'/g;
+
+   print($line, color("reset"));
+}
+
+#
+# Main program
+#
+
+# Set up default values for colors and compilers.
+initDefaults();
+
+# Read the configuration file, if there is one.
+$configFile = $ENV{"HOME"} . "/.colormakerc";
+if (-f $configFile)
+{
+   loadPreferences($configFile);
+}
+
+#Figure out which compiler to invoke based on our program name.
+$0 =~ m%.*/(.*)$%;
+$progName = $1 || $0;
+
+$compiler = $compilerPaths{$progName} || $compilerPaths{"gcc"};
+
+# Run the compiler with all the command line arguments we were given.
+$_ = join(" ", @ARGV);
+
+# This is needed in case we pass to the compiler something like
+# -DPACKAGE=\"Package\", so that the backslash still exists in the compiler
+# command line.
+s/\"/\\\"/g;
+
+# Keep the pid of the compiler process so we can get its return
+# code and use that as our return code.
+$compiler_pid = open3(\*wfh, \*GCCOUT, \*GCCOUT, "$compiler $_") || die("Couldn't open3.\n");
+
+# Get the terminal type. 
+$terminal = $ENV{"TERM"} || "dumb";
+
+# If it's in the list of terminal types not to color, or if
+# we're writing to something that's not a tty, don't do color.
+if ($nocolor{$terminal} || (!-t STDOUT))
+{
+   while(<GCCOUT>)
+   {
+      print;
+   }
+
+   # Get the return code of the compiler and exit with that.
+   waitpid($compiler_pid, 0);
+   exit ($? >> 8);
+}
+
+# If its in the list of terminal types with reverse video,
+# colorize with the reverse video options.
+if ($reversevideo{$terminal}) {
+    while(<GCCOUT>)
+    {
+        if (m/(make): (\*\*\*)(.*)/)
+        {
+            $field1 = $1 || "";
+            $field2 = $2 || "";
+            $field3 = $3 || "";
+            print($colors{"reverseSrcColor"}, "$field1", color("reset"), ": ");
+            print($colors{"reverseErrorMessageColor"}, "$field2", color("reset"));
+            srcscan($field3, $colors{"reverseWarningFileNameColor"});
+            print("\n");
+        }
+        elsif (m/(make)\[([0-9]+)\]: (\*\*\*)(.*)/)
+        {
+            $field1 = $1 || "";
+            $field2 = $2 || "";
+            $field3 = $3 || "";
+            $field4 = $4 || "";
+            print($colors{"reverseSrcColor"}, "$field1", color("reset"), "[");
+            print($colors{"reverseErrorNumberColor"}, "$field2", color("reset"), "]: ");
+            print($colors{"reverseErrorMessageColor"}, "$field3", color("reset"));
+            srcscan($field4, $colors{"reverseWarningFileNameColor"});
+            print("\n");
+        }
+        elsif (m/(make)\[([0-9]+)\]: (.*)/)
+        {
+            $field1 = $1 || "";
+            $field2 = $2 || "";
+            $field3 = $3 || "";
+            print($colors{"reverseSrcColor"}, "$field1", color("reset"), "[");
+            print($colors{"reverseErrorNumberColor"}, "$field2", color("reset"), "]: ");
+            srcscan($field3, $colors{"reverseWarningFileNameColor"});
+            print("\n");
+        }
+        elsif (m/(make): (.*)/)
+        {
+            $field1 = $1 || "";
+            $field2 = $2 || "";
+            print($colors{"reverseSrcColor"}, "$field1", color("reset"), ": ");
+            srcscan($field2, $colors{"reverseWarningFileNameColor"});
+            print("\n");
+        }
+        else # Anything else.        
+        {
+            # Doesn't seem to be a warning or an error. Print normally.
+            print($_);
+            #print(color("reset"), $_);
+        }
+    }
+}
+
+# Colorize the output from the compiler.
+while(<GCCOUT>)
+{
+   if (m/^(.*?):([0-9]+):(.*)$/) # filename:lineno:message
+   {
+      $field1 = $1 || "";
+      $field2 = $2 || "";
+      $field3 = $3 || "";
+
+      if ($field3 =~ m/\s+warning:.*/)
+      {
+	 # Warning
+	 print($colors{"warningFileNameColor"}, "$field1:", color("reset"));
+	 print($colors{"warningNumberColor"}, "$field2:", color("reset"));
+	 srcscan($field3, $colors{"warningMessageColor"});
+      }
+      else 
+      {
+	 # Error
+	 print($colors{"errorFileNameColor"}, "$field1:", color("reset"));
+	 print($colors{"errorNumberColor"}, "$field2:", color("reset"));
+	 srcscan($field3, $colors{"errorMessageColor"});
+      }
+      print("\n");
+   }
+   elsif (m/^(.*?):(.+):$/) # filename:message:
+   {
+      # No line number, treat as an "introductory" line of text.
+      srcscan($_, $colors{"introColor"});
+   }
+   else # Anything else.        
+   {
+      # Doesn't seem to be a warning or an error. Print normally.
+      print(color("reset"), $_);
+   }
+}
+
+# Get the return code of the compiler and exit with that.
+waitpid($compiler_pid, 0);
+exit ($? >> 8);
+
+
+
+
+
