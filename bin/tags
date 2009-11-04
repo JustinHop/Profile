@@ -1,0 +1,2 @@
+check	www-check.pl	/^sub check/
+help	www-check.pl	/^sub help/

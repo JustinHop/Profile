@@ -1,0 +1,5 @@
+#!/bin/bash
+for i in `cat ~/linux-sites` ; do 
+	echo -ne "$i\t"
+    /usr/lib/nagios/plugins/check_http -H $i --invert-regex -R warning 
+done 
