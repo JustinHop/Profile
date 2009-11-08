@@ -114,7 +114,8 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = awful.widget.textclock({ align = "right" })
+mytextclock = {}
+mytextclock = widget({ type = "textbox", align = "right" })
 
 myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
@@ -590,7 +591,7 @@ client.add_signal("manage", function (c, startup)
     if not startup then
         -- Set the windows at the slave,
         -- i.e. put it at the end of others instead of setting it master.
-        -- awful.client.setslave(c)
+        awful.client.setslave(c)
 
         -- Put windows in a smart way, only if they does not set an initial position.
         if not c.size_hints.user_position and not c.size_hints.program_position then
@@ -599,12 +600,10 @@ client.add_signal("manage", function (c, startup)
         end
     end
 
-    --awful.tag.seticon(awful.client.getmaster(mouse.screen).icon)
-    --awful.tag.seticon(c.icon)
-    --[[
+    awful.tag.seticon(awful.client.getmaster(mouse.screen).icon)
+    awful.tag.seticon(c.icon)
     local m = awful.client.getmaster()
     awful.tag.seticon(m.icon)
-    ]]--
     mousemarker() 
 end)
 
@@ -620,5 +619,9 @@ end)
 mousetimer = timer { timeout = .1 }
 mousetimer:add_signal("timeout", function() mousemarker() end)
 mousetimer:start()
+
+clocktimer = timer { timeout = .2 }
+clocktimer:add_signal("timeout", function() mytextclock.text=os.date("%a %b %e, %r %Y") end)
+clocktimer:start()
 
 -- }}}

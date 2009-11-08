@@ -143,6 +143,8 @@ endfunction
 filetype on
 filetype indent on
 
+set directory=~/tmp
+
 if has("autocmd")
     filetype plugin indent on
     "jumpback
@@ -162,28 +164,32 @@ if has("autocmd")
             if ! expand(&readonly)
                 au BufReadPost *
                             \ exe 'silent write! ' 
+                            \   substitute( expand(
                             \   substitute( expand( 
                             \       substitute( expand("$HOME/backup/") .
                             \           substitute( expand("%:p"), '/','_','g') . 
                             \           strftime("%Y%m%d.%H%M%S"), 
                             \       '\s','_', 'g') 
-                            \   ), '_','','')  
+                            \   ), '_','',''),
+                            \   ), 'LXWeb', 'LX_Web', 'g')
             endif
         endif
     else
         if has("unix")
             set backup
-            set backupdir=~/backup
+            set backupdir=expand("$HOME/backup")
         endif
     endif
 
     " purdy colors
     if expand($TERM) == "linux"
     	colorscheme elflord
-    elseif filereadable( expand("$HOME/.vim/colors/typo.vim") )
-    	colorscheme typofree
+    elseif filereadable( expand("$HOME/.vim/colors/cleanphp.vim") )
+    	colorscheme cleanphp
     elseif filereadable( expand("$HOME/.vim/colors/lucius.vim") )
     	colorscheme lucius
+    elseif
+        colorscheme elflord
     endif
 
     " yank to clipboard

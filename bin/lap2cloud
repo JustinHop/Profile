@@ -1,1 +1,3 @@
 #!/bin/zsh
+cd ~
+rsync -avb Pictures justinh1@cloud.justinhoppensteadt.com:/home3/justinh1

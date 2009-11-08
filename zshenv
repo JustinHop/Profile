@@ -72,7 +72,7 @@ FFMPEGPATH="/usr/local/websites/ffmpeg/bin"
 SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
 USER_PATH="$HOME/bin:$HOME/profile/bin:/usr/lib/xscreensaver"
 ENCODE_PATH="/usr/local/enctools/bin"
-NAGIOS_PATH="/usr/lib/nagios/plugins"
+NAGIOS_PATH="/usr/local/nagios/libexec"
 
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
