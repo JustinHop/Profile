@@ -37,43 +37,48 @@
 #keystate_capslock = enable
 #keystate_scrolllock= enable
 
-#"xvkbd -xsendevent -text "\[Control]\[Prior]""
+# XF86Search
+#"xwit -iconify"
+#    XF86Search
+
 # Tilt Right
-"/home/justin/bin/shiftctrltab"
-    b:6
+"shiftctrltab"
+    b:6 
 
-#"xvkbd -xsendevent -text "\[Control]\[Next]""
-# Tilt Left
-"/home/justin/bin/ctrltab"
-    b:7
+## Tilt Left
+"ctrltab"
+    b:7 
 
-# History Back
-#"xvkbd -xsendevent -text "\[Alt_L]\[Left]""
-#    b:8
-
-#"xvkbd -xsendevent -text "\[Alt_L]\[Left]""
-#    c:234
-
-# History Forward
-#"xvkbd -xsendevent -text "\[Alt_L]\[Right]""
-#    b:9
-
-#"xvkbd -xsendevent -text "\[Alt_L]\[Right]""
-#    c:233
-
-# Window Lower (towards screen)
-#"xvkbd -text "\[Shift_L]\[Control_L]\[Down]""
-"echo "KeyStrPress Super_L KeyStrPress d KeyStrRelease d KeyStrRelease Super_L"| xmacroplay -d 0 :0.0"
+#"unset WINDOWID; xwit -lower" 
+# Next Tag (towards screen)
+#"echo 'awful.tag.viewnext()' | awesome-client"
+#    b:13
+#
+#"echo 'awful.tag.viewnext()' | awesome-client"
+"winright"
+    b:12
+##"unset WINDOWID; xwit -focus"
+"winright"
     b:13
-
-# Window Raise (away from screen)
-#"xvkbd -text "\[Control]\[Shift]\[Up]""
-"echo "KeyStrPress Super_L KeyStrPress u KeyStrRelease u KeyStrRelease Super_L"| xmacroplay -d 0 :0.0"
+##    b:13 + Release
+#
+##"unset WINDOWID;xwit -raise"
+## Window Raise (away from screen)
+#"echo 'awful.tag.viewprev()' | awesome-client"
+"winleft"
     b:14
+##"unset WINDOWID;xwit -raise"
+## Window Raise (away from screen)
+#"echo 'awful.tag.viewprev()' | awesome-client"
+"winleft"
+    b:15
 
+#"unset WINDOWID;xwit -focus" 
+#    b:15 + Release
 
-#"echo "KeyStrPress Super_L KeyStrPress Shift_L KeyStrPress n KeyStrRelease n KeyStrRelease Shift_L KeyStrRelease Super_L" | xmacroplay -d 0 :0.0"
-#    b:6 + b:8
+# Thumb press
+"xdotool key XF86Save"
+    b:17
 
 
 

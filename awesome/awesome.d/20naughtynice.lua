@@ -32,6 +32,8 @@ naughty.icon_dirs={ "/usr/share/pixmaps/",
         "/usr/share/icons/gnome/22x22/actions/" 
     }
 
+naughty.config.presets.normal.screen=screen.count()
+
 --config.presets.normal.border_color = beautiful.bg_focus .. 25
 
 function naughty.notifyall(args)

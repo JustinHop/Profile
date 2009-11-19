@@ -1,0 +1,6 @@
+#!/bin/sh
+
+{ pidgin ; } &
+{ thunderbird ; } &
+{ ff ; } &
+exec chrome

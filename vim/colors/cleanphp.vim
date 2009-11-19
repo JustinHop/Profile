@@ -28,7 +28,8 @@ hi DiffText gui=bold guibg=Red
 hi Cursor guibg=Black guifg=NONE
 hi lCursor guibg=Black guifg=NONE
 hi Directory guifg=#ff8040
-hi LineNr guifg=#008000
+hi LineNr           guifg=#857b6f           guibg=#444444
+hi LineNr           ctermfg=101             ctermbg=238
 hi MoreMsg gui=bold guifg=SeaGreen
 hi NonText gui=bold guifg=#ff8040 guibg=#d3e4f8
 hi Question gui=bold guifg=Black
@@ -42,15 +43,17 @@ hi FoldColumn guibg=#c0c0c0 guifg=Darkblue
 hi DiffAdd guibg=Lightblue
 hi DiffChange guibg=LightMagenta
 hi DiffDelete gui=bold guifg=#ff8040 guibg=LightCyan
-
 hi Comment guifg=#ff8040 guibg=#d3e4f8
 hi Constant guifg=#BB0000 guibg=#d3e4f8
-hi PreProc guifg=#008080 guibg=#d3e4f8
+hi PreProc guifg=#008080 guibg=#d3e4f8 
 hi Statement gui=NONE guifg=#008000 guibg=#d3e4f8
 hi Special guifg=#008080 guibg=#d3e4f8
+hi Special cterm=bold ctermbg=0 ctermfg=211
 hi Ignore guifg=#c0c0c0
 hi Identifier guifg=#000080 guibg=#d3e4f8
 hi Type guifg=#00BB00 guibg=#d3e4f8
+"
+" line numbers
 
 hi link IncSearch		Visual
 hi link String			Constant
