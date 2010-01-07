@@ -14,6 +14,7 @@ require("naughty")
 require("debian.menu")
 
 theme_path = "/home/justin/.config/awesome/themes/default/theme.lua"
+--theme_path = "/usr/share/awesome/themes/zenburn/theme.lua"
 beautiful.init(theme_path)
 
 -- {{{ Load the functions in awesome.d
@@ -54,7 +55,7 @@ settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Termin
 --settings.mouse_marker_synergy = "<span bgcolor=" .. [["]] .. light_green .. [[">[╳]</span>]]
 
 -- This is used later as the default terminal and editor to run.
-terminal = "termit"
+terminal = "gnome-terminal"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -92,6 +93,10 @@ for s = 1, screen.count() do
     tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
 -- }}}
+
+awful.tag.setncol(2, tags[screen.count()][2])
+awful.tag.setnmaster (1, tags[screen.count()][2])
+awful.tag.setmwfact (0.2, tags[screen.count()][2])
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
@@ -228,8 +233,8 @@ for s = 1, screen.count() do
         rspace,
         mytextclock,
         rspace,
-        s == 1 and mysystray or nil,
-        s == 1 and rspace or nil,
+        s == screen.count() and mysystray or nil,
+        s == screen.count() and rspace or nil,
         mytasklist[s],
         rspace,
         layout = awful.widget.layout.horizontal.rightleft
@@ -561,12 +566,15 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
+    { rule = { class = "rdesktop" },
+      properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
     { rule = { class = "Pidgin" },
-     properties = { tag = tags[1][2] } },
+     properties = { tag = tags[screen.count()][2] } },
+     --callback = awful.client.setslave },
     { rule = { class = "Thunderbird-bin" },
-     properties = { tag = tags[1][3] } },
+     properties = { tag = tags[screen.count()][3] } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -624,4 +632,6 @@ clocktimer = timer { timeout = .2 }
 clocktimer:add_signal("timeout", function() mytextclock.text=os.date("%a %b %e, %r %Y") end)
 clocktimer:start()
 
+client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
