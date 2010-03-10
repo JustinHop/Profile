@@ -7,5 +7,9 @@ if ps aux | grep -v grep | egrep '\<autossh' ; then
 	echo "Bad News Bears"
 	exit 0
 else
+<<<<<<< HEAD:bin/autoautossh
     sudo -u tunnel autossh -M0 -D 5190 -R 150${NUM}:localhost:22 -oBatchMode=yes -oExitOnForwardFailure=yes -T -N tunnel@virtual.justinhoppensteadt.com
+=======
+    sudo sudo -u tunnel autossh -M0 -D 5190 -R 150${NUM}:localhost:22 -oBatchMode=yes -oExitOnForwardFailure=yes -T -N tunnel@jh.com
+>>>>>>> 9face3a3df82c242ffec940ebb0d547ae7dd966b:bin/autoautossh
 fi
