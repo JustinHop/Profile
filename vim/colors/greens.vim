@@ -41,6 +41,8 @@ hi CursorColumn                                    guibg=#403820
 
 hi MatchParen  ctermfg=White      guifg=White      guibg=DarkGreen    ctermbg=DarkGreen
 
+hi LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
+
 hi Pmenu       ctermfg=Black      guifg=Black      guibg=#C4C090      ctermbg=LightGray
 hi PmenuSel    ctermfg=Black      guifg=Black      guibg=#FFBF00      ctermbg=Yellow
 hi PmenuSbar   ctermfg=Black      guifg=Black      guibg=LightGray    ctermbg=White
