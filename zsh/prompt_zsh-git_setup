@@ -38,11 +38,11 @@ colorword() {
 
 prompt_zsh-git_setup() {
 	local verbose
-	if [[ $TERM == screen* ]] && [ -n "$STY" ]; then
+#	if [[ $TERM == screen* ]] && [ -n "$STY" ]; then
 		verbose=
-	else
-		verbose=1
-	fi
+#	else
+#		verbose=1
+#	fi
 
 	typeset -A colorcode
 	colorcode[black]=0

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rdesktop -r clipboard:PRIMARYCLIPBOARD -K -g 800x900 -u hoppenj "$@" &

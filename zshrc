@@ -1,7 +1,7 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.0.5"
+export ZSHRC_VERSION="2.0.5a"
 
 #
 # WORKSPACE AND ENVIRONMENT
@@ -276,6 +276,12 @@ fi
 # GNU LS ALIASES
 #
 
+if [[ -x `whence zsh-beta` ]]; then
+	alias z=`whence zsh-beta`
+else
+	alias z=$0
+fi
+
 if [[ $GNU_COREUTILS -eq 1 ]]; then
     export GREP_COLOR=auto
 
@@ -360,6 +366,9 @@ alias -g U="|uniq"
 alias -g UU="|&uniq"
 alias -g GP="|grep -P"
 alias -g GGP="|&grep -P"
+
+alias z=$0
+alias s=sudo
 
 # greppy
 if [[ -x `whence egrep` ]]; then
