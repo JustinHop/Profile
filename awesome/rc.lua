@@ -581,16 +581,8 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons } },
     { rule = { class = "Kruler" },
-<<<<<<< HEAD
-      properties = { floating = true, },
-      callback = function (c)
-          c.border_width = 0
-          awful.client.unmanage()
-      end},
-=======
       properties = { floating = true,
           border_width = 0 }, },
->>>>>>> b6f75d2e76ab209f4f6dfbffc820f13fb117862f
     { rule = { class = "MPlayer" },
       properties = { floating = true } },
     { rule = { class = "pinentry" },
@@ -624,10 +616,6 @@ client.add_signal("manage", function (c, startup)
             and awful.client.focus.filter(c) then
             client.focus = c
         end
-<<<<<<< HEAD
-
-=======
->>>>>>> b6f75d2e76ab209f4f6dfbffc820f13fb117862f
     end)
 
     if not startup then
@@ -642,16 +630,8 @@ client.add_signal("manage", function (c, startup)
         end
     end
 
-<<<<<<< HEAD
     --awful.tag.seticon(awful.client.getmaster(mouse.screen).icon)
     awful.tag.seticon(c.icon)
-=======
-    --[[awful.tag.seticon(awful.client.getmaster(mouse.screen).icon)
-    awful.tag.seticon(c.icon)
-    local m = awful.client.getmaster()
-    awful.tag.seticon(m.icon)
-    mousemarker() ]]--
->>>>>>> b6f75d2e76ab209f4f6dfbffc820f13fb117862f
 end)
 
 client.add_signal("focus", function(c) 
