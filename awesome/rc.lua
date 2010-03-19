@@ -1,7 +1,7 @@
 -- Standard awesome library
 require("awful")
-require("awful.autofocus")
 require("awful.rules")
+require("awful.autofocus")
 -- Theme handling library
 require("beautiful")
 -- Notification library
@@ -13,6 +13,19 @@ require("naughty")
 -- Load Debian menu entries
 require("debian.menu")
 
+function destroyall()
+    for loopy = 1, 10 do
+    for s = 1, screen.count() do
+        for p,pos in pairs(naughty.notifications[s]) do
+            for i,notification in pairs(naughty.notifications[s][p]) do
+                naughty.destroy(notification)
+            end 
+        end 
+    end 
+    end
+end
+
+naughty.config.screen = screen.count()
 theme_path = "/home/justin/.config/awesome/themes/default/theme.lua"
 beautiful.init(theme_path)
 
@@ -38,7 +51,6 @@ for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/*.lua")
 end
 -- }}}
 
---naughty.config.presets.default.screen = screen.count()
 
 settings = {}
 settings.debug = 1
@@ -256,6 +268,9 @@ globalkeys = awful.util.table.join(
     awful.key({ "Shift" }, "F11",  awful.tag.viewnext       ),
     awful.key({ modkey }, "d",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
+    awful.key({ modkey }, "c",   function () destroyall()  end     ),
+    awful.key({ modkey }, "i",   function () awful.tag.seticon()  end     ),
+
 
     awful.key({ modkey,           }, "j",
         function ()
@@ -557,6 +572,12 @@ awful.rules.rules = {
                      focus = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
+    { rule = { class = "Kruler" },
+      properties = { floating = true, },
+      callback = function (c)
+          c.border_width = 0
+          awful.client.unmanage()
+      end},
     { rule = { class = "MPlayer" },
       properties = { floating = true } },
     { rule = { class = "pinentry" },
@@ -581,11 +602,12 @@ client.add_signal("manage", function (c, startup)
 
     -- Enable sloppy focus
     c:add_signal("mouse::enter", function(c)
+
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
             and awful.client.focus.filter(c) then
             client.focus = c
         end
-        mousemarker() 
+
     end)
 
     if not startup then
@@ -600,19 +622,15 @@ client.add_signal("manage", function (c, startup)
         end
     end
 
-    awful.tag.seticon(awful.client.getmaster(mouse.screen).icon)
+    --awful.tag.seticon(awful.client.getmaster(mouse.screen).icon)
     awful.tag.seticon(c.icon)
-    local m = awful.client.getmaster()
-    awful.tag.seticon(m.icon)
-    mousemarker() 
 end)
 
 client.add_signal("focus", function(c) 
     c.border_color = beautiful.border_focus 
-    mousemarker()
+    awful.tag.seticon(c.icon)
 end)
 client.add_signal("unfocus", function(c) 
-    mousemarker()
     c.border_color = beautiful.border_normal 
 end)
 

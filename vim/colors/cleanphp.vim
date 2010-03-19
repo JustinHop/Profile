@@ -14,7 +14,7 @@ endif
 
 let colors_name = "cleanphp"
 
-hi Normal guifg=#008000 guibg=#d3e4f8
+hi Normal guifg=#1AD91A guibg=#000000
 
 hi ErrorMsg guibg=#d3e4f8 guifg=Red
 hi IncSearch gui=reverse
@@ -25,32 +25,32 @@ hi VertSplit gui=reverse
 hi Visual gui=reverse guifg=#c0c0c0 guibg=fg
 hi VisualNOS gui=underline,bold
 hi DiffText gui=bold guibg=Red
-hi Cursor guibg=Black guifg=NONE
-hi lCursor guibg=Black guifg=NONE
+hi Cursor guibg=Red guifg=NONE
+hi lCursor gui=underline guibg=Black guifg=NONE
 hi Directory guifg=#ff8040
-hi LineNr           guifg=#857b6f           guibg=#444444
+hi LineNr           guifg=#CFCB24           guibg=#444444
 hi LineNr           ctermfg=101             ctermbg=238
 hi MoreMsg gui=bold guifg=SeaGreen
-hi NonText gui=bold guifg=#ff8040 guibg=#d3e4f8
+hi NonText gui=bold guifg=Red guibg=#122025
 hi Question gui=bold guifg=Black
 hi Search guibg=#008000 guifg=NONE
 hi SpecialKey guifg=#ff8040
 hi Title gui=bold guifg=Magenta
 hi WarningMsg guifg=Red
 hi WildMenu guibg=Cyan guifg=#d3e4f8
-hi Folded guibg=White guifg=Darkblue
-hi FoldColumn guibg=#c0c0c0 guifg=Darkblue
+hi Folded guibg=#E7A7FC guifg=Darkblue
+hi FoldColumn guibg=#b550d7 guifg=Darkblue
 hi DiffAdd guibg=Lightblue
 hi DiffChange guibg=LightMagenta
 hi DiffDelete gui=bold guifg=#ff8040 guibg=LightCyan
-hi Comment guifg=#ff8040 guibg=#d3e4f8
-hi Constant guifg=#BB0000 guibg=#d3e4f8
-hi PreProc guifg=#008080 guibg=#d3e4f8 
-hi Statement gui=NONE guifg=#008000 guibg=#d3e4f8
-hi Special guifg=#008080 guibg=#d3e4f8
+hi Comment guifg=#ff8040 guibg=#4C4872
+hi Constant guifg=#BB0000 guibg=#787579
+hi PreProc gui=bold guifg=#008080 guibg=#658F9A 
+hi Statement gui=bold guifg=yellow 
+hi Special guifg=#008080 guibg=yellow
 hi Special cterm=bold ctermbg=0 ctermfg=211
 hi Ignore guifg=#c0c0c0
-hi Identifier guifg=#000080 guibg=#d3e4f8
+hi Identifier guifg=white guibg=#1c2b1c
 hi Type guifg=#00BB00 guibg=#d3e4f8
 "
 " line numbers
