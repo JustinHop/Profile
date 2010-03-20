@@ -38,7 +38,7 @@ else
 fi
 
 echo "GET $FILE HTTP/1.1
-Host: $HOST
+Host: $SITE
 Connection: Close
 
 " | nc $HOST 80
