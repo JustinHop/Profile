@@ -14,189 +14,65 @@ require("naughty")
 require("freedesktop.utils")
 require("freedesktop.menu")
 
-require("tsave")
+--require("tsave")
 --require("bashets")
 --require("pipelets")
 
 require("myrc.mainmenu")
 --require("myrc.tagman")
 require("myrc.themes")
-require("myrc.keybind")
-require("myrc.memory")
-require("myrc.logmon")
+--require("myrc.keybind")
+--require("myrc.memory")
+--require("myrc.logmon")
 
 --{{{ Debug 
 function dbg(vars)
-	local text = ""
-	for i=1, #vars-1 do text = text .. tostring(vars[i]) .. " | " end
-	text = text .. tostring(vars[#vars])
-	naughty.notify({ text = text, timeout = 10 })
+    local text = ""
+    for i=1, #vars-1 do text = text .. tostring(vars[i]) .. " | " end
+    text = text .. tostring(vars[#vars])
+    naughty.notify({ text = text, timeout = 10 })
 end
 
 function dbg_client(c)
-	local text = ""
-	if c.class then
-		text = text .. "Class: " .. c.class .. " "
-	end
-	if c.instance then
-		text = text .. "Instance: ".. c.instance .. " "
-	end
-	if c.role then
-		text = text .. "Role: ".. c.role .. " "
-	end
-	if c.type then
-		text = text .. "Type: ".. c.type .. " "
-	end
+    local text = ""
+    if c.class then
+        text = text .. "Class: " .. c.class .. " "
+    end
+    if c.instance then
+        text = text .. "Instance: ".. c.instance .. " "
+    end
+    if c.role then
+        text = text .. "Role: ".. c.role .. " "
+    end
+    if c.type then
+        text = text .. "Type: ".. c.type .. " "
+    end
 
-	text = text .. "Full name: '" .. client_name(c) .. "'"
+    text = text .. "Full name: '" .. client_name(c) .. "'"
 
-	dbg({text})
+    dbg({text})
 end
 --}}}
 
---{{{ Menu generators
-function client_name(c)
-    local cls = c.class or ""
-    local inst = c.instance or ""
-	local role = c.role or ""
-	local ctype = c.type or ""
-	return cls..":"..inst..":"..role..":"..ctype
-end
-
-
-function save_floating(c, f)
-	myrc.memory.set("floating", client_name(c), f)
-	awful.client.floating.set(c, f)
-	return f
-end
-
-function get_floating(c, def)
-	if def == nil then def = awful.client.floating.get(c) end
-	return myrc.memory.get("floating", client_name(c), def)
-end
-
-function save_centered(c, val)
-	myrc.memory.set("centered", client_name(c), val)
-	if val == true then
-		awful.placement.centered(c)
-        save_floating(c, true)
-	end
-	return val
-end
-
-function get_centered(c, def)
-	return myrc.memory.get("centered", client_name(c), def)
-end
-
-function save_titlebar(c, val)
-	myrc.memory.set("titlebar", client_name(c), val)
-	if val == true then
-		awful.titlebar.add(c, { modkey = modkey })
-	elseif val == false then
-		awful.titlebar.remove(c)
-	end
-	return val
-end
-
-function get_titlebar(c, def)
-	return myrc.memory.get("titlebar", client_name(c), def)
-end
-
-function save_tag(c, tag)
-	local tn = "none"
-	if tag then tn = tag.name end
-	myrc.memory.set("tags", client_name(c), tn)
-	if tag ~= nil and tag ~= awful.tag.selected() then 
-		awful.client.movetotag(tag, c) 
-	end
-end
-
-function get_tag(c, def)
-	local tn = myrc.memory.get("tags", client_name(c), def)
-	return myrc.tagman.find(tn)
-end
-
-function save_geometry(c, val)
-	myrc.memory.set("geometry", client_name(c), val)
-	c:geometry(val)
-end
-
-function get_geometry(c, def)
-	return myrc.memory.get("geometry", client_name(c), def)
-end
-
-
--- Builds menu for client c
-function build_client_menu(c, kg)
-	if mycontextmenu then awful.menu.hide(mycontextmenu) end
-	local centered = get_centered(c)
-	local floating = get_floating(c)
-	local titlebar = get_titlebar(c)
-	local geometry = get_geometry(c)
-	function checkbox(name, val) 
-		if val==true then return "[X] "..name 
-		elseif val==false then return "[ ] " .. name 
-		else return "[?] " .. name 
-		end 
-	end
-	function bool_submenu(f) 
-		return {
-			{"Set", function () f(true) end },
-			{"UnSet", function() f(false) end },
-		}
-	end
-	mycontextmenu = awful.menu.new( { 
-		items = { 
-			{ "Close", function() c:kill() 
-				end, freedesktop.utils.lookup_icon({ icon = 'gtk-stop' })} ,
-			{ checkbox("Floating",floating), 
-				bool_submenu(function(v) save_floating(c, v) end) },
-			{ checkbox("Centered", centered),
-				bool_submenu(function(v) save_centered(c, v) end) },
-			{ checkbox("Titlebar", titlebar),
-				bool_submenu(function(v) save_titlebar(c, v) end) },
-			{ checkbox("Store geomtery", geometry ~= nil ), function() 
-				save_geometry(c, c:geometry() ) 
-				end, },
-			{ "Toggle maximize", function () 
-				c.maximized_horizontal = not c.maximized_horizontal
-				c.maximized_vertical   = not c.maximized_vertical
-				end, },
-			{ "Bind to this tag", function ()
-				local t = awful.tag.selected()
-				naughty.notify({text = 
-					"Client " .. c.name .. " was bound to tag " .. t.name}) 
-                save_tag(c, t) 
-				end, },
-			{ "Unbind from tags", function ()
-                save_tag(c, nil) 
-				naughty.notify({text = 
-					"Client " .. c.name .. " was unbound from tags "}) 
-				end, },
-		}, 
-		height = beautiful.menu_context_height 
-	} )
-	awful.menu.show(mycontextmenu, kg)
-end
 -- {{{ Load the functions in awesome.d
 function import(file)
     -- local ret = awful.util.checkfile( awful.util.getdir("config") .. file ".lua" );
     local ret = awful.util.checkfile(file);
     if type(ret) == "string" then
-    	io.stderr:write(ret, "\n")
-    	return true
+        io.stderr:write(ret, "\n")
+        return true
     else
-    	--io.stderr:write("Returned type: ", type(ret), "\n")
-    	pcall(ret)
-    	--require(file)
+        --io.stderr:write("Returned type: ", type(ret), "\n")
+        pcall(ret)
+        --require(file)
     end
 end
 
 for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/*.lua"):lines() do
-	if string.find(file,"%.lua$") then 
-		--io.stderr:write("Importing ", file, "\n")
-		import(file)
-	end
+    if string.find(file,"%.lua$") then 
+        --io.stderr:write("Importing ", file, "\n")
+        import(file)
+    end
 end
 -- }}}
 -- This is used later as the default terminal and editor to run.
@@ -214,17 +90,17 @@ altkey = "Mod1"
 
 -- Helper variables
 env = {
-	browser = "firefox ",
-	man = "gnome-terminal -e man ",
-	terminal = "gnome-terminal ", 
-	screen = "gnome-terminal -e screen",
-	terminal_root = "gnome-terminal -e su -c screen",
-	im = "pidgin ",
-	editor = os.getenv("EDITOR") or "gnome-terminal -e vim ",
-	home_dir = os.getenv("HOME"),
-	music_show = "gmpc --replace",
-	music_hide = "gmpc --quit",
-	run = "gmrun"
+    browser = "firefox ",
+    man = "gnome-terminal -e man ",
+    terminal = "gnome-terminal ", 
+    screen = "gnome-terminal -e screen",
+    terminal_root = "gnome-terminal -e su -c screen",
+    im = "pidgin ",
+    editor = os.getenv("EDITOR") or "gnome-terminal -e vim ",
+    home_dir = os.getenv("HOME"),
+    music_show = "gmpc --replace",
+    music_hide = "gmpc --quit",
+    run = "gmrun"
 }
 
 -- Naughty
@@ -261,21 +137,21 @@ for s = 1, screen.count() do
 end
 -- }}}
 awful.menu.menu_keys = {
-	up={ "Up", 'k' }, 
-	down = { "Down", 'j' }, 
-	back = { "Left", 'x', 'h' }, 
-	exec = { "Return", "Right", 'o', 'l' },
-	close = { "Escape" }
+    up={ "Up", 'k' }, 
+    down = { "Down", 'j' }, 
+    back = { "Left", 'x', 'h' }, 
+    exec = { "Return", "Right", 'o', 'l' },
+    close = { "Escape" }
 }
 
-myrc.memory.init()
+--myrc.memory.init()
 
 beautiful.init(myrc.themes.current())
 
 myrc.mainmenu.init(env)
 
 
-myrc.logmon.init()
+--myrc.logmon.init()
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = {}
@@ -297,7 +173,7 @@ rspace.text=[[<span bgcolor="#30C23D"><sub><b>]] .. "┃" .. [[</b></sub></span>
 -- Empty launcher
 mymainmenu = myrc.mainmenu.build()
 mylauncher = awful.widget.launcher({ 
-	image = beautiful.awesome_icon, menu = mymainmenu })
+    image = beautiful.awesome_icon, menu = mymainmenu })
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
@@ -307,16 +183,16 @@ mywibox = {}
 mypromptbox = {}
 mylayoutbox = {}
 mylayoutbox.buttons = awful.util.table.join(
-	awful.button({ }, 1, function () 
-		awful.layout.inc(layouts, 1) 
-		naughty.notify({text = awful.layout.getname(awful.layout.get(1))}) 
-	end),
-	awful.button({ }, 3, function () 
-		awful.layout.inc(layouts, -1) 
-		naughty.notify({text = awful.layout.getname(awful.layout.get(1))}) 
-	end),		
-	awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
-	awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end) 
+    awful.button({ }, 1, function () 
+        awful.layout.inc(layouts, 1) 
+        naughty.notify({text = awful.layout.getname(awful.layout.get(1))}) 
+    end),
+    awful.button({ }, 3, function () 
+        awful.layout.inc(layouts, -1) 
+        naughty.notify({text = awful.layout.getname(awful.layout.get(1))}) 
+    end),       
+    awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
+    awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end) 
 )
 
 -- Taglist
@@ -337,23 +213,29 @@ mytaglist.buttons = awful.util.table.join(
                     )
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
-	awful.button({ }, 1, function (c)
-		if not c:isvisible() then
-			awful.tag.viewonly(c:tags()[1])
-		end
-		client.focus = c
-		c:raise()
-	end),
-	awful.button({ }, 3, function (c) build_client_menu(c) end),
-	awful.button({ }, 4, function ()
-		awful.client.focus.byidx(1)
-		if client.focus then client.focus:raise() end
-	end),
-	awful.button({ }, 5, function ()
-		awful.client.focus.byidx(-1)
-		if client.focus then client.focus:raise() end
-	end) 
-)
+                     awful.button({ }, 1, function (c)
+                                              if not c:isvisible() then
+                                                  awful.tag.viewonly(c:tags()[1])
+                                              end
+                                              client.focus = c
+                                              c:raise()
+                                          end),
+                     awful.button({ }, 3, function ()
+                                              if instance then
+                                                  instance:hide()
+                                                  instance = nil
+                                              else
+                                                  instance = awful.menu.clients({ width=250 })
+                                              end
+                                          end),
+                     awful.button({ }, 4, function ()
+                                              awful.client.focus.byidx(1)
+                                              if client.focus then client.focus:raise() end
+                                          end),
+                     awful.button({ }, 5, function ()
+                                              awful.client.focus.byidx(-1)
+                                              if client.focus then client.focus:raise() end
+                                          end))
 
 for s = 1, screen.count() do
     mydebugbox[s] = widget({ type = "textbox", align = "right" })
@@ -364,7 +246,7 @@ for s = 1, screen.count() do
 
     mymousebox[s] = widget({ type = "textbox", align = "left" })
     if screen.count() ~= 1 then 
-    	mymousebox[s].text = "[-]"
+        mymousebox[s].text = "[-]"
     end
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
@@ -387,20 +269,20 @@ for s = 1, screen.count() do
                                           ]]--
 
     mytasklist[s] = awful.widget.tasklist(
-		function(c)
+        function(c)
             local text,bg,st,icon = awful.widget.tasklist.label.currenttags(c, s)
 --            local text,bg,st,icon = awful.widget.tasklist.label.focused(c, s)
 --            local usertext = awful.client.property.get(c, "name")
 --            if usertext ~= nil then text = usertext end
             return text,bg,st,icon
-		end, mytasklist.buttons)
+        end, mytasklist.buttons)
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
-        	lspace,
+            lspace,
             mylauncher,
             lspace,
             mymousebox[s].text  and mymousebox[s] or nil,
@@ -438,34 +320,36 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 -- Standard program
 function switch_to_client(direction)
-	if direction == 0 then
-		awful.client.focus.history.previous()
-	else
-		awful.client.focus.byidx(direction);  
-	end
-	if client.focus then client.focus:raise() end
+    if direction == 0 then
+        awful.client.focus.history.previous()
+    else
+        awful.client.focus.byidx(direction);  
+    end
+    if client.focus then client.focus:raise() end
 end
 -- Toggle tags between current and one, that has name 'name'
+--[[
 function toggle_tag(name)
-	local this = awful.tag.selected()
-	if this.name == name then
-		awful.tag.history.restore()
-	else
-		local t = myrc.tagman.find(name)
-		if t == nil then
-			naughty.notify({text = "Can't find tag with name '" .. name .. "'"})
-			return
-		end
-		awful.tag.viewonly(t)
-	end
+    local this = awful.tag.selected()
+    if this.name == name then
+        awful.tag.history.restore()
+    else
+        local t = myrc.tagman.find(name)
+        if t == nil then
+            naughty.notify({text = "Can't find tag with name '" .. name .. "'"})
+            return
+        end
+        awful.tag.viewonly(t)
+    end
 end
+]]--
 
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ "Shift" }, "F10",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ "Shift" }, "F11",  awful.tag.viewnext       ),
-    awful.key({ modkey }, "d",  awful.tag.viewnext       ),
+    --awful.key({ modkey }, "d",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     awful.key({ modkey,           }, "j",
@@ -514,26 +398,6 @@ globalkeys = awful.util.table.join(
     -- Status bar control
     awful.key({ modkey }, "b", function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end),
 
-    awful.key({ modkey }, "p", function ()
-        if not mywibox[mouse.screen].visible then
-            mywibox[mouse.screen].visible = true
-        end
-        awful.prompt.run({ prompt = setFg("white", "Run: ") },
-                           mypromptbox[mouse.screen],
-                           awful.util.spawn, awful.completion.bash,
-                           awful.util.getdir("cache") .. "/history")
-    end),
-
-    awful.key({ modkey, "Shift" }, "p", function ()
-        if not mywibox[mouse.screen].visible then
-            mywibox[mouse.screen].visible = true
-        end
-        awful.prompt.run({ prompt = setFg("white", "Run Lua code: ") },
-                           mypromptbox[mouse.screen],
-                           awful.util.eval, awful.prompt.bash,
-                           awful.util.getdir("cache") .. "/history_eval")
-    end),
-    --
     -- MPD Controlling
     awful.key({   }, "XF86AudioPlay",      function () awful.util.spawn("mpc toggle") end)  ,
     --awful.key({   }, "Cancel",             function () awful.util.spawn("mpc toggle") end)  ,
@@ -594,7 +458,7 @@ globalkeys = awful.util.table.join(
                   awful.util.getdir("cache") .. "/history_eval")
               end),
     -- Debuggers
-    awful.key({ modkey, "Control" }, "d", function ()
+    awful.key({ modkey, "Shift" }, "d", function ()
             if settings.debug then
                 settings.debug = false
                 for s = 1, screen.count() do mydebugbox[s].text = nil end
@@ -622,28 +486,11 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
-    awful.key({ modkey }, "F1", 
-		function (c) 
-			local tag = myrc.tagman.getn(-1)
-			awful.client.movetotag(tag, c)
-			awful.tag.viewonly(tag)
-		end),
-    awful.key({ modkey }, "F2", 
-		function (c) 
-			local tag = myrc.tagman.getn(1)
-			awful.client.movetotag(tag, c)
-			awful.tag.viewonly(tag)
-		end),
-	awful.key({ altkey }, "F4", function (c) c:kill() end),
-    awful.key({ altkey }, "F5",
-        function (c)
-            c.maximized_horizontal = not c.maximized_horizontal
-            c.maximized_vertical   = not c.maximized_vertical
-        end),
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
+    awful.key({ modkey, "Shift" }, "o", awful.client.movetoscreen),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey }, "t", awful.client.togglemarked),
@@ -654,11 +501,6 @@ clientkeys = awful.util.table.join(
             c.maximized_vertical   = not c.maximized_vertical
         end),
     -- manipulation
-    awful.key({ modkey, "Control" }, "m", function (c) c.minimized = not c.minimized end),
-    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey, "Shift" }, "o", awful.client.movetoscreen),
-    awful.key({ modkey, }, "r", function (c) c:redraw() end),
-    -- TODO: Shift+r to redraw all clients in current tag
 
     -- Toggle titlebar
     awful.key({ modkey, "Shift"   }, "t",
@@ -670,70 +512,8 @@ clientkeys = awful.util.table.join(
                 awful.titlebar.add(c, { modkey = "Mod1" })
                 debug_notify(c.name .. "\ntitlebar " .. colored_on)
             end
-        end),
+        end)
 
-    awful.key({ altkey }, "`", function(c) build_client_menu(c, true) end),
-    awful.key({ modkey , "Ctrl" }, "d", function(c) 
-        myrc.keybind.push_client( {
-            myrc.keybind.key({}, "Escape", "Cancel", function (c) 
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "f", "Toggle floating", function (c) 
-                save_floating(c, not awful.client.floating.get(c))
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "c", "Set centered on", function (c) 
-                save_centered(c, true)
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({"Shift"}, "c", "Set centered off", function (c) 
-                save_centered(c, false)
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "t", "Toggle titlebar", function (c) 
-                save_titlebar(c, not get_titlebar(c, false)) 
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "g", "Save geometry", function (c) 
-                save_geometry(c, get_geometry(c))
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "s", "Toggle fullscreen", function (c) 
-                c.maximized_horizontal = not c.maximized_horizontal
-                c.maximized_vertical   = not c.maximized_vertical
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "r", "Rename", function (c) 
-                awful.prompt.run(
-                    { prompt = "Rename client: " }, 
-                    mypromptbox[mouse.screen].widget, 
-                    function(n) awful.client.property.set(c,"name", n) end,
-                    awful.completion.bash,
-                    awful.util.getdir("cache") .. "/rename")
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "d", "Stick to this tag", function (c) 
-				local t = awful.tag.selected()
-                save_tag(c, t) 
-				naughty.notify({text = "Client " .. c.name .. " was bound to tag " .. t.name}) 
-                myrc.keybind.pop_client(c) 
-            end), 
-
-            myrc.keybind.key({"Shift"}, "d", "Unbound from any tag", function (c) 
-                save_tag(c, nil) 
-				naughty.notify({text = "Client " .. c.name .. " was unbound from tag"}) 
-                myrc.keybind.pop_client(c) 
-            end)
-        } , "Change '" .. c.name .. "' settings", c) 
-    end)
 )
 
 -- Compute the maximum number of digit we need, limited to 9
@@ -805,6 +585,13 @@ awful.rules.rules = {
                      focus = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
+    { rule = { class = "Conky" },
+      properties = { focus = false,
+                     keys = clientkeys,
+                     buttons = clientbuttons } },
+    { rule = { class = "Googsystray" },
+      properties = { floating = true,
+          border_width = 0 }, },
     { rule = { class = "Kruler" },
       properties = { floating = true,
           border_width = 0 }, },
@@ -843,7 +630,7 @@ client.add_signal("manage", function (c, startup)
     end)
 
     if c.class == "pidgin" and c.role == "buddy_list" then
-    	awful.client.slave(c)
+        awful.client.slave(c)
     end
 
     if not startup then
@@ -863,8 +650,8 @@ end)
 client.add_signal("focus", function(c) 
     c.border_color = beautiful.border_focus 
     awful.tag.seticon(c.icon)
-	if mymainmenu then awful.menu.hide(mymainmenu) end
-	if mycontextmenu then awful.menu.hide(mycontextmenu) end
+    if mymainmenu then awful.menu.hide(mymainmenu) end
+    if mycontextmenu then awful.menu.hide(mycontextmenu) end
 end)
 client.add_signal("unfocus", function(c) 
     mousemarker()
