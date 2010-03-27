@@ -1,52 +1,22 @@
-    if [[ -f list ]]; then
-
-        for RCFILE in bashrc
-gvimrc
-gitconfig
-include
-inputrc
-perltidyrc
-screenrc
-vimperatorrc
-vimrc
-vim
-rpmmacros
-zshenv
-zlogin
-zlogout
+        for RCFILE in bashrc \
+gvimrc \
+gitconfig \
+include \
+inputrc \
+perltidyrc \
+screenrc \
+vimperatorrc \
+vimrc \
+vim \
+rpmmacros \
+zshenv \
+zlogin \
+zlogout \
 zshrc ; do
 
-            if [[ -f "~/." ]]; then
+	mv -v ~/.$RCFILE /tmp
 
-                mv -v "~/." "~/..old"
-
-            fi
-
-            ln -sfv "/home/justin/git/Profile/" ~/.
+            ln -sfv ~/Profile/$RCFILE ~/.$RCFILE
 
         done
-
-        if [[ -d ssh ]]; then
-
-            chmod 700 ssh
-
-            for SSHFILE in ssh/*(-.) ; do
-
-                if [[ -f "~/." ]]; then
-
-                    mv ~/. ~/..old
-
-                fi
-
-                ln -sfv "/home/justin/git/Profile/" ~/.
-
-            done
-
-        fi
-
-    else
-
-        echo "no list :-("
-
-    fi
 
