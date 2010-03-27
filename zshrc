@@ -563,7 +563,7 @@ if [[ -o interactive ]]; then
     autoload -U promptinit
     promptinit
 
-    prompt justin2
+    prompt clint
 
     autoload -U title
     autoload -U precmd
