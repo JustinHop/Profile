@@ -211,6 +211,7 @@ if has("autocmd")
         au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
         au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
         au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
+        au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
     augroup END
 
     " ZSH Brokenness
