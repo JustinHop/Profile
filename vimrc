@@ -445,4 +445,6 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
 "    autocmd BufEnter * :lcd %:p:h
 "endif " has("autocmd")
 "
+let g:detectindent_preferred_expandtab = 1
+let g:detectindent_preferred_indent = 4
 " vim:ft=vim:syn=vim:ts=4

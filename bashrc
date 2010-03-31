@@ -1,5 +1,7 @@
 set -o vi
 
+umask 002
+
 alias srpm="rpmbuild --target i686 --rebuild"
 alias rpm="rpm --verbose"
 alias A="ACCEPT_KEYWORDS=\"~x86\" "
