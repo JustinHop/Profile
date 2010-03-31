@@ -36,6 +36,19 @@ naughty.icon_dirs={ "/usr/share/pixmaps/",
 
 --config.presets.normal.border_color = beautiful.bg_focus .. 25
 
+	
+function destroyall()
+    for s = 1, capi.screen.count() do
+        for p,pos in pairs(naughty.notifications[s]) do
+            for i,notification in pairs(naughty.notifications[s][p]) do
+                naughty.destroy(notification.id)
+                io.stderr:write(notification.id)
+            end 
+        end 
+    end 
+end
+
+
 function naughty.notifyall(args)
     if args.replaces_id then
     	id = args.replaces_id 

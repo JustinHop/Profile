@@ -367,6 +367,9 @@ alias -g UU="|&uniq"
 alias -g GP="|grep -P"
 alias -g GGP="|&grep -P"
 
+alias z=$0
+alias s=sudo
+
 # greppy
 if [[ -x `whence egrep` ]]; then
     alias -g G="|egrep"
@@ -569,7 +572,7 @@ if [[ -o interactive ]]; then
     autoload -U promptinit
     promptinit
 
-    prompt justin2
+    prompt clint
 
     autoload -U title
     autoload -U precmd

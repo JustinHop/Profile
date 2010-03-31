@@ -14,7 +14,7 @@ host ukmx1 usmx6 usmx7 usmx8
     user admin
 
 Host umgapp1 app1
-    user jhoppens
+    user hoppenj
 
 Host uk* us* vm* att* umgmys1 mys1 web*
     user hoppenj

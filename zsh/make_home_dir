@@ -1,5 +1,4 @@
-
-for RCFILE in bashrc \
+        for RCFILE in bashrc \
 gvimrc \
 gitconfig \
 include \
@@ -24,11 +23,4 @@ zshrc ; do
             ln -sfv "/home/justin/Profile/$RCFILE" ~/.$RCFILE
 
         done
-
-
-    else
-
-        echo "no list :-("
-
-    fi
 

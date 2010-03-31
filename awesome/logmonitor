@@ -1,0 +1,140 @@
+#!/bin/sh
+#
+# Copyright (C) 2010 Sergey Mironov
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Name of script (for later parsing)
+this=$0
+
+# Log to watch
+log="/var/log/messages"
+
+# Popup time
+infoPopupTime=5000
+warningPopupTime=8000
+errorPopupTime=11000
+securityPopupTime=11000
+
+# Icons
+infoIcon='/usr/share/icons/gnome/16x16/status/sunny.png'
+warningIcon='/usr/share/icons/gnome/16x16/status/dialog-warning.png'
+errorIcon='/usr/share/icons/gnome/16x16/status/dialog-error.png'
+securityIcon='/usr/share/icons/gnome/16x16/status/security-medium.png'
+
+# source-hightlight grammar or so
+outlang=$HOME/.config/awesome/themes/awesome.outlang
+
+filter_hide_pppd() { grep -w pppd | grep -qvE 'Welcome|Exit' ; }
+filter_hide_autofs() { grep -w automount ; }
+filter_hide_cron() { grep -w cron ; }
+filter_hide_pptp() { grep -w pptp ; }
+filter_hide_sudo() { grep -w sudo ; }
+filter_hide_ntp() { grep -w ntpd ; }
+filter_hide_stack() { grep "used greatest stack depth" ; }
+hiders=`grep -o 'filter\_hide\_[a-z0-9]*' $this`
+
+filter() {
+	while read line ; do
+		local failed=""
+		for h in $hiders ; do
+			echo $line | $h > /dev/null && { failed=y ; break ; }
+		done
+		test -z "$failed" && echo $line
+	done
+}
+
+marker_normal() { grep -q "warn" && echo error ; } 
+marker_err() { grep -q "err" && echo error ; } 
+marker_sec() { grep -qE "auth|access" && echo security ; }
+marker_low() { echo low ; }
+markers=`grep -o 'marker\_[a-z0-9]*' $this`
+
+marker() {
+	while read line ; do
+		for m in $markers ; do
+			echo $line | $m && break
+		done
+		echo $line
+	done
+}
+
+colorizer() {
+	while { read urgency && read line ; } ; do
+		echo $urgency
+		# source-highlight has ugly default colors.
+		#echo $line | source-highlight --failsafe --src-lang=log --style-file=default.style --outlang-def=$outlang
+		# This is alternative
+		proc=`echo $line | sed 's/.\+ .\+ [0-9:]\+ [^:]\+ \([^:[]\+\)\(\[[0-9]\+\]\)\?: .*/\1/'`
+		echo -n "<span color='#FF00FF'>$proc</span>"
+		pid=`echo $line | sed 's/.\+ .\+ [0-9:]\+ [^:]\+ \([^:[]\+\)\(\[[0-9]\+\]\)\?: .*/\2/'`
+		echo -n "<span color='#00FFFF'>$pid</span>: "
+		msg=`echo $line | sed 's/.\+ .\+ [0-9:]\+ [^:]\+ [^:]\+: //'`
+		echo    "<span color='#BBBBBB'>$msg</span>"
+	done
+}
+
+sender() {
+	# Message header
+	local header=$1
+	while { read urgency && read line ; } ; do
+		case $urgency in 
+			low|security)
+				urgency="low"
+				icon=$infoIcon
+				tpopup=$infoPopupTime
+			;;
+			normal)
+				urgency="normal"
+				icon=$warningIcon
+				tpopup=$warningPopupTime
+			;;
+			*)
+				urgency="critical"
+				icon=$errorIcon
+				tpopup=$errorPopupTime
+			;;
+		esac
+
+		notify-send -u "$urgency" -t "$tpopup" -i "$icon" "$header" "$line"
+	done
+}
+
+die() {
+	echo $@ >&2
+	{ echo "critical" ; echo "$@" ; } | sender "Error"
+	exit
+}
+
+check_prog() {
+	which "$1" >/dev/null 2>&1 || die "Please install $1"
+}
+
+check_pid() {
+	local pidfile="$HOME/.logmonitor.pid"
+	test -f "$pidfile" && pkill -P `cat $pidfile`
+	echo $$ > "$pidfile"
+}
+
+# Dependencies checking
+check_pid
+check_prog source-highlight 
+check_prog notify-send
+check_prog pkill
+test -f $log || die "Unable to read $log"
+
+# Main part
+tail -F -n0 $log | filter | marker | colorizer | sender $log
+
+
