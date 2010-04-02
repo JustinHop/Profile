@@ -211,6 +211,7 @@ if has("autocmd")
         au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
         au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
         au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
+        au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
     augroup END
 
     " ZSH Brokenness
@@ -374,6 +375,18 @@ function! ToggleHex()
     let &readonly=l:oldreadonly
 endfunction
 
+map <c-w><c-t> :WMToggle<cr> 
+"                          mnemonic: window-toggle : <c-W><c-T>
+
+":FirstExplorerWindow      :directly takes you to the first explorer window
+ "                          from the top left corner which is visible. >
+map <c-w><c-f> :FirstExplorerWindow<cr>
+"<                          mnemonic: window-first  : <c-W><c-F>
+
+":BottomExplorerWindow     :directly takes you to the last explorere window
+                           "from the top-left which is visible. >
+map <c-w><c-b> :BottomExplorerWindow<cr>
+
 "if version >= 700
 "   "  this line makes esc accept a completion
 "   inoremap <silent><Esc>      <C-r>=pumvisible()?"\<lt>C-e>":"\<lt>Esc>"<CR>
@@ -445,4 +458,7 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
 "    autocmd BufEnter * :lcd %:p:h
 "endif " has("autocmd")
 "
+let g:detectindent_preferred_expandtab = 1
+let g:detectindent_preferred_indent = 4
+
 " vim:ft=vim:syn=vim:ts=4
