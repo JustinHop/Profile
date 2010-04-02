@@ -143,6 +143,8 @@ endfunction
 filetype on
 filetype indent on
 
+set directory=~/tmp
+
 if has("autocmd")
     filetype plugin indent on
     "jumpback
@@ -162,28 +164,32 @@ if has("autocmd")
             if ! expand(&readonly)
                 au BufReadPost *
                             \ exe 'silent write! ' 
+                            \   substitute( expand(
                             \   substitute( expand( 
                             \       substitute( expand("$HOME/backup/") .
                             \           substitute( expand("%:p"), '/','_','g') . 
                             \           strftime("%Y%m%d.%H%M%S"), 
                             \       '\s','_', 'g') 
-                            \   ), '_','','')  
+                            \   ), '_','',''),
+                            \   ), 'LXWeb', 'LX_Web', 'g')
             endif
         endif
     else
         if has("unix")
             set backup
-            set backupdir=~/backup
+            set backupdir=expand("$HOME/backup")
         endif
     endif
 
     " purdy colors
     if expand($TERM) == "linux"
     	colorscheme elflord
-    elseif filereadable( expand("$HOME/.vim/colors/typo.vim") )
-    	colorscheme typofree
+    elseif filereadable( expand("$HOME/.vim/colors/cleanphp.vim") )
+    	colorscheme cleanphp
     elseif filereadable( expand("$HOME/.vim/colors/lucius.vim") )
     	colorscheme lucius
+    elseif
+        colorscheme elflord
     endif
 
     " yank to clipboard
@@ -222,10 +228,13 @@ if has("autocmd")
     au FileType html,css,xhtml let html_use_css=1              "       for standards-compliant :TOhtml output
     au FileType html,css,xhtml let use_xhtml=1                 "       for standards-compliant :TOhtml output
 
-    au FileType php let php_sql_query = 1
+    au FileType html,css,xhtml,php,javascript colorscheme cleanphp
+
+    " au FileType php let php_sql_query = 1
     au FileType php let php_htmlInStrings = 1
-    au FileType php let php_folding = 1
+    au FileType php let php_folding = 2
     au FileType php let php_sync_method = 0
+    au FileType php let php_no_ShortTags = 1
 
     "  Use enter to activate help jump points & display line numbers
     "   au FileType help set number     
@@ -235,7 +244,7 @@ endif
 
 
 "let html_number_lines = 0
-let html_ignore_folding = 1
+"let html_ignore_folding = 1
 
 
 " -------------------------

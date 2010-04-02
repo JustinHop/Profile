@@ -3,6 +3,7 @@
 
 export ZSHRC_VERSION="2.0.5"
 
+umask 002
 #
 # WORKSPACE AND ENVIRONMENT
 #

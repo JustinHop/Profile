@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "KeyStrPress Super_L KeyStrPress Right KeyStrRelease Right KeyStrRelease Super_L " | xmacroplay $DISPLAY 
