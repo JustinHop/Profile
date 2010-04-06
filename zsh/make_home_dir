@@ -14,9 +14,13 @@ zlogin \
 zlogout \
 zshrc ; do
 
-	mv -v ~/.$RCFILE /tmp
+         if [[ -f "~/.$RCFILE" ]]; then
 
-            ln -sfv ~/Profile/$RCFILE ~/.$RCFILE
+                mv -v "~/.$RCFILE" "~/.$RCFILE.old"
+
+            fi
+
+            ln -sfv "/home/justin/Profile/$RCFILE" ~/.$RCFILE
 
         done
 

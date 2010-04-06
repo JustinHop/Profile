@@ -1,4 +1,11 @@
 set -o vi
+set -o histexpand
+
+umask 002
+
+if [ -f "~/bin/zsh" ]; then
+    alias zsh="~/bin/zsh"
+fi
 
 alias srpm="rpmbuild --target i686 --rebuild"
 alias rpm="rpm --verbose"
@@ -22,7 +29,7 @@ alias B='export BACKUP=+'
 alias psa="ps -Af f" 
 alias kew="echo 'Totally.'"
 alias orly="echo yarly"
-alias ,,=".."
+alias ,,="cd .."
 alias ks="ls"
 alias xs="cd"
 alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"

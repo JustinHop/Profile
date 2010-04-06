@@ -211,6 +211,7 @@ if has("autocmd")
         au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
         au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
         au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
+        au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
     augroup END
 
     " ZSH Brokenness
@@ -457,4 +458,7 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
 "    autocmd BufEnter * :lcd %:p:h
 "endif " has("autocmd")
 "
+let g:detectindent_preferred_expandtab = 1
+let g:detectindent_preferred_indent = 4
+
 " vim:ft=vim:syn=vim:ts=4
