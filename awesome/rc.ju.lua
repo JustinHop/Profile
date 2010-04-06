@@ -154,8 +154,7 @@ myrc.mainmenu.init(env)
 --myrc.logmon.init()
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = {}
-mytextclock = widget({ type = "textbox", align = "right" })
+mytextclock = awful.widget.textclock({ align = "right" },"%a %b %e, %r %Y", 1)
 
 myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
@@ -367,10 +366,22 @@ globalkeys = awful.util.table.join(
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) mousemarker() end),
-    awful.key({ modkey,           }, "Up", function () awful.screen.focus_relative( 1) mousemarker() end),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) mousemarker() end),
-    awful.key({ modkey,           }, "Down", function () awful.screen.focus_relative(-1) mousemarker() end),
+    awful.key({ modkey, "Control" }, "j", function () 
+        awful.screen.focus_relative( 1) 
+        mousemarker() 
+    end),
+    awful.key({ modkey,           }, "Up", function () 
+        awful.screen.focus_relative( 1) 
+        mousemarker() 
+    end),
+    awful.key({ modkey, "Control" }, "k", function () 
+        awful.screen.focus_relative(-1) 
+        mousemarker() 
+    end),
+    awful.key({ modkey,           }, "Down", function () 
+        awful.screen.focus_relative(-1) 
+        mousemarker() 
+    end),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
     awful.key({ modkey,           }, "Tab",
         function ()
@@ -658,13 +669,11 @@ client.add_signal("unfocus", function(c)
     c.border_color = beautiful.border_normal 
 end)
 
+--[[
 mousetimer = timer { timeout = .1 }
 mousetimer:add_signal("timeout", function() mousemarker() end)
 mousetimer:start()
-
-clocktimer = timer { timeout = .2 }
-clocktimer:add_signal("timeout", function() mytextclock.text=os.date("%a %b %e, %r %Y") end)
-clocktimer:start()
+]]--
 
 awful.tag.setncol(2, tags[1][2])
 awful.tag.setnmaster (1, tags[1][2])

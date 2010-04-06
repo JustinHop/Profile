@@ -113,6 +113,9 @@ export EDITOR=vim
 export MYSQL_PS1="mysql (\U@\h)::(\d) \c > "
 export FIREFOX_DSP="padsp"
 
+export DEBEMAIL=Justin.Hoppensteadt@umgtemp.com
+export DEBFULLNAME="Justin Hoppensteadt"
+
 [ -n `whence less` ] && PAGER=less || PAGER=more
 export PAGER
  
