@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshenv
 #  Both kinds of free
 
-export __ZSHENV__=0.2.4
+export __ZSHENV__=0.2.4a
 
 export HOSTNAME=`hostname`
 export UNAME=`uname`
@@ -107,6 +107,7 @@ export FTP_PASSIVE=1
 export MINICOM="-c on -m"
 export LESS="-isaFMXRU"
 export MANLESS="-isaFMXR"
+alias man='LESS=$MANLESS man'
 export VISUAL=vim
 export SVN_EDITOR=vim
 export EDITOR=vim
