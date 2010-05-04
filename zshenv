@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshenv
 #  Both kinds of free
 
-export __ZSHENV__=0.2.4
+export __ZSHENV__=0.2.4a
 
 export HOSTNAME=`hostname`
 export UNAME=`uname`
@@ -113,6 +113,9 @@ export SVN_EDITOR=vim
 export EDITOR=vim
 export MYSQL_PS1="mysql (\U@\h)::(\d) \c > "
 export FIREFOX_DSP="padsp"
+
+export DEBEMAIL=Justin.Hoppensteadt@umgtemp.com
+export DEBFULLNAME="Justin Hoppensteadt"
 
 [ -n `whence less` ] && PAGER=less || PAGER=more
 export PAGER
