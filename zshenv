@@ -107,6 +107,7 @@ export FTP_PASSIVE=1
 export MINICOM="-c on -m"
 export LESS="-isaFMXRU"
 export MANLESS="-isaFMXR"
+alias man='LESS=$MANLESS man'
 export VISUAL=vim
 export SVN_EDITOR=vim
 export EDITOR=vim
