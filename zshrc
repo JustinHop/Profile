@@ -572,7 +572,11 @@ if [[ -o interactive ]]; then
     autoload -U promptinit
     promptinit
 
-    prompt clint
+    if [[ $HOSTNAME = "tux2" ]]; then
+    	prompt justin2
+    else
+        prompt clint
+    fi
 
     autoload -U title
     autoload -U precmd
