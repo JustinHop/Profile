@@ -1,0 +1,7 @@
+#!/bin/sh
+export FLASH_FORCE_PULSEAUDIO=1
+export PULSE_BINARY=/usr/bin/pulseaudio
+export RUNTIME_FIREFOX_DSP="padsp"
+export FIREFOX_DSP="padsp"
+
+firefox-3.5 -no-remote -P "$@"

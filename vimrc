@@ -130,6 +130,7 @@ function! MyPerlSettings()
     setlocal cindent 
     setlocal cinkeys=0{,0},0(,0),:,!^F,o,O,e
     setlocal formatoptions-=t formatoptions+=croq
+    let perl_extended_vars=1
 
     compiler perl
     "colorscheme wuye
@@ -140,7 +141,10 @@ endfunction
 "  We are using VIM
 "
 filetype on
+filetype plugin on
 filetype indent on
+
+set directory=~/tmp
 
 if has("autocmd")
     filetype plugin indent on
@@ -161,29 +165,32 @@ if has("autocmd")
             if ! expand(&readonly)
                 au BufReadPost *
                             \ exe 'silent write! ' 
-                            \   substitute( 
+                            \   substitute( expand(
                             \   substitute( expand( 
                             \       substitute( expand("$HOME/backup/") .
                             \           substitute( expand("%:p"), '/','_','g') . 
                             \           strftime("%Y%m%d.%H%M%S"), 
                             \       '\s','_', 'g') 
-                            \   ), '_','',''), 'LXWeb', 'LX_Web', 'g')
+                            \   ), '_','',''),
+                            \   ), 'LXWeb', 'LX_Web', 'g')
             endif
         endif
     else
         if has("unix")
             set backup
-            set backupdir=~/backup
+            set backupdir=expand("$HOME/backup")
         endif
     endif
 
     " purdy colors
     if expand($TERM) == "linux"
     	colorscheme elflord
-    elseif filereadable( expand("$HOME/.vim/colors/typo.vim") )
-    	colorscheme typofree
+    elseif filereadable( expand("$HOME/.vim/colors/cleanphp.vim") )
+    	colorscheme cleanphp
     elseif filereadable( expand("$HOME/.vim/colors/lucius.vim") )
     	colorscheme lucius
+    elseif
+        colorscheme elflord
     endif
 
     " yank to clipboard
@@ -205,6 +212,7 @@ if has("autocmd")
         au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
         au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
         au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
+        au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
     augroup END
 
     " ZSH Brokenness
@@ -222,10 +230,14 @@ if has("autocmd")
     au FileType html,css,xhtml let html_use_css=1              "       for standards-compliant :TOhtml output
     au FileType html,css,xhtml let use_xhtml=1                 "       for standards-compliant :TOhtml output
 
-    au FileType php let php_sql_query = 1
+    au FileType html,css,xhtml,php,javascript colorscheme cleanphp
+
+    " au FileType php let php_sql_query = 1
+    au BufRead,BufNewFile *.php		set indentexpr= | set smartindent
     au FileType php let php_htmlInStrings = 1
-    au FileType php let php_folding = 1
+    au FileType php let php_folding = 2
     au FileType php let php_sync_method = 0
+    au FileType php let php_no_ShortTags = 1
 
     "  Use enter to activate help jump points & display line numbers
     "   au FileType help set number     
@@ -235,7 +247,7 @@ endif
 
 
 "let html_number_lines = 0
-let html_ignore_folding = 1
+"let html_ignore_folding = 1
 
 
 " -------------------------
@@ -298,7 +310,14 @@ function! RapYes()
    :map <silent><F10> :call RapNo()<CR>
 endfunction
 
-map <silent><F10> :call RapNo()<CR>
+function ToggleWrap()
+    set wrap!
+    set list!
+    set linebreak!
+endfunction
+
+map <silent><F10> :call ToggleWrap()<CR>
+map! <silent><F10> ^[:call ToggleWrap()<CR>
 
 "" <F9> toggle hlsearch
 "noremap <silent> <F9> :set hlsearch!<cr>
@@ -364,6 +383,18 @@ function! ToggleHex()
     let &mod=l:modified
     let &readonly=l:oldreadonly
 endfunction
+
+map <c-w><c-t> :WMToggle<cr> 
+"                          mnemonic: window-toggle : <c-W><c-T>
+
+":FirstExplorerWindow      :directly takes you to the first explorer window
+ "                          from the top left corner which is visible. >
+map <c-w><c-f> :FirstExplorerWindow<cr>
+"<                          mnemonic: window-first  : <c-W><c-F>
+
+":BottomExplorerWindow     :directly takes you to the last explorere window
+                           "from the top-left which is visible. >
+map <c-w><c-b> :BottomExplorerWindow<cr>
 
 "if version >= 700
 "   "  this line makes esc accept a completion
@@ -436,4 +467,13 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
 "    autocmd BufEnter * :lcd %:p:h
 "endif " has("autocmd")
 "
+let g:detectindent_preferred_expandtab = 1
+let g:detectindent_preferred_indent = 4
+
+" MovingThroughCamelCaseWords
+nnoremap <silent><C-Left>  :<C-u>cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%^','bW')<CR>
+nnoremap <silent><C-Right> :<C-u>cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%$','W')<CR>
+inoremap <silent><C-Left>  <C-o>:cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%^','bW')<CR>
+inoremap <silent><C-Right> <C-o>:cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%$','W')<CR> 
+
 " vim:ft=vim:syn=vim:ts=4

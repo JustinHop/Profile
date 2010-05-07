@@ -1,0 +1,84 @@
+Hello. You are reading Sergey (ierton) Mironov's config readme.
+I hope you'll find my work usefull.
+
+DIRECTORY STRUCTURE
+===================
+
+The directory structure of config:
+.
+|-- README                          This file
+|-- freedesktop                     Freedesktop-menu from Gustavo Dutra.
+|                                   http://github.com/terceiro/awesome-freedesktop/tree
+|-- icons                           Some common icons for theme
+|-- memory.data
+|-- myrc                            Directory with my config libs
+|   |-- keybind.lua                 Library for defining key sequence
+|   |-- mainmenu.lua                Main menu generator
+|   |-- memory.lua                  Registry routines (client states are saved here)
+|   |-- tagman.lua                  Tag routines (renaming, adding, deleting, ...)
+|   `-- themes.lua
+|-- rc.lua                     		This is main config
+|-- table.save-0.94.lua
+|-- themes                          Theme collection
+|   |-- blue-black-red              My current theme files are here
+|   |   |-- theme.lua               My current theme config
+|   |   `-- titlebar
+|   |-- default -> /usr/share/awesome/themes/default
+|   |                               Default theme
+|   `-- sky -> /usr/share/awesome/themes/sky
+|                                   Another default theme
+|-- tsave.lua -> table.save-0.94.lua
+|                                   Main thing for registry to work
+`-- wallpapers                      Wallpaper collection
+    `-- vladstudio-1.jpg
+
+
+
+DEFAULT KEYBINDINGS
+===================
+
+Here are some default bindings:
+
+==== Client keys:
+
+altkey+` - show client context menu
+Ctrl+modkey+d - start client settings chord
+Ctrl+modkey+d,c - Center client
+Ctrl+modkey+d,f - Set client to be floating
+Ctrl+modkey+d,F - Remove floating
+and so on (read tooltip)
+
+altkey+1 - prev client
+altkey+2 - next client
+altkey+tab - toggle last 2 active clients
+
+==== Tag keys:
+
+altkey+F1 - jump to one tag left
+altkey+F2 - jump to one tag right
+modkey+F1 - move current clinet one tag left
+modkey+F2 - move current clinet one tag right
+modkey+tab - switch to previous tag
+
+Crtl+modkey+s - begin tag manipulation chord (tooltip will appear)
+Crtl+modkey+s,s - rename current tag
+Crtl+modkey+s,c - create a tag
+Crtl+modkey+s,d - delete current tag
+and so on
+
+==== Menus:
+
+altkey+Esc - show main menu
+altkey+` - show client menu
+
+There are vim keybindings defained in menus (hjkl - move, o - open, Enter - open)
+
+Mail bugs to ierton@gmail.com.
+
+TODO: Implemet M$Windows alt+tab functionality (don't know how to capture
+altkey release event)
+TODO: Implement client renaming
+TODO: Fix menu non-dissapearing
+TODO: Rewrite keybind.lua
+
+Sergey.

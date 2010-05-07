@@ -1,0 +1,39 @@
+#!/usr/bin/perl
+
+# ptags -- make a tags file for perl source(s)
+# tchrist@perl.com
+
+$GLOBALS = 1;
+
+open(OUTPUT, "| sort > tags");
+
+while (<>) {
+    chop;
+    if (/^\s*package ((\w+('|::))*(\w+))/) {
+	$fullpack = $1;
+    } 
+    if (/^\s*sub\s+(\w+('|::))*(\w+)/) {
+	$func = $3;
+	print OUTPUT "$func\t", $ARGV, "\t/^$&/\n";
+	if ($fullpack) {
+	    print OUTPUT "${fullpack}::$func\t", $ARGV, "\t/^$&/\n";
+	} 
+    }
+    if (/^\s*(\w+):/) {
+	$func = $1;
+	print OUTPUT "$func\t", $ARGV, "\t/^$&/\n";
+    } 
+
+    if ( $GLOBALS and /^\s*[\$%\@]([A-Z]\w*)\s*=\s*/ ) {
+	$func = $1;
+	$_ = $&;
+	s/\$/\\$&/g;
+	next if $seen{$func}++;
+	print OUTPUT "$func\t", $ARGV, "\t/^$_/\n";
+	if ($fullpack) {
+	    print OUTPUT "${fullpack}::$func\t", $ARGV, "\t/^$_/\n";
+	} 
+	print OUTPUT "$func\t", $ARGV, "\t/^$_/\n";
+    } 
+}
+close(OUTPUT) || die "sort failed";

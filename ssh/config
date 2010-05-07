@@ -14,12 +14,12 @@ host ukmx1 usmx6 usmx7 usmx8
     user admin
 
 Host umgapp1 app1
-    user jhoppens
+    user hoppenj
 
 Host uk* us* vm* att* umgmys1 mys1 web*
     user hoppenj
 
-Host jh tux-ninja alien justinhoppensteadt.com
+Host jh tux-ninja alien justinhoppensteadt.com rack mu
     user justin
 
 Host cloud* hm 
@@ -28,4 +28,5 @@ Host cloud* hm
 Host gitproxy
     hostname ssh.github.com
     port 443
+
 

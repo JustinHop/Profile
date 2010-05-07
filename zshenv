@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshenv
 #  Both kinds of free
 
-export __ZSHENV__=0.2.4
+export __ZSHENV__=0.2.4a
 
 export HOSTNAME=`hostname`
 export UNAME=`uname`
@@ -72,13 +72,15 @@ FFMPEGPATH="/usr/local/websites/ffmpeg/bin"
 SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
 USER_PATH="$HOME/bin:$HOME/profile/bin:/usr/lib/xscreensaver"
 ENCODE_PATH="/usr/local/enctools/bin"
+NAGIOS_PATH="/usr/local/nagios/libexec"
 
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
 typeset -U LD_EXEC_PATH
 typeset -U PKG_CONFIG_PATH
 
-PATH=$ENCODE_PATH:$COMMON_PATH:$ROOT_PATH:$SVN_PATH:$MYSQL_PATH:$POSTFIX:$PHP_PATH:$APACHE_PATH:$LAMEPATH:$FFMPEGPATH:$USER_PATH
+PATH=$ENCODE_PATH:$COMMON_PATH:$ROOT_PATH:$SVN_PATH:$MYSQL_PATH:$POSTFIX:$PHP_PATH
+PATH=$PATH:$APACHE_PATH:$LAMEPATH:$FFMPEGPATH:$USER_PATH:$NAGIOS_PATH
 
 [ -d $DISTCC_PATH ] && PATH="$DISTCC_PATH:$PATH"
 
@@ -103,12 +105,17 @@ done
 
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
-export LESS="-isaFMXR"
+export LESS="-isaFMXRU"
+export MANLESS="-isaFMXR"
+alias man='LESS=$MANLESS man'
 export VISUAL=vim
 export SVN_EDITOR=vim
 export EDITOR=vim
 export MYSQL_PS1="mysql (\U@\h)::(\d) \c > "
 export FIREFOX_DSP="padsp"
+
+export DEBEMAIL=Justin.Hoppensteadt@umgtemp.com
+export DEBFULLNAME="Justin Hoppensteadt"
 
 [ -n `whence less` ] && PAGER=less || PAGER=more
 export PAGER

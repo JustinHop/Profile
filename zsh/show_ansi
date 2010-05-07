@@ -11,4 +11,4 @@ for attr in 0 1 4 5 7 ; do
     printf '\033[0m'
 done
 
-#vim: ft=zsh:syn=zsh
+#vim: ft=zsh

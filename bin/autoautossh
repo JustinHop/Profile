@@ -1,10 +1,11 @@
 #!/bin/zsh
 export AUTOSSH_LOGLEVEL=0 
 export AUTOSSH_LOGFILE=/dev/null 
+NUM=$(seq 10 99 | rl | head -n 1)
 
-if ps aux | egrep '\<autossh' ; then
+if ps aux | grep -v grep | egrep '\<autossh' ; then
 	echo "Bad News Bears"
 	exit 0
 else
-    autossh -M0 -D 5190 -R 15014:localhost:22 -oBatchMode=yes -oExitOnForwardFailure=yes -T -N tunnel@justinhoppensteadt.com
+    sudo -u tunnel autossh -M0 -D 5190 -R 150${NUM}:localhost:22 -oBatchMode=yes -oExitOnForwardFailure=yes -T -N tunnel@www2.justinhoppensteadt.com
 fi

@@ -185,7 +185,7 @@ prompt_justin2_setup () {
 	if [[ $TERM == screen* ]] && [ -n "$STY" ]; then
 		verbose=
 	else
-		verbose=1
+		verbose=
 	fi
 
 	typeset -A colorcode

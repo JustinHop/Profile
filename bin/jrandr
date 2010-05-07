@@ -1,5 +1,10 @@
 #!/bin/bash
 
+killall synergy
+killall synergys
+killall synergyc
+
+
 for SCREEN in `xrandr | grep -e '\<connected' | awk '{ print $1 }'` ; do
 	xrandr --output $SCREEN --preferred
 	if [ $SCREEN == "DVI-0" ]; then
@@ -8,3 +13,6 @@ for SCREEN in `xrandr | grep -e '\<connected' | awk '{ print $1 }'` ; do
 		xrandr --output $SCREEN --auto --right-of LVDS
 	fi
 done
+
+synergy &
+synergyc usucpwd-hoppenj
