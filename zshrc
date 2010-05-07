@@ -333,12 +333,13 @@ if [[ -x `whence vim` ]]; then
     VIM=`whence vim`
 fi
 
-if [[ -x ~/profile/bin/`uname`/vim ]]; then
-    VIM=~/profile/bin/`uname`/vim
+if [[ -x ~/bin/vim ]]; then
+    VIM=~/bin/vim
 fi
 
 alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
 
+alias 'sudo vim'='sudo ~/bin/vim'
 export EDITOR=$VIM
 export VISUAL=$VIM
 alias vim=$VIM
@@ -563,7 +564,7 @@ if [[ -o interactive ]]; then
     autoload -U promptinit
     promptinit
 
-    prompt justin2
+    prompt clint
 
     autoload -U title
     autoload -U precmd

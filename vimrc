@@ -161,12 +161,13 @@ if has("autocmd")
             if ! expand(&readonly)
                 au BufReadPost *
                             \ exe 'silent write! ' 
+                            \   substitute( 
                             \   substitute( expand( 
                             \       substitute( expand("$HOME/backup/") .
                             \           substitute( expand("%:p"), '/','_','g') . 
                             \           strftime("%Y%m%d.%H%M%S"), 
                             \       '\s','_', 'g') 
-                            \   ), '_','','')  
+                            \   ), '_','',''), 'LXWeb', 'LX_Web', 'g')
             endif
         endif
     else
