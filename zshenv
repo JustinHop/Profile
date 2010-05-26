@@ -143,4 +143,7 @@ if [[ -d /usr/local/apache2 ]]; then
 	wwwc=/usr/local/apache2/conf
 	wwwb=/usr/local/apache2/bin
 fi
+
+export PATH=$HOME/bin:/usr/bin:$PATH
+
 # vim:ft=zsh:syn=zsh

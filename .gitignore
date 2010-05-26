@@ -10,3 +10,7 @@
 *.orig
 *.netrwhist
 *.netrwhist~
+
+bin/*
+
+zsh/cache
