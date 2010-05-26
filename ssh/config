@@ -10,10 +10,16 @@ ForwardX11      yes
 ForwardX11Trusted yes
 TCPKeepAlive    yes
 
+ControlMaster auto
+ControlPath /tmp/ssh_mux_%h_%p_%r 
+ServerAliveInterval 30
+ServerAliveCountMax 10
+
 host ukmx1 usmx6 usmx7 usmx8
     user admin
 
 Host umgapp1 app1
+    DynamicForward localhost:6666
     user hoppenj
 
 Host uk* us* vm* att* umgmys1 mys1 web*
@@ -22,7 +28,11 @@ Host uk* us* vm* att* umgmys1 mys1 web*
 Host jh tux-ninja alien justinhoppensteadt.com
     user justin
 
+Host jh
+    DynamicForward *:6668
+
 Host cloud* hm 
+    DynamicForward *:6667
     user justinh1
 
 Host gitproxy

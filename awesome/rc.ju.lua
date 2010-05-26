@@ -409,6 +409,15 @@ globalkeys = awful.util.table.join(
     -- Status bar control
     awful.key({ modkey }, "b", function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end),
 
+    -- MPD Controlling
+    awful.key({   }, "XF86AudioPlay",      function () awful.util.spawn("mpc toggle") end)  ,
+    --awful.key({   }, "Cancel",             function () awful.util.spawn("mpc toggle") end)  ,
+    awful.key({   }, "XF86AudioStop",      function () awful.util.spawn("mpc stop")   end)  ,
+    awful.key({   }, "Undo",               function () awful.util.spawn("mpc stop")   end)  ,
+    awful.key({   }, "XF86AudioPrev",      function () awful.util.spawn("mpc prev")   end)  ,
+    awful.key({   }, "XF86AudioNext",      function () awful.util.spawn("mpc next")   end)  ,
+    awful.key({   }, "XF86AudioMute",      function () awful.util.spawn("mpc stop") end)  ,
+
         
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
