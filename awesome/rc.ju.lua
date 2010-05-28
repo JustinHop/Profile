@@ -11,173 +11,14 @@ require("awful.rules")
 require("beautiful")
 -- Notification library
 require("naughty")
-require("freedesktop.utils")
-require("freedesktop.menu")
 
-require("tsave")
---require("bashets")
---require("pipelets")
+-- Load Debian menu entries
+require("debian.menu")
 
-require("myrc.mainmenu")
---require("myrc.tagman")
-require("myrc.themes")
-require("myrc.keybind")
-require("myrc.memory")
-require("myrc.logmon")
+-- {{{ Variable definitions
+-- Themes define colours, icons, and wallpapers
+beautiful.init("/home/justin/Profile/awesome/themes/justin/theme.lua")
 
---{{{ Debug 
-function dbg(vars)
-	local text = ""
-	for i=1, #vars-1 do text = text .. tostring(vars[i]) .. " | " end
-	text = text .. tostring(vars[#vars])
-	naughty.notify({ text = text, timeout = 10 })
-end
-
-function dbg_client(c)
-	local text = ""
-	if c.class then
-		text = text .. "Class: " .. c.class .. " "
-	end
-	if c.instance then
-		text = text .. "Instance: ".. c.instance .. " "
-	end
-	if c.role then
-		text = text .. "Role: ".. c.role .. " "
-	end
-	if c.type then
-		text = text .. "Type: ".. c.type .. " "
-	end
-
-	text = text .. "Full name: '" .. client_name(c) .. "'"
-
-	dbg({text})
-end
---}}}
-
---{{{ Menu generators
-function client_name(c)
-    local cls = c.class or ""
-    local inst = c.instance or ""
-	local role = c.role or ""
-	local ctype = c.type or ""
-	return cls..":"..inst..":"..role..":"..ctype
-end
-
-
-function save_floating(c, f)
-	myrc.memory.set("floating", client_name(c), f)
-	awful.client.floating.set(c, f)
-	return f
-end
-
-function get_floating(c, def)
-	if def == nil then def = awful.client.floating.get(c) end
-	return myrc.memory.get("floating", client_name(c), def)
-end
-
-function save_centered(c, val)
-	myrc.memory.set("centered", client_name(c), val)
-	if val == true then
-		awful.placement.centered(c)
-        save_floating(c, true)
-	end
-	return val
-end
-
-function get_centered(c, def)
-	return myrc.memory.get("centered", client_name(c), def)
-end
-
-function save_titlebar(c, val)
-	myrc.memory.set("titlebar", client_name(c), val)
-	if val == true then
-		awful.titlebar.add(c, { modkey = modkey })
-	elseif val == false then
-		awful.titlebar.remove(c)
-	end
-	return val
-end
-
-function get_titlebar(c, def)
-	return myrc.memory.get("titlebar", client_name(c), def)
-end
-
-function save_tag(c, tag)
-	local tn = "none"
-	if tag then tn = tag.name end
-	myrc.memory.set("tags", client_name(c), tn)
-	if tag ~= nil and tag ~= awful.tag.selected() then 
-		awful.client.movetotag(tag, c) 
-	end
-end
-
-function get_tag(c, def)
-	local tn = myrc.memory.get("tags", client_name(c), def)
-	return myrc.tagman.find(tn)
-end
-
-function save_geometry(c, val)
-	myrc.memory.set("geometry", client_name(c), val)
-	c:geometry(val)
-end
-
-function get_geometry(c, def)
-	return myrc.memory.get("geometry", client_name(c), def)
-end
-
-
--- Builds menu for client c
-function build_client_menu(c, kg)
-	if mycontextmenu then awful.menu.hide(mycontextmenu) end
-	local centered = get_centered(c)
-	local floating = get_floating(c)
-	local titlebar = get_titlebar(c)
-	local geometry = get_geometry(c)
-	function checkbox(name, val) 
-		if val==true then return "[X] "..name 
-		elseif val==false then return "[ ] " .. name 
-		else return "[?] " .. name 
-		end 
-	end
-	function bool_submenu(f) 
-		return {
-			{"Set", function () f(true) end },
-			{"UnSet", function() f(false) end },
-		}
-	end
-	mycontextmenu = awful.menu.new( { 
-		items = { 
-			{ "Close", function() c:kill() 
-				end, freedesktop.utils.lookup_icon({ icon = 'gtk-stop' })} ,
-			{ checkbox("Floating",floating), 
-				bool_submenu(function(v) save_floating(c, v) end) },
-			{ checkbox("Centered", centered),
-				bool_submenu(function(v) save_centered(c, v) end) },
-			{ checkbox("Titlebar", titlebar),
-				bool_submenu(function(v) save_titlebar(c, v) end) },
-			{ checkbox("Store geomtery", geometry ~= nil ), function() 
-				save_geometry(c, c:geometry() ) 
-				end, },
-			{ "Toggle maximize", function () 
-				c.maximized_horizontal = not c.maximized_horizontal
-				c.maximized_vertical   = not c.maximized_vertical
-				end, },
-			{ "Bind to this tag", function ()
-				local t = awful.tag.selected()
-				naughty.notify({text = 
-					"Client " .. c.name .. " was bound to tag " .. t.name}) 
-                save_tag(c, t) 
-				end, },
-			{ "Unbind from tags", function ()
-                save_tag(c, nil) 
-				naughty.notify({text = 
-					"Client " .. c.name .. " was unbound from tags "}) 
-				end, },
-		}, 
-		height = beautiful.menu_context_height 
-	} )
-	awful.menu.show(mycontextmenu, kg)
-end
 -- {{{ Load the functions in awesome.d
 function import(file)
     -- local ret = awful.util.checkfile( awful.util.getdir("config") .. file ".lua" );
@@ -260,26 +101,32 @@ for s = 1, screen.count() do
     tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
 -- }}}
-awful.menu.menu_keys = {
-	up={ "Up", 'k' }, 
-	down = { "Down", 'j' }, 
-	back = { "Left", 'x', 'h' }, 
-	exec = { "Return", "Right", 'o', 'l' },
-	close = { "Escape" }
+
+--beautiful.init(myrc.themes.current())
+-- {{{ Menu
+-- Create a laucher widget and a main menu
+myawesomemenu = {
+   { "manual", terminal .. " -e man awesome" },
+   { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua" },
+   { "restart", awesome.restart },
+   { "quit", awesome.quit }
 }
 
-myrc.memory.init()
+mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                                    { "Debian", debian.menu.Debian_menu.Debian },
+                                    { "open terminal", terminal }
+                                  }
+                        })
 
-beautiful.init(myrc.themes.current())
+mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
+                                     menu = mymainmenu })
+-- }}}
 
-myrc.mainmenu.init(env)
 
 
-myrc.logmon.init()
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = {}
-mytextclock = widget({ type = "textbox", align = "right" })
+mytextclock = awful.widget.textclock({ align = "right" }, "%a %b %e, %r %Y", 1)
 
 myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
@@ -295,7 +142,6 @@ rspace = widget({ type = "textbox", align="right" })
 rspace.text=[[<span bgcolor="#30C23D"><sub><b>]] .. "┃" .. [[</b></sub></span>]]
 
 -- Empty launcher
-mymainmenu = myrc.mainmenu.build()
 mylauncher = awful.widget.launcher({ 
 	image = beautiful.awesome_icon, menu = mymainmenu })
 
@@ -331,6 +177,7 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ modkey }, 3, awful.client.toggletag),
                     awful.button({ }, 4, awful.tag.viewnext),
                     awful.button({ }, 13, awful.tag.viewnext),
+                    awful.button({ }, 10, awful.tag.viewprev),
                     awful.button({ }, 14, awful.tag.viewprev),
                     awful.button({ }, 15, awful.tag.viewprev),
                     awful.button({ }, 5, awful.tag.viewprev)
@@ -429,6 +276,7 @@ root.buttons(awful.util.table.join(
     awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev),
+    awful.button({ }, 10, awful.tag.viewprev),
     awful.button({ }, 13, awful.tag.viewnext),
     awful.button({ }, 14, awful.tag.viewprev),
     awful.button({ }, 15, awful.tag.viewprev)
@@ -436,30 +284,6 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Key bindings
--- Standard program
-function switch_to_client(direction)
-	if direction == 0 then
-		awful.client.focus.history.previous()
-	else
-		awful.client.focus.byidx(direction);  
-	end
-	if client.focus then client.focus:raise() end
-end
--- Toggle tags between current and one, that has name 'name'
-function toggle_tag(name)
-	local this = awful.tag.selected()
-	if this.name == name then
-		awful.tag.history.restore()
-	else
-		local t = myrc.tagman.find(name)
-		if t == nil then
-			naughty.notify({text = "Can't find tag with name '" .. name .. "'"})
-			return
-		end
-		awful.tag.viewonly(t)
-	end
-end
-
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ "Shift" }, "F10",   awful.tag.viewprev       ),
@@ -622,18 +446,6 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
-    awful.key({ modkey }, "F1", 
-		function (c) 
-			local tag = myrc.tagman.getn(-1)
-			awful.client.movetotag(tag, c)
-			awful.tag.viewonly(tag)
-		end),
-    awful.key({ modkey }, "F2", 
-		function (c) 
-			local tag = myrc.tagman.getn(1)
-			awful.client.movetotag(tag, c)
-			awful.tag.viewonly(tag)
-		end),
 	awful.key({ altkey }, "F4", function (c) c:kill() end),
     awful.key({ altkey }, "F5",
         function (c)
@@ -669,71 +481,8 @@ clientkeys = awful.util.table.join(
             else
                 awful.titlebar.add(c, { modkey = "Mod1" })
                 debug_notify(c.name .. "\ntitlebar " .. colored_on)
-            end
-        end),
+            end end)
 
-    awful.key({ altkey }, "`", function(c) build_client_menu(c, true) end),
-    awful.key({ modkey , "Ctrl" }, "d", function(c) 
-        myrc.keybind.push_client( {
-            myrc.keybind.key({}, "Escape", "Cancel", function (c) 
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "f", "Toggle floating", function (c) 
-                save_floating(c, not awful.client.floating.get(c))
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "c", "Set centered on", function (c) 
-                save_centered(c, true)
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({"Shift"}, "c", "Set centered off", function (c) 
-                save_centered(c, false)
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "t", "Toggle titlebar", function (c) 
-                save_titlebar(c, not get_titlebar(c, false)) 
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "g", "Save geometry", function (c) 
-                save_geometry(c, get_geometry(c))
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "s", "Toggle fullscreen", function (c) 
-                c.maximized_horizontal = not c.maximized_horizontal
-                c.maximized_vertical   = not c.maximized_vertical
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "r", "Rename", function (c) 
-                awful.prompt.run(
-                    { prompt = "Rename client: " }, 
-                    mypromptbox[mouse.screen].widget, 
-                    function(n) awful.client.property.set(c,"name", n) end,
-                    awful.completion.bash,
-                    awful.util.getdir("cache") .. "/rename")
-                myrc.keybind.pop_client(c) 
-            end),
-
-            myrc.keybind.key({}, "d", "Stick to this tag", function (c) 
-				local t = awful.tag.selected()
-                save_tag(c, t) 
-				naughty.notify({text = "Client " .. c.name .. " was bound to tag " .. t.name}) 
-                myrc.keybind.pop_client(c) 
-            end), 
-
-            myrc.keybind.key({"Shift"}, "d", "Unbound from any tag", function (c) 
-                save_tag(c, nil) 
-				naughty.notify({text = "Client " .. c.name .. " was unbound from tag"}) 
-                myrc.keybind.pop_client(c) 
-            end)
-        } , "Change '" .. c.name .. "' settings", c) 
-    end)
 )
 
 -- Compute the maximum number of digit we need, limited to 9
@@ -789,6 +538,7 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize),
     awful.button({ }, 13, awful.tag.viewnext),
+    awful.button({ }, 10, awful.tag.viewprev),
     awful.button({ }, 14, awful.tag.viewprev),
     awful.button({ }, 15, awful.tag.viewprev))
 
@@ -871,13 +621,6 @@ client.add_signal("unfocus", function(c)
     c.border_color = beautiful.border_normal 
 end)
 
-mousetimer = timer { timeout = .1 }
-mousetimer:add_signal("timeout", function() mousemarker() end)
-mousetimer:start()
-
-clocktimer = timer { timeout = .2 }
-clocktimer:add_signal("timeout", function() mytextclock.text=os.date("%a %b %e, %r %Y") end)
-clocktimer:start()
 
 awful.tag.setncol(2, tags[1][2])
 awful.tag.setnmaster (1, tags[1][2])
