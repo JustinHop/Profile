@@ -1,22 +1,23 @@
-        for RCFILE in bashrc \
-gvimrc \
-gitconfig \
-include \
-inputrc \
-perltidyrc \
-screenrc \
-vimperatorrc \
-vimrc \
-vim \
-rpmmacros \
-zshenv \
-zlogin \
-zlogout \
-zshrc ; do
+for RCFILE in bashrc \
+    gvimrc \
+    gitconfig \
+    include \
+    inputrc \
+    perltidyrc \
+    screenrc \
+    vimperatorrc \
+    vimrc \
+    vim \
+    rpmmacros \
+    zshenv \
+    zlogin \
+    zlogout \
+    zshrc ; do
+    if [[ -f "~/.$RCFILE" ]]; then
+        mv -v "~/.$RCFILE" "~/.$RCFILE.old"
+    fi
+    ln -sfv "/home/justin/Profile/$RCFILE" ~/.$RCFILE
 
-	mv -v ~/.$RCFILE /tmp
+done
 
-            ln -sfv ~/Profile/$RCFILE ~/.$RCFILE
-
-        done
-
+# vim: ft=zsh:syn=zsh

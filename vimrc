@@ -141,6 +141,7 @@ endfunction
 "  We are using VIM
 "
 filetype on
+filetype plugin on
 filetype indent on
 
 set directory=~/tmp
@@ -211,6 +212,7 @@ if has("autocmd")
         au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
         au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
         au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
+        au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
     augroup END
 
     " ZSH Brokenness
@@ -231,6 +233,7 @@ if has("autocmd")
     au FileType html,css,xhtml,php,javascript colorscheme cleanphp
 
     " au FileType php let php_sql_query = 1
+    au BufRead,BufNewFile *.php		set indentexpr= | set smartindent
     au FileType php let php_htmlInStrings = 1
     au FileType php let php_folding = 2
     au FileType php let php_sync_method = 0
@@ -307,7 +310,14 @@ function! RapYes()
    :map <silent><F10> :call RapNo()<CR>
 endfunction
 
-map <silent><F10> :call RapNo()<CR>
+function ToggleWrap()
+    set wrap!
+    set list!
+    set linebreak!
+endfunction
+
+map <silent><F10> :call ToggleWrap()<CR>
+map! <silent><F10> ^[:call ToggleWrap()<CR>
 
 "" <F9> toggle hlsearch
 "noremap <silent> <F9> :set hlsearch!<cr>
@@ -457,4 +467,13 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
 "    autocmd BufEnter * :lcd %:p:h
 "endif " has("autocmd")
 "
+let g:detectindent_preferred_expandtab = 1
+let g:detectindent_preferred_indent = 4
+
+" MovingThroughCamelCaseWords
+nnoremap <silent><C-Left>  :<C-u>cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%^','bW')<CR>
+nnoremap <silent><C-Right> :<C-u>cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%$','W')<CR>
+inoremap <silent><C-Left>  <C-o>:cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%^','bW')<CR>
+inoremap <silent><C-Right> <C-o>:cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%$','W')<CR> 
+
 " vim:ft=vim:syn=vim:ts=4
