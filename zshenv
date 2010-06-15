@@ -119,6 +119,10 @@ export DEBFULLNAME="Justin Hoppensteadt"
 
 [ -n `whence less` ] && PAGER=less || PAGER=more
 export PAGER
+
+if [[ "$TERM" == "screen" ]]; then
+    alias htop="TERM=xterm htop"
+fi
  
 DIRSTACKSIZE=20
 LISTMAX=1000

@@ -2,7 +2,15 @@
 %vendor Universal Music Group
  
 %_topdir        /home/jhoppens/RPM
-%_tmppath       /tmp
+%_builddir          %{_topdir}/BUILD
+%_rpmdir            %{_topdir}/RPMS
+%_sourcedir         %{_topdir}/SOURCES
+%_specdir           %{_topdir}/SPECS
+%_srcrpmdir         %{_topdir}/SRPMS
+%_buildrootdir      %{_topdir}/TMP
+%_tmppath           %{_topdir}/TMP
+%_query_all_fmt %%{name}-%%{version}-%%{release}.%%{arch}
+
 
 %_signature gpg
 %_gpg_name Justin Hoppensteadt (Universal Music Group RPM Key) <Justin.Hoppensteadt@umgtemp.com>
