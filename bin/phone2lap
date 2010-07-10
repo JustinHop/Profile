@@ -4,9 +4,8 @@
 #   This is to move pics from the phone to the laptop
 #
 
-SRC=/media/disk/DCIM/102NIKON
+SRC=/media/disk/DCIM/
 DST=/home/justin/Pictures
-TXLIST="${SRC}/transfered_list"
 
 NEWDATE=`date +%F`
 
@@ -14,17 +13,29 @@ if [ ! -d "${DST}/${NEWDATE}" ]; then
 	mkdir -p "${DST}/${NEWDATE}"
 fi
 
-cd $SRC || exit 1
 
-if [ -f $TXLIST ]; then
-    tar -cpf - -X $TXLIST *.JPG | ( cd "$DST/$NEWDATE" ; tar -xvpf - ) || exit 1
-else
-    tar -cpf - *.JPG | ( cd "$DST/$NEWDATE" ; tar -xvpf - ) || exit 1
-fi
+for SOURCE in $SRC/*(-/) ; do 
 
-cd "$DST/$NEWDATE" || exit 1
+    TXLIST="${SRC}/transfered_list"
 
-for PIC in *JPG ; do
-	echo ${PIC:t} >> $TXLIST || exit 1
+    if [ ! -w $TXLIST ]; then
+        echo "$TXLIST not writable"
+        exit 1;
+    fi
+
+    cd $SOURCE || exit 1
+
+    if [ -f $TXLIST ]; then
+        tar -cpf - -X $TXLIST *.JPG | ( cd "$DST/$NEWDATE" ; tar -xvpf - ) || exit 1
+    else
+        tar -cpf - *.JPG | ( cd "$DST/$NEWDATE" ; tar -xvpf - ) || exit 1
+    fi
+
+    cd "$DST/$NEWDATE" || exit 1
+
+    for PIC in *JPG ; do
+	    echo ${PIC:t} >> $TXLIST || exit 1
+    done
+
 done
 

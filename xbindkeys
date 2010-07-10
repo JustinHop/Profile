@@ -73,6 +73,8 @@
 "winleft"
     b:15
 
+"winleft"
+    b:10
 #"unset WINDOWID;xwit -focus" 
 #    b:15 + Release
 

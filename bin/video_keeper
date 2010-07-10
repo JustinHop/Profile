@@ -1,21 +1,32 @@
 #!/bin/zsh
 
 MPLAYER_OPTS=" -really-quiet -fixed-vo -osd-duration 1  -af volume=-30,volnorm -osdlevel 0 -ao pulse -vo gl "
-mkdir keep nokeep
+
+if [ ! -d keep ]; then
+    mkdir keep || exit 1
+fi
+
+if [ ! -d nokeep ]; then
+    mkdir nokeep || exit 1
+fi
 
 for i in "$@" ; do 
-    echo "Playing ${(q)i}"
-    ls -l "$i"
-    eval mplayer $MPLAYER_OPTS ${(q)i}
-    echo "Do you wish to delete $i [y/N] "
-    read -q answer
-    if echo $answer | grep -y 'n' ; then
-        echo "NOT DELETING: Keeping $i"
-        #mv -v ${(q)i} nokeep
-        mv -v "$i" keep
-    else
-        echo "YES DELETING: NOT Keeping $i"
-        #mv -v ${(q)i} keep
-        mv -v "$i" nokeep
+    if [ -f "$i" ]; then
+        echo "Playing ${(q)i}"
+        ls -l "$i"
+        eval mplayer $MPLAYER_OPTS ${(q)i}
+        echo "Do you wish to delete $i [y/N] "
+        read -q answer
+        if echo $answer | grep -y 'y' ; then
+            echo "YES DELETING: NOT Keeping $i"
+            #mv -v ${(q)i} keep
+            mv -v "$i" nokeep/
+            ln -sv nokeep/$i .
+        else
+            echo "NOT DELETING: Keeping $i"
+            #mv -v ${(q)i} nokeep
+            mv -v "$i" keep/
+            ln -sv keep/$i .
+        fi
     fi
 done
