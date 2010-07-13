@@ -44,6 +44,11 @@ echo "Session: Setting xrandr"
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
+mpd || true
+mpc stop || true
+{ mpdas || true } &
+
+
 xbindkeys || true
 klipper || true
 numlockx &
