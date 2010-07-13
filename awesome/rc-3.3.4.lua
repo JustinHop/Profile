@@ -589,13 +589,13 @@ root.keys(globalkeys)
 
 -- {{{ Hooks
 -- Hook function to execute when focusing a client.
+--[[ Hook function to execute when unfocusing a client.
 awful.hooks.focus.register(function (c)
     if not awful.client.ismarked(c) then
         c.border_color = beautiful.border_focus
     end
 end)
 
--- Hook function to execute when unfocusing a client.
 awful.hooks.unfocus.register(function (c)
     if not awful.client.ismarked(c) then
         c.border_color = beautiful.border_normal
@@ -611,6 +611,7 @@ end)
 awful.hooks.unmarked.register(function (c)
     c.border_color = beautiful.border_focus
 end)
+]]--
 
 -- Hook function to execute when the mouse enters a client.
 awful.hooks.mouse_enter.register(function (c)
