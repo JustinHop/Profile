@@ -1,5 +1,9 @@
 #!/bin/zsh
 
+cat ~/.xsession-errors > ~/.xsession-errors-1
+echo > ~/.xsession-errors
+
+
 #if xrandr | grep DVI-D_1 ; then
 #	xrandr --output PANEL --off
 #	xrandr --output DVI-D_1 --auto
@@ -11,15 +15,17 @@
 #	fi
 #fi
 
-if xrandr -q | grep -P '\sconnected' | grep DFP1 ; then
-	xrandr --output LCD --off 
-	xrandr --output CRT1 --auto 
-	xrandr --output DFP1 --auto  --left-of CRT1 
-else
-	if xrandr -q | grep -P '\sconnected' | grep CRT1 ; then
-	    xrandr --output CRT1 --auto --right-of LCD
-	fi
-fi
+#if xrandr -q | grep -P '\sconnected' | grep DFP1 ; then
+#	xrandr --output LCD --off 
+#	xrandr --output CRT1 --auto 
+#	xrandr --output DFP1 --auto  --left-of CRT1 
+#else
+#	if xrandr -q | grep -P '\sconnected' | grep CRT1 ; then
+#	    xrandr --output CRT1 --auto --right-of LCD
+#	fi
+#fi
+
+#xrandr --output CRT1 --right-of DFP1 --rotate left --auto || true
 
 conky --config ~/Profile/conky-tux2.conf &
 
@@ -38,15 +44,21 @@ echo "Session: Setting xrandr"
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
+mpd || true
+mpc stop || true
+{ mpdas || true } &
+
+
 xbindkeys || true
 klipper || true
 numlockx &
-{ sleep 10s; synergy ; volwheel; } &
+{ sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
 wicd-client &
 
 
-autoautossh &
+
+#autoautossh &
 
 xscreensaver-command -exit > /dev/null || true
 xscreensaver -no-splash &
@@ -57,6 +69,7 @@ xscreensaver -no-splash &
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
     xmodmap -e 'add Control = Control_L' >& /dev/null;
 done > /dev/null ; } &
+
 
 gnome-settings-daemon &
 gnome-power-manager &
@@ -69,5 +82,5 @@ uname -a
 { sleep 5s; nitrogen --restore; } &
 { sleep 9s; nitrogen --restore; } &
 
-exec ssh-agent dbus-launch bash -c 'while true ; do awesome ; done'            
+exec ssh-agent dbus-launch bash -c 'while true ; do awesome ; done;' 
 

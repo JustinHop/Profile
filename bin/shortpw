@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "$@" | md5sum - | perl -ne '/^(\w{8})/; print $1 . "\n";'

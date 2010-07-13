@@ -4,19 +4,35 @@
 #   This is to move pics from the phone to the laptop
 #
 
-SRC=/media/disk/DCIM/
+BASE=/media/disk
 DST=/home/justin/Pictures
-TXLIST=/media/disk/transfered_list
-
+TXLIST="${BASE}/transfered_list"
 NEWDATE=`date +%F`
-
-if [ ! -d "${DST}/${NEWDATE}" ]; then
-	mkdir -p "${DST}/${NEWDATE}"
-fi
 
 if [ ! -w $TXLIST ]; then
     echo "$TXLIST not writable"
     exit 1
 fi
 
-for PICTURE find ${SRC} -iname '*jpg'  
+if [ ! -d $DST ]; then
+	mkdir -p $DST || exit 1
+fi
+
+for SOURCE in $BASE/* ; do
+    if [ -d $SOURCE ]; then 
+        echo "Using $SOURCE"
+        for D in $SOURCE/*(-/) ; do
+            echo "Using $D"
+            for PICTURE in $( find $D -iname '*jpg' ) ; do
+                if grep -i $PICTURE $TXLIST ; then
+                    echo "Already Transfered $PICTURE"
+                else
+                    cp -av $PICTURE $DST/${PICTURE:t:l}
+                    echo ${PICTURE:t} >> $TXLIST
+                fi
+            done
+        done
+    fi
+done
+exit
+
