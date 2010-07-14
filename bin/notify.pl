@@ -25,10 +25,22 @@ use Desktop::Notify;
 
 my $notify = Desktop::Notify->new();
 
-my $n = $notify->create(summary => 'Desktop::Notify',
+my $title = 'Desktop::Notify';
+
+ $title = $ARGV[0] if  $ARGV[0];
+
+my $body = 'Hello!';
+
+ $body = $ARGV[1] if ( $ARGV[1] );
+
+my $timeout = 2000;
+
+ $timeout = $ARGV[2] if ( $ARGV[2] );
+
+my $n = $notify->create(summary => $title ,
         # body => join(" ", @ARGC),
-        body    =>  "Hello!",
-        timeout =>  2000,);
+        body    =>  $body,
+        timeout =>  $timeout,);
 
 $n->show();
 

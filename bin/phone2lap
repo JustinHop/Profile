@@ -4,23 +4,34 @@
 #   This is to move pics from the phone to the laptop
 #
 
-SRC=/media/disk/dcim/100nikon/
+BASE=/media/disk
 DST=/home/justin/Pictures
-TXLIST="${SRC}/transfered_list"
-
+TXLIST="${BASE}/transfered_list"
 NEWDATE=`date +%F`
 
-if [ ! -d "${DST}/${NEWDATE}" ]; then
-	mkdir -p "${DST}/${NEWDATE}"
+if [ ! -f $TXLIST ]; then
+    touch $TXLIST || exit 1
 fi
 
-cd $SRC
+if [ ! -d $DST ]; then
+	mkdir -p $DST || exit 1
+fi
 
-tar -cpf - -X $TXLIST *.jpg | ( cd "$DST/$NEWDATE" ; tar -xvpf - )
-
-cd "$DST/$NEWDATE"
-
-for PIC in *jpg ; do
-	echo ${PIC:t} >> $TXLIST
+for SOURCE in $BASE/* ; do
+    if [ -d $SOURCE ]; then 
+        echo "Using $SOURCE"
+        for D in $SOURCE/*(-/) ; do
+            echo "Using $D"
+            for PICTURE in $( find $D -iname '*jpg' ) ; do
+                if grep -i $PICTURE $TXLIST ; then
+                    echo "Already Transfered $PICTURE"
+                else
+                    cp -av $PICTURE $DST/${PICTURE:t:l}
+                    echo $PICTURE >> $TXLIST
+                fi
+            done
+        done
+    fi
 done
+exit
 

@@ -1,0 +1,66 @@
+#!/bin/zsh
+
+MUSIC=/home/justin/Music
+
+FILE="/home/justin/Music/$( mpc --format '%file%' | head -n 1 )"
+
+SANEFILE="$(echo ${FILE:t} | perl -ne 's/([[:punct:]]|\s)/_/g; s/_mp3_$/.mp3/i;  print;' )"
+
+getopts d ARG_D
+getopts D ARG_DEBUG
+getopts v ARG_V
+getopts n ARG_N
+
+if [ $ARG_D ]; then
+    FILE=${FILE:h}
+fi
+
+VER=""
+if [ $ARG_V ]; then
+    VER="-v"
+fi
+
+TARGET=$MUSIC/$(date +%Y-%m)
+[ ! -d $TARGET ] && mkdir $TARGET
+
+if [ $1 ]; then
+    case $1 in
+        (ads|A)
+            TARGET=$MUSIC/AwesomeDUBSTEP
+            ;;
+        (del|rm|BAD|DEL)
+            TARGET=/home/justin/backup
+            ;;
+        (ds)
+            TARGET=$MUSIC/DUBSTEP
+            ;;
+        (dsdate)
+            TARGET=$MUSIC/DUBSTEP/$(date +%Y-%m)
+            [ ! -d $TARGET ] && mkdir $TARGET
+            ;;
+        (*)
+            TARGET=$MUSIC/$1
+            ;;
+    esac
+fi
+
+if [ $ARG_DEBUG ]; then
+    echo $TARGET
+    echo $FILE
+    echo $SANEFILE
+    echo $TARGET/$SANEFILE
+fi
+
+if [ ! -d $TARGET ]; then
+    echo "TARGET $TARGET does not exist."
+    exit 1
+fi
+
+if [ $ARG_N ]; then
+    echo mv -v "$FILE" "$TARGET"/"$SANEFILE"
+    exit 0
+fi
+
+if [ -e "$FILE" ]; then
+     mv $VER "$FILE" "$TARGET"/"$SANEFILE"
+fi
