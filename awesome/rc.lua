@@ -343,11 +343,14 @@ globalkeys = awful.util.table.join(
     --
     -- MPD Controlling
     awful.key({   }, "XF86AudioPlay",      function () awful.util.spawn("mpc toggle") end)  ,
+    awful.key({   }, "Redo",               function () awful.util.spawn("mpc toggle") end)  ,
     --awful.key({   }, "Cancel",             function () awful.util.spawn("mpc toggle") end)  ,
     awful.key({   }, "XF86AudioStop",      function () awful.util.spawn("mpc stop")   end)  ,
-    awful.key({   }, "Undo",               function () awful.util.spawn("mpc stop")   end)  ,
+    awful.key({   }, "Cancel",             function () awful.util.spawn("mpc stop")   end)  ,
     awful.key({   }, "XF86AudioPrev",      function () awful.util.spawn("mpc prev")   end)  ,
+    awful.key({   }, "SunProps",      function () awful.util.spawn("mpc prev")   end)  ,
     awful.key({   }, "XF86AudioNext",      function () awful.util.spawn("mpc next")   end)  ,
+    awful.key({   }, "Undo",               function () awful.util.spawn("mpc next")   end)  ,
     awful.key({   }, "XF86AudioMute",      function () awful.util.spawn("echo $EDITOR > /tmp/aw.log") end)  ,
 
     -- Volume
