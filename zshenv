@@ -144,6 +144,9 @@ if [[ -d /usr/local/apache2 ]]; then
 	wwwb=/usr/local/apache2/bin
 fi
 
+export DEBEMAIL="debian@justinhoppensteadt.com"
+export DEBFULLNAME="Justin Hoppensteadt"
+
 export PATH=$HOME/bin:/usr/bin:$PATH
 
 # vim:ft=zsh:syn=zsh

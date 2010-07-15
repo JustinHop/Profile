@@ -4,10 +4,10 @@
 #   This is to move pics from the phone to the laptop
 #
 
-BASE=/media/disk
+BASE=${1-/media/disk}
 DST=/home/justin/Pictures
 TXLIST="${BASE}/transfered_list"
-NEWDATE=`date +%F`
+DST=$DST/`date +%F`
 
 if [ ! -w $TXLIST ]; then
     echo "$TXLIST not writable"
@@ -24,10 +24,12 @@ for SOURCE in $BASE/* ; do
         for D in $SOURCE/*(-/) ; do
             echo "Using $D"
             for PICTURE in $( find $D -iname '*jpg' ) ; do
-                if grep -i $PICTURE $TXLIST ; then
-                    echo "Already Transfered $PICTURE"
+                if grep -i ${PICTURE:t} $TXLIST > /dev/null ; then
+                    #echo "Already Transfered $PICTURE"
                 else
                     cp -av $PICTURE $DST/${PICTURE:t:l}
+                    touch $DST/${PICTURE:t:l}
+                    chmod -x $DST/${PICTURE:t:l}
                     echo ${PICTURE:t} >> $TXLIST
                 fi
             done
