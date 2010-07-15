@@ -4,7 +4,13 @@ set -o histexpand
 umask 002
 
 if [ -f "~/bin/zsh" ]; then
-    alias zsh="~/bin/zsh"
+    ZSH="~/bin/zsh"
+else
+    Z=$( which zsh-beta )
+    if [[ -x $Z ]]; then
+        ZSH=$Z
+    fi
+    unset Z
 fi
 
 alias srpm="rpmbuild --target i686 --rebuild"
@@ -52,9 +58,9 @@ NOR=" --color=auto --hide-control-chars --classify "
     alias  llh="$LS $NOR -lshB"
     alias  sl="$LS $NOR -B -r"
 
-alias zsg=zsh
-alias zsj=zsh
-alias z=zsh
+alias zsg=$ZSH
+alias zsj=$ZSH
+alias z=$ZSH
 
 export PS1="<\u@\H> \W \$ "
 
