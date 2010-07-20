@@ -63,7 +63,7 @@ settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Termin
 --settings.mouse_marker_synergy = "<span bgcolor=" .. [["]] .. light_green .. [[">[╳]</span>]]
 
 -- This is used later as the default terminal and editor to run.
-terminal = "termit"
+terminal = "gnome-terminal"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -101,6 +101,9 @@ for s = 1, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
+awful.tag.setnmaster(2, tags[1][2])
+awful.tag.setmwfact( .2, tags[1][2])
+awful.tag.setncol( 2, tags[1][2])
 -- }}}
 
 -- {{{ Wibox
@@ -578,6 +581,12 @@ awful.rules.rules = {
     { rule = { class = "Kruler" },
         properties = { floating = true,
                         border_width = 0 } },
+    { rule = { class = "Pidgin" },
+        properties = { tag = tags[1][2] } },
+    { rule = { class = "Icedove" },
+        properties = { tag = tags[1][3] } },
+    { rule = { class = "icedove" },
+        properties = { tag = tags[1][3] } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -611,6 +620,8 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.add_signal("focus", function(c) c.border_color = beautiful.border_focus 
+    if c:isvisible() then awful.tag.seticon(c.icon) end
+end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
