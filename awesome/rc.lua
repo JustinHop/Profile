@@ -346,11 +346,14 @@ globalkeys = awful.util.table.join(
     --
     -- MPD Controlling
     awful.key({   }, "XF86AudioPlay",      function () awful.util.spawn("mpc toggle") end)  ,
+    awful.key({   }, "Redo",               function () awful.util.spawn("mpc toggle") end)  ,
     --awful.key({   }, "Cancel",             function () awful.util.spawn("mpc toggle") end)  ,
     awful.key({   }, "XF86AudioStop",      function () awful.util.spawn("mpc stop")   end)  ,
-    awful.key({   }, "Undo",               function () awful.util.spawn("mpc stop")   end)  ,
+    awful.key({   }, "Cancel",             function () awful.util.spawn("mpc stop")   end)  ,
     awful.key({   }, "XF86AudioPrev",      function () awful.util.spawn("mpc prev")   end)  ,
+    awful.key({   }, "SunProps",      function () awful.util.spawn("mpc prev")   end)  ,
     awful.key({   }, "XF86AudioNext",      function () awful.util.spawn("mpc next")   end)  ,
+    awful.key({   }, "Undo",               function () awful.util.spawn("mpc next")   end)  ,
     awful.key({   }, "XF86AudioMute",      function () awful.util.spawn("echo $EDITOR > /tmp/aw.log") end)  ,
 
     -- Volume
@@ -451,65 +454,31 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "o", awful.client.movetoscreen),
     awful.key({ modkey, }, "r", function (c) c:redraw() end),
     -- TODO: Shift+r to redraw all clients in current tag
-
-    -- Toggle titlebar
-    awful.key({ modkey, "Shift"   }, "t",
-        function (c)
-            if c.titlebar then
-                awful.titlebar.remove(c)
-                debug_notify(c.name .. "\ntitlebar " .. colored_off)
-            else
-                awful.titlebar.add(c, { modkey = "Mod1" })
-                debug_notify(c.name .. "\ntitlebar " .. colored_on)
-            end
-        end)
-
-    --[[ Toggle ontop
-    ,
-    awful.key({ modkey }, "o",
-        function (c)
-            if c.ontop then
-                c.ontop = false
-                if not awful.client.ismarked(c) then
-                    c.border_color = beautiful.border_focus
-                else
-                    c.border_color = beautiful.border_marked_focus
-                end
-                debug_notify(c.name .. "\nontop " .. colored_off)
-            else
-                c.ontop = true
-                if not awful.client.ismarked(c) then
-                    c.border_color = beautiful.border_ontop_focus
-                else
-                    c.border_color = beautiful.border_marked_focus
-                end
-                debug_notify(c.name .. "\nontop " .. colored_on)
-            end
-        end),
-
-    -- Toggle xcompmgr transparency
-    awful.key({ modkey }, "t", function (c)
-        if clienttable[c].custom_trans then
-            clienttable[c].custom_trans = false
-            clienttable[c].custom_trans_value = c.opacity
-            c.opacity = settings.opacity_focus
-            if trans_notify then naughty.destroy(trans_notify) end
-            trans_notify = naughty.notify({ title = "Transparency",
-                text = "Custom transparency turned " .. colored_off })
-        else
-            if clienttable[c].custom_trans_value then
-                c.opacity = clienttable[c].custom_trans_value
-            else
-                c.opacity = settings.opacity_toggle
-            end
-            clienttable[c].custom_trans = true
-            if trans_notify then naughty.destroy(trans_notify) end
-            trans_notify = naughty.notify({ title = "Transparency",
-                text = "Custom transparency turned " .. colored_on
-                       .. " (" .. math.floor(100 - c.opacity*100) .. "%)" })
-        end
+    awful.key({ modkey }, "m", function (c)
+        c.maximized_horizontal = not c.maximized_horizontal
+        c.maximized_vertical   = not c.maximized_vertical
+    end),
+    --awful.key({ modkey }, "o",     awful.client.movetoscreen),
+    awful.key({ modkey }, "Next",  function () awful.client.moveresize( 20,  20, -40, -40) end),
+    awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20,  40,  40) end),
+    awful.key({ modkey }, "Down",  function () awful.client.moveresize(  0,  20,   0,   0) end),
+    awful.key({ modkey }, "Up",    function () awful.client.moveresize(  0, -20,   0,   0) end),
+    awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20,   0,   0,   0) end),
+    awful.key({ modkey }, "Right", function () awful.client.moveresize( 20,   0,   0,   0) end),
+    awful.key({ modkey, "Control"},"r", function (c) c:redraw() end),
+    awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
+    awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
+    awful.key({ modkey, "Shift" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
+    awful.key({ modkey, "Shift" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
+    awful.key({ modkey, "Shift" }, "t", function (c)
+        if   c.titlebar then awful.titlebar.remove(c)
+        else awful.titlebar.add(c, { modkey = modkey }) end
+    end),
+    awful.key({ modkey, "Shift" }, "f", function (c) if awful.client.floating.get(c)
+        then awful.client.floating.delete(c);    awful.titlebar.remove(c)
+        else awful.client.floating.set(c, true); awful.titlebar.add(c) end
     end)
-    ]]--
+
 )
 
 -- Compute the maximum number of digit we need, limited to 9
@@ -554,7 +523,9 @@ end
 clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
-    awful.button({ modkey }, 3, awful.mouse.client.resize))
+    awful.button({ modkey }, 3, awful.mouse.client.resize)
+
+)
 
 -- Set keys
 root.keys(globalkeys)
@@ -624,4 +595,5 @@ client.add_signal("focus", function(c) c.border_color = beautiful.border_focus
     if c:isvisible() then awful.tag.seticon(c.icon) end
 end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+
 -- }}}

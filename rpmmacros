@@ -1,5 +1,6 @@
-%packager       Justin Hoppensteadt <Justin.Hoppensteadt@umgtemp.com>
-
+%packager Justin Hoppensteadt <Justin.Hoppensteadt@umgtemp.com> 
+%vendor Universal Music Group
+ 
 %_topdir            /LX_Web/RPM
 %_builddir          %{_topdir}/BUILD
 %_rpmdir            %{_topdir}/RPMS
@@ -12,6 +13,5 @@
 
 
 %_signature gpg
-%_gpg_name <Justin.Hoppensteadt@umgtemp.com>
-
+%_gpg_name Justin Hoppensteadt (Universal Music Group RPM Key) <Justin.Hoppensteadt@umgtemp.com>
 
