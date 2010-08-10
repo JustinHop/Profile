@@ -79,15 +79,15 @@ altkey = "Mod1"
 layouts =
 {
     awful.layout.suit.tile,
+    awful.layout.suit.max,
+    awful.layout.suit.floating,
     awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.max,
+    awful.layout.suit.tile.top
+    --awful.layout.suit.fair,
+    --awful.layout.suit.fair.horizontal,
     --awful.layout.suit.max.fullscreen,
     --awful.layout.suit.magnifier,
-    awful.layout.suit.floating
 }
 
 -- Define if we want to use titlebar on all applications.
@@ -454,10 +454,6 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "o", awful.client.movetoscreen),
     awful.key({ modkey, }, "r", function (c) c:redraw() end),
     -- TODO: Shift+r to redraw all clients in current tag
-    awful.key({ modkey }, "m", function (c)
-        c.maximized_horizontal = not c.maximized_horizontal
-        c.maximized_vertical   = not c.maximized_vertical
-    end),
     --awful.key({ modkey }, "o",     awful.client.movetoscreen),
     awful.key({ modkey }, "Next",  function () awful.client.moveresize( 20,  20, -40, -40) end),
     awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20,  40,  40) end),
@@ -468,8 +464,8 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control"},"r", function (c) c:redraw() end),
     awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
     awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey, "Shift" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
-    awful.key({ modkey, "Shift" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
+    awful.key({ modkey, "Control" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
+    awful.key({ modkey, "Control" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
     awful.key({ modkey, "Shift" }, "t", function (c)
         if   c.titlebar then awful.titlebar.remove(c)
         else awful.titlebar.add(c, { modkey = modkey }) end

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+[ ! $1 ] && echo "No Path" && exit 1
+
+chown -R www-ro:apache $1
+find $1 -type d -exec chmod u=rwx,g=rx,o= {} \;
+find $1 -type f -exec chmod u=rw,g=r,o= {} \;
+
+cd $1/sites
+find . -type d -name files -exec chmod ug=rwx,o= '{}' \;
+find . -name files -type d -exec find '{}' -type f \; | while read FILE; do chmod ug=rw,o= "$FILE"; done
+find . -name files -type d -exec find '{}' -type d \; | while read DIR; do chmod ug=rwx,o= "$DIR"; done
+
+
