@@ -1,8 +1,8 @@
 #!/bin/zsh
 
-MUSIC=/home/justin/Music
+MUSIC=/home/justin/music
 
-FILE="/home/justin/Music/$( mpc --format '%file%' | head -n 1 )"
+FILE="/home/justin/music/$( mpc --format '%file%' | head -n 1 )"
 
 SANEFILE="$(echo ${FILE:t} | perl -ne 's/([[:punct:]]|\s)/_/g; s/_mp3_$/.mp3/i;  print;' )"
 
