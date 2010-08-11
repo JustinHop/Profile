@@ -4,6 +4,9 @@ cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
 
+#ssh-agent dbus-launch awesome & 
+#WMPID=$!
+
 #if xrandr | grep DVI-D_1 ; then
 #	xrandr --output PANEL --off
 #	xrandr --output DVI-D_1 --auto
@@ -35,6 +38,7 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
 [ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
+[ -e ~/.xmodmap ] && xmodmap ~/.xmodmap > /dev/null 2>&1
 
 echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
@@ -44,14 +48,21 @@ echo "Session: Setting xrandr"
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-mpd || true
-mpc stop || true
-{ mpdas || true } &
+if ps -C mpd > /dev/null ; then
+    true
+else
+    mpd || true
+    if ps -C mpdas ; then
+        true
+    else
+        { mpdas ; } & 
+    fi
+fi
 
 
-xbindkeys || true
-klipper || true
-numlockx &
+ xbindkeys || true
+ klipper || true
+ numlockx  &
 { sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
 wicd-client &
@@ -71,16 +82,15 @@ xscreensaver -no-splash &
 done > /dev/null ; } &
 
 
-gnome-settings-daemon &
 gnome-power-manager &
-#padevchooser &
+gnome-settings-daemon &
+padevchooser &
 #nm-applet --sm-disable &             
-update-notifier &
+update-notifier || true &
 
 uname -a
 
 { sleep 5s; nitrogen --restore; } &
 { sleep 9s; nitrogen --restore; } &
 
-exec ssh-agent dbus-launch bash -c 'while true ; do awesome ; done;' 
-
+exec ssh-agent dbus-launch bash -c 'while true ; do awesome ; done;'

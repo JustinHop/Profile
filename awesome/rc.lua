@@ -63,7 +63,7 @@ settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Termin
 --settings.mouse_marker_synergy = "<span bgcolor=" .. [["]] .. light_green .. [[">[╳]</span>]]
 
 -- This is used later as the default terminal and editor to run.
-terminal = "termit"
+terminal = "gnome-terminal"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -79,15 +79,15 @@ altkey = "Mod1"
 layouts =
 {
     awful.layout.suit.tile,
+    awful.layout.suit.max,
+    awful.layout.suit.floating,
     awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.max,
+    awful.layout.suit.tile.top
+    --awful.layout.suit.fair,
+    --awful.layout.suit.fair.horizontal,
     --awful.layout.suit.max.fullscreen,
     --awful.layout.suit.magnifier,
-    awful.layout.suit.floating
 }
 
 -- Define if we want to use titlebar on all applications.
@@ -101,6 +101,9 @@ for s = 1, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
+awful.tag.setnmaster(2, tags[1][2])
+awful.tag.setmwfact( .2, tags[1][2])
+awful.tag.setncol( 2, tags[1][2])
 -- }}}
 
 -- {{{ Wibox
@@ -451,10 +454,6 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "o", awful.client.movetoscreen),
     awful.key({ modkey, }, "r", function (c) c:redraw() end),
     -- TODO: Shift+r to redraw all clients in current tag
-    awful.key({ modkey }, "m", function (c)
-        c.maximized_horizontal = not c.maximized_horizontal
-        c.maximized_vertical   = not c.maximized_vertical
-    end),
     --awful.key({ modkey }, "o",     awful.client.movetoscreen),
     awful.key({ modkey }, "Next",  function () awful.client.moveresize( 20,  20, -40, -40) end),
     awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20,  40,  40) end),
@@ -465,8 +464,8 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control"},"r", function (c) c:redraw() end),
     awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
     awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey, "Shift" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
-    awful.key({ modkey, "Shift" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
+    awful.key({ modkey, "Control" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
+    awful.key({ modkey, "Control" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
     awful.key({ modkey, "Shift" }, "t", function (c)
         if   c.titlebar then awful.titlebar.remove(c)
         else awful.titlebar.add(c, { modkey = modkey }) end
@@ -520,7 +519,10 @@ end
 clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
-    awful.button({ modkey }, 3, awful.mouse.client.resize)
+    awful.button({ modkey }, 3, awful.mouse.client.resize),
+                    awful.button({ }, 13, awful.tag.viewnext),
+                    awful.button({ }, 14, awful.tag.viewprev),
+                    awful.button({ }, 15, awful.tag.viewprev)
 
 )
 
@@ -549,6 +551,12 @@ awful.rules.rules = {
     { rule = { class = "Kruler" },
         properties = { floating = true,
                         border_width = 0 } },
+    { rule = { class = "Pidgin" },
+        properties = { tag = tags[1][2] } },
+    { rule = { class = "Icedove" },
+        properties = { tag = tags[1][3] } },
+    { rule = { class = "icedove" },
+        properties = { tag = tags[1][3] } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -582,7 +590,9 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.add_signal("focus", function(c) c.border_color = beautiful.border_focus 
+    if c:isvisible() then awful.tag.seticon(c.icon) end
+end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
 -- }}}
