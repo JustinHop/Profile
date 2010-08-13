@@ -20,4 +20,13 @@ for RCFILE in bashrc \
 
 done
 
+mkdir ~/bin ~/backup ~/tmp ~/.screenlogs
+
+for EXE in ~/Profile/bin/* ; do
+    if [ -e ~/bin/${EXE:t} ]; then
+        mv -v ~/bin/${EXE:t} ~/bin/.${EXE:t}
+    fi
+    ln -sfv $EXE ~/bin
+done
+
 # vim: ft=zsh:syn=zsh

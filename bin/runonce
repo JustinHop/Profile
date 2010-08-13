@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+if pgrep "^$1$" > /dev/null ; then
+    echo "$1 already running." $(pgrep "^$1$")
+    exit 0
+else
+    exec $@
+fi
+
