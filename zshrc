@@ -1,7 +1,7 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.0.5a"
+export ZSHRC_VERSION="2.0.5b"
 
 #
 # WORKSPACE AND ENVIRONMENT
