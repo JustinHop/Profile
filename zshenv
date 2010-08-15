@@ -119,6 +119,10 @@ export DEBFULLNAME="Justin Hoppensteadt"
 
 [ -n `whence less` ] && PAGER=less || PAGER=more
 export PAGER
+
+if [[ "$TERM" == "screen" ]]; then
+    alias htop="TERM=xterm htop"
+fi
  
 DIRSTACKSIZE=20
 LISTMAX=1000
@@ -146,4 +150,10 @@ if [[ -d /usr/local/apache2 ]]; then
 	wwwc=/usr/local/apache2/conf
 	wwwb=/usr/local/apache2/bin
 fi
+
+export DEBEMAIL="debian@justinhoppensteadt.com"
+export DEBFULLNAME="Justin Hoppensteadt"
+
+export PATH=$HOME/bin:/usr/bin:$PATH
+
 # vim:ft=zsh:syn=zsh

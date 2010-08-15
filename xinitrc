@@ -1,5 +1,12 @@
 #!/bin/zsh
 
+cat ~/.xsession-errors > ~/.xsession-errors-1
+echo > ~/.xsession-errors
+
+
+#ssh-agent dbus-launch awesome & 
+#WMPID=$!
+
 #if xrandr | grep DVI-D_1 ; then
 #	xrandr --output PANEL --off
 #	xrandr --output DVI-D_1 --auto
@@ -11,15 +18,17 @@
 #	fi
 #fi
 
-if xrandr -q | grep -P '\sconnected' | grep DFP1 ; then
-	xrandr --output LCD --off 
-	xrandr --output CRT1 --auto 
-	xrandr --output DFP1 --auto  --left-of CRT1 
-else
-	if xrandr -q | grep -P '\sconnected' | grep CRT1 ; then
-	    xrandr --output CRT1 --auto --right-of LCD
-	fi
-fi
+#if xrandr -q | grep -P '\sconnected' | grep DFP1 ; then
+#	xrandr --output LCD --off 
+#	xrandr --output CRT1 --auto 
+#	xrandr --output DFP1 --auto  --left-of CRT1 
+#else
+#	if xrandr -q | grep -P '\sconnected' | grep CRT1 ; then
+#	    xrandr --output CRT1 --auto --right-of LCD
+#	fi
+#fi
+
+#xrandr --output CRT1 --right-of DFP1 --rotate left --auto || true
 
 conky --config ~/Profile/conky-tux2.conf &
 
@@ -29,6 +38,7 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
 [ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
+[ -e ~/.xmodmap ] && xmodmap ~/.xmodmap > /dev/null 2>&1
 
 echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
@@ -38,15 +48,28 @@ echo "Session: Setting xrandr"
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-xbindkeys || true
-klipper || true
-numlockx &
-{ sleep 10s; synergy ; volwheel; } &
+if ps -C mpd > /dev/null ; then
+    true
+else
+    mpd || true
+    if ps -C mpdas ; then
+        true
+    else
+        { mpdas ; } & 
+    fi
+fi
+
+
+ xbindkeys || true
+ klipper || true
+ numlockx  &
+{ sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
 wicd-client &
 
 
-autoautossh &
+
+#autoautossh &
 
 xscreensaver-command -exit > /dev/null || true
 xscreensaver -no-splash &
@@ -58,16 +81,16 @@ xscreensaver -no-splash &
     xmodmap -e 'add Control = Control_L' >& /dev/null;
 done > /dev/null ; } &
 
-gnome-settings-daemon &
+
 gnome-power-manager &
-#padevchooser &
+gnome-settings-daemon &
+padevchooser &
 #nm-applet --sm-disable &             
-update-notifier &
+update-notifier || true &
 
 uname -a
 
 { sleep 5s; nitrogen --restore; } &
 { sleep 9s; nitrogen --restore; } &
 
-exec ssh-agent dbus-launch bash -c 'while true ; do awesome ; done'            
-
+exec ssh-agent dbus-launch bash -c 'while true ; do awesome ; done;'

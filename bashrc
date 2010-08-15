@@ -4,21 +4,19 @@ set -o histexpand
 umask 002
 
 if [ -f "~/bin/zsh" ]; then
-    alias zsh="~/bin/zsh"
+    ZSH="~/bin/zsh"
+else
+    Z=$( which zsh-beta )
+    if [[ -x $Z ]]; then
+        ZSH=$Z
+    fi
+    unset Z
 fi
 
 alias srpm="rpmbuild --target i686 --rebuild"
 alias rpm="rpm --verbose"
-alias A="ACCEPT_KEYWORDS=\"~x86\" "
-alias doom3="LD_PRELOAD=/usr/lib/libGL.so.1 doom3"
-alias m1='xmodmap -e "pointer = 1 2 3 6 7 4 5"'
-alias m2='xmodmap -e "pointer = 1 2 3 7 6 4 5"'
-alias ls="ls -F "
 alias ifconfig=ipconfig
-alias BT="TERM=screen-bce"
-alias XT="TERM=xterm "
 alias Xterm='xterm +bc -cr red -j +sb -u8 +vb -bd red -bg black -fg green'
-alias flux='xinit `which startfluxbox`'
 alias d=dirs
 alias pu=pushd
 alias po=popd
@@ -29,10 +27,11 @@ alias B='export BACKUP=+'
 alias psa="ps -Af f" 
 alias kew="echo 'Totally.'"
 alias orly="echo yarly"
+alias ..="cd .."
 alias ,,="cd .."
 alias ks="ls"
 alias xs="cd"
-alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
+
 LS=/bin/ls
 NOR=" --color=auto --hide-control-chars --classify "  
 
@@ -59,9 +58,9 @@ NOR=" --color=auto --hide-control-chars --classify "
     alias  llh="$LS $NOR -lshB"
     alias  sl="$LS $NOR -B -r"
 
-alias zsg=zsh
-alias zsj=zsh
-alias z=zsh
+alias zsg=$ZSH
+alias zsj=$ZSH
+alias z=$ZSH
 
 export PS1="<\u@\H> \W \$ "
 

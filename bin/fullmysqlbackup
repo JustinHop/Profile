@@ -1,0 +1,25 @@
+#!/bin/zsh -v
+
+TARGET=${/LX_Web/Database_Backups}
+USER=root
+PASS=root
+MY_OPT="-u$USER -p$PASS"
+MY="mysql $MY_OPT"
+MYD="mysqldump $MY_OPT"
+
+getopts d: ARG_D
+if [[ $ARG_D == "d" ]]; then
+    echo $ARG_D
+    TARGET=${OPTARG}
+fi
+
+( [ -d $TARGET ] && [ -w $TARGET ] ) || ( echo $TARGET is not a writable directory && exit 1 )
+
+cd $TARGET
+
+#for DATABASE in $( echo "show databases" | mysql $MY | egrep -v 'Database|information_schema'  ) ; do
+for DATABASE in $( echo "show databases" | eval $MY | egrep -v 'Database|information_schema' ) ; do
+    echo $DATABASE
+    time eval $MYD $DATABASE > $DATABASE
+    ls -l $DATABASE
+done
