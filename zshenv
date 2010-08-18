@@ -103,6 +103,10 @@ done
 # PICKY SETTINGS
 #
 
+export SURFRAW_text_browser=elinks
+export SURFRAW_graphical=no
+
+
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
 export LESS="-isaFMXRU"
