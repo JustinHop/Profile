@@ -3,6 +3,16 @@
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
+date
+echo "New Session on $HOSTNAME" | figlet -w 1000
+
+if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
+    ## if not found, launch a new one
+    eval `dbus-launch --sh-syntax --exit-with-session`
+    echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
+fi
+
+
 
 #ssh-agent dbus-launch awesome & 
 #WMPID=$!
@@ -30,10 +40,7 @@ echo > ~/.xsession-errors
 
 #xrandr --output CRT1 --right-of DFP1 --rotate left --auto || true
 
-conky --config ~/Profile/conky-tux2.conf &
-
-date
-echo "New Session on $HOSTNAME" | figlet -w 1000
+conky --config ~/Profile/conky-${HOST}.conf &
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
@@ -43,33 +50,23 @@ echo "Session: setting Xdefaults and Xmodmap"
 echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
 
-echo "Session: Setting xrandr"
-#jrandr
-
 setxkbmap -option terminate:ctrl_alt_bksp
 
-if ps -C mpd > /dev/null ; then
-    true
-else
-    mpd || true
-    if ps -C mpdas ; then
-        true
-    else
-        { mpdas ; } & 
-    fi
+runonce mpd
+runonce mpdas &
+runonce mpn.py &
+
+if [[ $HOST = tux2 ]]; then
+    runonce xcompmgr -fF -I-.002 -O-.003 -D1 -cC -t-5 -l-6 -r5
 fi
 
-
- xbindkeys || true
- klipper || true
- numlockx  &
+xbindkeys || true
+klipper || true
+numlockx  &
 { sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
+autocutsel -d -s CLIPBOARD &
 wicd-client &
-
-
-
-#autoautossh &
 
 xscreensaver-command -exit > /dev/null || true
 xscreensaver -no-splash &
@@ -80,7 +77,6 @@ xscreensaver -no-splash &
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
     xmodmap -e 'add Control = Control_L' >& /dev/null;
 done > /dev/null ; } &
-
 
 gnome-power-manager &
 gnome-settings-daemon &
@@ -93,4 +89,4 @@ uname -a
 { sleep 5s; nitrogen --restore; } &
 { sleep 9s; nitrogen --restore; } &
 
-exec ssh-agent dbus-launch bash -c 'while true ; do awesome ; done;'
+exec bash -c 'while true ; do awesome ; done;'
