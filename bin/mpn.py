@@ -87,7 +87,7 @@ class Notifier:
             title = "???"
             print "<No title found>"
         if self.debug:
-            print "Titre : " + title
+            print "Title : " + title
         return title
 
     def get_album(self):
@@ -109,7 +109,7 @@ class Notifier:
             artist = "???"
             print "<No artist found>"
         if self.debug:
-            print "Artiste : " + artist
+            print "Artist : " + artist
         return artist
 
     def notify(self):
@@ -137,7 +137,7 @@ class Notifier:
         if self.debug:
             print ""
 
-        body = "de <b>" + artist + "</b> in <i>" + album + \
+        body = "by <b>" + artist + "</b> in <i>" + album + \
                "</i>\nDuration : " + length
 
         # set paramaters and display the notice
