@@ -3,34 +3,7 @@
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
-
-#ssh-agent dbus-launch awesome & 
-#WMPID=$!
-
-#if xrandr | grep DVI-D_1 ; then
-#	xrandr --output PANEL --off
-#	xrandr --output DVI-D_1 --auto
-#	xrandr --output VGA_1 --auto --right-of DVI-D_1
-#else
-#	xrandr --output PANEL --auto
-#	if xrandr | grep VGA_1 ; then
-#	    xrandr --output VGA_1 --auto --right-of PANEL
-#	fi
-#fi
-
-#if xrandr -q | grep -P '\sconnected' | grep DFP1 ; then
-#	xrandr --output LCD --off 
-#	xrandr --output CRT1 --auto 
-#	xrandr --output DFP1 --auto  --left-of CRT1 
-#else
-#	if xrandr -q | grep -P '\sconnected' | grep CRT1 ; then
-#	    xrandr --output CRT1 --auto --right-of LCD
-#	fi
-#fi
-
-#xrandr --output CRT1 --right-of DFP1 --rotate left --auto || true
-
-conky --config ~/Profile/conky-tux2.conf &
+conky --config ~/Profile/conky-$HOST.conf &
 
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
@@ -48,20 +21,12 @@ echo "Session: Setting xrandr"
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-if ps -C mpd > /dev/null ; then
-    true
-else
-    mpd || true
-    if ps -C mpdas ; then
-        true
-    else
-        { mpdas ; } & 
-    fi
-fi
-
+runonce mpd
+runonce mpdas &
+runonce mpn.py &
 
  xbindkeys || true
- klipper || true
+ parcellite &
  numlockx  &
 { sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
