@@ -7,7 +7,7 @@
 escapify () { perl -e "use HTML::Entities; print encode_entities(\"${1//\"/\\\"}\", \"<>&\")"; } ;
 
 # Media path. Config this.
-MEDIA_PATH="/var/lib/mpd/music/"
+MEDIA_PATH=~/Music/
 
 # Main loop.
 while true; do

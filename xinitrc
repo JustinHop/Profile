@@ -3,37 +3,16 @@
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
-
-#ssh-agent dbus-launch awesome & 
-#WMPID=$!
-
-#if xrandr | grep DVI-D_1 ; then
-#	xrandr --output PANEL --off
-#	xrandr --output DVI-D_1 --auto
-#	xrandr --output VGA_1 --auto --right-of DVI-D_1
-#else
-#	xrandr --output PANEL --auto
-#	if xrandr | grep VGA_1 ; then
-#	    xrandr --output VGA_1 --auto --right-of PANEL
-#	fi
-#fi
-
-#if xrandr -q | grep -P '\sconnected' | grep DFP1 ; then
-#	xrandr --output LCD --off 
-#	xrandr --output CRT1 --auto 
-#	xrandr --output DFP1 --auto  --left-of CRT1 
-#else
-#	if xrandr -q | grep -P '\sconnected' | grep CRT1 ; then
-#	    xrandr --output CRT1 --auto --right-of LCD
-#	fi
-#fi
-
-#xrandr --output CRT1 --right-of DFP1 --rotate left --auto || true
-
-conky --config ~/Profile/conky-tux2.conf &
+conky --config ~/Profile/conky-$HOST.conf &
 
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
+
+if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
+    ## if not found, launch a new one
+    eval `dbus-launch --sh-syntax --exit-with-session`
+    echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
+fi
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
@@ -43,33 +22,20 @@ echo "Session: setting Xdefaults and Xmodmap"
 echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
 
-echo "Session: Setting xrandr"
-#jrandr
-
 setxkbmap -option terminate:ctrl_alt_bksp
 
-if ps -C mpd > /dev/null ; then
-    true
-else
-    mpd || true
-    if ps -C mpdas ; then
-        true
-    else
-        { mpdas ; } & 
-    fi
-fi
-
+runonce mpd
+runonce mpdas &
+runonce mpn.py &
 
  xbindkeys || true
- klipper || true
+ parcellite &
  numlockx  &
+
 { sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
+autocutsel -d -s CLIPBOARD &
 wicd-client &
-
-
-
-#autoautossh &
 
 xscreensaver-command -exit > /dev/null || true
 xscreensaver -no-splash &
@@ -80,7 +46,6 @@ xscreensaver -no-splash &
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
     xmodmap -e 'add Control = Control_L' >& /dev/null;
 done > /dev/null ; } &
-
 
 gnome-power-manager &
 gnome-settings-daemon &
@@ -93,4 +58,4 @@ uname -a
 { sleep 5s; nitrogen --restore; } &
 { sleep 9s; nitrogen --restore; } &
 
-exec ssh-agent dbus-launch bash -c 'while true ; do awesome ; done;'
+exec ssh-agent bash -c 'while true ; do awesome ; done;'
