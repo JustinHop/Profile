@@ -568,7 +568,11 @@ awful.rules.rules = {
 client.add_signal("manage", function (c, startup)
     -- Add a titlebar
     -- awful.titlebar.add(c, { modkey = modkey })
-
+    
+    if awful.client.floating.get(c) then 
+        awful.titlebar.add(c, { modkey = modkey })
+    end
+        
     -- Enable sloppy focus
     c:add_signal("mouse::enter", function(c)
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier

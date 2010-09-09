@@ -24,13 +24,13 @@ xset r rate 350 50
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-runonce mpd
+runonce mpd &
 runonce mpdas &
 runonce mpn.py &
 
- xbindkeys || true
- parcellite &
- numlockx  &
+xbindkeys || true
+parcellite &
+numlockx  &
 
 { sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
@@ -50,12 +50,17 @@ done > /dev/null ; } &
 gnome-power-manager &
 gnome-settings-daemon &
 padevchooser &
-#nm-applet --sm-disable &             
 update-notifier || true &
 
 uname -a
 
 { sleep 5s; nitrogen --restore; } &
 { sleep 9s; nitrogen --restore; } &
+{ sleep 2m; pidgin; } &
+
+{ while true ; do
+    sleep 15m;
+    ~/bin/pidgin_status.py "$(fortune zippy)";
+done >& /dev/null; } &
 
 exec ssh-agent bash -c 'while true ; do awesome ; done;'
