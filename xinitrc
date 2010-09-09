@@ -3,6 +3,8 @@
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
+conky --config ~/Profile/conky-$HOST.conf &
+
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
@@ -11,36 +13,6 @@ if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
     eval `dbus-launch --sh-syntax --exit-with-session`
     echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
 fi
-
-
-
-#ssh-agent dbus-launch awesome & 
-#WMPID=$!
-
-#if xrandr | grep DVI-D_1 ; then
-#	xrandr --output PANEL --off
-#	xrandr --output DVI-D_1 --auto
-#	xrandr --output VGA_1 --auto --right-of DVI-D_1
-#else
-#	xrandr --output PANEL --auto
-#	if xrandr | grep VGA_1 ; then
-#	    xrandr --output VGA_1 --auto --right-of PANEL
-#	fi
-#fi
-
-#if xrandr -q | grep -P '\sconnected' | grep DFP1 ; then
-#	xrandr --output LCD --off 
-#	xrandr --output CRT1 --auto 
-#	xrandr --output DFP1 --auto  --left-of CRT1 
-#else
-#	if xrandr -q | grep -P '\sconnected' | grep CRT1 ; then
-#	    xrandr --output CRT1 --auto --right-of LCD
-#	fi
-#fi
-
-#xrandr --output CRT1 --right-of DFP1 --rotate left --auto || true
-
-conky --config ~/Profile/conky-${HOST}.conf &
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
@@ -56,13 +28,10 @@ runonce mpd &
 runonce mpdas &
 runonce mpn.py &
 
-if [[ $HOST = tux2 ]]; then
-    runonce xcompmgr -fF -I-.002 -O-.003 -D1 -cC -t-5 -l-6 -r5
-fi
-
 xbindkeys || true
 parcellite &
 numlockx  &
+
 { sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
 autocutsel -d -s CLIPBOARD &
@@ -81,12 +50,17 @@ done > /dev/null ; } &
 gnome-power-manager &
 gnome-settings-daemon &
 padevchooser &
-#nm-applet --sm-disable &             
 update-notifier || true &
 
 uname -a
 
 { sleep 5s; nitrogen --restore; } &
 { sleep 9s; nitrogen --restore; } &
+{ sleep 2m; pidgin; } &
 
-exec bash -c 'while true ; do awesome ; done;'
+{ while true ; do
+    sleep 15m;
+    ~/bin/pidgin_status.py "$(fortune zippy)";
+done >& /dev/null; } &
+
+exec ssh-agent bash -c 'while true ; do awesome ; done;'
