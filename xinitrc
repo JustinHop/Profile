@@ -52,7 +52,7 @@ xset r rate 350 50
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-runonce mpd
+runonce mpd &
 runonce mpdas &
 runonce mpn.py &
 
@@ -61,7 +61,7 @@ if [[ $HOST = tux2 ]]; then
 fi
 
 xbindkeys || true
-klipper || true
+parcellite &
 numlockx  &
 { sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
