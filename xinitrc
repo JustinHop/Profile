@@ -17,7 +17,6 @@ fi
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
 [ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
-[ -e ~/.xmodmap ] && xmodmap ~/.xmodmap > /dev/null 2>&1
 
 echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
@@ -27,6 +26,10 @@ setxkbmap -option terminate:ctrl_alt_bksp
 runonce mpd &
 runonce mpdas &
 runonce mpn.py &
+
+if whence davmail >& /dev/null ; then
+    runonce davmail &
+fi
 
 xbindkeys || true
 parcellite &
