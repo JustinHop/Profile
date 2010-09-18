@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+getopts t: TIME_ARG
+
+if [ $TIME_ARG ]; then
+    TIME=$OPTARG
+fi
+
+getopts f: FORTUNE_ARG
+
+if [ $FORTUNE_ARG ]; then
+    FORTUNE=$OPTARG
+fi
+
+while true ; do
+    MESSAGE="$(fortune ${FORTUNE:-zippy})"
+    echo $MESSAGE
+    ~/bin/pidgin_status.py "$MESSAGE"
+    sleep ${TIME:-15m};
+done
+

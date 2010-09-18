@@ -48,7 +48,7 @@ xscreensaver -no-splash &
     xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
     xmodmap -e 'add Control = Control_L' >& /dev/null;
-done > /dev/null ; } &
+done ; } &
 
 gnome-power-manager &
 gnome-settings-daemon &
@@ -59,11 +59,8 @@ uname -a
 
 { sleep 5s; nitrogen --restore; } &
 { sleep 9s; nitrogen --restore; } &
-{ sleep 2m; pidgin; } &
+{ sleep 1m; pidgin; } &
+{ sleep 1m; pidgin_fortune; } &
 
-{ while true ; do
-    sleep 15m;
-    ~/bin/pidgin_status.py "$(fortune zippy)";
-done >& /dev/null; } &
 
 exec ssh-agent bash -c 'while true ; do awesome ; done;'
