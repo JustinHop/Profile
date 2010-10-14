@@ -25,8 +25,8 @@ xset r rate 350 50
 setxkbmap -option terminate:ctrl_alt_bksp
 
 runonce mpd &
-runonce mpdas &
-runonce mpn.py &
+{ sleep 1m; runonce mpdas; } &
+{ sleep 1m; runonce mpn.py; } &
 
 xbindkeys || true
 parcellite &
@@ -56,6 +56,7 @@ uname -a
 
 { sleep 5s; nitrogen --restore; } &
 { sleep 9s; nitrogen --restore; } &
+{ sleep 30s; gnome-do; } &
 { sleep 1m; pidgin; } &
 { sleep 1m; pidgin_fortune; } &
 

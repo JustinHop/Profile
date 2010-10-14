@@ -23,20 +23,27 @@ use warnings;
 
 use Net::Twitter;
 
-my $pass;
+my $access_token;
+my $access_token_secret; 
 
 open (PW,"<", $ENV{"HOME"} . "/.tweet") || die "No Password File (~/.tweet): $!";
 while (<PW>){
     chomp;
-    $pass = $_;
+    ($access_token,$access_token_secret) = split(':');
 }
 close PW;
 
-my $nt = Net::Twitter->new(
-        traits   => [qw/API::REST/],
-        username => "Justin_Hop",
-        password => $pass,
-        );
+my $consumer_key = 'cbXRR0ZCqjakf98IbI6A';
+my $consumer_secret = 'To20mhtdpgKjlPc4QEe4imZ8ZHaJt6183x7ofCkQysc';
+
+         my $nt = Net::Twitter->new(
+             traits   => [qw/OAuth API::REST/],
+             consumer_key        => $consumer_key,
+             consumer_secret     => $consumer_secret,
+             access_token        => $access_token,
+             access_token_secret => $access_token_secret,
+         );
+
 
 my $update;
 
