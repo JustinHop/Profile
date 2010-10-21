@@ -1,14 +1,19 @@
 -- Standard awesome library
 require("awful")
+require("awful.titlebar")
 require("awful.autofocus")
 require("awful.rules")
--- Theme handling library
+require("awesome")
+require("client")
+require("screen")
 require("beautiful")
 -- Notification library
 require("naughty")
 
 -- Load Debian menu entries
 require("debian.menu")
+require("freedesktop.utils")
+require("freedesktop.menu")
 
 function destroyall()
     for loopy = 1, 10 do
@@ -16,9 +21,9 @@ function destroyall()
         for p,pos in pairs(naughty.notifications[s]) do
             for i,notification in pairs(naughty.notifications[s][p]) do
                 naughty.destroy(notification)
-            end 
-        end 
-    end 
+            end
+        end
+    end
     end
 end
 
@@ -41,7 +46,7 @@ function import(file)
 end
 
 for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/*.lua"):lines() do
-	if string.find(file,"%.lua$") then 
+	if string.find(file,"%.lua$") then
 		--io.stderr:write("Importing ", file, "\n")
 		import(file)
 	end
@@ -198,14 +203,9 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 for s = 1, screen.count() do
-    mydebugbox[s] = widget({ type = "textbox", align = "right" })
-    mydebugbox[s].text = ""
-
-    mymsgbox[s] = widget({ type = "textbox", align = "left" })
-    mymsgbox[s].text = ""
-
+	-- My mouse indicator
     mymousebox[s] = widget({ type = "textbox", align = "left" })
-    if screen.count() ~= 1 then 
+    if screen.count() ~= 1 then
     	mymousebox[s].text = "[-]"
     end
     -- Create a promptbox for each screen
@@ -249,7 +249,6 @@ for s = 1, screen.count() do
         s == 1 and mysystray or nil,
         s == 1 and rspace or nil,
         mytasklist[s],
-        rspace,
         layout = awful.widget.layout.horizontal.rightleft
     }
 end
@@ -359,43 +358,43 @@ globalkeys = awful.util.table.join(
     -- Volume
     awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower() end),
     awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise() end),
-    awful.key({"Control" }, "XF86AudioLowerVolume", 
-        function () 
-            awful.util.spawn("mpc volume -5")   
-            updatevol() 
-            displayvol()  
+    awful.key({"Control" }, "XF86AudioLowerVolume",
+        function ()
+            awful.util.spawn("mpc volume -5")
+            updatevol()
+            displayvol()
         end),
-    awful.key({"Control" }, "XF86AudioRaiseVolume", 
-        function () 
-            awful.util.spawn("mpc volume +5")   
-            updatevol() 
-            displayvol()  
+    awful.key({"Control" }, "XF86AudioRaiseVolume",
+        function ()
+            awful.util.spawn("mpc volume +5")
+            updatevol()
+            displayvol()
         end)  ,
-    awful.key({"Shift"   }, "XF86AudioLowerVolume", 
-        function () 
-            awful.util.spawn("aumix -w -5")  
-            updatevol() 
-            displayvol()    
+    awful.key({"Shift"   }, "XF86AudioLowerVolume",
+        function ()
+            awful.util.spawn("aumix -w -5")
+            updatevol()
+            displayvol()
         end)  ,
-    awful.key({"Shift"   }, "XF86AudioRaiseVolume", 
-        function () 
-            awful.util.spawn("aumix -w +5")  
-            updatevol() 
-            displayvol()    
+    awful.key({"Shift"   }, "XF86AudioRaiseVolume",
+        function ()
+            awful.util.spawn("aumix -w +5")
+            updatevol()
+            displayvol()
         end),
-    awful.key({"Mod1"   }, "XF86AudioLowerVolume", 
-        function () 
-            awful.util.spawn("ssh -oBatchMode=yes usucpwd-hoppenj nircmd changesysvolume -10000")  
-            updatevol() 
-            displayvol()    
+    awful.key({"Mod1"   }, "XF86AudioLowerVolume",
+        function ()
+            awful.util.spawn("ssh -oBatchMode=yes usucpwd-hoppenj nircmd changesysvolume -10000")
+            updatevol()
+            displayvol()
         end)  ,
-    awful.key({"Mod1"   }, "XF86AudioRaiseVolume", 
-        function () 
-            awful.util.spawn("ssh -oBatchMode=yes usucpwd-hoppenj nircmd changesysvolume +10000")  
-            updatevol() 
-            displayvol()    
+    awful.key({"Mod1"   }, "XF86AudioRaiseVolume",
+        function ()
+            awful.util.spawn("ssh -oBatchMode=yes usucpwd-hoppenj nircmd changesysvolume +10000")
+            updatevol()
+            displayvol()
         end),
-        
+
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
 
@@ -421,15 +420,16 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "i", show_client_infos or nil),
     awful.key({ modkey, "Shift" }, "i", function ()
         local s = mouse.screen
-        if mymsgbox[s].text then
-            mymsgbox[s].text = nil
-        elseif client.focus then
+        if client.focus then
             local text = ""
             if client.focus.class then text = text .. setFg("white", " Class: ") .. client.focus.class .. " " end
             if client.focus.instance then text = text .. setFg("white", "Instance: ") .. client.focus.instance .. " " end
             if client.focus.role then text = text .. setFg("white", "Role: ") .. client.focus.role .. " " end
             if client.focus.type then text = text .. setFg("white", "Type: ") .. client.focus.type .. " " end
             mymsgbox[s].text = text
+            naughty.notify{ title = 'Debug Information', text = text, icon = '/usr/share/awesome/icons/awesome64.png'}
+    	    io.stderr:write(text, "\n")
+
         end
     end)
 )
@@ -437,9 +437,8 @@ globalkeys = awful.util.table.join(
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
+    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle()                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
     awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
@@ -451,7 +450,8 @@ clientkeys = awful.util.table.join(
     -- manipulation
     awful.key({ modkey, "Control" }, "m", function (c) c.minimized = not c.minimized end),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey, "Shift" }, "o", awful.client.movetoscreen),
+    awful.key({ modkey, "Shift"   }, "o", awful.client.movetoscreen),
+    awful.key({ modkey,           }, "o", awful.client.movetoscreen),
     awful.key({ modkey, }, "r", function (c) c:redraw() end),
     -- TODO: Shift+r to redraw all clients in current tag
     --awful.key({ modkey }, "o",     awful.client.movetoscreen),
@@ -560,6 +560,7 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
+    --]]
 }
 -- }}}
 
@@ -568,11 +569,11 @@ awful.rules.rules = {
 client.add_signal("manage", function (c, startup)
     -- Add a titlebar
     -- awful.titlebar.add(c, { modkey = modkey })
-    
-    if awful.client.floating.get(c) then 
+
+    if awful.client.floating.get(c) then
         awful.titlebar.add(c, { modkey = modkey })
     end
-        
+
     -- Enable sloppy focus
     c:add_signal("mouse::enter", function(c)
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
@@ -594,9 +595,8 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus 
+client.add_signal("focus", function(c) c.border_color = beautiful.border_focus
     if c:isvisible() then awful.tag.seticon(c.icon) end
 end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
--- }}}
