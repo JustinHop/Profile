@@ -23,13 +23,15 @@ xset r rate 350 50
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-runonce mpd &
-{ sleep 1m; runonce mpdas; } &
-{ sleep 1m; runonce mpn.py; } &
-
-if whence davmail >& /dev/null ; then
-    runonce davmail &
+if whence runonce >& /dev/null ; then
+    runonce mpd &
+    { sleep 1m; runonce mpdas; } &
+    { sleep 1m; runonce mpn.py; } &
+    if whence davmail >& /dev/null ; then
+        { sleep 1m; runonce davmail; } &
+    fi
 fi
+
 
 xbindkeys || true
 parcellite &
@@ -43,7 +45,7 @@ wicd-client &
 xscreensaver-command -exit > /dev/null || true
 xscreensaver -no-splash &
 
-{ while true; do 
+{ while true; do
     sleep 10s;
     xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
@@ -52,15 +54,16 @@ done ; } &
 
 gnome-power-manager &
 gnome-settings-daemon &
-padevchooser &
 update-notifier || true &
 
 uname -a
 
 { sleep 5s; nitrogen --restore; } &
 { sleep 9s; nitrogen --restore; } &
-{ sleep 1m; pidgin; } &
+#{ sleep 30s; gnome-do; } &
+{ sleep 10s; pidgin; } &
 { sleep 1m; pidgin_fortune; } &
+{ sleep 1m; padevchooser; } &
 
 
 exec ssh-agent bash -c 'while true ; do awesome ; done;'

@@ -10,6 +10,8 @@ set nocompatible
 set backspace=2
 set ttyfast
 
+set hidden
+
 filetype plugin indent on
 syntax enable
 

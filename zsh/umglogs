@@ -1,0 +1,2 @@
+echo $( find ${1:-/data/apache/logs} -type f -name \*log -size +1k | xargs -i echo -f {} | xargs )
+

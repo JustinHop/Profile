@@ -475,7 +475,7 @@ if [[ $ZSH_VERSION = 4.* ]]; then
         promptpercent 
 fi
 
-if [[ $ZSH_VERSION = 3.* ]]; then
+if [[ $ZSH_VERSION = 4.* ]]; then
     setopt listtypes \
         mark_dirs \
         menu_complete \
@@ -575,7 +575,7 @@ if [[ -o interactive ]]; then
     promptinit
 
     if [[ $HOSTNAME = "tux2" ]]; then
-    	prompt justin2
+    	prompt jclint
     else
         prompt clint
     fi

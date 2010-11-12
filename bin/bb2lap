@@ -1,0 +1,30 @@
+#!/bin/zsh
+
+#
+#   This is to move pics from the blackberry to the laptop
+#
+
+BASE=${1-/media/BLACKBERRY/BlackBerry/pictures}
+DST=/home/justin/Pictures/`date +%F`
+TXLIST="${BASE}/transfered_list"
+
+
+if [ ! -w $TXLIST ]; then
+    echo "$TXLIST not writable"
+    exit 1
+fi
+
+if [ ! -d $DST ]; then
+	mkdir -p $DST || exit 1
+fi
+
+for PICTURE in $( find $BASE -iname '*jpg' ) ; do
+    if grep -i ${PICTURE:t} $TXLIST > /dev/null ; then
+        #echo "Already Transfered $PICTURE"
+    else
+        cp -av $PICTURE $DST/${PICTURE:t:l}
+        chmod -x $DST/${PICTURE:t:l}
+        echo ${PICTURE:t} >> $TXLIST
+    fi
+done
+
