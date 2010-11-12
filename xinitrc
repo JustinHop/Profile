@@ -24,8 +24,8 @@ xset r rate 350 50
 setxkbmap -option terminate:ctrl_alt_bksp
 
 runonce mpd &
-runonce mpdas &
-runonce mpn.py &
+{ sleep 1m; runonce mpdas; } &
+{ sleep 1m; runonce mpn.py; } &
 
 if whence davmail >& /dev/null ; then
     runonce davmail &
