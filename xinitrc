@@ -23,15 +23,15 @@ xset r rate 350 50
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-if whence runonce >& /dev/null ; then
-    runonce mpd &
-    { sleep 1m; runonce mpdas; } &
-    { sleep 1m; runonce mpn.py; } &
-    if whence davmail >& /dev/null ; then
-        { sleep 1m; runonce davmail; } &
-    fi
-fi
-
+#if whence runonce >& /dev/null ; then
+#    runonce mpd &
+#    { sleep 1m; runonce mpdas; } &
+#    { sleep 1m; runonce mpn.py; } &
+#    if whence davmail >& /dev/null ; then
+#        { sleep 1m; runonce davmail; } &
+#    fi
+#fi
+#
 
 xbindkeys || true
 parcellite &
@@ -65,5 +65,6 @@ uname -a
 { sleep 1m; pidgin_fortune; } &
 { sleep 1m; padevchooser; } &
 
+gnome-settings-daemon &
 
 exec ssh-agent bash -c 'while true ; do awesome ; done;'

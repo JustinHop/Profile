@@ -417,18 +417,18 @@ nmap <space> <PageDown>
 "   perl
 let g:Perl_AuthorName      = 'Justin Hoppensteadt'
 let g:Perl_AuthorRef       = 'JH'
-let g:Perl_Email           = 'Justin.Hoppensteadt@umgtemp.com'
-let g:Perl_Company         = 'Universal Music Group'
+let g:Perl_Email           = 'Justin.Hoppensteadt@ticketmaster.com'
+let g:Perl_Company         = 'Live Nation'
 
 let g:BASH_AuthorName      = 'Justin Hoppensteadt'
 let g:BASH_AuthorRef       = 'JH'
-let g:BASH_Email           = 'Justin.Hoppensteadt@umgtemp.com'
-let g:BASH_Company         = 'Universal Music Group'
+let g:BASH_Email           = 'Justin.Hoppensteadt@ticketmaster.com'
+let g:BASH_Company         = 'Live Nation'
 
 let g:Lua_AuthorName      = 'Justin Hoppensteadt'
 let g:Lua_AuthorRef       = 'JH'
-let g:Lua_Email           = 'Justin.Hoppensteadt@umgtemp.com'
-let g:Lua_Company         = 'Universal Music Group'
+let g:Lua_Email           = 'Justin.Hoppensteadt@ticketmaster.com'
+let g:Lua_Company         = 'Live Nation'
 
 "" insert mode : autocomplete brackets and braces
 "imap ( ()<Left>
