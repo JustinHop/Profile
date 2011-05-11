@@ -537,6 +537,10 @@ if [[ $ZSH_VERSION = 4.* ]]; then
     	    zstyle ':completion:*' hosts $etchosts;
         fi
     done
+    if [[ -f "$HOME"/tm.bindForward ]]; then
+        etchosts=( $( perl -ne '/(^[\w\.]*tmcs)/; if ($1) { print $1 . " " }' < "$HOME"/tm.bindForward ))
+        zstyle ':completion:*' hosts $etchosts
+    fi
     compdef _hosts getip
     compdef _modprobe remod
     compdef _mozilla firefox-3.5
