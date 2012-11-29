@@ -7,6 +7,8 @@ require("awesome")
 require("client")
 require("screen")
 require("beautiful")
+require("obvious")
+require("obvious.volume_alsa")
 -- Notification library
 require("naughty")
 
@@ -55,6 +57,8 @@ end
 naughty.config.screen = screen.count()
 theme_path = "/home/justin/.config/awesome/themes/justin/theme.lua"
 beautiful.init(theme_path)
+
+--obvious.volume_alsa.setchannel("Master")
 
 -- {{{ Load the functions in awesome.d
 function import(file)
@@ -159,6 +163,10 @@ mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesom
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
+
+
+
+
 -- }}}
 
 
@@ -381,20 +389,24 @@ globalkeys = awful.util.table.join(
     end),
     --
     -- MPD Controlling
+    --[[
     awful.key({   }, "XF86AudioPlay",      function () awful.util.spawn("mpc toggle") end)  ,
     awful.key({   }, "Redo",               function () awful.util.spawn("mpc toggle") end)  ,
-    --awful.key({   }, "Cancel",             function () awful.util.spawn("mpc toggle") end)  ,
+    --awful.key({   }, "Cancel",           function () awful.util.spawn("mpc toggle") end)  ,
     awful.key({   }, "XF86AudioStop",      function () awful.util.spawn("mpc stop")   end)  ,
     awful.key({   }, "Cancel",             function () awful.util.spawn("mpc stop")   end)  ,
     awful.key({   }, "XF86AudioPrev",      function () awful.util.spawn("mpc prev")   end)  ,
-    awful.key({   }, "SunProps",      function () awful.util.spawn("mpc prev")   end)  ,
+    awful.key({   }, "SunProps",           function () awful.util.spawn("mpc prev")   end)  ,
     awful.key({   }, "XF86AudioNext",      function () awful.util.spawn("mpc next")   end)  ,
     awful.key({   }, "Undo",               function () awful.util.spawn("mpc next")   end)  ,
-    awful.key({   }, "XF86AudioMute",      function () awful.util.spawn("echo $EDITOR > /tmp/aw.log") end)  ,
+    --awful.key({   }, "XF86AudioMute",      function () obvious.volume_alsa.mute(0, "Master") end)  ,
+    --]]
+
 
     -- Volume
-    awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower() end),
-    awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise() end),
+    awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower(0, "Master", 1) end),
+    awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise(0, "Master", 1) end),
+    --[[
     awful.key({"Control" }, "XF86AudioLowerVolume",
         function ()
             awful.util.spawn("mpc volume -5")
@@ -431,6 +443,7 @@ globalkeys = awful.util.table.join(
             updatevol()
             displayvol()
         end),
+    --]]
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
@@ -518,6 +531,14 @@ clientkeys = awful.util.table.join(
 keynumber = 0
 for s = 1, screen.count() do
    keynumber = math.min(9, math.max(#tags[s], keynumber));
+   screen[s]:add_signal("tag::history::update", function()
+       --naughty.notify({ text = "hey" })
+       if client.focus then
+           awful.tag.seticon(client.focus.icon)
+       else
+           awful.tag.seticon()
+       end
+   end)
 end
 
 -- Bind all key numbers to tags.
@@ -632,10 +653,15 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus
+client.add_signal("focus", function(c)
+    c.border_color = beautiful.border_focus
     if c:isvisible() then awful.tag.seticon(c.icon) end
 end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal
+client.add_signal("unfocus", function(c)
+    c.border_color = beautiful.border_normal
+    --naughty.notify({ text = "unfocus" })
     --awful.tag.seticon()
+    --sel = awful.tag.selected(mouse.screen)
+    --sel.seticon()
 end)
 

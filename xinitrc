@@ -72,6 +72,6 @@ done ; } &
 #
 gnome-settings-daemon &
 
-exec ssh-agent bash -c 'while true ; do awesome ; done;'
+exec bash -c 'while true ; do awesome ; done;'
 
 #exec ck-launch-session gnome-session
