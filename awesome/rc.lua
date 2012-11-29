@@ -15,6 +15,31 @@ require("debian.menu")
 require("freedesktop.utils")
 require("freedesktop.menu")
 
+-- {{{ Error handling
+-- Check if awesome encountered an error during startup and fell back to
+-- another config (This code will only ever execute for the fallback config)
+if awesome.startup_errors then
+    naughty.notify({ preset = naughty.config.presets.normal,
+                     title = "Oops, there were errors during startup!",
+                     text = awesome.startup_errors })
+end
+
+-- Handle runtime errors after startup
+do
+    local in_error = false
+    awesome.add_signal("debug::error", function (err)
+        -- Make sure we don't go into an endless error loop
+        if in_error then return end
+        in_error = true
+
+        naughty.notify({ preset = naughty.config.presets.normal,
+                         title = "Oops, an error happened!",
+                         text = err })
+        in_error = false
+    end)
+end
+-- }}}
+
 function destroyall()
     for loopy = 1, 10 do
     for s = 1, screen.count() do
@@ -139,7 +164,8 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 
 -- {{{ Wibox
 -- Create a textclock widget
-spacer = "✠"
+--spacer = "✠"█
+spacer = "❚"
 mytextclock = awful.widget.textclock({ align = "right" },
     "%a %b %d, %r<small> %Y %z</small>", .5)
 
@@ -182,8 +208,16 @@ mytaglist.buttons = awful.util.table.join(
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
-                                              if not c:isvisible() then
-                                                  awful.tag.viewonly(c:tags()[1])
+                                              if c == client.focus then
+                                                  c.minimized = true
+                                              else
+                                                  if not c:isvisible() then
+                                                      awful.tag.viewonly(c:tags()[1])
+                                                  end
+                                                  -- This will also un-minimize
+                                                  -- the client, if needed
+                                                  client.focus = c
+                                                  c:raise()
                                               end
                                               client.focus = c
                                               c:raise()
@@ -601,5 +635,7 @@ end)
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus
     if c:isvisible() then awful.tag.seticon(c.icon) end
 end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal
+    --awful.tag.seticon()
+end)
 
