@@ -116,12 +116,12 @@ awful.tag.setncol( 2, tags[1][2])
 -- Create a textbox widget
 mytextbox = widget({ type = "textbox", align = "right" })
 -- Set the default text in textbox
-mytextbox.text = "<b><small> " .. awesome.release .. " </small></b>"
+mytextbox.text = "<b> " .. awesome.release .. " </b>"
 
 -- Create a laucher widget and a main menu
 myawesomemenu = {
    { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua" },
+   { "edit config", editor_cmd .. " " .. awesome.conffile },
    { "restart", awesome.restart },
    { "quit", awesome.quit }
 }
@@ -136,8 +136,10 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
 -- }}}
 
+
 -- {{{ Wibox
 -- Create a textclock widget
+spacer = "✠"
 mytextclock = awful.widget.textclock({ align = "right" },
     "%a %b %d, %r<small> %Y %z</small>", .5)
 
@@ -149,10 +151,10 @@ myalertbox = widget({ type = "textbox", align = "right" })
 
 -- spacer
 lspace = widget({ type = "textbox", align="left", bg = "black", })
-lspace.text=[[<span bgcolor="#30C23D"><sub><b>]] .. "┃" .. [[</b></sub></span>]]
+lspace.text=[[<span bgcolor="#30C23D"><b>]] .. spacer .. [[</b></span>]]
 
 rspace = widget({ type = "textbox", align="right" })
-rspace.text=[[<span bgcolor="#30C23D"><sub><b>]] .. "┃" .. [[</b></sub></span>]]
+rspace.text=[[<span bgcolor="#30C23D"><b>]] .. spacer .. [[</b></span>]]
 
 
 -- Create a systray
@@ -175,7 +177,6 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 5, awful.tag.viewprev),
                     awful.button({ }, 10, awful.tag.viewprev),
                     awful.button({ }, 13, awful.tag.viewnext),
-                    awful.button({ }, 14, awful.tag.viewprev),
                     awful.button({ }, 15, awful.tag.viewprev)
                     )
 mytasklist = {}
@@ -229,7 +230,7 @@ for s = 1, screen.count() do
                                           end, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    mywibox[s] = awful.wibox({ position = "top", screen = s, height = "30" })
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
@@ -262,7 +263,7 @@ root.buttons(awful.util.table.join(
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev),
     awful.button({ }, 13, awful.tag.viewnext),
-    awful.button({ }, 14, awful.tag.viewprev),
+    awful.button({ }, 10, awful.tag.viewprev),
     awful.button({ }, 15, awful.tag.viewprev)
 ))
 -- }}}
@@ -523,7 +524,7 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize),
                     awful.button({ }, 13, awful.tag.viewnext),
-                    awful.button({ }, 14, awful.tag.viewprev),
+                    awful.button({ }, 10, awful.tag.viewprev),
                     awful.button({ }, 15, awful.tag.viewprev)
 
 )

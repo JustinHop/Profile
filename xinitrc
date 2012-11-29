@@ -33,17 +33,22 @@ setxkbmap -option terminate:ctrl_alt_bksp
 #fi
 #
 
+#awesome &
+
 xbindkeys || true
 parcellite &
 numlockx  &
+bluetooth-applet &
+gnome-sound-applet &
+mpd &
 
-{ sleep 10s; ~/bin/synergy ; } &
+#{ sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
 autocutsel -d -s CLIPBOARD &
 wicd-client &
 
-xscreensaver-command -exit > /dev/null || true
-xscreensaver -no-splash &
+#xscreensaver-command -exit > /dev/null || true
+#xscreensaver -no-splash &
 
 { while true; do
     sleep 10s;
@@ -52,19 +57,21 @@ xscreensaver -no-splash &
     xmodmap -e 'add Control = Control_L' >& /dev/null;
 done ; } &
 
-gnome-power-manager &
-gnome-settings-daemon &
-update-notifier || true &
-
-uname -a
-
-{ sleep 5s; nitrogen --restore; } &
-{ sleep 9s; nitrogen --restore; } &
-#{ sleep 30s; gnome-do; } &
-{ sleep 10s; pidgin; } &
-{ sleep 1m; pidgin_fortune; } &
-{ sleep 1m; padevchooser; } &
-
+#gnome-power-manager &
+#gnome-settings-daemon &
+#update-notifier || true &
+#
+#uname -a
+#
+#{ sleep 5s; nitrogen --restore; } &
+#{ sleep 9s; nitrogen --restore; } &
+##{ sleep 30s; gnome-do; } &
+#{ sleep 10s; pidgin; } &
+#{ sleep 1m; pidgin_fortune; } &
+#{ sleep 1m; padevchooser; } &
+#
 gnome-settings-daemon &
 
 exec ssh-agent bash -c 'while true ; do awesome ; done;'
+
+#exec ck-launch-session gnome-session

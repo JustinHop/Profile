@@ -36,7 +36,7 @@ strong_red          = "#DC0004"
 purple              = "#CF0FB0"
 black               = "#000000"
 
-theme.font          = "monospace 8"
+theme.font          = "monospace 12"
 
 theme.bg_normal     = blue
 theme.bg_focus      = light_blue
@@ -49,7 +49,7 @@ theme.fg_focus      = black
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize  = "#ffffff"
 
-theme.border_width  = "5"
+theme.border_width  = "10"
 theme.border_normal = dark_blue
 theme.border_focus  = purple
 theme.border_marked = hot_pink
