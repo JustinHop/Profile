@@ -8,6 +8,8 @@ require("awesome")
 require("client")
 require("screen")
 require("beautiful")
+require("obvious")
+require("obvious.volume_alsa")
 -- Notification library
 require("naughty")
 
@@ -15,42 +17,41 @@ require("naughty")
 require("freedesktop.menu")
 
 config_dir = awful.util.getdir("config")
-set_icon_command = os.getenv("HOME") .. "/bin/set-awesome-client-icon.sh"
+hostname = string.gsub(awful.util.pread("hostname"), "\n", "")
 
-function file_exists(name)
-    local f=io.open(name,"r")
-    if f~=nil then
-        io.close(f)
-        return true
-    else
-        return false
-    end
+-- {{{ Error handling
+-- Check if awesome encountered an error during startup and fell back to
+-- another config (This code will only ever execute for the fallback config)
+if awesome.startup_errors then
+    naughty.notify({ preset = naughty.config.presets.normal,
+                     title = "Oops, there were errors during startup!",
+                     text = awesome.startup_errors })
 end
 
-function run_icon_set()
-    if file_exists(set_icon_command) then
-        os.execute(set_icon_command)
-        return true
-    else
-        return false
-    end
-end
+-- Handle runtime errors after startup
+do
+    local in_error = false
+    awesome.add_signal("debug::error", function (err)
+        -- Make sure we don't go into an endless error loop
+        if in_error then return end
+        in_error = true
 
-function destroyall()
-    for loopy = 1, 10 do
-    for s = 1, screen.count() do
-        for p,pos in pairs(naughty.notifications[s]) do
-            for i,notification in pairs(naughty.notifications[s][p]) do
-                naughty.destroy(notification)
-            end
-        end
-    end
-    end
+        naughty.notify({ preset = naughty.config.presets.normal,
+                         title = "Oops, an error happened!",
+                         text = err })
+        in_error = false
+    end)
 end
+-- }}}
 
 naughty.config.screen = screen.count()
-theme_path = "/home/justin/.config/awesome/themes/justin/theme.lua"
+theme_path = config_dir .. "themes/" .. hostname .. "/theme.lua"
+if not awful.util.checkfile(theme_path) then
+    theme_path = config_dir .. "/themes/justin/theme.lua"
+end
 beautiful.init(theme_path)
+
+--obvious.volume_alsa.setchannel("Master")
 
 -- {{{ Load the functions in awesome.d
 function import(file)
@@ -143,7 +144,7 @@ awful.tag.setncol( 2, tags[1][2])
 -- Create a textbox widget
 mytextbox = widget({ type = "textbox", align = "right" })
 -- Set the default text in textbox
-mytextbox.text = "<b><small> " .. awesome.release .. " </small></b>"
+mytextbox.text = "<b> " .. awesome.release .. " </b>"
 
 -- Create a laucher widget and a main menu
 myawesomemenu = {
@@ -167,10 +168,15 @@ mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesom
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
+
+
 -- }}}
+
 
 -- {{{ Wibox
 -- Create a textclock widget
+--spacer = "✠"█
+spacer = "❚"
 mytextclock = awful.widget.textclock({ align = "right" },
     "%a %b %d, %r<small> %Y %z</small>", .5)
 
@@ -182,10 +188,10 @@ myalertbox = widget({ type = "textbox", align = "right" })
 
 -- spacer
 lspace = widget({ type = "textbox", align="left", bg = "black", })
-lspace.text=[[<span bgcolor="#30C23D"><sub><b>]] .. "┃" .. [[</b></sub></span>]]
+lspace.text=[[<span bgcolor="#30C23D"><b>]] .. spacer .. [[</b></span>]]
 
 rspace = widget({ type = "textbox", align="right" })
-rspace.text=[[<span bgcolor="#30C23D"><sub><b>]] .. "┃" .. [[</b></sub></span>]]
+rspace.text=[[<span bgcolor="#30C23D"><b>]] .. spacer .. [[</b></span>]]
 
 
 -- Create a systray
@@ -213,8 +219,16 @@ mytaglist.buttons = awful.util.table.join(
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
-                                              if not c:isvisible() then
-                                                  awful.tag.viewonly(c:tags()[1])
+                                              if c == client.focus then
+                                                  c.minimized = true
+                                              else
+                                                  if not c:isvisible() then
+                                                      awful.tag.viewonly(c:tags()[1])
+                                                  end
+                                                  -- This will also un-minimize
+                                                  -- the client, if needed
+                                                  client.focus = c
+                                                  c:raise()
                                               end
                                               client.focus = c
                                               c:raise()
@@ -261,7 +275,7 @@ for s = 1, screen.count() do
                                           end, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    mywibox[s] = awful.wibox({ position = "top", screen = s, height = "30" })
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
@@ -378,20 +392,24 @@ globalkeys = awful.util.table.join(
     end),
     --
     -- MPD Controlling
+    --[[
     awful.key({   }, "XF86AudioPlay",      function () awful.util.spawn("mpc toggle") end)  ,
     awful.key({   }, "Redo",               function () awful.util.spawn("mpc toggle") end)  ,
-    --awful.key({   }, "Cancel",             function () awful.util.spawn("mpc toggle") end)  ,
+    --awful.key({   }, "Cancel",           function () awful.util.spawn("mpc toggle") end)  ,
     awful.key({   }, "XF86AudioStop",      function () awful.util.spawn("mpc stop")   end)  ,
     awful.key({   }, "Cancel",             function () awful.util.spawn("mpc stop")   end)  ,
     awful.key({   }, "XF86AudioPrev",      function () awful.util.spawn("mpc prev")   end)  ,
-    awful.key({   }, "SunProps",      function () awful.util.spawn("mpc prev")   end)  ,
+    awful.key({   }, "SunProps",           function () awful.util.spawn("mpc prev")   end)  ,
     awful.key({   }, "XF86AudioNext",      function () awful.util.spawn("mpc next")   end)  ,
     awful.key({   }, "Undo",               function () awful.util.spawn("mpc next")   end)  ,
-    awful.key({   }, "XF86AudioMute",      function () awful.util.spawn("echo $EDITOR > /tmp/aw.log") end)  ,
+    --awful.key({   }, "XF86AudioMute",      function () obvious.volume_alsa.mute(0, "Master") end)  ,
+    --]]
+
 
     -- Volume
-    awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower() end),
-    awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise() end),
+    awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower(0, "Master", 1) end),
+    awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise(0, "Master", 1) end),
+    --[[
     awful.key({"Control" }, "XF86AudioLowerVolume",
         function ()
             awful.util.spawn("mpc volume -5")
@@ -428,6 +446,7 @@ globalkeys = awful.util.table.join(
             updatevol()
             displayvol()
         end),
+    --]]
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
@@ -515,6 +534,14 @@ clientkeys = awful.util.table.join(
 keynumber = 0
 for s = 1, screen.count() do
    keynumber = math.min(9, math.max(#tags[s], keynumber));
+   screen[s]:add_signal("tag::history::update", function()
+       --naughty.notify({ text = "hey" })
+       if client.focus then
+           awful.tag.seticon(client.focus.icon)
+       else
+           awful.tag.seticon()
+       end
+   end)
 end
 
 -- Bind all key numbers to tags.
@@ -628,16 +655,15 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus
-    --if c:isvisible() then awful.tag.seticon(c.icon) end
+client.add_signal("focus", function(c)
+    c.border_color = beautiful.border_focus
+    if c:isvisible() then awful.tag.seticon(c.icon) end
     if mousemark then mousemarker() end
-    run_icon_set()
 end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal
-    --awful.tag.seticon()
+client.add_signal("unfocus", function(c)
+    c.border_color = beautiful.border_normal
     if mousemark then mousemarker() end
 end)
 
 if mousemark then mousemarker() end
-
 
