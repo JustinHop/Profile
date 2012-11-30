@@ -45,7 +45,7 @@ end
 -- }}}
 
 naughty.config.screen = screen.count()
-theme_path = config_dir .. "themes/" .. hostname .. "/theme.lua"
+theme_path = config_dir .. "/themes/" .. hostname .. "/theme.lua"
 if not awful.util.checkfile(theme_path) then
     theme_path = config_dir .. "/themes/justin/theme.lua"
 end
