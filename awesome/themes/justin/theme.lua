@@ -36,7 +36,7 @@ strong_red          = "#DC0004"
 purple              = "#CF0FB0"
 black               = "#000000"
 
-theme.font          = "monospace 8"
+theme.font          = "monospace 10"
 
 theme.bg_normal     = blue
 theme.bg_focus      = light_blue
@@ -49,7 +49,7 @@ theme.fg_focus      = black
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize  = "#ffffff"
 
-theme.border_width  = "5"
+theme.border_width  = "10"
 theme.border_normal = dark_blue
 theme.border_focus  = purple
 theme.border_marked = hot_pink
@@ -127,8 +127,13 @@ theme.layout_dwindle = "/usr/share/awesome/themes/default/layouts/dwindlew.png"
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
 --
 -- look inside /usr/share/icons/, default: nil (don't use icon theme)
-theme.icon_theme = "Tango"
+theme.icon_theme = "unity-icon-theme"
 theme.icon_theme_size = "32x32"
+theme.icon_path = os.getenv("HOME") .. "/.config/awesome/icons/"
+theme.icon_terminal = theme.icon_path .. "utilities-terminal.png"
+theme.icon_lock = theme.icon_path .. "lock.png"
+theme.icon_ubuntu = theme.icon_path .. "ubuntu.png"
+theme.icon_gnomescreenshot = theme.icon_path .. "gnome-screenshot.png"
 --theme.default_client_icon = theme.config .. "/icons/emptytrash.png"
 
 

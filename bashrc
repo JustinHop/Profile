@@ -62,7 +62,7 @@ alias zsg=$ZSH
 alias zsj=$ZSH
 alias z=$ZSH
 
-alias J="ssh jhoppensteadt@justin1.sys.dev99.websys.tmcs"
+alias J="ssh jhoppensteadt@justin2.sys.dev99.websys.tmcs"
 
 export PS1="<\u@\H> \W \$ "
 
