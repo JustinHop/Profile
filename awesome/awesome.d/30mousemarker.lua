@@ -18,9 +18,9 @@
 function mousemarker() 
     for s=1, screen.count() do
     	if s == mouse.screen then
-    		mymousebox[s].text=[[<span bgcolor="]] .. beautiful.bg_urgent .. [["><small><b> ■ </b></small></span>]]
+    		mymousebox[s].text=[[<span bgcolor="]] .. beautiful.bg_urgent .. [["><b> ■ </b></span>]]
     	else
-    		mymousebox[s].text=[[<span bgcolor="]] .. beautiful.bg_normal .. [["><small><b> □ </b></small></span>]]
+    		mymousebox[s].text=[[<span bgcolor="]] .. beautiful.bg_normal .. [["><b> □ </b></span>]]
     	end
     end
 end

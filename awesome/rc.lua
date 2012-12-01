@@ -3,6 +3,7 @@ require("awful")
 require("awful.titlebar")
 require("awful.autofocus")
 require("awful.rules")
+require("awful.util")
 require("awesome")
 require("client")
 require("screen")
@@ -13,9 +14,10 @@ require("obvious.volume_alsa")
 require("naughty")
 
 -- Load Debian menu entries
-require("debian.menu")
-require("freedesktop.utils")
 require("freedesktop.menu")
+
+config_dir = awful.util.getdir("config")
+hostname = string.gsub(awful.util.pread("hostname"), "\n", "")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -42,20 +44,11 @@ do
 end
 -- }}}
 
-function destroyall()
-    for loopy = 1, 10 do
-    for s = 1, screen.count() do
-        for p,pos in pairs(naughty.notifications[s]) do
-            for i,notification in pairs(naughty.notifications[s][p]) do
-                naughty.destroy(notification)
-            end
-        end
-    end
-    end
-end
-
 naughty.config.screen = screen.count()
-theme_path = "/home/justin/.config/awesome/themes/justin/theme.lua"
+theme_path = config_dir .. "/themes/" .. hostname .. "/theme.lua"
+if not awful.util.checkfile(theme_path) then
+    theme_path = config_dir .. "/themes/justin/theme.lua"
+end
 beautiful.init(theme_path)
 
 --obvious.volume_alsa.setchannel("Master")
@@ -98,6 +91,8 @@ settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Termin
 
 -- This is used later as the default terminal and editor to run.
 terminal = "gnome-terminal"
+lock_session = "gnome-screensaver-command -l"
+take_screenshot = "gnome-screenshot -i"
 -- terminal = "terminator"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
@@ -134,10 +129,14 @@ use_titlebar = false
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    if screen.count() == 1 then
+        tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    else
+        tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6 }, s, layouts[1])
+    end
 end
 awful.tag.setnmaster(1, tags[1][2])
-awful.tag.setmwfact( .2, tags[1][2])
+awful.tag.setmwfact( .8, tags[1][2])
 awful.tag.setncol( 2, tags[1][2])
 -- }}}
 
@@ -155,16 +154,20 @@ myawesomemenu = {
    { "quit", awesome.quit }
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "Debian", debian.menu.Debian_menu.Debian },
-                                    { "open terminal", terminal }
+free_desktop_menu = freedesktop.menu.new()
+
+mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesome_icon },
+                                    --{ "Ubuntu", debian.menu.Debian_menu.Debian, beautiful.icon_ubuntu },
+                                    { "Ubuntu", free_desktop_menu, beautiful.icon_ubuntu },
+                                    { "Open Terminal", terminal, beautiful.icon_terminal },
+                                    { "Take Screenshot", take_screenshot, beautiful.icon_gnomescreenshot },
+                                    { "", "true" },
+                                    { "Lock Session", lock_session, beautiful.icon_lock }
                                   }
                         })
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
-
-
 
 
 -- }}}
@@ -455,7 +458,7 @@ globalkeys = awful.util.table.join(
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end),
-    -- Debuggers
+    --[[ Debuggers
     awful.key({ modkey, "Control" }, "d", function ()
             if settings.debug then
                 settings.debug = false
@@ -467,6 +470,7 @@ globalkeys = awful.util.table.join(
                 naughty.notify({ title = "Debug" , text = "debug mode turned " .. colored_on })
             end
     end),
+    ]]--
     awful.key({ modkey, "Control" }, "i", show_client_infos or nil),
     awful.key({ modkey, "Shift" }, "i", function ()
         local s = mouse.screen
@@ -524,7 +528,6 @@ clientkeys = awful.util.table.join(
         then awful.client.floating.delete(c);    awful.titlebar.remove(c)
         else awful.client.floating.set(c, true); awful.titlebar.add(c) end
     end)
-
 )
 
 -- Compute the maximum number of digit we need, limited to 9
@@ -578,10 +581,9 @@ clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize),
-                    awful.button({ }, 13, awful.tag.viewnext),
-                    awful.button({ }, 10, awful.tag.viewprev),
-                    awful.button({ }, 15, awful.tag.viewprev)
-
+    awful.button({ }, 13, awful.tag.viewnext),
+    awful.button({ }, 10, awful.tag.viewprev),
+    awful.button({ }, 15, awful.tag.viewprev)
 )
 
 -- Set keys
@@ -656,12 +658,12 @@ end)
 client.add_signal("focus", function(c)
     c.border_color = beautiful.border_focus
     if c:isvisible() then awful.tag.seticon(c.icon) end
+    if mousemark then mousemarker() end
 end)
 client.add_signal("unfocus", function(c)
     c.border_color = beautiful.border_normal
-    --naughty.notify({ text = "unfocus" })
-    --awful.tag.seticon()
-    --sel = awful.tag.selected(mouse.screen)
-    --sel.seticon()
+    if mousemark then mousemarker() end
 end)
+
+if mousemark then mousemarker() end
 
