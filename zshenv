@@ -106,6 +106,7 @@ done
 export SURFRAW_text_browser=elinks
 export SURFRAW_graphical=no
 
+alias J="ssh jhoppensteadt@justin1.sys.dev99.websys.tmcs"
 
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
