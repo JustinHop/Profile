@@ -36,7 +36,7 @@ strong_red          = "#DC0004"
 purple              = "#CF0FB0"
 black               = "#000000"
 
-theme.font          = "monospace 10"
+theme.font          = "monospace 12"
 
 theme.bg_normal     = blue
 theme.bg_focus      = light_blue

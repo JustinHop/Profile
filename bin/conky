@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/bin/conky -c ~/Profile/conky-tux2.conf
+/usr/bin/conky -c ~/Profile/conky-$HOSTNAME.conf

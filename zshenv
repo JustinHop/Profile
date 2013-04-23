@@ -106,7 +106,10 @@ done
 export SURFRAW_text_browser=elinks
 export SURFRAW_graphical=no
 
-alias J="ssh jhoppensteadt@justin1.sys.dev99.websys.tmcs"
+alias J="ssh -A jhoppensteadt@justin2.sys.dev99.websys.tmcs"
+alias JR="ssh -A root@justin2.sys.dev99.websys.tmcs"
+
+alias IE="wine 'C:\Program Files\Internet Explorer\iexplore'"
 
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"

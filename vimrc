@@ -1,7 +1,7 @@
 " Justin's vimrc
 " $Id$
 
-" 
+"
 "  General Operation
 
 " vimrc-1.9.5
@@ -33,7 +33,7 @@ set number
 set ruler
 
 " No Switching to Alt Screen!
-set t_ti= 
+set t_ti=
 set t_te=
 " No More MORE
 set nomore
@@ -64,7 +64,7 @@ set smartindent
 set textwidth=80
 set formatoptions=roq
 set nolist
-set showbreak=-->\ 
+set showbreak=-->\
 set wrap
 set linebreak
 
@@ -118,7 +118,7 @@ if $VIM_MOUSE
    ttymouse=$VIM_MOUSE
 else
     set ttymouse=xterm2
-endif  
+endif
 
 function! MyPerlSettings()
     if !did_filetype()
@@ -128,8 +128,8 @@ function! MyPerlSettings()
     setlocal nosmartindent
     setlocal noautoindent
     setlocal indentexpr=
-    setlocal complete+=k 
-    setlocal cindent 
+    setlocal complete+=k
+    setlocal cindent
     setlocal cinkeys=0{,0},0(,0),:,!^F,o,O,e
     setlocal formatoptions-=t formatoptions+=croq
     let perl_extended_vars=1
@@ -154,7 +154,7 @@ if has("autocmd")
     au BufReadPost *
         \ if line("'\"") > 0 && line ("'\"") <= line("$") |
         \   exe "normal g'\"" |
-        \ endif 
+        \ endif
 
     " Backup EVERYTHING MODE!!!!
     "let BACKUPDIR=expand("$HOME/backup/")
@@ -166,13 +166,13 @@ if has("autocmd")
             set nobackup
             if ! expand(&readonly)
                 au BufReadPost *
-                            \ exe 'silent write! ' 
+                            \ exe 'silent write! '
                             \   substitute( expand(
-                            \   substitute( expand( 
+                            \   substitute( expand(
                             \       substitute( expand("$HOME/backup/") .
-                            \           substitute( expand("%:p"), '/','_','g') . 
-                            \           strftime("%Y%m%d.%H%M%S"), 
-                            \       '\s','_', 'g') 
+                            \           substitute( expand("%:p"), '/','_','g') .
+                            \           strftime("%Y%m%d.%H%M%S"),
+                            \       '\s','_', 'g')
                             \   ), '_','',''),
                             \   ), 'LXWeb', 'LX_Web', 'g')
             endif
@@ -242,7 +242,7 @@ if has("autocmd")
     au FileType php let php_no_ShortTags = 1
 
     "  Use enter to activate help jump points & display line numbers
-    "   au FileType help set number     
+    "   au FileType help set number
     au FileType help nmap <buffer> <Return> <C-]>
     "   au FileType help nmap <buffer> <C-[> <C-O>
 endif
@@ -370,22 +370,10 @@ if !exists("*ToggleHex")
     endfunction
 endif
 
-map <c-w><c-t> :WMToggle<cr> 
-"                          mnemonic: window-toggle : <c-W><c-T>
-
-":FirstExplorerWindow      :directly takes you to the first explorer window
- "                          from the top left corner which is visible. >
-map <c-w><c-f> :FirstExplorerWindow<cr>
-"<                          mnemonic: window-first  : <c-W><c-F>
-
-":BottomExplorerWindow     :directly takes you to the last explorere window
-                           "from the top-left which is visible. >
-map <c-w><c-b> :BottomExplorerWindow<cr>
-
 "if version >= 700
 "   "  this line makes esc accept a completion
 "   inoremap <silent><Esc>      <C-r>=pumvisible()?"\<lt>C-e>":"\<lt>Esc>"<CR>
-"   
+"
 "   "  but i think it would do better to accept and go to normal mode
 ""
 ""inoremap <silent><Esc>      <C-r>=pumvisible()?"\<lt>C-e>":"\<lt>CR>"<CR><Esc>
@@ -394,7 +382,7 @@ map <c-w><c-b> :BottomExplorerWindow<cr>
 "   inoremap <silent><Down>     <C-r>=pumvisible()?"\<lt>C-n>":"\<lt>Down>"<CR>
 "   inoremap <silent><Up>       <C-r>=pumvisible()?"\<lt>C-p>":"\<lt>Up>"<CR>
 "   inoremap <silent><PageDown> <C-r>=pumvisible()?"\<lt>PageDown>\<lt>C-p>\<lt>C-n>":"\<lt>PageDown>"<CR>
-"   inoremap <silent><PageUp>   <C-r>=pumvisible()?"\<lt>PageUp>\<lt>C-p>\<lt>C-n>":"\<lt>PageUp>"<CR> 
+"   inoremap <silent><PageUp>   <C-r>=pumvisible()?"\<lt>PageUp>\<lt>C-p>\<lt>C-n>":"\<lt>PageUp>"<CR>
 "endif
 "
 "" --------------
@@ -473,5 +461,20 @@ if !exists("*Backspace")
     inoremap <BS> <c-r>=Backspace()<CR>
 endif
 
+if !exists("*WordProcessorMode")
+func! WordProcessorMode()
+  setlocal formatoptions=1
+  setlocal noexpandtab
+  map j gj
+  map k gk
+  setlocal spell spelllang=en_us
+"  set thesaurus+=/Users/sbrown/.vim/thesaurus/mthesaur.txt
+  set complete+=s
+  set formatprg=par
+  setlocal wrap
+  setlocal linebreak
+endfu
+com! WP call WordProcessorMode()
+endif
 
 " vim:ft=vim:syn=vim:ts=4
