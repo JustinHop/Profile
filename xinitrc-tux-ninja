@@ -65,8 +65,8 @@ synergys -d INFO -f &
 done ; } &
 
 { while true; do
-    wget -O- -o/dev/null http://whatismyip.com | grep -P -o '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}' | head -n 1 > ~/.external_ip
-    tsocks wget -O- -o/dev/null http://whatismyip.com | grep -P -o '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}' | head -n 1 > ~/.external_tor_ip
+    nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_ip
+    tsocks nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_tor_ip
     sleep 1m
 done ; } &
 

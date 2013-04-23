@@ -400,8 +400,8 @@ globalkeys = awful.util.table.join(
 
 
     -- Volume
-    awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower(0, "Master", 1) end),
-    awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise(0, "Master", 1) end),
+    --awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower(0, "Master", 1) end),
+    --awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise(0, "Master", 1) end),
     --[[
     awful.key({"Control" }, "XF86AudioLowerVolume",
         function ()
@@ -497,8 +497,8 @@ clientkeys = awful.util.table.join(
     -- manipulation
     awful.key({ modkey, "Control" }, "m", function (c) c.minimized = not c.minimized end),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey, "Shift"   }, "o", awful.client.movetoscreen),
-    awful.key({ modkey,           }, "o", awful.client.movetoscreen),
+    awful.key({ modkey, "Shift"   }, "o", function () awful.client.movetoscreen() mousemarker() end),
+    awful.key({ modkey,           }, "o", function () awful.client.movetoscreen() mousemarker() end),
     awful.key({ modkey, }, "r", function (c) c:redraw() end),
     -- TODO: Shift+r to redraw all clients in current tag
     --awful.key({ modkey }, "o",     awful.client.movetoscreen),
@@ -695,5 +695,5 @@ for s = 1, screen.count() do
     end)
 end
 
-if mousemark then mousemarker() end
+mousemarker()
 
