@@ -297,29 +297,16 @@ map <F9>   :set hls! <CR> :set hls?<CR>
 set pastetoggle=<F11>
 
 " <F10> do the line wrapping hoobla
-function! RapNo()
-   :set nowrap
-   :set list
-   :map <SILENT><F10> :call RapYes()<CR>
-endfunction
+if !exists("*ToggleWrap")
+    function ToggleWrap()
+        set wrap!
+        set list!
+        set linebreak!
+    endfunction
+    map <silent><F10> :call ToggleWrap()<CR>
+    map! <silent><F10> ^[:call ToggleWrap()<CR>
+endif
 
-" and back
-function! RapYes()
-   :set wrap
-   :set nolist
-   :set linebreak
-   :set showbreak=-->\ 
-   :map <silent><F10> :call RapNo()<CR>
-endfunction
-
-function ToggleWrap()
-    set wrap!
-    set list!
-    set linebreak!
-endfunction
-
-map <silent><F10> :call ToggleWrap()<CR>
-map! <silent><F10> ^[:call ToggleWrap()<CR>
 
 "" <F9> toggle hlsearch
 "noremap <silent> <F9> :set hlsearch!<cr>
@@ -346,39 +333,42 @@ noremap <C-j> gj
 noremap <C-k> gk
 
 command! Hexmode call ToggleHex()
-function! ToggleHex()
-    " hex mode should be considered a read-only operation
-    " save values for modified and read-only for restoration later,
-    " and clear the read-only flag for now
-    let l:modified=&mod
-    let l:oldreadonly=&readonly
-    let &readonly=0
-    if !exists("b:editHex") || !b:editHex
-        " save old options
-        let b:oldft=&ft
-        let b:oldbin=&bin
-        " set new options
-        setlocal binary " make sure it overrides any textwidth, etc.
-        let &ft="xxd"
-        " set status
-        let b:editHex=1
-        " switch to hex editor
-        %!xxd
-    else
-        " restore old options
-        let &ft=b:oldft
-        if !b:oldbin
-            setlocal nobinary
+
+if !exists("*ToggleHex")
+    function! ToggleHex()
+        " hex mode should be considered a read-only operation
+        " save values for modified and read-only for restoration later,
+        " and clear the read-only flag for now
+        let l:modified=&mod
+        let l:oldreadonly=&readonly
+        let &readonly=0
+        if !exists("b:editHex") || !b:editHex
+            " save old options
+            let b:oldft=&ft
+            let b:oldbin=&bin
+            " set new options
+            setlocal binary " make sure it overrides any textwidth, etc.
+            let &ft="xxd"
+            " set status
+            let b:editHex=1
+            " switch to hex editor
+            %!xxd
+        else
+            " restore old options
+            let &ft=b:oldft
+            if !b:oldbin
+                setlocal nobinary
+            endif
+            " set status
+            let b:editHex=0
+            " return to normal editing
+            %!xxd -r
         endif
-        " set status
-        let b:editHex=0
-        " return to normal editing
-        %!xxd -r
-    endif
-    " restore values for modified and read only state
-    let &mod=l:modified
-    let &readonly=l:oldreadonly
-endfunction
+        " restore values for modified and read only state
+        let &mod=l:modified
+        let &readonly=l:oldreadonly
+    endfunction
+endif
 
 map <c-w><c-t> :WMToggle<cr> 
 "                          mnemonic: window-toggle : <c-W><c-T>
@@ -430,6 +420,8 @@ let g:Lua_AuthorRef       = 'JH'
 let g:Lua_Email           = 'Justin.Hoppensteadt@ticketmaster.com'
 let g:Lua_Company         = 'Live Nation'
 
+let g:spec_chglog_packager = 'Justin Hoppensteadt <justin.hoppensteadt@ticketmaster.com>'
+
 "" insert mode : autocomplete brackets and braces
 "imap ( ()<Left>
 "imap [ []<Left>
@@ -466,25 +458,20 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
 let g:detectindent_preferred_expandtab = 1
 let g:detectindent_preferred_indent = 4
 
-" MovingThroughCamelCaseWords
-nnoremap <silent><C-Left>  :<C-u>cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%^','bW')<CR>
-nnoremap <silent><C-Right> :<C-u>cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%$','W')<CR>
-inoremap <silent><C-Left>  <C-o>:cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%^','bW')<CR>
-inoremap <silent><C-Right> <C-o>:cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%$','W')<CR> 
+if !exists("*Backspace")
+    func Backspace()
+      if col('.') == 1
+        if line('.')  != 1
+          return  "\<ESC>kA\<Del>"
+        else
+          return ""
+        endif
+      else
+        return "\<Left>\<Del>"
+      endif
+    endfunc
+    inoremap <BS> <c-r>=Backspace()<CR>
+endif
 
-
-func Backspace()
-  if col('.') == 1
-    if line('.')  != 1
-      return  "\<ESC>kA\<Del>"
-    else
-      return ""
-    endif
-  else
-    return "\<Left>\<Del>"
-  endif
-endfunc
-
-inoremap <BS> <c-r>=Backspace()<CR>
 
 " vim:ft=vim:syn=vim:ts=4
