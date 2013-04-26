@@ -407,8 +407,8 @@ globalkeys = awful.util.table.join(
 
 
     -- Volume
-    awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower(0, "Master", 1) end),
-    awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise(0, "Master", 1) end),
+    --awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower(0, "Master", 1) end),
+    --awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise(0, "Master", 1) end),
     --[[
     awful.key({"Control" }, "XF86AudioLowerVolume",
         function ()
