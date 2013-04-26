@@ -1,12 +1,7 @@
 -- Standard awesome library
 require("awful")
-require("awful.titlebar")
 require("awful.autofocus")
 require("awful.rules")
-require("awful.util")
-require("awesome")
-require("client")
-require("screen")
 require("beautiful")
 require("obvious")
 require("obvious.volume_alsa")
@@ -16,6 +11,7 @@ require("naughty")
 -- Load Debian menu entries
 require("freedesktop.menu")
 
+home_dir = os.getenv("HOME")
 config_dir = awful.util.getdir("config")
 hostname = string.gsub(awful.util.pread("hostname"), "\n", "")
 
@@ -140,7 +136,7 @@ awful.tag.setmwfact( .8, tags[1][2])
 awful.tag.setncol( 2, tags[1][2])
 -- }}}
 
--- {{{ Wibox
+-- {{{ Menu
 -- Create a textbox widget
 mytextbox = widget({ type = "textbox", align = "right" })
 -- Set the default text in textbox
@@ -157,7 +153,6 @@ myawesomemenu = {
 free_desktop_menu = freedesktop.menu.new()
 
 mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesome_icon },
-                                    --{ "Ubuntu", debian.menu.Debian_menu.Debian, beautiful.icon_ubuntu },
                                     { "Ubuntu", free_desktop_menu, beautiful.icon_ubuntu },
                                     { "Open Terminal", terminal, beautiful.icon_terminal },
                                     { "Take Screenshot", take_screenshot, beautiful.icon_gnomescreenshot },
@@ -168,15 +163,13 @@ mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesom
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
-
-
 -- }}}
 
 
 -- {{{ Wibox
 -- Create a textclock widget
 --spacer = "✠"█
-spacer = "❚"
+spacer = "┃"
 mytextclock = awful.widget.textclock({ align = "right" },
     "%a %b %d, %r<small> %Y %z</small>", .5)
 
@@ -504,8 +497,8 @@ clientkeys = awful.util.table.join(
     -- manipulation
     awful.key({ modkey, "Control" }, "m", function (c) c.minimized = not c.minimized end),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey, "Shift"   }, "o", awful.client.movetoscreen),
-    awful.key({ modkey,           }, "o", awful.client.movetoscreen),
+    awful.key({ modkey, "Shift"   }, "o", function () awful.client.movetoscreen() mousemarker() end),
+    awful.key({ modkey,           }, "o", function () awful.client.movetoscreen() mousemarker() end),
     awful.key({ modkey, }, "r", function (c) c:redraw() end),
     -- TODO: Shift+r to redraw all clients in current tag
     --awful.key({ modkey }, "o",     awful.client.movetoscreen),
@@ -534,14 +527,6 @@ clientkeys = awful.util.table.join(
 keynumber = 0
 for s = 1, screen.count() do
    keynumber = math.min(9, math.max(#tags[s], keynumber));
-   screen[s]:add_signal("tag::history::update", function()
-       --naughty.notify({ text = "hey" })
-       if client.focus then
-           awful.tag.seticon(client.focus.icon)
-       else
-           awful.tag.seticon()
-       end
-   end)
 end
 
 -- Bind all key numbers to tags.
@@ -657,13 +642,58 @@ end)
 
 client.add_signal("focus", function(c)
     c.border_color = beautiful.border_focus
-    if c:isvisible() then awful.tag.seticon(c.icon) end
-    if mousemark then mousemarker() end
+    --if c:isvisible() then awful.tag.seticon(c.icon) end
+    --[[
+    local i = 1
+    local tt = c:tags()
+    while next(tt[i])
+        ndump(tt[i])
+        i++
+       ]]--
+    set_tag_icon()
+    mousemarker()
 end)
 client.add_signal("unfocus", function(c)
     c.border_color = beautiful.border_normal
-    if mousemark then mousemarker() end
+    --awful.tag.seticon()
+    --[[
+    if not awful.tag.selected():clients() then
+        --awful.tag.seticon(nil,awful.tag.selected())
+    end
+    ]]--
+    set_tag_icon()
+    mousemarker()
 end)
+--[[
+tag.add_signal("tagged", function(t)
+    if t then
+        ndump(t.name)
+    else
+        ndump("HEY")
+    end
+end)
+]]--
+for s = 1, screen.count() do
+    local i = 1
+    while tags[s][i] do
+        tags[s][i]:add_signal("property::selected", function(t)
+            set_tag_icon()
+            --ndump(t.name)
+            --if not next(t:clients()) then
+            --    awful.tag.seticon(nil,t)
+            --end
+        end)
+        i = i + 1
+    end
+    screen[s]:add_signal("property::screen", function()
+        ndump("property::screen")
+        if client.focus then
+            --awful.tag.seticon(client.focus.icon)
+        else
+            --awful.tag.seticon()
+        end
+    end)
+end
 
-if mousemark then mousemarker() end
+mousemarker()
 

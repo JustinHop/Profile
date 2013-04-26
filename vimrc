@@ -1,7 +1,7 @@
 " Justin's vimrc
 " $Id$
 
-" 
+"
 "  General Operation
 
 " vimrc-1.9.5
@@ -33,7 +33,7 @@ set number
 set ruler
 
 " No Switching to Alt Screen!
-set t_ti= 
+set t_ti=
 set t_te=
 " No More MORE
 set nomore
@@ -64,7 +64,7 @@ set smartindent
 set textwidth=80
 set formatoptions=roq
 set nolist
-set showbreak=-->\ 
+set showbreak=-->\
 set wrap
 set linebreak
 
@@ -118,7 +118,7 @@ if $VIM_MOUSE
    ttymouse=$VIM_MOUSE
 else
     set ttymouse=xterm2
-endif  
+endif
 
 function! MyPerlSettings()
     if !did_filetype()
@@ -128,8 +128,8 @@ function! MyPerlSettings()
     setlocal nosmartindent
     setlocal noautoindent
     setlocal indentexpr=
-    setlocal complete+=k 
-    setlocal cindent 
+    setlocal complete+=k
+    setlocal cindent
     setlocal cinkeys=0{,0},0(,0),:,!^F,o,O,e
     setlocal formatoptions-=t formatoptions+=croq
     let perl_extended_vars=1
@@ -154,7 +154,7 @@ if has("autocmd")
     au BufReadPost *
         \ if line("'\"") > 0 && line ("'\"") <= line("$") |
         \   exe "normal g'\"" |
-        \ endif 
+        \ endif
 
     " Backup EVERYTHING MODE!!!!
     "let BACKUPDIR=expand("$HOME/backup/")
@@ -166,13 +166,13 @@ if has("autocmd")
             set nobackup
             if ! expand(&readonly)
                 au BufReadPost *
-                            \ exe 'silent write! ' 
+                            \ exe 'silent write! '
                             \   substitute( expand(
-                            \   substitute( expand( 
+                            \   substitute( expand(
                             \       substitute( expand("$HOME/backup/") .
-                            \           substitute( expand("%:p"), '/','_','g') . 
-                            \           strftime("%Y%m%d.%H%M%S"), 
-                            \       '\s','_', 'g') 
+                            \           substitute( expand("%:p"), '/','_','g') .
+                            \           strftime("%Y%m%d.%H%M%S"),
+                            \       '\s','_', 'g')
                             \   ), '_','',''),
                             \   ), 'LXWeb', 'LX_Web', 'g')
             endif
@@ -242,7 +242,7 @@ if has("autocmd")
     au FileType php let php_no_ShortTags = 1
 
     "  Use enter to activate help jump points & display line numbers
-    "   au FileType help set number     
+    "   au FileType help set number
     au FileType help nmap <buffer> <Return> <C-]>
     "   au FileType help nmap <buffer> <C-[> <C-O>
 endif
@@ -297,29 +297,16 @@ map <F9>   :set hls! <CR> :set hls?<CR>
 set pastetoggle=<F11>
 
 " <F10> do the line wrapping hoobla
-function! RapNo()
-   :set nowrap
-   :set list
-   :map <SILENT><F10> :call RapYes()<CR>
-endfunction
+if !exists("*ToggleWrap")
+    function ToggleWrap()
+        set wrap!
+        set list!
+        set linebreak!
+    endfunction
+    map <silent><F10> :call ToggleWrap()<CR>
+    map! <silent><F10> ^[:call ToggleWrap()<CR>
+endif
 
-" and back
-function! RapYes()
-   :set wrap
-   :set nolist
-   :set linebreak
-   :set showbreak=-->\ 
-   :map <silent><F10> :call RapNo()<CR>
-endfunction
-
-function ToggleWrap()
-    set wrap!
-    set list!
-    set linebreak!
-endfunction
-
-map <silent><F10> :call ToggleWrap()<CR>
-map! <silent><F10> ^[:call ToggleWrap()<CR>
 
 "" <F9> toggle hlsearch
 "noremap <silent> <F9> :set hlsearch!<cr>
@@ -346,56 +333,47 @@ noremap <C-j> gj
 noremap <C-k> gk
 
 command! Hexmode call ToggleHex()
-function! ToggleHex()
-    " hex mode should be considered a read-only operation
-    " save values for modified and read-only for restoration later,
-    " and clear the read-only flag for now
-    let l:modified=&mod
-    let l:oldreadonly=&readonly
-    let &readonly=0
-    if !exists("b:editHex") || !b:editHex
-        " save old options
-        let b:oldft=&ft
-        let b:oldbin=&bin
-        " set new options
-        setlocal binary " make sure it overrides any textwidth, etc.
-        let &ft="xxd"
-        " set status
-        let b:editHex=1
-        " switch to hex editor
-        %!xxd
-    else
-        " restore old options
-        let &ft=b:oldft
-        if !b:oldbin
-            setlocal nobinary
+
+if !exists("*ToggleHex")
+    function! ToggleHex()
+        " hex mode should be considered a read-only operation
+        " save values for modified and read-only for restoration later,
+        " and clear the read-only flag for now
+        let l:modified=&mod
+        let l:oldreadonly=&readonly
+        let &readonly=0
+        if !exists("b:editHex") || !b:editHex
+            " save old options
+            let b:oldft=&ft
+            let b:oldbin=&bin
+            " set new options
+            setlocal binary " make sure it overrides any textwidth, etc.
+            let &ft="xxd"
+            " set status
+            let b:editHex=1
+            " switch to hex editor
+            %!xxd
+        else
+            " restore old options
+            let &ft=b:oldft
+            if !b:oldbin
+                setlocal nobinary
+            endif
+            " set status
+            let b:editHex=0
+            " return to normal editing
+            %!xxd -r
         endif
-        " set status
-        let b:editHex=0
-        " return to normal editing
-        %!xxd -r
-    endif
-    " restore values for modified and read only state
-    let &mod=l:modified
-    let &readonly=l:oldreadonly
-endfunction
-
-map <c-w><c-t> :WMToggle<cr> 
-"                          mnemonic: window-toggle : <c-W><c-T>
-
-":FirstExplorerWindow      :directly takes you to the first explorer window
- "                          from the top left corner which is visible. >
-map <c-w><c-f> :FirstExplorerWindow<cr>
-"<                          mnemonic: window-first  : <c-W><c-F>
-
-":BottomExplorerWindow     :directly takes you to the last explorere window
-                           "from the top-left which is visible. >
-map <c-w><c-b> :BottomExplorerWindow<cr>
+        " restore values for modified and read only state
+        let &mod=l:modified
+        let &readonly=l:oldreadonly
+    endfunction
+endif
 
 "if version >= 700
 "   "  this line makes esc accept a completion
 "   inoremap <silent><Esc>      <C-r>=pumvisible()?"\<lt>C-e>":"\<lt>Esc>"<CR>
-"   
+"
 "   "  but i think it would do better to accept and go to normal mode
 ""
 ""inoremap <silent><Esc>      <C-r>=pumvisible()?"\<lt>C-e>":"\<lt>CR>"<CR><Esc>
@@ -404,7 +382,7 @@ map <c-w><c-b> :BottomExplorerWindow<cr>
 "   inoremap <silent><Down>     <C-r>=pumvisible()?"\<lt>C-n>":"\<lt>Down>"<CR>
 "   inoremap <silent><Up>       <C-r>=pumvisible()?"\<lt>C-p>":"\<lt>Up>"<CR>
 "   inoremap <silent><PageDown> <C-r>=pumvisible()?"\<lt>PageDown>\<lt>C-p>\<lt>C-n>":"\<lt>PageDown>"<CR>
-"   inoremap <silent><PageUp>   <C-r>=pumvisible()?"\<lt>PageUp>\<lt>C-p>\<lt>C-n>":"\<lt>PageUp>"<CR> 
+"   inoremap <silent><PageUp>   <C-r>=pumvisible()?"\<lt>PageUp>\<lt>C-p>\<lt>C-n>":"\<lt>PageUp>"<CR>
 "endif
 "
 "" --------------
@@ -429,6 +407,8 @@ let g:Lua_AuthorName      = 'Justin Hoppensteadt'
 let g:Lua_AuthorRef       = 'JH'
 let g:Lua_Email           = 'Justin.Hoppensteadt@ticketmaster.com'
 let g:Lua_Company         = 'Live Nation'
+
+let g:spec_chglog_packager = 'Justin Hoppensteadt <justin.hoppensteadt@ticketmaster.com>'
 
 "" insert mode : autocomplete brackets and braces
 "imap ( ()<Left>
@@ -466,25 +446,35 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
 let g:detectindent_preferred_expandtab = 1
 let g:detectindent_preferred_indent = 4
 
-" MovingThroughCamelCaseWords
-nnoremap <silent><C-Left>  :<C-u>cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%^','bW')<CR>
-nnoremap <silent><C-Right> :<C-u>cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%$','W')<CR>
-inoremap <silent><C-Left>  <C-o>:cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%^','bW')<CR>
-inoremap <silent><C-Right> <C-o>:cal search('\<\<Bar>\U\@<=\u\<Bar>\u\ze\%(\U\&\>\@!\)\<Bar>\%$','W')<CR> 
+if !exists("*Backspace")
+    func Backspace()
+      if col('.') == 1
+        if line('.')  != 1
+          return  "\<ESC>kA\<Del>"
+        else
+          return ""
+        endif
+      else
+        return "\<Left>\<Del>"
+      endif
+    endfunc
+    inoremap <BS> <c-r>=Backspace()<CR>
+endif
 
-
-func Backspace()
-  if col('.') == 1
-    if line('.')  != 1
-      return  "\<ESC>kA\<Del>"
-    else
-      return ""
-    endif
-  else
-    return "\<Left>\<Del>"
-  endif
-endfunc
-
-inoremap <BS> <c-r>=Backspace()<CR>
+if !exists("*WordProcessorMode")
+func! WordProcessorMode()
+  setlocal formatoptions=1
+  setlocal noexpandtab
+  map j gj
+  map k gk
+  setlocal spell spelllang=en_us
+"  set thesaurus+=/Users/sbrown/.vim/thesaurus/mthesaur.txt
+  set complete+=s
+  set formatprg=par
+  setlocal wrap
+  setlocal linebreak
+endfu
+com! WP call WordProcessorMode()
+endif
 
 " vim:ft=vim:syn=vim:ts=4

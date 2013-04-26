@@ -16,7 +16,7 @@ for RCFILE in bashrc \
     if [[ -f "~/.$RCFILE" ]]; then
         mv -v "~/.$RCFILE" "~/.$RCFILE.old"
     fi
-    ln -sfv "/home/justin/Profile/$RCFILE" ~/.$RCFILE
+    ln -sfv ~/Profile/$RCFILE ~/.$RCFILE
 
 done
 
