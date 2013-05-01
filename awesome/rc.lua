@@ -69,6 +69,7 @@ settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Termin
 
 -- This is used later as the default terminal and editor to run.
 terminal = "gnome-terminal"
+-- terminal = "terminator"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -171,10 +172,11 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 3, awful.tag.viewtoggle),
                     awful.button({ modkey }, 3, awful.client.toggletag),
                     awful.button({ }, 4, awful.tag.viewnext),
+                    awful.button({ }, 5, awful.tag.viewprev),
+                    awful.button({ }, 10, awful.tag.viewprev),
                     awful.button({ }, 13, awful.tag.viewnext),
                     awful.button({ }, 14, awful.tag.viewprev),
-                    awful.button({ }, 15, awful.tag.viewprev),
-                    awful.button({ }, 5, awful.tag.viewprev)
+                    awful.button({ }, 15, awful.tag.viewprev)
                     )
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(

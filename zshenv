@@ -106,6 +106,7 @@ done
 export SURFRAW_text_browser=elinks
 export SURFRAW_graphical=no
 
+alias J="ssh jhoppensteadt@justin1.sys.dev99.websys.tmcs"
 
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
@@ -139,12 +140,8 @@ fi
 # SHORTCUTS
 #
 lsrc="/usr/local/src"
-spec="$HOME/rpmbuild/SPECS"
-pf="$HOME/profile"
-pj="$HOME/projects"
-cfi="$HOME/dev/systems/cfengine/trunk/inputs"
-cfb="$HOME/dev/systems/cfengine/trunk/build"
-cf="$HOME/dev/systems/cfengine/trunk/"
+spec="$HOME/build/SPECS"
+pf="$HOME/Profile"
 
 if [[ -d /usr/local/apache2 ]]; then
 	www=/usr/local/apache2
@@ -155,6 +152,12 @@ fi
 export DEBEMAIL="debian@justinhoppensteadt.com"
 export DEBFULLNAME="Justin Hoppensteadt"
 
-export PATH=$HOME/bin:/usr/bin:$PATH
+PERL_CPANM_OPT="--local-lib=~/perl5"
+
+if [ -z $PERLLIB ]; then
+    export PERLLIB=~/perl5/lib/perl5
+fi
+
+export PATH=$HOME/perl5/bin:$HOME/bin:/usr/bin:$PATH
 
 # vim:ft=zsh:syn=zsh

@@ -1,14 +1,5 @@
-%packager Justin Hoppensteadt <Justin.Hoppensteadt@ticketmaster.com> 
+%packager Justin Hoppensteadt <justin.hoppensteadt@ticketmaster.com>
 %vendor Live Nation
  
-%_topdir            /LX_Web/RPM
-%_builddir          %{_topdir}/BUILD
-%_rpmdir            %{_topdir}/RPMS
-%_sourcedir         %{_topdir}/SOURCES
-%_specdir           %{_topdir}/SPECS
-%_srcrpmdir         %{_topdir}/SRPMS
-%_buildrootdir      %{_topdir}/TMP
-%_tmppath           %{_topdir}/TMP
-%_query_all_fmt %%{name}-%%{version}-%%{release}.%%{arch}
-
+%_topdir /bld/shared/home/jhoppensteadt/build
 
