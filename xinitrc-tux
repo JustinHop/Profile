@@ -36,7 +36,7 @@ setxkbmap -option terminate:ctrl_alt_bksp
 #awesome &
 
 xbindkeys || true
-parcellite &
+clipit &
 numlockx  &
 bluetooth-applet &
 gnome-sound-applet &
@@ -45,7 +45,7 @@ mpd &
 #{ sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
 autocutsel -d -s CLIPBOARD &
-wicd-client &
+nm-applet &
 
 #xscreensaver-command -exit > /dev/null || true
 #xscreensaver -no-splash &
@@ -71,6 +71,8 @@ done ; } &
 #{ sleep 1m; padevchooser; } &
 #
 gnome-settings-daemon &
+
+#fusesmb ~/network
 
 exec bash -c 'while true ; do awesome ; done;'
 
