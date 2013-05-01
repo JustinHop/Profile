@@ -44,3 +44,5 @@ untracked = cyan
     df = diff
     lg = log -p
 
+[difftool]
+	prompt = false

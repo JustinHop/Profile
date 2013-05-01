@@ -73,13 +73,14 @@ SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
 USER_PATH="$HOME/bin:$HOME/profile/bin:/usr/lib/xscreensaver"
 ENCODE_PATH="/usr/local/enctools/bin"
 NAGIOS_PATH="/usr/local/nagios/libexec"
+LOCAL_PERL5_PATH="$HOME/perl5/bin"
 
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
 typeset -U LD_EXEC_PATH
 typeset -U PKG_CONFIG_PATH
 
-PATH=$ENCODE_PATH:$COMMON_PATH:$ROOT_PATH:$SVN_PATH:$MYSQL_PATH:$POSTFIX:$PHP_PATH
+PATH=$LOCAL_PERL5_PATH:$ENCODE_PATH:$COMMON_PATH:$ROOT_PATH:$SVN_PATH:$MYSQL_PATH:$POSTFIX:$PHP_PATH
 PATH=$PATH:$APACHE_PATH:$LAMEPATH:$FFMPEGPATH:$USER_PATH:$NAGIOS_PATH
 
 [ -d $DISTCC_PATH ] && PATH="$DISTCC_PATH:$PATH"
@@ -106,7 +107,10 @@ done
 export SURFRAW_text_browser=elinks
 export SURFRAW_graphical=no
 
-alias J="ssh jhoppensteadt@justin1.sys.dev99.websys.tmcs"
+alias J="ssh -A jhoppensteadt@justin2.sys.dev99.websys.tmcs"
+alias JR="ssh -A root@justin2.sys.dev99.websys.tmcs"
+
+alias IE="wine 'C:\Program Files\Internet Explorer\iexplore'"
 
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
@@ -128,7 +132,7 @@ export PAGER
 if [[ "$TERM" == "screen" ]]; then
     alias htop="TERM=xterm htop"
 fi
- 
+
 DIRSTACKSIZE=20
 LISTMAX=1000
 REPORTTIME=10
@@ -154,10 +158,14 @@ export DEBFULLNAME="Justin Hoppensteadt"
 
 PERL_CPANM_OPT="--local-lib=~/perl5"
 
-if [ -z $PERLLIB ]; then
-    export PERLLIB=~/perl5/lib/perl5
+if [ -d ~/perl5/lib/perl5 ]; then
+    if [ -z "$PERLLIB" ]; then
+        export PERLLIB=~/perl5/lib/perl5
+    else
+        export PERLLIB=~/perl5/lib/perl5:$PERLLIB
+    fi
 fi
 
-export PATH=$HOME/perl5/bin:$HOME/bin:/usr/bin:$PATH
+export PATH=$HOME/bin:/usr/bin:$PATH
 
 # vim:ft=zsh:syn=zsh
