@@ -207,6 +207,7 @@ mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 5, awful.tag.viewprev),
                     awful.button({ }, 10, awful.tag.viewprev),
                     awful.button({ }, 13, awful.tag.viewnext),
+                    awful.button({ }, 14, awful.tag.viewprev),
                     awful.button({ }, 15, awful.tag.viewprev)
                     )
 mytasklist = {}

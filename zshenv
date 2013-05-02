@@ -73,13 +73,14 @@ SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
 USER_PATH="$HOME/bin:$HOME/profile/bin:/usr/lib/xscreensaver"
 ENCODE_PATH="/usr/local/enctools/bin"
 NAGIOS_PATH="/usr/local/nagios/libexec"
+LOCAL_PERL5_PATH="$HOME/perl5/bin"
 
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
 typeset -U LD_EXEC_PATH
 typeset -U PKG_CONFIG_PATH
 
-PATH=$ENCODE_PATH:$COMMON_PATH:$ROOT_PATH:$SVN_PATH:$MYSQL_PATH:$POSTFIX:$PHP_PATH
+PATH=$LOCAL_PERL5_PATH:$ENCODE_PATH:$COMMON_PATH:$ROOT_PATH:$SVN_PATH:$MYSQL_PATH:$POSTFIX:$PHP_PATH
 PATH=$PATH:$APACHE_PATH:$LAMEPATH:$FFMPEGPATH:$USER_PATH:$NAGIOS_PATH
 
 [ -d $DISTCC_PATH ] && PATH="$DISTCC_PATH:$PATH"
@@ -131,7 +132,7 @@ export PAGER
 if [[ "$TERM" == "screen" ]]; then
     alias htop="TERM=xterm htop"
 fi
- 
+
 DIRSTACKSIZE=20
 LISTMAX=1000
 REPORTTIME=10
@@ -143,12 +144,8 @@ fi
 # SHORTCUTS
 #
 lsrc="/usr/local/src"
-spec="$HOME/rpmbuild/SPECS"
-pf="$HOME/profile"
-pj="$HOME/projects"
-cfi="$HOME/dev/systems/cfengine/trunk/inputs"
-cfb="$HOME/dev/systems/cfengine/trunk/build"
-cf="$HOME/dev/systems/cfengine/trunk/"
+spec="$HOME/build/SPECS"
+pf="$HOME/Profile"
 
 if [[ -d /usr/local/apache2 ]]; then
 	www=/usr/local/apache2
@@ -158,6 +155,16 @@ fi
 
 export DEBEMAIL="debian@justinhoppensteadt.com"
 export DEBFULLNAME="Justin Hoppensteadt"
+
+PERL_CPANM_OPT="--local-lib=~/perl5"
+
+if [ -d ~/perl5/lib/perl5 ]; then
+    if [ -z "$PERLLIB" ]; then
+        export PERLLIB=~/perl5/lib/perl5
+    else
+        export PERLLIB=~/perl5/lib/perl5:$PERLLIB
+    fi
+fi
 
 export PATH=$HOME/bin:/usr/bin:$PATH
 
