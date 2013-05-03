@@ -25,7 +25,7 @@ i=0
 e=0
 
 help() {
- ( 
+ (
    echo
    echo -n " Use 'a' to add jobs"
    if [ $e = 0 ]; then
@@ -46,7 +46,7 @@ help() {
 # starting jobs from commandline
 fork_jobs() {
  # starting screen job
- screen -S $sname -dm $pjob
+ screen -A -S $sname -x -r $pjob
 }
 
 case "$1" in
@@ -61,69 +61,68 @@ esac
 #cleanup temp files
 if test -f /tmp/.screenie*
   then
-    rm /tmp/.screenie* >/dev/null 2>&1   
+    rm /tmp/.screenie* >/dev/null 2>&1
 fi
 
 while :
   do
       clear
-      echo "" && echo " SCREENIE - terminal screen-session handler" 
-      echo " written by Marc O. Gloor <mgloor@fhzh.ch>" && echo ""
-    
+      echo "" && echo " SCREENIE - terminal screen-session handler"
+
       eval $ACTIVE_SCREENS | (
-      
+
           while read sessions
-          
+
               do
                 e=`expr \( $e + 1 \)` && echo -n " $e) "
-                echo $sessions 
+                echo $sessions
               done
-        
+
           echo ""
           echo " a) add job"
           echo " q) quit"
 
           help e
       )
-      
+
       echo "" ; echo -n " select: "
       read ANSW
-      
+
       case $ANSW in
-        a|a) 
+        a|a)
           echo -n " session name: " && read sname
           echo -n " job: " && read pjob
           sname=$(echo $sname | tr " " "_")
-          screen -S $sname -dm $pjob ;;
-        0|Q|q) 
+          screen -A -S $sname -dm $pjob ;;
+        0|Q|q)
           echo ""; exit ;;
-      esac  
-    
+      esac
+
       eval $ACTIVE_SCREENS | (
-      
+
       while read pat
         do
           # display screen session menu no. (int)
-          i=`expr \( $i + 1 \)` && echo -n " $i) " >/dev/null 2>&1 
-          
+          i=`expr \( $i + 1 \)` && echo -n " $i) " >/dev/null 2>&1
+
           # set internal session 'no sessionid' var (string)
           sess_id=$(echo $pat|awk 'split($0, token, ".") {print token[1]}')
           k=$(echo -n  $i" "$sess_id)
-        
+
           m=$(echo $k | awk '{print $1}')
-          n=$(echo $k | awk '{print $2}')	
-        
+          n=$(echo $k | awk '{print $2}')
+
           case $ANSW in
             $m) echo $n > $TMPF ; break;
           esac
-          
+
         done
-        
+
       )
 
-  screen -r $(cat $TMPF 2>&1) >/dev/null 2>&1 
+  screen -A -x -r $(cat $TMPF 2>&1) >/dev/null 2>&1
 	rm $TMPF >/dev/null 2>&1
-	
+
 done
 
 exit 0
