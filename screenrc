@@ -43,6 +43,7 @@ hardstatus off
 
 #caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d %{yk}%D %{gk}%c %{bk}%l"
 #caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d %{yk}%D %{gk}%c %{bk}%l"
+#caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{rk}%1` %{yk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d"
 caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{rk}%1` %{yk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d"
 
 # grabbed from gentoo's screenrc
