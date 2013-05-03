@@ -4,4 +4,6 @@
 #        local -a cmd; cmd=(${(z)1})
 #        title "<$ORI_XTITLE>" $cmd[1]:t "$cmd[2,-1]"
 #    fi
+
+
 #vim: ft=zsh
