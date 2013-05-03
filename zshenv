@@ -132,7 +132,7 @@ export PAGER
 if [[ "$TERM" == "screen" ]]; then
     alias htop="TERM=xterm htop"
 fi
- 
+
 DIRSTACKSIZE=20
 LISTMAX=1000
 REPORTTIME=10
@@ -144,12 +144,8 @@ fi
 # SHORTCUTS
 #
 lsrc="/usr/local/src"
-spec="$HOME/rpmbuild/SPECS"
-pf="$HOME/profile"
-pj="$HOME/projects"
-cfi="$HOME/dev/systems/cfengine/trunk/inputs"
-cfb="$HOME/dev/systems/cfengine/trunk/build"
-cf="$HOME/dev/systems/cfengine/trunk/"
+spec="$HOME/build/SPECS"
+pf="$HOME/Profile"
 
 if [[ -d /usr/local/apache2 ]]; then
 	www=/usr/local/apache2
@@ -159,6 +155,8 @@ fi
 
 export DEBEMAIL="debian@justinhoppensteadt.com"
 export DEBFULLNAME="Justin Hoppensteadt"
+
+PERL_CPANM_OPT="--local-lib=~/perl5"
 
 if [ -d ~/perl5/lib/perl5 ]; then
     if [ -z "$PERLLIB" ]; then
