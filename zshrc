@@ -2,7 +2,7 @@
 #  Both kinds of free
 
 export ZSHRC_VERSION="2.0.5a"
-
+export PROFILE_DIR="$HOME/Profile"
 umask 002
 #
 # WORKSPACE AND ENVIRONMENT
@@ -594,14 +594,24 @@ if [[ -o interactive ]]; then
 fi
 
 function preexec() {
-
     local a=${${1## *}[(w)1]}  # get the command
     local b=${a##*\/}   # get the command basename
     a="${b}${1#$a}"     # add back the parameters
     a=${a//\%/\%\%}     # escape print specials
     a=$(print -Pn "$a" | tr -d "\t\n\v\f\r")  # remove fancy whitespace
     a=${(V)a//\%/\%\%}  # escape non-visibles and print specials
-    a=${a#ssh }
+
+    case "$b" in
+        ssh)
+        #a=${a#ssh }
+        a=${a%%.*}
+        a=${a##* }
+        ;;
+        *)
+        a=${a//.websys.tmcs}
+        ;;
+    esac
+
 
     case "$TERM" in
         screen|screen.*)

@@ -23,6 +23,8 @@ TMPF=/tmp/.screenie.$$
 ACTIVE_SCREENS="screen \-ls | awk '/tached/ { print \$1}' | sort"
 i=0
 e=0
+SCREEN_ATTACH_ARGS="-A -d -r"
+SCREEN_NEW_ARGS='-A -S $sname -dm $pjob'
 
 help() {
  (
@@ -80,6 +82,8 @@ while :
 
           echo ""
           echo " a) add job"
+          echo " r) modify attach args: \"$SCREEN_ATTACH_ARGS\""
+          echo " n) modify new args: \"$SCREEN_NEW_ARGS\""
           echo " q) quit"
 
           help e
@@ -93,7 +97,15 @@ while :
           echo -n " session name: " && read sname
           echo -n " job: " && read pjob
           sname=$(echo $sname | tr " " "_")
-          screen -A -S $sname -dm $pjob ;;
+          eval screen $SCREEN_NEW_ARGS ;;
+        r|R)
+            echo    " current args \"$SCREEN_ATTACH_ARGS\""
+            echo -n " new attach args: " && read SCREEN_ATTACH_ARGS
+            ;;
+        n|N)
+            echo    " current args \"$SCREEN_NEW_ARGS\""
+            echo -n " new new args: " && read SCREEN_NEW_ARGS
+            ;;
         0|Q|q)
           echo ""; exit ;;
       esac
