@@ -607,6 +607,9 @@ function preexec() {
         a=${a%%.*}
         a=${a##* }
         ;;
+        *)
+        a=${a//.websys.tmcs}
+        ;;
     esac
 
 

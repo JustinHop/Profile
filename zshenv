@@ -8,6 +8,8 @@ export __ZSHENV__=0.2.4a
 export HOSTNAME=`hostname`
 export UNAME=`uname`
 
+export PROFILE_DIR=$HOME/Profile
+
 export SHELL=$0
 #
 # WHO AM I
