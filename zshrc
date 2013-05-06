@@ -609,6 +609,7 @@ function preexec() {
         ;;
         *)
         a=${a//.websys.tmcs}
+        a=${${1## *}[(w)1]}  # get the command
         ;;
     esac
 
