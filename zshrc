@@ -630,7 +630,7 @@ function precmd() {
 #  postexec
 #
 
-if [[ -e "$PROFILE_DIR/zshrc.local.post" ]]; then
+if [ -f "$PROFILE_DIR/zshrc.local.post" ]; then
     source "$PROFILE_DIR/zshrc.local.post"
 fi
 

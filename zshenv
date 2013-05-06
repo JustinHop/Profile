@@ -8,6 +8,8 @@ export __ZSHENV__=0.2.4a
 export HOSTNAME=`hostname`
 export UNAME=`uname`
 
+export PROFILE_DIR=~/Profile
+
 export SHELL=$0
 #
 # WHO AM I
@@ -159,10 +161,10 @@ export DEBFULLNAME="Justin Hoppensteadt"
 PERL_CPANM_OPT="--local-lib=~/perl5"
 
 if [ -d ~/perl5/lib/perl5 ]; then
-    if [ -z "$PERLLIB" ]; then
-        export PERLLIB=~/perl5/lib/perl5
+    if [ -z "$PERL5LIB" ]; then
+        export PERL5LIB=~/perl5/lib/perl5
     else
-        export PERLLIB=~/perl5/lib/perl5:$PERLLIB
+        export PERL5LIB=~/perl5/lib/perl5:$PERLLIB
     fi
 fi
 
