@@ -4,7 +4,7 @@
 #
 
 screen
-screen $SHELL -c 'screen -X backtick 1 0 0 echo "$STY"'
+screen $SHELL -c 'screen -X backtick 1 0 0 echo "${STY#*.}"'
 
 setenv SCREENRC_VERSION 1.2.4
 setenv SCREEN_SCREEN 1
