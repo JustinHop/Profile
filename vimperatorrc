@@ -8,7 +8,7 @@ nmap , gT
 nmap . gt
 nmap ga :open file:///usr/local/share/awesome/lib/index.html<CR>
 nmap <C-l> <C-z><C-l><Esc>
-set guioptions=rbmB
+#set guioptions=rbmB
 set runtimepath=/home/justin/.vimperator
 vmap , gT
 vmap . gt
