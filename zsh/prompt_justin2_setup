@@ -295,7 +295,7 @@ prompt_justin2_setup () {
     prompt_l_paren="%B%F{black}("
     prompt_r_paren="%B%F{black})"
 
-    prompt_user_host="%b%F{$prompt_justin2_color3}%n%B%F{$prompt_justin2_color3}@%b%F{$prompt_justin2_color3}%m"
+    prompt_user_host="%b%F{$prompt_justin2_color3}%n%B%F{$prompt_justin2_color3}@%b%F{$prompt_justin2_color3}%M"
 
     prompt_line_1a="$prompt_gfx_tbox$prompt_l_paren%B%F{$prompt_justin2_color2}%~$prompt_r_paren%b%F{$prompt_justin2_color1} "
     prompt_line_1b="$prompt_l_paren$prompt_user_host$prompt_r_paren%b%2(L.%L.)%F{$prompt_justin2_color1}${prompt_gfx_hyphen}"

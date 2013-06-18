@@ -1,0 +1,5 @@
+#!/bin/bash
+
+swconf=/$CLASS/shared/init/software.conf ; [[ -e $swconf ]] && . $swconf ; if [[ `uname -i` == "x86_64" ]] ; then /usr/lib64/nagios/plugins/check_nimbus ; else /usr/lib/nagios/plugins/check_nimbus ; fi
+
+

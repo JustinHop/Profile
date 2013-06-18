@@ -1,0 +1,17 @@
+#!/bin/bash
+
+CLUSTER=`date +%F`
+LOG_DIR=/tmp/check_nimbus-${CLUSTER}
+
+[ -d $LOG_DIR ] && rm -f $LOG_DIR/* || mkdir $LOG_DIR
+#nhs -cluster $CLUSTER -businessunit websys -hostnameformat v3 \
+#        cat ~/ash1 \
+while read line ; do
+    lines="$lines $line"
+done
+echo "$@ $lines" | onall -p -d1 -r30 -o $LOG_DIR -Q ' swconf=/$CLASS/shared/init/software.conf ; [[ -e $swconf ]] && . $swconf ; if [[ `uname -i` == "x86_64" ]] ; then /usr/lib64/nagios/plugins/check_nimbus ; else /usr/lib/nagios/plugins/check_nimbus ; fi '
+
+
+perl -pi -e "s/\[.*\]//g" $LOG_DIR/*
+
+echo $LOG_DIR
