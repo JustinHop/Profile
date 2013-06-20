@@ -6,9 +6,9 @@ echo > ~/.xsession-errors
 gnome-settings-daemon &
 thunar --daemon &
 
-{ sleep 5s; nitrogen --restore; } &
+{ sleep 2s; nitrogen --restore; } &
 
-{ sleep 8s; conky ; }&
+{ sleep 5s; conky ; }&
 
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
@@ -51,11 +51,10 @@ if ! pgrep -x mpdas > /dev/null ; then
     { sleep 5s; mpdas ; } &
 fi
 { sleep 10s; mpc update ; } &
-{ sleep 5s; clipit ; } &
-{ sleep 5s; bluetooth-applet ; } &
-{ sleep 5s; gnome-sound-applet ; } &
-{ sleep 5s; nm-applet ; } &
-{ sleep 5s; mpdas ; } &
+{ sleep 3s; clipit ; } &
+{ sleep 3s; bluetooth-applet ; } &
+{ sleep 3s; gnome-sound-applet ; } &
+{ sleep 3s; nm-applet ; } &
 
 #synergys -d INFO -f &
 #autocutsel -d -s PRIMARY &
