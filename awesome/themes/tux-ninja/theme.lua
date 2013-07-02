@@ -134,6 +134,7 @@ theme.icon_terminal = theme.icon_path .. "utilities-terminal.png"
 theme.icon_lock = theme.icon_path .. "lock.png"
 theme.icon_ubuntu = theme.icon_path .. "ubuntu.png"
 theme.icon_gnomescreenshot = theme.icon_path .. "gnome-screenshot.png"
+theme.icon_shutdown = theme.icon_path .. "system-shutdown.png"
 --theme.default_client_icon = theme.config .. "/icons/emptytrash.png"
 
 
