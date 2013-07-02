@@ -17,8 +17,8 @@ for SPACE in .undo backup .zsh ; do
     [ ! -d "$HOME/$SPACE"  ] && mkdir "$HOME/$SPACE" 
 done
 
-if [ -f "$HOME"/agent ]; then
-    . "$HOME"/agent
+if [ -f "$HOME"/agent-$HOSTNAME ]; then
+    . "$HOME"/agent-$HOSTNAME
 fi
 
 #
