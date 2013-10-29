@@ -10,8 +10,8 @@
 "       Company:  FH Südwestfalen, Iserlohn
 "       Version:  1.0
 "       Created:  16.12.2008 18:16:55
-"      Revision:  $Id$
-"       License:  Copyright 2008-2009 Dr. Fritz Mehner
+"      Revision:  $Id: perlsupportregex.vim,v 1.4 2012/02/26 14:07:44 mehner Exp $
+"       License:  Copyright 2008-2010 Dr. Fritz Mehner
 "===============================================================================
 "
 " Exit quickly when:
@@ -49,13 +49,28 @@ function! perlsupportregex#Perl_RegexExplain( mode )
     return
   endif
 
+	if g:Perl_PerlRegexAnalyser	== 'no'
+    perl <<INITIALIZE_PERL_INTERFACE
+		#
+		# ---------------------------------------------------------------
+		# Perl_RegexExplain (function)
+		# try to load the regex analyzer module; report failure
+		# ---------------------------------------------------------------
+		eval "require YAPE::Regex::Explain";
+		if ( !$@ ) {
+			VIM::DoCommand("let g:Perl_PerlRegexAnalyser = 'yes'");
+		}
+		#
+INITIALIZE_PERL_INTERFACE
+	endif
+
   if g:Perl_PerlRegexAnalyser != 'yes'
     echomsg "*** The Perl module YAPE::Regex::Explain can not be found. ***"
     return
   endif
 
   if a:mode == 'v'
-    call Perl_RegexPick ( "regexp", "v" )
+    call perlsupportregex#Perl_RegexPick ( "regexp", "v" )
   endif
 
   if bufloaded(s:Perl_PerlRegexBufferName) != 0 && bufwinnr(s:Perl_PerlRegexBufferNumber) != -1
@@ -72,9 +87,10 @@ function! perlsupportregex#Perl_RegexExplain( mode )
   "
   " remove content if any
   "
+	setlocal modifiable
   silent normal ggdG
 
-  perl <<EOF
+  perl <<EOF_RegexExplain
       my $explanation;
       my ( $success, $regexp ) = VIM::Eval('s:MSWIN');
 
@@ -82,8 +98,11 @@ function! perlsupportregex#Perl_RegexExplain( mode )
       ( $success, $regexp ) = VIM::Eval('s:Perl_PerlRegexVisualize_regexp');
       if ( $success == 1 ) {
         # get the explanation
-        $regexp = eval 'qr{'.$regexp.'}'.$flag;
-        $explanation  = YAPE::Regex::Explain->new($regexp)->explain();
+				$explanation  = "The regular expression\n\n".${regexp}."\n\nmatches as follows:\n\n";
+				#$regexp = eval 'qr{'.$regexp.'}'.$flag;
+        $regexp = qr{$regexp};
+
+        $explanation  .= YAPE::Regex::Explain->new($regexp)->explain('regex');
         }
       else {
         $explanation  = "\n*** VIM failed to evaluate the regular expression ***\n";
@@ -94,7 +113,10 @@ function! perlsupportregex#Perl_RegexExplain( mode )
 
       # put the explanation to the top of the buffer
       $curbuf->Append( 0, @explanation );
-EOF
+
+			VIM::DoCommand( 'setlocal nomodifiable' );
+EOF_RegexExplain
+
 
 endfunction    " ----------  end of function Perl_RegexExplain  ----------
 "
@@ -114,12 +136,12 @@ endfunction    " ----------  end of function Perl_RegexCodeEvaluation  ---------
 "   item : regexp | string
 "   mode : n | v
 "------------------------------------------------------------------------------
-function! perlsupportregex#Perl_RegexPick ( item, mode )
+function! perlsupportregex#Perl_RegexPick ( item, mode ) range
   "
   " the complete line; remove leading and trailing whitespaces
   "
   if a:mode == 'n'
-    let line  = getline(line("."))
+    let line  = join( getline( a:firstline, a:lastline ), "\n" )
     if  s:MSWIN
       " MSWIN : copy item to the yank-register, remove trailing CR
       let line  = substitute( line, "\n$", '', '' )
@@ -221,14 +243,13 @@ function! perlsupportregex#Perl_RegexVisualize( )
   endif
   "
   " remove content if any:
+	setlocal modifiable
   silent normal ggdG
+	let s:Perl_PerlRegexMatch                 = ''
 
-  perl <<EOF
+  perl <<EOF_regex_evaluate
 
   my  @substchar= split //, VIM::Eval('g:Perl_PerlRegexSubstitution');
-
-    use re 'eval';
-    use utf8;                                   # Perl pragma to enable/disable UTF-8 in source
 
     regex_evaluate();
 
@@ -240,6 +261,7 @@ function! perlsupportregex#Perl_RegexVisualize( )
     #===============================================================================
     sub regex_evaluate {
 
+		use re 'eval';
     my ( $regexp, $string, $flag );
 
     $flag     = VIM::Eval('s:Perl_PerlRegexVisualizeFlag');
@@ -297,6 +319,10 @@ function! perlsupportregex#Perl_RegexVisualize( )
         my  @hit_length;
 
         $^R = undef;
+				#-------------------------------------------------------------------------------
+				#  g-modifier present
+				#  @hit will contain the consecutive matches
+				#-------------------------------------------------------------------------------
         if ( $flag =~ m{g} ) {
           $gflag  = 1;
           $flag =~ s/g//;
@@ -314,6 +340,10 @@ function! perlsupportregex#Perl_RegexVisualize( )
             @lastMatchEnd         = @+;
             }
           }
+				#-------------------------------------------------------------------------------
+				#  no g-modifier
+				#  @hit will contain the submatches $1, $2, ... , if any
+				#-------------------------------------------------------------------------------
         else {
           @hit                  = ( $string =~ m{(?$flag:$regexp)} );
           $prematch             = $`;
@@ -352,8 +382,8 @@ function! perlsupportregex#Perl_RegexVisualize( )
           #
           # print the numbered variables $1, $2, ...
           #
-          foreach my $n ( 1 .. (scalar( @lastMatchStart ) -1) ) {
-            if ( defined $hit[$n-1] ) {
+          foreach my $n ( 1 .. $#lastMatchStart ) {
+					  if ( defined $lastMatchStart[$n] ) {
             $result .= sprintf $format2, "  \$$n", $lastMatchStart[$n], $lastMatchEnd[$n] - $lastMatchStart[$n],
               marker_string( $lastMatchStart[$n], 
                               prepare_stringout(substr( $string, $lastMatchStart[$n], $lastMatchEnd[$n] - $lastMatchStart[$n] )) );
@@ -488,7 +518,9 @@ function! perlsupportregex#Perl_RegexVisualize( )
       }
       return ($result, $linecount);
     } # ----------  end of subroutine lineruler  ----------
-EOF
+
+		VIM::DoCommand( 'setlocal nomodifiable' );
+EOF_regex_evaluate
   "
   if line('$') == 1
     :close
@@ -502,6 +534,7 @@ EOF
   " Vim regex pattern (range 33 ... 126 or '!' ... '~').
   "-------------------------------------------------------------------------------
   exe ":match none"
+
   if s:Perl_PerlRegexMatch != ''
     let nr    = char2nr('!')
     let tilde = char2nr('~')
@@ -520,13 +553,19 @@ EOF
       :highlight color_match ctermbg=green guibg=green
       let delim   = nr2char(nr)
       " escape Vim regexp metacharacters
-      let match0  = escape( s:Perl_PerlRegexPrematch , '*$~' )
-      let match1  = escape( s:Perl_PerlRegexMatch    , '*$~' )
+      let match0  = escape( s:Perl_PerlRegexPrematch , '][*$~\' )
+      let match1  = escape( s:Perl_PerlRegexMatch    , '][*$~\' )
       "
       " the first part of the following regular expression describes the
       " beginnning of $format1 in sub regex_evaluate
       "
-      exe ':match color_match '.delim.'\(^STRING\s\+\[\s*\d\+,\s*\d\+\] =[ |]'.match0.'\)\@<='.match1.delim
+			try 
+				exe ':match color_match '.delim.'\(^STRING\s\+\[\s*\d\+,\s*\d\+\] =[ |]'.match0.'\)\@<='.match1.delim
+			catch //
+				echo "Internal error (" . v:exception . ")"
+				echo " - occurred at " . v:throwpoint
+			finally 
+			endtry
     endif
   endif
 
@@ -559,12 +598,10 @@ function! perlsupportregex#Perl_RegexMatchSeveral( )
   endif
   "
   " remove content if any:
+	setlocal modifiable
   silent normal ggdG
 
-  perl <<EOF
-
-    use re 'eval';
-    use utf8;                                   # Perl pragma to enable/disable UTF-8 in source
+  perl <<EOF_evaluate_multiple
 
     regex_evaluate_multiple();
 
@@ -575,6 +612,8 @@ function! perlsupportregex#Perl_RegexMatchSeveral( )
     #      RETURNS:  ---
     #===============================================================================
     sub regex_evaluate_multiple {
+
+		use re 'eval';
 
       my ( $regexp, $string, $flag );
       my  $regexp1;
@@ -634,7 +673,9 @@ function! perlsupportregex#Perl_RegexMatchSeveral( )
       }
     return "'$result'";
     } # ----------  end of subroutine splitstr  ----------
-EOF
+
+		VIM::DoCommand( 'setlocal nomodifiable' );
+EOF_evaluate_multiple
   "
   if line('$') == 1
     :close

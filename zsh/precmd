@@ -1,3 +1,4 @@
 [[ -o interactive ]] &&  title "<$ORI_XTITLE>" "${SHORTUSER:-$USER}@${SHORTHOST:-$SHORTHOST}" "$PWD"
 echo
+
 #vim: ft=zsh

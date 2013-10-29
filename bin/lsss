@@ -1,0 +1,113 @@
+#!/usr/bin/perl
+#
+# lsss - ls with StarSign, an improved ls command. Unix/Linux.
+#
+# This runs the ls command and inserts a field to display the starsign of
+#  each file.
+#
+# 23-Nov-2004	ver 0.90
+#
+# USAGE: lsss
+#
+# COPYRIGHT: Copyright (c) 2004 Brendan Gregg.
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software Foundation,
+#  Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+#  (http://www.gnu.org/copyleft/gpl.html)
+#
+# NOTE: A program like this should use Perl's <*> and stat() functions
+#  to fetch the file data. Perhaps future versions will.
+#
+# 23-Nov-2004	Brendan Gregg	Created this.
+
+#$ENV{PATH} = "/usr/ucb"; # uncomment to use the BSD ls on Solaris
+
+#
+#  Declare Months
+#
+%Month = qw(january 0 february 1 march 2 april 3 may 4 june 5
+	july 6 august 7 september 8 october 9 november 10 december 11);
+foreach $month (keys %Month) {
+	$short = substr($month,0,3);
+	$Month{$short} = $Month{$month};
+}
+
+#
+#  Declare Starsigns
+#
+foreach $line (<DATA>) {
+	### Foreach Starsign,
+	chomp($line);
+	($starsign,$month0,$day0,$month1,$day1) = split(' ',$line);
+	$month0 = $Month{$month0};
+	$month1 = $Month{$month1};
+	while (1) {
+		# count through the days while setting a lookup hash
+		$Sign{$month0}{$day0} = $starsign;
+		if (($day0 == $day1) && ($month0 == $month1)) { last; }
+		$day0++;
+		if ($day0 > 33) { 
+			$day0 = 0; $month0++; 
+			$month0 = 0 if $month0 > 11;
+		}
+	}
+}
+
+#
+#  Fetch Current Starsign
+#
+($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+$current = $Sign{$mon}{$mday};
+
+#
+#  Fetch ls Data
+#
+@Lines = `ls -l @ARGV`;
+
+#
+#  Print Output
+#
+foreach $line (@Lines) {
+
+	### Process Line
+	if ($line =~ /([A-Z][a-z][a-z])\s+(\d+)/) {
+		### Determine Starsign
+		$month = $1; $day = $2;
+		$month = $Month{lc($month)};
+		$day =~ s/^0//;
+		$starsign = $Sign{$month}{$day};
+	} else {
+		$starsign = $current;
+	}
+	$starsign = sprintf("%9s",$starsign);
+	$line =~ s/([A-Z][a-z][a-z]\s+\d+\s+\S+\s+)/ $starsign \1/;
+
+	### Print Line
+	print $line;
+}
+
+__END__
+aries	march 21 april 20
+taurus	april 21 may 21
+gemini	may 22 june 22
+cancer	june 23 july 23
+leo	july 24 august 23
+virgo	august 24 september 23
+libra	september 24 october 23
+scorpio	october 24 november 22
+sagittari	november 23 december 22
+capricorn	december 23 january 19
+aquarius	january 20 february 19
+pisces	february 20 march 20

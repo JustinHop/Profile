@@ -227,3 +227,7 @@ function DataDumper(value, varname, fastmode, ident)
     return table.concat(items)
   end
 end
+
+function dump(...)
+    io.stderr:write (DataDumper(...), "\n---\n")
+end
