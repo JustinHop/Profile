@@ -541,6 +541,8 @@ awful.rules.rules = {
         properties = { tag = tags[1][2] } },
     { rule_any = { class = {"Mail", "Thunderbird"} },
         properties = { tag = tags[1][3] } },
+    { rule = { class = "Android SDK Manager" },
+      properties = { floating = true } },
     { rule = { class = "java-lang-Thread" },
         properties = { floating = true },
         callback = function (c)
