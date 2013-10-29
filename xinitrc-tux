@@ -44,7 +44,6 @@ setxkbmap -option terminate:ctrl_alt_bksp
 
 #awesome &
 
-<<<<<<< HEAD
 #xbindkeys || true
 numlockx  &
 if ! pgrep -x mpd > /dev/null ; then
@@ -64,19 +63,6 @@ fi
 #autocutsel -d -s PRIMARY &
 #autocutsel -d -s CLIPBOARD &
 #wicd-client &
-=======
-xbindkeys || true
-clipit &
-numlockx  &
-bluetooth-applet &
-gnome-sound-applet &
-mpd &
-
-#{ sleep 10s; ~/bin/synergy ; } &
-autocutsel -d -s PRIMARY &
-autocutsel -d -s CLIPBOARD &
-nm-applet &
->>>>>>> 16739dea6be68c854a294099097e551c430cc2f9
 
 #xscreensaver-command -exit > /dev/null || true
 #xscreensaver -no-splash &
@@ -108,13 +94,7 @@ done ; } &
 #{ sleep 1m; padevchooser; } &
 #
 
-<<<<<<< HEAD
 #exec ssh-agent bash -c 'while true ; do awesome ; done;'
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
-=======
-#fusesmb ~/network
-
-exec bash -c 'while true ; do awesome ; done;'
->>>>>>> 16739dea6be68c854a294099097e551c430cc2f9
 
 #exec ck-launch-session gnome-session

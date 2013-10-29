@@ -6,15 +6,9 @@ echo > ~/.xsession-errors
 gnome-settings-daemon &
 thunar --daemon &
 
-<<<<<<< HEAD
-{ sleep 5s; nitrogen --restore; } &
-
-{ sleep 8s; conky ; }&
-=======
 { sleep 2s; nitrogen --restore; } &
 
 { sleep 5s; conky ; }&
->>>>>>> 16739dea6be68c854a294099097e551c430cc2f9
 
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
@@ -57,18 +51,10 @@ if ! pgrep -x mpdas > /dev/null ; then
     { sleep 5s; mpdas ; } &
 fi
 { sleep 10s; mpc update ; } &
-<<<<<<< HEAD
-{ sleep 5s; clipit ; } &
-{ sleep 5s; bluetooth-applet ; } &
-{ sleep 5s; gnome-sound-applet ; } &
-{ sleep 5s; nm-applet ; } &
-{ sleep 5s; mpdas ; } &
-=======
 { sleep 3s; clipit ; } &
 { sleep 3s; bluetooth-applet ; } &
 { sleep 3s; gnome-sound-applet ; } &
 { sleep 3s; nm-applet ; } &
->>>>>>> 16739dea6be68c854a294099097e551c430cc2f9
 
 #synergys -d INFO -f &
 #autocutsel -d -s PRIMARY &
@@ -83,12 +69,6 @@ fi
     xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
     xmodmap -e 'add Control = Control_L' >& /dev/null;
-done ; } &
-
-{ while true; do
-    nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_ip
-    tsocks nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_tor_ip
-    sleep 1m
 done ; } &
 
 #gnome-power-manager &

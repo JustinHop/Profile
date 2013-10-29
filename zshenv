@@ -158,9 +158,7 @@ fi
 export DEBEMAIL="debian@justinhoppensteadt.com"
 export DEBFULLNAME="Justin Hoppensteadt"
 
-<<<<<<< HEAD
 PATH=${PATH:s/::/:/}
-=======
 PERL_CPANM_OPT="--local-lib=~/perl5"
 
 if [ -d ~/perl5/lib/perl5 ]; then
@@ -171,7 +169,6 @@ if [ -d ~/perl5/lib/perl5 ]; then
     fi
 fi
 
->>>>>>> 16739dea6be68c854a294099097e551c430cc2f9
 export PATH=$HOME/bin:/usr/bin:$PATH
 
 # vim:ft=zsh:syn=zsh
