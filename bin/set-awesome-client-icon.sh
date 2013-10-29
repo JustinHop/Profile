@@ -18,8 +18,10 @@
 #      REVISION:  ---
 #===============================================================================
 
-#sleep .01s
-#echo "if client.focus then awful.tag.seticon(client.focus.icon) else awful.tag.seticon() end" | awesome-client &
+if [ "$HOSTNAME" == "tux" ]; then
+    sleep .01s
+    echo "if client.focus then awful.tag.seticon(client.focus.icon) else awful.tag.seticon() end" | awesome-client &
+fi
 #
 #how its done on the old tux
 #( awesome-client < ~/Profile/awesome/tagset.lua ) &
