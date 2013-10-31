@@ -196,7 +196,7 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 --spacer = "✠"█
 spacer = "┃"
 mytextclock = awful.widget.textclock({ align = "right" },
-    "%a %b %d, %r<small> %Y %z</small>", .5)
+    "%a %b %d, %r", .5)
 
 myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
@@ -570,12 +570,17 @@ awful.rules.rules = {
         properties = { tag = tags[1][2] } },
     { rule_any = { class = {"Mail", "Thunderbird"} },
         properties = { tag = tags[1][3] } },
+    { rule = { class = "Android SDK Manager" },
+      properties = { floating = true } },
     { rule = { class = "java-lang-Thread" },
         properties = { floating = true },
         callback = function (c)
             awful.titlebar.add(c, { modkey = modkey })
         end
     },
+    { rule = { name = "File Operation Progress" },
+        properties = { floating = true,
+                        border_width = 0 } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
