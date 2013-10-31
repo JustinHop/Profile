@@ -517,7 +517,7 @@ fi
 if [[ $ZSH_VERSION = 4.* ]]; then
     # use cache
     zstyle ':completion:*' use-cache on
-    zstyle ':completion:*' cache-path ~/.zsh/cache
+    zstyle ':completion:*' cache-path ~/.zsh/cache-$HOSTNAME
 
     # ignore lost&found
     zstyle ':completion:*:cd:*' ignored-patterns '(*/)#lost+found'
