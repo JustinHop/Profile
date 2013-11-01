@@ -3,8 +3,8 @@ require("awful")
 require("awful.autofocus")
 require("awful.rules")
 require("beautiful")
-require("obvious")
-require("obvious.volume_alsa")
+--require("obvious")
+--require("obvious.volume_alsa")
 -- Notification library
 require("naughty")
 
@@ -488,7 +488,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle()                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
-    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+    awful.key({ modkey, "Shift"   }, "t",      function (c) c.ontop = not c.ontop            end),
     awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
     awful.key({ modkey,           }, "m",
         function (c)
@@ -514,7 +514,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey, "Control" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
     awful.key({ modkey, "Control" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
-    awful.key({ modkey, "Shift" }, "t", function (c)
+    awful.key({ modkey,         }, "t", function (c)
         if   c.titlebar then awful.titlebar.remove(c)
         else awful.titlebar.add(c, { modkey = modkey }) end
     end),
@@ -586,7 +586,8 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons } },
     { rule = { class = "MPlayer" },
-      properties = { floating = true } },
+      properties = { floating = true,
+                        border_width = 0 } },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
     { rule = { class = "gimp" },
@@ -617,7 +618,9 @@ client.add_signal("manage", function (c, startup)
     -- awful.titlebar.add(c, { modkey = modkey })
 
     if awful.client.floating.get(c) then
-        awful.titlebar.add(c, { modkey = modkey })
+        if not c.title ~= "MPlayer" then
+            awful.titlebar.add(c, { modkey = modkey })
+        end
     end
 
     -- Enable sloppy focus

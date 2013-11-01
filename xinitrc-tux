@@ -40,7 +40,8 @@ clipit &
 numlockx  &
 bluetooth-applet &
 gnome-sound-applet &
-mpd &
+runonce mpd &
+runonce mpdas &
 
 #{ sleep 10s; ~/bin/synergy ; } &
 autocutsel -d -s PRIMARY &
