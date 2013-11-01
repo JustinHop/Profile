@@ -9,7 +9,7 @@ require("beautiful")
 require("naughty")
 
 -- Load Debian menu entries
-require("freedesktop.menu")
+require("debian.menu")
 
 home_dir = os.getenv("HOME")
 config_dir = awful.util.getdir("config")
@@ -46,8 +46,6 @@ if not awful.util.checkfile(theme_path) then
     theme_path = config_dir .. "/themes/justin/theme.lua"
 end
 beautiful.init(theme_path)
-
---obvious.volume_alsa.setchannel("Master")
 
 -- {{{ Load the functions in awesome.d
 function import(file)
@@ -89,6 +87,7 @@ settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Termin
 terminal = "gnome-terminal"
 lock_session = "gnome-screensaver-command -l"
 take_screenshot = "gnome-screenshot -i"
+session_ender = "session_ender.sh"
 -- terminal = "terminator"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
@@ -107,9 +106,9 @@ layouts =
     awful.layout.suit.tile,
     awful.layout.suit.max,
     awful.layout.suit.floating,
-    awful.layout.suit.tile.left,
+    --awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top
+    --awful.layout.suit.tile.top
     --awful.layout.suit.fair,
     --awful.layout.suit.fair.horizontal,
     --awful.layout.suit.max.fullscreen,
@@ -120,6 +119,7 @@ layouts =
 use_titlebar = false
 -- }}}
 
+--[[
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
@@ -131,6 +131,31 @@ for s = 1, screen.count() do
         tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6 }, s, layouts[1])
     end
 end
+]]--
+tags = {}
+if screen.count() == 1 then
+    tags1_1 = {
+               --names  = { "[web]", "[shell]", "[work]", "[coding]", "[mail/calendar]", "[music]", "[other]" },
+              layout = { layouts[1], layouts[1], layouts[2], layouts[1],
+                         layouts[1], layouts[1], layouts[1], layouts[1], layouts[1] }
+              }
+              tags[1] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 1, tags1_1.layout)
+else
+
+    tags2_1 = {
+               --names  = { "[web]", "[shell]", "[work]", "[coding]", "[mail/calendar]", "[music]", "[other]" },
+               layout = { layouts[1], layouts[1], layouts[2], layouts[1], layouts[1], layouts[1] }
+              }
+
+    tags2_2 = {
+              --names  = { "[code]", "[web]", "[chat]", "[misc]" },
+               layout = { layouts[1], layouts[1], layouts[2], layouts[1], layouts[1], layouts[1] }
+               }
+
+              tags[1] = awful.tag({ 1, 2, 3, 4, 5, 6 }, 1, tags2_1.layout)
+              tags[2] = awful.tag({ 1, 2, 3, 4, 5, 6 }, 2, layouts[1])
+end
+
 awful.tag.setnmaster(1, tags[1][2])
 awful.tag.setmwfact( .8, tags[1][2])
 awful.tag.setncol( 2, tags[1][2])
@@ -150,14 +175,14 @@ myawesomemenu = {
    { "quit", awesome.quit }
 }
 
-free_desktop_menu = freedesktop.menu.new()
-
 mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "Ubuntu", free_desktop_menu, beautiful.icon_ubuntu },
+                                    { "Debian", debian.menu.Debian_menu.Debian, beautiful.icon_ubuntu },
+                                    --{ "Ubuntu", free_desktop_menu, beautiful.icon_ubuntu },
                                     { "Open Terminal", terminal, beautiful.icon_terminal },
                                     { "Take Screenshot", take_screenshot, beautiful.icon_gnomescreenshot },
                                     { "", "true" },
-                                    { "Lock Session", lock_session, beautiful.icon_lock }
+                                    { "Lock Session", lock_session, beautiful.icon_lock },
+                                    { "End Session", session_ender, beautiful.icon_shutdown },
                                   }
                         })
 
@@ -171,7 +196,7 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 --spacer = "✠"█
 spacer = "┃"
 mytextclock = awful.widget.textclock({ align = "right" },
-    "%a %b %d, %r<small> %Y %z</small>", .5)
+    "%a %b %d, %r", .5)
 
 myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
@@ -384,63 +409,6 @@ globalkeys = awful.util.table.join(
                            awful.util.eval, awful.prompt.bash,
                            awful.util.getdir("cache") .. "/history_eval")
     end),
-    --
-    -- MPD Controlling
-    --[[
-    awful.key({   }, "XF86AudioPlay",      function () awful.util.spawn("mpc toggle") end)  ,
-    awful.key({   }, "Redo",               function () awful.util.spawn("mpc toggle") end)  ,
-    --awful.key({   }, "Cancel",           function () awful.util.spawn("mpc toggle") end)  ,
-    awful.key({   }, "XF86AudioStop",      function () awful.util.spawn("mpc stop")   end)  ,
-    awful.key({   }, "Cancel",             function () awful.util.spawn("mpc stop")   end)  ,
-    awful.key({   }, "XF86AudioPrev",      function () awful.util.spawn("mpc prev")   end)  ,
-    awful.key({   }, "SunProps",           function () awful.util.spawn("mpc prev")   end)  ,
-    awful.key({   }, "XF86AudioNext",      function () awful.util.spawn("mpc next")   end)  ,
-    awful.key({   }, "Undo",               function () awful.util.spawn("mpc next")   end)  ,
-    --awful.key({   }, "XF86AudioMute",      function () obvious.volume_alsa.mute(0, "Master") end)  ,
-    --]]
-
-
-    -- Volume
-    --awful.key({   }, "XF86AudioLowerVolume", function() obvious.volume_alsa.lower(0, "Master", 1) end),
-    --awful.key({   }, "XF86AudioRaiseVolume", function() obvious.volume_alsa.raise(0, "Master", 1) end),
-    --[[
-    awful.key({"Control" }, "XF86AudioLowerVolume",
-        function ()
-            awful.util.spawn("mpc volume -5")
-            updatevol()
-            displayvol()
-        end),
-    awful.key({"Control" }, "XF86AudioRaiseVolume",
-        function ()
-            awful.util.spawn("mpc volume +5")
-            updatevol()
-            displayvol()
-        end)  ,
-    awful.key({"Shift"   }, "XF86AudioLowerVolume",
-        function ()
-            awful.util.spawn("aumix -w -5")
-            updatevol()
-            displayvol()
-        end)  ,
-    awful.key({"Shift"   }, "XF86AudioRaiseVolume",
-        function ()
-            awful.util.spawn("aumix -w +5")
-            updatevol()
-            displayvol()
-        end),
-    awful.key({"Mod1"   }, "XF86AudioLowerVolume",
-        function ()
-            awful.util.spawn("ssh -oBatchMode=yes usucpwd-hoppenj nircmd changesysvolume -10000")
-            updatevol()
-            displayvol()
-        end)  ,
-    awful.key({"Mod1"   }, "XF86AudioRaiseVolume",
-        function ()
-            awful.util.spawn("ssh -oBatchMode=yes usucpwd-hoppenj nircmd changesysvolume +10000")
-            updatevol()
-            displayvol()
-        end),
-    --]]
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
@@ -600,16 +568,25 @@ awful.rules.rules = {
                         border_width = 0 } },
     { rule = { class = "Pidgin" },
         properties = { tag = tags[1][2] } },
-    { rule = { class = "Icedove" },
+    { rule_any = { class = {"Mail", "Thunderbird"} },
         properties = { tag = tags[1][3] } },
-    { rule = { class = "icedove" },
-        properties = { tag = tags[1][3] } },
+    { rule = { class = "Android SDK Manager" },
+      properties = { floating = true } },
+    { rule = { class = "java-lang-Thread" },
+        properties = { floating = true },
+        callback = function (c)
+            awful.titlebar.add(c, { modkey = modkey })
+        end
+    },
+    { rule = { name = "File Operation Progress" },
+        properties = { floating = true,
+                        border_width = 0 } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
     --]]
 }
--- }}}
+-- }}
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
@@ -654,8 +631,12 @@ client.add_signal("focus", function(c)
         ndump(tt[i])
         i++
        ]]--
-    set_tag_icon()
-    mousemarker()
+    if (set_tag_icon ~= nil) then
+        set_tag_icon()
+    end
+    if (mousemarker ~= nil) then
+        mousemarker()
+    end
 end)
 client.add_signal("unfocus", function(c)
     c.border_color = beautiful.border_normal
@@ -665,23 +646,20 @@ client.add_signal("unfocus", function(c)
         --awful.tag.seticon(nil,awful.tag.selected())
     end
     ]]--
-    set_tag_icon()
-    mousemarker()
-end)
---[[
-tag.add_signal("tagged", function(t)
-    if t then
-        ndump(t.name)
-    else
-        ndump("HEY")
+    if (set_tag_icon ~= nil) then
+        set_tag_icon()
+    end
+    if (mousemarker ~= nil) then
+        mousemarker()
     end
 end)
-]]--
 for s = 1, screen.count() do
     local i = 1
     while tags[s][i] do
         tags[s][i]:add_signal("property::selected", function(t)
-            set_tag_icon()
+            if (set_tag_icon ~= nil) then
+                set_tag_icon()
+            end
             --ndump(t.name)
             --if not next(t:clients()) then
             --    awful.tag.seticon(nil,t)
@@ -690,7 +668,7 @@ for s = 1, screen.count() do
         i = i + 1
     end
     screen[s]:add_signal("property::screen", function()
-        ndump("property::screen")
+        --ndump("property::screen")
         if client.focus then
             --awful.tag.seticon(client.focus.icon)
         else
@@ -699,5 +677,7 @@ for s = 1, screen.count() do
     end)
 end
 
-mousemarker()
+if (mousemarker ~= nil) then
+    mousemarker()
+end
 

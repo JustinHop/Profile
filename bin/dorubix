@@ -1,0 +1,43 @@
+#!/bin/bash
+
+IGNORE="^(fw|as|ld.?|nsr|lb|swx|dsx|asx|cyc|rcm|gig|fls|fsx|slb|ra|nls|sjs|hsrp|dhcp|vsr|utl|coresys)(\.|[0-9])"
+RELEASE=latest
+
+while read LINE ; do
+    HOSTS="$LINE $HOSTS"
+done
+
+LOG_DIR=/tmp/rubix
+[ -d $LOG_DIR ] && rm -f $LOG_DIR/* || mkdir $LOG_DIR
+echo $HOSTS | egrep -v $IGNORE \
+        | onall -p -t3000 -o $LOG_DIR -Q "
+                sleep 0.0\${RANDOM}m
+                test -f /etc/ntp/step-tickers && rm /etc/ntp/step-tickers
+                test -f /etc/init.d/named.rpmorig && rm /etc/init.d/named.rpmorig
+                /usr/bin/rubix --freeze --release $RELEASE
+            "
+
+
+
+perl -pi -e "s/rubix_core: initializing.*//gs" $LOG_DIR/*
+perl -pi -e "s/ssh: connect to host.*//gs" $LOG_DIR/*
+perl -pi -e "s/Last rubix.*//gs" $LOG_DIR/*
+perl -pi -e "s/\/etc\/motd.*//gs" $LOG_DIR/*
+perl -pi -e "s/\w{3}\s+\w{3}\s+\d+\s+\d+:\d+:\d+\s+\d+//gs" $LOG_DIR/*
+perl -pi -e "s/.*FAIL_FILE.*//gs" $LOG_DIR/*
+perl -pi -e "s/.*NOPASSWD.*//gs" $LOG_DIR/*
+perl -pi -e "s/.*Permanently.added.*//gs" $LOG_DIR/*
+perl -pi -e "s/.*initializing data for.*//gs" $LOG_DIR/*
+perl -pi -e "s/.*rpm-xfer.*//gs" $LOG_DIR/*
+perl -pi -e "s/.*Fetched .*kB in.*//gs" $LOG_DIR/*
+perl -pi -e "s/^apply_overlay.*\ robotname.*//gs" $LOG_DIR/*
+perl -pi -e "s/^distro: found a distro release package:.*//gs" $LOG_DIR/*
+perl -pi -e "s/^architecture: running on a.*//gs" $LOG_DIR/*
+
+echo $LOG_DIR
+echo 'LOG_DIR='$LOG_DIR
+cat <<EOF
+grep err $LOG_DIR/* | egrep -v 'no\ |ssh-dss|ssh-rsa' | grep -v \<
+grep 'Failed to retrieve' $LOG_DIR/*
+grep '\[crit\]' $LOG_DIR/*
+EOF

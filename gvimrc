@@ -4,6 +4,7 @@
 "  version 0.1
 
 "colorscheme metacosm 
+set guifont=DejaVu\ Sans\ Mono\ 12
 
 set cursorline
 set cursorcolumn
@@ -45,4 +46,5 @@ nmap    <RightMouse> <Insert>
 imap    <RightMouse> <ESC>
 "
 "
+
 

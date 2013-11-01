@@ -2,7 +2,7 @@
 #  Both kinds of free
 
 export ZSHRC_VERSION="2.0.5a"
-
+export PROFILE_DIR="$HOME/Profile"
 umask 002
 #
 # WORKSPACE AND ENVIRONMENT
@@ -17,8 +17,8 @@ for SPACE in .undo backup .zsh ; do
     [ ! -d "$HOME/$SPACE"  ] && mkdir "$HOME/$SPACE" 
 done
 
-if [ -f "$HOME"/agent ]; then
-    . "$HOME"/agent
+if [ -f "$HOME"/agent-$HOSTNAME ]; then
+    . "$HOME"/agent-$HOSTNAME
 fi
 
 #
@@ -517,7 +517,7 @@ fi
 if [[ $ZSH_VERSION = 4.* ]]; then
     # use cache
     zstyle ':completion:*' use-cache on
-    zstyle ':completion:*' cache-path ~/.zsh/cache
+    zstyle ':completion:*' cache-path ~/.zsh/cache-$HOSTNAME
 
     # ignore lost&found
     zstyle ':completion:*:cd:*' ignored-patterns '(*/)#lost+found'
@@ -594,14 +594,25 @@ if [[ -o interactive ]]; then
 fi
 
 function preexec() {
-
     local a=${${1## *}[(w)1]}  # get the command
     local b=${a##*\/}   # get the command basename
     a="${b}${1#$a}"     # add back the parameters
     a=${a//\%/\%\%}     # escape print specials
     a=$(print -Pn "$a" | tr -d "\t\n\v\f\r")  # remove fancy whitespace
     a=${(V)a//\%/\%\%}  # escape non-visibles and print specials
-    a=${a#ssh }
+
+    case "$b" in
+        ssh)
+        #a=${a#ssh }
+        a=${a%%.*}
+        a=${a##* }
+        ;;
+        *)
+        a=${a//.websys.tmcs}
+        a=${${1## *}[(w)1]}  # get the command
+        ;;
+    esac
+
 
     case "$TERM" in
         screen|screen.*)

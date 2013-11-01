@@ -138,6 +138,14 @@ function! MyPerlSettings()
     "colorscheme wuye
 endfunction
 
+function! DoTitle()
+    if &term == "screen"
+        let &titlestring=expand("%:t")
+        set t_ts=k
+        set t_fs=\
+        set title
+    endif
+endfunction
 
 "
 "  We are using VIM
@@ -223,6 +231,8 @@ if has("autocmd")
     au FileType spec set formatoptions-=a
 
     au FileType perl :call MyPerlSettings()
+
+    au BufEnter * :call DoTitle()
 
     au FileType apache set nosmartindent preserveindent
 
