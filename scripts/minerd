@@ -1,0 +1,42 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:		minerd
+# Required-Start:	$syslog
+# Required-Stop:	$syslog
+# Default-Start:	2 3 4 5
+# Default-Stop:
+# Short-Description:	OpenBSD Secure Shell server
+### END INIT INFO
+
+set -e
+
+# /etc/init.d/minerd: start and stop the litecoin mining daemon
+
+. /lib/lsb/init-functions
+
+MINERD_OPTS="--url=stratum+tcp://pool1.us.multipool.us:3334 --user=justin_hop.1 --pass=x --syslog --background"
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+	log_daemon_msg "Starting LiteCoin Miner" "minerd" || true
+	if start-stop-daemon --start --quiet --oknodo --nicelevel 19 --chuid miner --pidfile /var/run/minerd.pid --exec /usr/local/bin/minerd -- $MINERD_OPTS; then
+	    log_end_msg 0 || true
+	else
+	    log_end_msg 1 || true
+	fi
+
+    ;;
+  stop)
+	log_daemon_msg "Stopping LiteCoin Miner" "minerd" || true
+	killall minerd
+    ;;
+  *)
+    echo "Usage: /etc/init.d/minerd {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+
