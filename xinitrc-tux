@@ -10,7 +10,7 @@ thunar --daemon &
 
 { sleep 5s; nitrogen --restore; } &
 
-#{ sleep 8s; conky ; }&
+{ sleep 8s; conky ; }&
 
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
