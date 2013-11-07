@@ -71,11 +71,11 @@ fi
     xmodmap -e 'add Control = Control_L' >& /dev/null;
 done ; } &
 
-{ while true; do
-    nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_ip
-    tsocks nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_tor_ip
-    sleep 1m
-done ; } &
+#{ while true; do
+#    nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_ip
+#    tsocks nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_tor_ip
+#    sleep 1m
+#done ; } &
 
 #gnome-power-manager &
 #gnome-settings-daemon &

@@ -373,6 +373,10 @@ alias -g UU="|&uniq"
 alias -g GP="|grep -P"
 alias -g GGP="|&grep -P"
 
+if [[ -x `whence rlwrap` ]]; then
+    alias imapfilter='rlwrap imapfilter'
+fi
+
 alias z=$0
 alias s=sudo
 
