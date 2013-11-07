@@ -196,7 +196,7 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 --spacer = "✠"█
 spacer = "┃"
 mytextclock = awful.widget.textclock({ align = "right" },
-    "%a %b %d, %r<small> %Y %z</small>", .5)
+    "%a %b %d, %r", .5)
 
 myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
@@ -459,7 +459,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle()                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
-    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+    awful.key({ modkey, "Shift"   }, "t",      function (c) c.ontop = not c.ontop            end),
     awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
     awful.key({ modkey,           }, "m",
         function (c)
@@ -485,7 +485,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey, "Control" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
     awful.key({ modkey, "Control" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
-    awful.key({ modkey, "Shift" }, "t", function (c)
+    awful.key({ modkey,         }, "t", function (c)
         if   c.titlebar then awful.titlebar.remove(c)
         else awful.titlebar.add(c, { modkey = modkey }) end
     end),
@@ -559,8 +559,6 @@ awful.rules.rules = {
     { rule = { class = "MPlayer" },
       properties = { floating = true,
         border_width = 0 } },
-    { rule = { name = "File Operation Progress" },
-      properties = { floating = true } },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
     { rule = { class = "gimp" },
@@ -575,12 +573,17 @@ awful.rules.rules = {
         properties = { tag = tags[1][2] } },
     { rule_any = { class = {"Mail", "Thunderbird"} },
         properties = { tag = tags[1][3] } },
+    { rule = { class = "Android SDK Manager" },
+      properties = { floating = true } },
     { rule = { class = "java-lang-Thread" },
         properties = { floating = true },
         callback = function (c)
             awful.titlebar.add(c, { modkey = modkey })
         end
     },
+    { rule = { name = "File Operation Progress" },
+        properties = { floating = true,
+                        border_width = 0 } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -595,7 +598,9 @@ client.add_signal("manage", function (c, startup)
     -- awful.titlebar.add(c, { modkey = modkey })
 
     if awful.client.floating.get(c) then
-        awful.titlebar.add(c, { modkey = modkey })
+        if not c.title ~= "MPlayer" then
+            awful.titlebar.add(c, { modkey = modkey })
+        end
     end
 
     -- Enable sloppy focus

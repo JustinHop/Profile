@@ -18,6 +18,6 @@
 #      REVISION:  ---
 #===============================================================================
 
-ssh ops1.sys.devqa1.websys.tmcs '/ops/local/bin/cluster_software_update; rsync -av --delete --exclude=.snapshot/ /mnt/software_sync/AS5/ /mnt/volsw_dev/AS5'
+ssh ops1.sys.devqa1.websys.tmcs '/ops/local/bin/cluster_software_update'
 
-ssh ops2.sys.devqa1.websys.tmcs '/ops/local/bin/cluster_software_update ; rsync -av --exclude=.snapshot/ /mnt/software_sync/AS5/ /software'
+ssh ops2.sys.devqa1.websys.tmcs '/ops/local/bin/cluster_software_update'

@@ -55,7 +55,7 @@ export SHORTHOST=`echo $HOSTNAME | sed -e 's/.buzznet.com//' -e 's/justinhoppens
 #
 # PATH
 #
-
+PROFILE_DIR=~/Profile
 COMMON_PATH="$HOME/bin:$HOME/Profile/bin:$PATH:/usr/bin/wrappers:/bin:/usr/bin:/usr/local/bin"
 ROOT_PATH="/sbin:/usr/sbin:/usr/local/sbin"
 UNIXWARE_PATH="/usr/dt/bin:/usr/ucb:/usr/X/bin:/opt/vxvm-va/bin"
@@ -158,6 +158,7 @@ fi
 export DEBEMAIL="debian@justinhoppensteadt.com"
 export DEBFULLNAME="Justin Hoppensteadt"
 
+PATH=${PATH:s/::/:/}
 PERL_CPANM_OPT="--local-lib=~/perl5"
 
 if [ -d ~/perl5/lib/perl5 ]; then

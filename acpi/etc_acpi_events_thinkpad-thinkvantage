@@ -1,0 +1,8 @@
+# /etc/acpi/events/thinkpad-thinkvantage
+# This is called when ever an ACPI interupt comes in;  we
+# use it to perform a (more intelligent) event-driven form
+# of polling for Thinkpad hotkey status.
+
+event=ibm/hotkey HKEY 00000080 00001018
+#action=/usr/sbin/thinkpad-keys --update
+action=/etc/thinkpad-button.sh
