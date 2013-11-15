@@ -25,4 +25,5 @@ do
     dig @iib1.dns.dns2.cloudsys.tmcs $zone axfr >> ~/tm.bindForward
 done
 
+sed -i '/\.tm\.tmcs\.\s+/d' ~/tm.bindForward
 
