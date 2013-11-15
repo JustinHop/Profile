@@ -1,0 +1,935 @@
+#!/usr/bin/env perl
+#ignore
+use Getopt::Long;
+use IPC::Open2;
+use strict;
+use warnings;
+
+$::svnId = '$Id: nhs 7074 2012-10-18 02:50:53Z todd.jimenez $';
+$::releaseDate = (split(' ', $::svnId))[3];
+$::releaseTime = (split(' ', $::svnId))[4];
+$::version = "$::releaseDate $::releaseTime";
+$::debug = "0";
+$::fping = `/usr/bin/which fping`;
+
+chomp $::fping;
+
+$::rootDomain = "tmcs";
+$::tinyDnsZoneFile = "";
+$::bindReverseLookupFile = "";
+$::bindForwardLookupFile = "$ENV{'HOME'}/tm.bindForward";
+$::packageRepository = "$ENV{'HOME'}/workbench/rpmlist";
+$::interfaceRepository = "$ENV{'HOME'}/workbench/interfacelist";
+$::operatingSystemRepository = "$ENV{'HOME'}/workbench/oslist";
+$::macroFile = "$ENV{'HOME'}/.nhsMacros";
+$::nsRecordType = "A";
+@::hostnameFormats = ("v1", "v2", "v3");
+
+my $autodig = 1;
+my $binddaysold = 5;
+my @dnsDomains = qw(tmcs);
+my $dnsTimeout = 10;
+
+@::getOptionsOptions = (
+			\%::commandLineOptions,
+			'location=s',
+			'locationInstance=s',
+			'class=s',
+			'superClass=s',
+			'subClass=s',
+			'classInstance=s',
+			'cluster=s',
+			'product=s',
+			'businessUnit=s',
+			'regexp=s',
+			'macro=s@',
+			'package=s',
+			'interface=s',
+			'operatingSystem=s',
+			'tinyDnsZoneFile=s',
+			'bindForwardLookupFile=s',
+			'bindReverseLookupFile=s',
+			'hostnameFormat=s@',
+			'dnsDomain=s@',
+			'dnsTimeout=s',
+			'packageRepository=s',
+			'interfaceRepository=s',
+			'operatingSystemRepository=s',
+			'details!',
+			'clusters',
+			'locations',
+			'classes',
+			'superClasses',
+			'subClasses',
+			'products',
+			'businessUnits',
+			'unique=s',
+			'even',
+			'odd',
+			'fqdn!',
+			'includeHyphens!',
+			'nsRecordType=s',
+			'verbose|v!',
+			'help|?',
+			'ping',
+			'fping',
+			'noFping',
+			'stdin',
+			'invertMatch',
+			'',
+		       );
+
+if (exists $ENV{'NHS'}) {
+    @ARGV = (
+        split(' ', $ENV{NHS}), @ARGV
+    );
+}
+
+GetOptions(
+	@::getOptionsOptions
+) or exit 1;
+
+#
+# Getopt::Long requires the special case of ''
+# to consider a singular dash by itself and argument
+# since 'stdin|' doesn't work
+#
+
+if (exists $::commandLineOptions{''}) {
+	++$::commandLineOptions{stdin};
+}
+
+if (exists $::commandLineOptions{macro}) {
+    open(MACRO_FILE, $::macroFile)
+	|| die "unable to open macro file $::macroFile: $!";
+
+    my %macros;
+    foreach my $line (
+		      grep { !/^\s*#/ } (<MACRO_FILE>)
+		     ) {
+	chomp($line);
+	my($macroName, $macroDefinition) = split(/:/, $line, 2);
+	$macroName =~ s/^\s+//;
+	$macroDefinition =~ s/["']//g;
+	$macros{$macroName} = $macroDefinition;
+    }
+
+    close(MACRO_FILE);
+
+    foreach my $macro (@{ $::commandLineOptions{macro} }) {
+	unless (exists $macros{$macro}) {
+	    die "$macro not found in macro file $::macroFile";
+	}
+	@ARGV = (
+		split(' ', $macros{$macro}), @ARGV
+	);
+    }
+
+    GetOptions(
+        @::getOptionsOptions
+    ) or exit 1;
+
+}
+
+if (exists $::commandLineOptions{help}) {
+    print "
+Mr. Netops nifty host selector $::version
+options:
+	-location <location>
+		'lax'	is location for lax1app2.tm.tmcs
+	-locationInstance <locationInstance>
+		'1'	is locationInstance for lax1app2.tm.tmcs
+	-class <class>
+		'app'	is class for lax1app2.tm.tmcs
+	-superClass <class>
+		'ilom'	is superClass for ilom-apt2.tmol.bej1.websys.tmcs
+	-subClass <class>
+		'apt'	is subClass for ilom-apt2.tmol.bej1.websys.tmcs
+	-classInstance <classInstance>
+		'2'	is classInstance for lax1app2.tm.tmcs
+	-cluster <cluster>
+		'lax1'	is cluster for lax1app2.tm.tmcs
+	-product <product>
+		'tmol'	is product for pxy1.tmol.dev2.tm.tmcs
+	-businessUnit <businessUnit>
+		'tm'	is businessUnit for pxy1.tmol.dev2.tm.tmcs
+	-regexp <regexp>
+		specify your own hostname regexp directly
+	-macro <macro>
+		reference a predefined macro from $::macroFile
+	-unique <perl string>
+		return the unique elements of some combination of attributes.
+	-package <package>
+		only return hostnames with the specified package installed
+		requires repository @ $::packageRepository
+	-interface <interface>
+		only return hostnames with the specified interface
+		requires repository @ $::interfaceRepository
+	-operatingSystem <operatingSystem>
+		only return hostnames with the specified operating system
+		requires repository @ $::operatingSystemRepository
+	-details
+		include matching the matching repository information
+		in addition to the hostname, when using repository criteria
+		to select a host.
+	-clusters
+		list the selected host clusters
+	-locations
+		list the selected host locations
+	-classes
+		list the selected host classes
+	-superClasses
+		list the selected host superClasses
+	-subClasses
+		list the selected host subClasses
+	-products
+		list the selected host products
+	-businessUnits
+		list the selected host businessUnits
+	-even
+		only return hostnames where the host portion
+		ends in an even number
+	-odd
+		only return hostnames where the host portion
+		ends in an odd number
+	-fqdn
+		by default return fqdn names
+	-nofqdn
+		return just the host portion of the hostname
+	-includeHyphens
+		by default entries with hyphens are suppresed.
+		use this option to include them.
+	-nsRecordType
+		specify an alternate ns record type
+		the default is $::nsRecordType
+	-v, -verbose
+		print additional status information to stderr.
+	-help
+		this.
+	-fping
+		fping the host list, and only return hosts that respond.
+		requires fping @ $::fping
+	-noFping
+		fping the host list, and only return hosts that do not respond.
+		requires fping @ $::fping
+	-tinyDnsZoneFile <tinyDnsZoneFile>
+		specify an alternate tiny dns zone file
+		the default is $::tinyDnsZoneFile
+	-bindForwardLookupFile <bindForwardLookupFile>
+		specify an alternate bind forward lookup file
+		the default is $::bindForwardLookupFile
+	-bindReverseLookupFile <bindReverseLookupFile>
+		specify an alternate bind reverse lookup file
+		the default is $::bindReverseLookupFile
+	-stdin, -
+		read the host list from stdin
+	-hostnameFormat <hostnameFormat>
+		specify some combination of v1, v2, v3, or v4 hostname formats
+	-dnsDomain <dnsDomain>
+		specify a dns domain to walk for data population.
+		may be used multiple times to specify multiple dns domains
+	-dnsTimeout <timeout>
+		specify the dns query timeout in seconds for data population requests.
+		the default is $dnsTimeout
+	-invertMatch
+		return hosts that do not match the selection criteria
+	-packageRepository <packageRepository>
+		specify an alternate package repository
+		the default is $::packageRepository
+	-interfaceRepository <interfaceRepository>
+		specify an alternate interface repository
+		the default is $::interfaceRepository
+	-operatingSystemRepository <operatingSystemRepository>
+		specify an alternate operating system repository
+		the default is $::packageRepository
+examples:
+	just the host portion of all even pxy servers at lax:
+
+	$0 -nofqdn -even -class pxy -location lax
+
+	just the tmol product classes:
+
+	$0 -product tmol -classes
+
+	iloms for the bej1 app boxes:
+
+	$0 -superclass ilom -subclass app -cluster bej1
+
+	unique class/product combinations:
+
+	$0 -unique '\${product}.\${class}'
+
+	just the Linux servers with apache mysql-edb installed at wil3:
+
+	$0 -operatingSystem Linux -package mysql-edb -cluster wil3
+
+	just the classes running on sun boxes:
+
+	$0 -operatingSystem Sun -classes
+
+	restart httpd on the lax & ord pxy servers that respond to fping:
+
+	for host in `
+		$0 \
+			-class pxy \
+			-location \"(lax|ord)\" \
+			-fping \
+			| grep -v v
+	`
+	do
+		echo \$host
+		ssh -n -C -q \$host \"
+			/etc/init.d/httpd-* restart
+		\"
+	done
+currently groks hostnames in the following formats:
+	v1
+		{cluster}{class}{classInstance}.{businessUnit}.$::rootDomain
+		for example lax1pxy1.tm.tmcs
+	v2
+		{cluster}{class}{classInstance}.{product}.{businessUnit}.$::rootDomain
+		for example lca1cch1.oly.tm.tmcs
+	v3
+		{class}{classInstance}.{product}.{cluster}.{businessUnit}.$::rootDomain
+		for example pxy1.tmol.dev2.tm.tmcs
+	v4
+		{superClass}-{subClass}{classInstance}.{product}.{cluster}.{businessUnit}.$::rootDomain
+		for example ilom-apt2.tmol.bej1.websys.tmcs
+$::macroFile macro file format is:
+	{macroName}: {commandLineArguments}
+for example:
+	prod: -cluster \"(lax1|lax2|ord1|ord2)\"
+
+NHS enviromental variable example to only query websys by default:
+	export NHS=\"-dnsDomain websys.tmcs -businessunit websys\"
+";
+    exit 0;
+}
+
+if (exists $::commandLineOptions{fping} && ! -x $::fping) {
+    print STDERR "$::fping not found, -fping option not avaliable\n";
+    exit 1;
+}
+
+if (
+	exists $::commandLineOptions{fping} 
+		&& 
+	exists $::commandLineOptions{noFping}
+) {
+    print STDERR "the sum of all pingable and not pingable hosts";
+    print STDERR " is the sum of all hosts.\n";
+    print STDERR "understand this and be enlightened.\n";
+    exit 1;
+}
+
+$::tinyDnsZoneFile = exists $::commandLineOptions{tinyDnsZoneFile} ?
+    $::commandLineOptions{tinyDnsZoneFile} : $::tinyDnsZoneFile;
+
+$::packageRepository = exists $::commandLineOptions{packageRepository} ?
+    $::commandLineOptions{packageRepository} : $::packageRepository;
+
+$::interfaceRepository = exists $::commandLineOptions{interfaceRepository} ?
+    $::commandLineOptions{interfaceRepository} : $::interfaceRepository;
+
+$::operatingSystemRepository =
+    exists $::commandLineOptions{operatingSystemRepository} ?
+    $::commandLineOptions{operatingSystemRepository}
+    :
+    $::operatingSystemRepository;
+
+$::debug = exists $::commandLineOptions{verbose} ?
+    $::commandLineOptions{verbose} : $::debug;
+
+$::nsRecordType = exists $::commandLineOptions{nsRecordType} ?
+    $::commandLineOptions{nsRecordType} : $::nsRecordType;
+
+if (exists $::commandLineOptions{clusters}) {
+    $::commandLineOptions{unique} = '$cluster';
+}
+
+if (exists $::commandLineOptions{locations}) {
+    $::commandLineOptions{unique} = '$location';
+}
+
+if (exists $::commandLineOptions{classes}) {
+    $::commandLineOptions{unique} = '$class';
+}
+
+if (exists $::commandLineOptions{superClasses}) {
+    $::commandLineOptions{unique} = '$superClass';
+}
+
+if (exists $::commandLineOptions{subClasses}) {
+    $::commandLineOptions{unique} = '$subClass';
+}
+
+if (exists $::commandLineOptions{products}) {
+    $::commandLineOptions{unique} = '$product';
+}
+
+if (exists $::commandLineOptions{businessUnits}) {
+    $::commandLineOptions{unique} = '$businessUnit';
+}
+
+#
+# since unique is going through an eval
+# we're only going to allow \w, {, }, $
+# everything else gets escaped.
+#
+
+if (exists $::commandLineOptions{unique}) {
+    $::commandLineOptions{unique} =~ s/([^\w\{\}\$])/\\$1/g;
+}
+
+if (
+	exists $::commandLineOptions{product}
+		||
+	exists $::commandLineOptions{products}
+) {
+    @::hostnameFormats = ("v2", "v3");
+}
+
+if (
+	exists $::commandLineOptions{subClass}
+		||
+	exists $::commandLineOptions{subClasses}
+		||
+	exists $::commandLineOptions{superClass}
+		||
+	exists $::commandLineOptions{superClasses}
+	
+) {
+    @::hostnameFormats = ("v4");
+    ++$::commandLineOptions{includeHyphens};
+
+   if (exists $::commandLineOptions{class}) {
+	print STDERR "cannot use -subclass or -superclass with -class\n";
+	print STDERR "try -subclass and -superclass together instead\n";
+	exit 1;
+   }
+}
+
+if (exists $::commandLineOptions{hostnameFormat}) {
+    @::hostnameFormats = @{
+	$::commandLineOptions{hostnameFormat}
+    };
+}
+
+if (exists $::commandLineOptions{dnsDomain}) {
+    @dnsDomains = @{
+	$::commandLineOptions{dnsDomain}
+    };
+}
+
+if (exists $::commandLineOptions{dnsTimeout}) {
+    $dnsTimeout = $::commandLineOptions{dnsTimeout};
+}
+
+
+%::hostnameFormat = %{ &buildHostnameFormats(\%::commandLineOptions) };
+
+if (exists $::commandLineOptions{regexp}) {
+    $::regexp = $::commandLineOptions{regexp};
+} else {
+    my @hostnameFormats;
+
+    foreach my $format (@::hostnameFormats) {
+	if (exists $::hostnameFormat{$format}) {
+	    push(@hostnameFormats, $::hostnameFormat{$format});	
+	}
+    }
+
+    $::regexp = "^(" . join("|", @hostnameFormats) . ")";
+}
+
+if (exists $::commandLineOptions{stdin}) {
+	foreach my $line (<>) {
+		chomp $line;
+		foreach my $hostname (
+			split(' ', $line)
+		) {
+			++$::hosts{$hostname};
+		}
+	}
+} else {
+	if ($::tinyDnsZoneFile) {
+		unless (-f $::tinyDnsZoneFile) {
+		    print STDERR "ERROR: tiny dns zone file "
+			. "$::tinyDnsZoneFile not found\n";
+		    exit 1;
+		}
+		&extractHostsFromTinyDns;
+	}
+
+	if ($::bindReverseLookupFile) {
+		unless (-f $::bindReverseLookupFile) {
+		    print STDERR "ERROR: bind reverse lookup file "
+			. "$::bindReverseLookupFile not found\n";
+		    exit 1;
+		}
+		&extractHostsFromBindReverseLookup;
+	}
+	&extractHostsFromBindForwardLookup;
+}
+
+if (exists $::commandLineOptions{package}) {
+    &checkRepository($::packageRepository, $::commandLineOptions{package},
+		     "package");
+}
+
+if (exists $::commandLineOptions{interface}) {
+    &checkRepository($::interfaceRepository, $::commandLineOptions{interface},
+		     "interface");
+}
+
+if (exists $::commandLineOptions{operatingSystem}) {
+    &checkRepository($::operatingSystemRepository,
+		     $::commandLineOptions{operatingSystem}, "operatingSystem");
+}
+
+if (exists $::commandLineOptions{invertMatch}) {
+	@::returnValues = grep (!/$::regexp/, keys %::hosts);
+} else {
+	@::returnValues = grep (/$::regexp/, keys %::hosts);
+}
+
+unless (exists $::commandLineOptions{includeHyphens}
+	and $::commandLineOptions{includeHyphens}) {
+    @::returnValues = grep (!/-/, @::returnValues);
+}
+
+if (
+	exists $::commandLineOptions{fping}
+		||
+	exists $::commandLineOptions{noFping}
+) {
+    my @fpingResults = ();
+
+    my $pid = open2(\*FPING_OUTPUT, \*FPING_INPUT, "$::fping -r1");
+
+    print FPING_INPUT join("\n", @::returnValues);
+    close(FPING_INPUT);
+
+    @fpingResults = (<FPING_OUTPUT>);
+
+    chomp(@fpingResults);
+
+    waitpid $pid, 0;
+
+    if (exists $::commandLineOptions{fping}) {
+        if ($::debug) {
+		print STDERR join(
+			"\n", grep { / is unreachable$/ } @fpingResults
+		), "\n";
+        }
+
+    	@::returnValues = grep { / is alive$/ } @fpingResults;
+    	@::returnValues = map {
+		(my $host = $_) =~ s/ is alive$//; $host 
+	} @::returnValues;
+    }
+
+    if (exists $::commandLineOptions{noFping}) {
+        if ($::debug) {
+		print STDERR join(
+			"\n", grep { / is alive$/ } @fpingResults
+		), "\n";
+        }
+
+    	@::returnValues = grep { / is unreachable$/ } @fpingResults;
+    	@::returnValues = map {
+		(my $host = $_) =~ s/ is unreachable$//; $host 
+	} @::returnValues;
+    }
+}
+
+%::hostnameFormat = %{ &buildHostnameFormats( {} ) };
+
+foreach my $host (@::returnValues) {
+
+    my ($cluster,
+	$location,
+	$class,
+	$superClass,
+	$subClass,
+	$classInstance,
+	$product,
+	$businessUnit
+       );
+
+    my $formatMatch = 0;
+
+    # hostname format v1
+    if ($host =~ m/$::hostnameFormat{v1}/) {
+	$cluster = $1;
+	$class = $2;
+	$classInstance = $3;
+	$businessUnit = $4;
+	$formatMatch = 1;
+    }
+
+    # hostname format v2
+    if ($host =~ m/$::hostnameFormat{v2}/) {
+	$cluster = $1;
+	$class = $2;
+	$classInstance = $3;
+	$product = $4;
+	$businessUnit = $5;
+	$formatMatch = 1;
+	
+    }
+
+    # hostname format v3
+    if ($host =~ m/$::hostnameFormat{v3}/) {
+	$class = $1;
+	$classInstance = $2;
+	$product = $3;
+	$cluster = $4;
+	$businessUnit = $5;
+	$formatMatch = 1;
+    }
+
+    # hostname format v3
+    if ($host =~ m/$::hostnameFormat{v4}/) {
+	$superClass = $1;
+	$subClass = $2;
+	$class = "$superClass-$subClass";
+	$classInstance = $3;
+	$product = $4;
+	$cluster = $5;
+	$businessUnit = $6;
+	$formatMatch = 1;
+    }
+
+    if ($::debug && !$formatMatch) {
+	print "unknown host format: $host\n";
+    }
+
+    if (defined $cluster) {
+	if ($cluster =~ m/([^\s\d\.]+)(\d+)/) {
+	    $location = $1;
+	}
+    }
+
+    if (exists $::commandLineOptions{unique}) {
+
+        my $eval = "
+use warnings FATAL => qw(all);
+return \"$::commandLineOptions{unique}\";
+        ";
+
+        my $unique = eval $eval;
+        unless ($@) {
+	    $::unique{$unique} = 1;
+        }
+
+    }
+
+}
+
+if (exists $::commandLineOptions{unique}) {
+    @::returnValues = (keys %::unique);
+}
+
+if (exists $::commandLineOptions{fqdn} && $::commandLineOptions{fqdn} == 0) {
+    @::returnValues = map {(my $host = $_) =~ s/\..*//;	$host } @::returnValues;
+}
+
+if (exists $::commandLineOptions{details}) {
+    foreach my $host (@::returnValues) {
+	print "$host\n";
+	foreach my $repository (keys %{ $::results{$host} }) {
+	    foreach my $result (@{ $::results{$host}{$repository} }) {
+		$result =~ s/^\s+//g;
+		print "\t$repository: $result"
+	    }
+	}
+    }
+} else {
+    print join("\n", @::returnValues), "\n";
+}
+
+
+sub checkRepository {
+    my ($repository, $regexp, $repositoryName) = @_;
+    unless (-d $repository && -r $repository) {
+	print STDERR "ERROR: unable to access repository $repository\n";
+	exit 1;
+    }
+
+    my @files = keys %::hosts;
+    %::hosts = ();
+
+    foreach my $file ( @files ) {
+	unless (-f "$repository/$file" and open(FILE, "$repository/$file")) {
+	    next;
+	}
+
+	my @result = grep { /$regexp/ } (<FILE>);
+
+	if (@result) {
+	    ++$::hosts{$file};
+	    $::results{$file}{$repositoryName} = \@result;
+	}
+    }
+}
+
+
+sub extractHostsFromTinyDns {
+
+    unless (open(FILE,$::tinyDnsZoneFile)) {
+    	print STDERR "unable to open $::tinyDnsZoneFile: $!\n";
+	exit 1;
+    }
+
+    while (<FILE>) {
+	if (/^(=|C|\+)/) {
+	    s/^(=|C|\+)//g;
+	    my ($hostname, $ipAddress) = split(/:/, $_);
+	    ++$::hosts{$hostname};
+	}
+    }
+
+    close(FILE);
+}
+
+sub autodig_ns {
+	my($domain) = @_;
+
+	if ($::debug) {
+		print STDERR "attempting to retrieve NS records for $domain\n";
+	}
+
+	my $digOutput = `dig +time=$dnsTimeout $domain NS 2>/dev/null`;
+
+	if ($digOutput =~ /;; Query time:/) {
+		return $digOutput;
+	}
+
+	if ($::debug) {
+		print STDERR "unable to retrieve NS records for $domain\n";
+	}
+
+	return '';
+}
+
+sub autodig_axfr {
+	my($domain, @nameservers) = @_;
+
+	foreach my $nameserver (@nameservers) {
+
+		if ($::debug) {
+			print STDERR "attempting zone transfer"
+				. " from $nameserver: "; 
+		}
+
+		my $digOutput = `dig +time=$dnsTimeout +tries=1 \@$nameserver $domain AXFR 2>/dev/null`;
+		
+		if ($digOutput =~ /;; Query time:/) {
+			if ($::debug) { print STDERR "SUCCESS!\n"; }
+			return $digOutput;
+		}
+
+		if ($::debug) { print STDERR "FAILURE!\n"; }
+		
+	}
+
+	if ($::debug) { print STDERR "unable to transfer zone $domain\n"; }
+
+	return '';
+}
+
+sub autodig_extractDelegations {
+	my($zone) = @_;
+
+	my %delegation;
+
+	foreach my $line (
+		split(/\n/, $zone)
+	) {
+		if ($line =~ /^;/ || $line =~ /^\s*$/) {
+		    next;
+		}
+		if ($line =~ /\s+IN\s+NS\s+/) {
+			my($domain, $ttl, $IN, $NS, $server)
+				= split(' ', $line);
+
+			$domain =~ s/\.$//;
+			$server =~ s/\.$//;
+
+			push(@{ $delegation{$domain} }, $server);
+		}
+	}
+
+	return \%delegation;
+}
+
+sub autodig_walkZones {
+	my($delegationRef) = @_;
+
+	my %delegations = %{ $delegationRef };
+	my %zoneVisited;
+
+	my @zones = keys %delegations;
+
+	my $zoneCompendium = '';
+
+	while (@zones) {
+		my $zoneName = shift @zones;
+
+		if ($::debug) { print STDERR "\nchecking zone $zoneName\n"; }
+
+		if (exists $zoneVisited{$zoneName}) { next; }
+		$zoneVisited{$zoneName} = 1;
+
+		if ($::debug) { print STDERR "\nwalking zone $zoneName\n"; }
+
+		my $zoneContents = &autodig_axfr(
+			$zoneName, @{ $delegations{$zoneName} }
+		);
+
+		$zoneCompendium .= $zoneContents;
+
+		my $zoneDelegationsRef = &autodig_extractDelegations(
+			$zoneContents
+		);
+
+		push(@zones, keys %{ $zoneDelegationsRef });
+		%delegations = (%delegations, %{ $zoneDelegationsRef });
+		
+	}
+
+	return $zoneCompendium;
+}
+
+sub extractHostsFromBindForwardLookup {
+    if ($autodig
+	and (! -e $::bindForwardLookupFile
+	     or -M $::bindForwardLookupFile > $binddaysold)) {
+
+	print STDERR "zonefile over $binddaysold days old, retrieving new file...\n" if $::debug;
+
+	my %delegation;
+
+	foreach my $domain (@dnsDomains) {
+		my $zoneDelegationsRef = &autodig_extractDelegations(
+			&autodig_ns($domain)
+		);
+		%delegation = (%delegation, %{ $zoneDelegationsRef });
+	}
+
+	my $zonefile = &autodig_walkZones(\%delegation);
+
+	open (FILE, ">$::bindForwardLookupFile");
+
+	print FILE $zonefile;
+	print STDERR "Zonefile Updated\n" if $::debug;
+    }
+
+    unless (open(FILE,$::bindForwardLookupFile)) {
+	if ($::debug) {
+	    print STDERR "unable to open $::bindForwardLookupFile: $!\n";
+	}
+	return;
+    }
+
+    while (<FILE>) {
+	if (/^;/ || /^\s*$/) {
+	    next;
+	}
+	if (/\s+IN\s+$::nsRecordType\s+/) {
+	    s/^(=|C|\+)//g;
+	    my ($hostname) = split(/\.\s+/, $_);
+	    ++$::hosts{$hostname};
+	}
+    }
+    close(FILE);
+}
+
+
+sub extractHostsFromBindReverseLookup {
+
+    unless (open(FILE,$::bindReverseLookupFile)) {
+    	print STDERR "unable to open $::bindReverseLookupFile: $!\n";
+	exit 1;
+    }
+
+    while (<FILE>) {
+	if (/^;/) {
+	    next;
+	}
+	if (/^(=|C|\+)/) {
+	    s/^(=|C|\+)//g;
+	    my ($hostname, $ipAddress) = split(/:/, $_);
+	    ++$::hosts{$hostname};
+	}
+    }
+    close(FILE);
+}
+
+
+sub buildHostnameFormats {
+    my($configRef) = @_;
+
+    #
+    # build the host regexp
+    #
+
+    my $regexpLocation = exists $$configRef{location} ?
+	$$configRef{location} : '[^\d\s\.]+';
+
+    my $regexpLocationInstance = exists $$configRef{locationInstance} ?
+	$$configRef{locationInstance} : '\d+';
+
+    my $regexpClass = exists $$configRef{class} ?
+	$$configRef{class} : '[^\d\s\.]+';
+
+    my $regexpSuperClass = exists $$configRef{superClass} ?
+	$$configRef{superClass} : '[^\d\s\.-]+';
+
+    my $regexpSubClass = exists $$configRef{subClass} ?
+	$$configRef{subClass} : '[^\d\s\.-]+';
+
+    my $regexpClassInstance = exists $$configRef{classInstance} ?
+	$$configRef{classInstance} : '\d+';
+
+    $regexpClassInstance = exists $$configRef{even} ?
+	'\d*[02468]' : $regexpClassInstance;
+
+    $regexpClassInstance = exists $$configRef{odd} ?
+	'\d*[13579]' : $regexpClassInstance;
+
+    my $regexpCluster = exists $$configRef{cluster} ?
+	$$configRef{cluster} : $regexpLocation . $regexpLocationInstance;
+
+    my $regexpProduct = exists $$configRef{product} ?
+	$$configRef{product} : '[^\d\s\.]+';
+
+    my $regexpBusinessUnit = exists $$configRef{businessUnit} ?
+	$$configRef{businessUnit} : '[^\d\s\.]+';
+
+    my %hostnameFormat;
+
+    # hostname format v1, lax1pxy1.tm.tmcs
+    $hostnameFormat{v1} = "($regexpCluster)" . "($regexpClass)"
+	. "($regexpClassInstance)" . "\\." . "($regexpBusinessUnit)" . "\\."
+	. $::rootDomain;
+
+    # hostname format v2, lca1cch1.oly.tm.tmcs
+    $hostnameFormat{v2} = "($regexpCluster)" . "($regexpClass)"
+	. "($regexpClassInstance)" . "\\."  . "($regexpProduct)" . "\\."
+        . "($regexpBusinessUnit)" . "\\." . $::rootDomain;
+
+    # hostname format v3, pxy1.tmol.dev2.tm.tmcs
+    $hostnameFormat{v3} = "($regexpClass)" . "($regexpClassInstance)" . "\\."
+	. "($regexpProduct)" . "\\." . "($regexpCluster)" . "\\."
+        . "($regexpBusinessUnit)" . "\\." . $::rootDomain;
+
+    # hostname format v4, ilom-apt2.tmol.bej1.websys.tmcs
+    $hostnameFormat{v4} = "($regexpSuperClass)" . "-" . "($regexpSubClass)"
+	. "($regexpClassInstance)" . "\\." . "($regexpProduct)" . "\\."
+	. "($regexpCluster)" . "\\." . "($regexpBusinessUnit)" . "\\." 
+	. $::rootDomain;
+
+    return \%hostnameFormat;
+}
