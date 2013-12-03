@@ -219,7 +219,7 @@ bindkey '^Xx' push-line
 bindkey '^U' undo
 bindkey '^R' redo
 
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( ${ZSH_VERSION:0:1} >= 4 )); then
 	bindkey '^O' all-matches
 fi
     
@@ -477,13 +477,13 @@ export SAVEHIST=65000
 # bindings for history
 #bindkey "^XH" set-local-history
 
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( ${ZSH_VERSION:0:1} >= 4 )); then
     setopt aliases \
         listpacked \
         promptpercent 
 fi
 
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( ${ZSH_VERSION:0:1} >= 4 )); then
     setopt listtypes \
         mark_dirs \
         menu_complete \
@@ -496,7 +496,7 @@ fi
 ################################################
 # The following lines were added by compinstall
 ################################################
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( ${ZSH_VERSION:0:1} >= 4 )); then
     zstyle ':completion:*' auto-description 'specify: %d'
     #zstyle ':completion:*' completer _list _expand _complete _match _correct _approximate
     zstyle ':completion:*' completer _complete _expand  _match _correct _list _approximate
@@ -518,7 +518,7 @@ fi
 ###############################################
 ### completion goodness from zshwiki.org
 ##############################################
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( ${ZSH_VERSION:0:1} >= 4 )); then
     # use cache
     zstyle ':completion:*' use-cache on
     zstyle ':completion:*' cache-path ~/.zsh/cache-$HOSTNAME
@@ -577,7 +577,7 @@ fi
 #
 # PROMPT MADNESS
 #
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( ${ZSH_VERSION:0:1} >= 4 )); then
    autoload -U colors
    colors
 fi
