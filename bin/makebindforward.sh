@@ -2,11 +2,11 @@
 #===============================================================================
 #
 #          FILE:  makebindforward.sh
-# 
-#         USAGE:  ./makebindforward.sh 
-# 
-#   DESCRIPTION:  
-# 
+#
+#         USAGE:  ./makebindforward.sh
+#
+#   DESCRIPTION:
+#
 #       OPTIONS:  ---
 #  REQUIREMENTS:  ---
 #          BUGS:  ---
@@ -14,9 +14,10 @@
 #        AUTHOR:  Justin Hoppensteadt (JH), Justin.Hoppensteadt@ticketmaster.com
 #       COMPANY:  Live Nation
 #       VERSION:  1.0
-#       CREATED:  11/14/2013 06:44:32 PM PST
+#       CREATED:  08/28/2013 11:48:45 AM PDT
 #      REVISION:  ---
 #===============================================================================
+
 
 mv -v ~/tm.bindForward ~/.tm.bindForward.back
 

@@ -356,6 +356,9 @@ globalkeys = awful.util.table.join(
         end),
     awful.key({ modkey,           }, "w", function () mymainmenu:show({keygrabber=true}) end),
 
+    awful.key({ modkey,           }, "Cancel", function () awful.util.spawn("killall -STOP chrome") end),
+    awful.key({ modkey, "Shift"   }, "Cancel", function () awful.util.spawn("killall -9 chrome") end),
+
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
@@ -555,7 +558,7 @@ awful.rules.rules = {
                      buttons = clientbuttons } },
     { rule = { class = "MPlayer" },
       properties = { floating = true,
-                        border_width = 0 } },
+        border_width = 0 } },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
     { rule = { class = "gimp" },

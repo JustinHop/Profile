@@ -17,7 +17,7 @@ fi
 unset $__ZSHENV__
 
 for SPACE in .undo backup .zsh ; do
-    [ ! -d "$HOME/$SPACE"  ] && mkdir "$HOME/$SPACE" 
+    [ ! -d "$HOME/$SPACE"  ] && mkdir "$HOME/$SPACE"
 done
 
 if [ -f "$HOME"/agent-$HOSTNAME ]; then
@@ -151,11 +151,11 @@ case $TERM in
         FN_CHARS=( '^[[2~' '^[[H' '^[[5~'
                     '^[[3~' '^[[F' '^[[6~' )
 
-        bindkey '^[[1~' vi-beginning-of-line   #home   
+        bindkey '^[[1~' vi-beginning-of-line   #home
         bindkey '^[[4~' vi-end-of-line         #end
 
         #rxvt uglyness
-        bindkey '^[[7~' vi-beginning-of-line   #home   
+        bindkey '^[[7~' vi-beginning-of-line   #home
         bindkey '^[[8~' vi-end-of-line         #end
         if [[ $UNAME == "SunOS" ]]; then
             STM="-T xterm"
@@ -205,7 +205,7 @@ bindkey '^[OF' vi-end-of-line                   # end
 #  ^R    hist search
 #  cmdG + int, int rev hist line
 #  ^G    list expands
-  
+
 #  Mine
 #  ^N    repeat search
 #  ^P    rev search
@@ -293,7 +293,7 @@ fi
 if [[ $GNU_COREUTILS -eq 1 ]]; then
     export GREP_COLOR=auto
 
-    NOR=" --color=auto --hide-control-chars --classify "  
+    NOR=" --color=auto --hide-control-chars --classify "
 
     alias  l="$LS --color=always -C -F "
     alias  l.="$LS $NOR -d .* "
@@ -306,7 +306,7 @@ if [[ $GNU_COREUTILS -eq 1 ]]; then
     alias  lsc="$LS --color=always -C -F -B"
     alias  lsd="$LS $NOR -d *(-/) "
     alias  lsf="$LS $NOR -d *(-.) "
-    alias  lsh="$LS $NOR -shB" 
+    alias  lsh="$LS $NOR -shB"
     alias  lss="$LS $NOR -s"
     alias  lsln="$LS $NOR -d *(#q@) "
 
@@ -413,7 +413,7 @@ alias konqu='konqueror --profile filemanagement '
 alias rn="rename '$_=lc $_;s/ /_/g' "
 #purdy stuff
 if [[ -o interactive ]]; then
-	for _COLOR in gcc make diff svn ; do 
+	for _COLOR in gcc make diff svn ; do
 		whence "color${_COLOR}" >> /dev/null && alias ${_COLOR}="color${_COLOR}"
 	done
 fi
@@ -457,7 +457,7 @@ setopt  \
     promptsubst \
     NO_nomatch \
     vi \
-    zle 
+    zle
 
 # history stuff
 setopt   \
@@ -470,7 +470,7 @@ setopt   \
     histignoredups \
     histreduceblanks \
     histverify \
-    incappendhistory 
+    incappendhistory
 
 # env vars for history
 export HISTFILE=~/.zhistory
@@ -483,7 +483,7 @@ export SAVEHIST=65000
 if (( $ZSH_MAJOR >= 4 )); then
     setopt aliases \
         listpacked \
-        promptpercent 
+        promptpercent
 fi
 
 if (( $ZSH_MAJOR >= 4 )); then
