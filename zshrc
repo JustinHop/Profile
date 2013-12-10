@@ -1,8 +1,11 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.0.5a"
+export ZSHRC_VERSION="2.1.0"
 export PROFILE_DIR="$HOME/Profile"
+export ZSH_MAJOR=$(echo $ZSH_VERSION | cut -d. -f1)
+export ZSH_MINOR=$(echo $ZSH_VERSION | cut -d. -f2)
+export ZSH_REL=$(echo $ZSH_VERSION | cut -d. -f3)
 umask 002
 #
 # WORKSPACE AND ENVIRONMENT
@@ -26,7 +29,7 @@ fi
 #
 case $UNAME in
     (SunOS)
-        if [[ $ZSH_VERSION = 3.* ]]; then
+        if [[ $ZSH_MAJOR = 3 ]]; then
             typeset BKT
             BKT='<>[]{}'
         else
@@ -219,10 +222,10 @@ bindkey '^Xx' push-line
 bindkey '^U' undo
 bindkey '^R' redo
 
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( $ZSH_MAJOR >= 4 )); then
 	bindkey '^O' all-matches
 fi
-    
+
 #
 # ALIAS
 #
@@ -373,6 +376,10 @@ alias -g UU="|&uniq"
 alias -g GP="|grep -P"
 alias -g GGP="|&grep -P"
 
+if [[ -x `whence rlwrap` ]]; then
+    alias imapfilter='rlwrap imapfilter'
+fi
+
 alias z=$0
 alias s=sudo
 
@@ -473,13 +480,13 @@ export SAVEHIST=65000
 # bindings for history
 #bindkey "^XH" set-local-history
 
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( $ZSH_MAJOR >= 4 )); then
     setopt aliases \
         listpacked \
         promptpercent 
 fi
 
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( $ZSH_MAJOR >= 4 )); then
     setopt listtypes \
         mark_dirs \
         menu_complete \
@@ -492,7 +499,7 @@ fi
 ################################################
 # The following lines were added by compinstall
 ################################################
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( $ZSH_MAJOR >= 4 )); then
     zstyle ':completion:*' auto-description 'specify: %d'
     #zstyle ':completion:*' completer _list _expand _complete _match _correct _approximate
     zstyle ':completion:*' completer _complete _expand  _match _correct _list _approximate
@@ -514,7 +521,7 @@ fi
 ###############################################
 ### completion goodness from zshwiki.org
 ##############################################
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( $ZSH_MAJOR >= 4 )); then
     # use cache
     zstyle ':completion:*' use-cache on
     zstyle ':completion:*' cache-path ~/.zsh/cache-$HOSTNAME
@@ -554,7 +561,7 @@ fi
 # COLOR FUNCTIONS
 #
 I_WANT_COLORS="yes"
-if [[ $ZSH_VERSION = 3.* ]]; then
+if [[ $ZSH_MAJOR = 3 ]]; then
     if [[ -n $I_WANT_COLORS ]]; then
         black=`echo -n "\033[0;30m"`
         red=`echo -n "\033[0;31m"`
@@ -573,7 +580,7 @@ fi
 #
 # PROMPT MADNESS
 #
-if [[ $ZSH_VERSION = 4.* ]]; then
+if (( $ZSH_MAJOR >= 4 )); then
    autoload -U colors
    colors
 fi
@@ -581,12 +588,7 @@ fi
 if [[ -o interactive ]]; then
     autoload -U promptinit
     promptinit
-
-    if [[ $HOSTNAME = "tux2" ]]; then
-    	prompt jclint
-    else
-        prompt clint
-    fi
+	prompt jclint || prompt clint
 
     #autoload -U title
     #autoload -U precmd

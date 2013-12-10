@@ -169,6 +169,10 @@ if [ -d ~/perl5/lib/perl5 ]; then
     fi
 fi
 
+if [ -f $PROFILE_DIR/zshenv.local ]; then
+	. $PROFILE_DIR/zshenv.local
+fi
+
 export PATH=$HOME/bin:/usr/bin:$PATH
 
 # vim:ft=zsh:syn=zsh
