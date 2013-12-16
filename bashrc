@@ -6,7 +6,7 @@ umask 002
 if [ -f "~/bin/zsh" ]; then
     ZSH="~/bin/zsh"
 else
-    Z=$( which zsh-beta )
+    Z=$( which zsh-beta 2>/dev/null)
     if [[ -x $Z ]]; then
         ZSH=$Z
     fi
