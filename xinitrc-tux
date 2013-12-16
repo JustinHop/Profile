@@ -3,25 +3,19 @@
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
-gnome-settings-daemon &
-thunar --daemon &
+#gnome-settings-daemon &
+#thunar --daemon &
 
 #xfsettingsd
 
-{ sleep 5s; nitrogen --restore; } &
+{ nitrogen --restore; } &
 
-{ sleep 8s; conky ; }&
+{ sleep 2s; conky ; }&
+
+{ xbindkeys --nodaemon ; }&
 
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
-
-#eval `gnome-keyring-daemon`
-
-#if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
-#    ## if not found, launch a new one
-#    eval `dbus-launch --sh-syntax --exit-with-session`
-#    echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
-#fi
 
 #echo "Session: setting Xdefaults and Xmodmap"
 #[ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
@@ -32,26 +26,13 @@ xset r rate 350 50
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-#if whence runonce >& /dev/null ; then
-#    runonce mpd &
-#    { sleep 1m; runonce mpdas; } &
-#    { sleep 1m; runonce mpn.py; } &
-#    if whence davmail >& /dev/null ; then
-#        { sleep 1m; runonce davmail; } &
-#    fi
-#fi
-#
-
-#awesome &
-
-#xbindkeys || true
 numlockx  &
-if ! pgrep -x mpd > /dev/null ; then
-    mpd
-fi
-if ! pgrep -x mpdas > /dev/null ; then
-    { sleep 5s; mpdas ; } &
-fi
+#if ! pgrep -x mpd > /dev/null ; then
+#    mpd
+#fi
+#if ! pgrep -x mpdas > /dev/null ; then
+#    { sleep 5s; mpdas ; } &
+#fi
 #{ sleep 10s; mpc update ; } &
 { sleep 3s; clipit ; } &
 { sleep 3s; bluetooth-applet ; } &
@@ -68,17 +49,17 @@ fi
 #xscreensaver -no-splash &
 
 { while true; do
-    sleep 10s;
     xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
     xmodmap -e 'add Control = Control_L' >& /dev/null;
+    sleep 10s;
 done ; } &
 
-{ while true; do
-    nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_ip
-    tsocks nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_tor_ip
-    sleep 1m
-done ; } &
+#{ while true; do
+#    nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_ip
+#    tsocks nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_tor_ip
+#    sleep 1m
+#done ; } &
 
 #gnome-power-manager &
 #gnome-settings-daemon &
@@ -90,11 +71,12 @@ done ; } &
 #{ sleep 9s; nitrogen --restore; } &
 ##{ sleep 30s; gnome-do; } &
 #{ sleep 10s; pidgin; } &
-#{ sleep 1m; pidgin_fortune; } &
+{ sleep 1m; pidgin_fortune; } &
 #{ sleep 1m; padevchooser; } &
 #
 
 #exec ssh-agent bash -c 'while true ; do awesome ; done;'
+{ sleep 2s; nitrogen --restore; } &
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
 
 #exec ck-launch-session gnome-session
