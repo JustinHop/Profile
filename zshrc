@@ -588,7 +588,11 @@ fi
 if [[ -o interactive ]]; then
     autoload -U promptinit
     promptinit
-	prompt jclint || prompt clint
+    if (( $ZSH_MAJOR == 4 && $ZSH_MINOR >= 3 || $ZSH_MAJOR > 4 )); then
+        prompt jclint || prompt clint
+    else
+        prompt clint
+    fi
 
     #autoload -U title
     #autoload -U precmd

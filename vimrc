@@ -223,6 +223,8 @@ if has("autocmd")
         au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
         au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
         au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
+        au BufRead,BufNewFile */syseng-rubix-config/*                 set filetype=spine
+        au BufRead,BufNewFile */syseng-rubix-config/*/svn-commit.tmp  set filetype=svn
     augroup END
 
     " ZSH Brokenness
