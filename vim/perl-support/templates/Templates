@@ -8,7 +8,7 @@ SetMacro( 'COMPANY',     'Live Nation' )
 SetMacro( 'COPYRIGHT',   'Copyright (c) |YEAR|, |AUTHOR|' )
 SetMacro( 'EMAIL',       'Justin.Hoppensteadt@ticketmaster.com' )
 SetMacro( 'LICENSE',     'GNU General Public License' )
-SetMacro( 'ORGANIZATION','Linux Systems Mercury' )
+SetMacro( 'ORGANIZATION','Web Systems' )
 
 SetStyle( 'default' )
 
