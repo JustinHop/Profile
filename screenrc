@@ -18,7 +18,7 @@ shelltitle " $ |$SHELL"
 compacthist on
 bufferfile        $HOME/.screenlogs/.screen_exchange
 startup_message   off
-defscrollback     16384
+defscrollback     32768
 
 # more stolen stuff
 #sorendition "+b kG"
