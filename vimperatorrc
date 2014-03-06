@@ -8,6 +8,9 @@ nmap , gT
 nmap . gt
 nmap u <C-u>
 nmap <C-l> <C-z><C-l><Esc>
+
+set focuscontent
+
 source! /home/justin/.vimperatorrc.local
 
 " vim: set ft=vimperator:

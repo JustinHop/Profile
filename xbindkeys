@@ -49,15 +49,15 @@
 "ctrltab"
     b:7 
 
-"pvol.py -m"
-    XF86AudioMute
-
-"pvol.py -c -2"
-    XF86AudioLowerVolume
-
-"pvol.py -c 2"
-    XF86AudioRaiseVolume
-
+#"pvol.py -m"
+#    XF86AudioMute
+#
+#"pvol.py -c -2"
+#    XF86AudioLowerVolume
+#
+#"pvol.py -c 2"
+#    XF86AudioRaiseVolume
+#
 ##"unset WINDOWID; xwit -lower" 
 ## Next Tag (towards screen)
 ##"echo 'awful.tag.viewnext()' | awesome-client"

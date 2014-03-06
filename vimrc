@@ -4,7 +4,12 @@
 "
 "  General Operation
 
-" vimrc-1.9.5
+" vimrc-1.9.6
+
+
+execute pathogen#infect()
+call pathogen#incubate()
+call pathogen#helptags()
 
 set nocompatible
 set backspace=2
@@ -195,13 +200,14 @@ if has("autocmd")
     " purdy colors
     if expand($TERM) == "linux"
     	colorscheme elflord
-    elseif filereadable( expand("$HOME/.vim/colors/cleanphp.vim") )
-    	colorscheme cleanphp
-    elseif filereadable( expand("$HOME/.vim/colors/lucius.vim") )
-    	colorscheme lucius
-    elseif
-        colorscheme elflord
+    else
+        if filereadable($HOME . "/.vim/colors/advantage.vim")
+            colorscheme advantage
+        else
+    	    colorscheme elflord
+    	endif
     endif
+
 
     " yank to clipboard
     if executable("xclip")

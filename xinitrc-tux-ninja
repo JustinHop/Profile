@@ -4,7 +4,7 @@ cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
 gnome-settings-daemon &
-thunar --daemon &
+#thunar --daemon &
 
 { sleep 2s; nitrogen --restore; } &
 
@@ -51,10 +51,11 @@ if ! pgrep -x mpdas > /dev/null ; then
     { sleep 5s; mpdas ; } &
 fi
 { sleep 10s; mpc update ; } &
-{ sleep 3s; clipit ; } &
+{ sleep 3s; parcellite ; } &
 { sleep 3s; bluetooth-applet ; } &
 { sleep 3s; gnome-sound-applet ; } &
 { sleep 3s; nm-applet ; } &
+{ sleep 3s; indicator-cpufreq ; } &
 
 #synergys -d INFO -f &
 #autocutsel -d -s PRIMARY &
@@ -65,10 +66,10 @@ fi
 #xscreensaver -no-splash &
 
 { while true; do
-    sleep 10s;
     xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
     xmodmap -e 'add Control = Control_L' >& /dev/null;
+    sleep 10s;
 done ; } &
 
 #gnome-power-manager &

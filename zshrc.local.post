@@ -1,0 +1,2 @@
+export PATH=~/android-sdk-linux/platform-tools:~/android-sdk-linux/tools:$PATH
+export ANDROID_HOME=~/android-sdk-linux
