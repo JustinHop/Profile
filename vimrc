@@ -159,6 +159,15 @@ function WriteBackupPath(originalFilespec, isQueryOnly)
 endfunction
 let g:WriteBackup_BackupDir =function('WriteBackupPath')
 
+function! EnableBackup()
+  if ! (exists('g:EnabledBackup'))
+    if g:DoBackups == 1
+      execute "silent! normal :LoadProfiles backup \<CR>"
+      execute "silent! normal :WriteBackup \<CR>"
+    endif
+    let g:EnabledBackup = 1
+  endif
+endfunction
 
 "
 "  We are using VIM
@@ -240,6 +249,10 @@ if has("autocmd")
     au BufRead,BufNewFile */syseng-rubix-config/*                 set filetype=spine
     au BufRead,BufNewFile */syseng-rubix-config/*/svn-commit.tmp  set filetype=svn
   augroup END
+
+  let g:DoBackups = 1
+  au BufNewFile,BufRead ~/backup/* let g:DoBackups = 0
+  au BufNewFile,BufRead * call EnableBackup()
 
   au FileType nerdtree setlocal nofoldenable
 
