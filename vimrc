@@ -7,8 +7,12 @@
 " vimrc-1.9.9
 
 
+" Vim Profiles
 let g:profiles_default = ['lib', 'base']
 exec profiles#init()
+
+let g:backup_directory=$HOME . '/backup'
+let g:backup_purge=0
 
 set backspace=2
 set ttyfast
@@ -162,33 +166,33 @@ if has("autocmd")
         \   exe "normal g'\"" |
         \ endif
 
-  " Backup EVERYTHING MODE!!!!
-  "let BACKUPDIR=expand("$HOME/backup/")
-  "if expand($SUDO_USER)
-  "let BACKUPDIR=expand("/home/$SUDO_USER/backup/")
-  "endif
-  if expand($BACKUP) !=# "-"
-    if getfsize(expand("%:p")) <= 8024000
-      set nobackup
-      if ! expand(&readonly)
-        au BufReadPost *
-              \ exe 'silent write! '
-              \   substitute( expand(
-              \   substitute( expand(
-              \       substitute( expand("$HOME/backup/") .
-              \           substitute( expand("%:p"), '/','_','g') .
-              \           strftime("%Y%m%d.%H%M%S"),
-              \       '\s','_', 'g')
-              \   ), '_','',''),
-              \   ), 'LXWeb', 'LX_Web', 'g')
-      endif
-    endif
-  else
-    if has("unix")
-      set backup
-      set backupdir=expand("$HOME/backup")
-    endif
-  endif
+"  " Backup EVERYTHING MODE!!!!
+"  "let BACKUPDIR=expand("$HOME/backup/")
+"  "if expand($SUDO_USER)
+"  "let BACKUPDIR=expand("/home/$SUDO_USER/backup/")
+"  "endif
+"  if expand($BACKUP) !=# "-"
+"    if getfsize(expand("%:p")) <= 8024000
+"      set nobackup
+"      if ! expand(&readonly)
+"        au BufReadPost *
+"              \ exe 'silent write! '
+"              \   substitute( expand(
+"              \   substitute( expand(
+"              \       substitute( expand("$HOME/backup/") .
+"              \           substitute( expand("%:p"), '/','_','g') .
+"              \           strftime("%Y%m%d.%H%M%S"),
+"              \       '\s','_', 'g')
+"              \   ), '_','',''),
+"              \   ), 'LXWeb', 'LX_Web', 'g')
+"      endif
+"    endif
+"  else
+"    if has("unix")
+"      set backup
+"      set backupdir=expand("$HOME/backup")
+"    endif
+"  endif
 
   " purdy colors
   if expand($TERM) == "linux"
@@ -231,7 +235,7 @@ if has("autocmd")
   au FileType sh set formatoptions-=t
   au FileType spec set formatoptions-=a
 
-  au FileType perl :call MyPerlSettings()
+  "au FileType perl :call MyPerlSettings()
 
   au BufEnter * :call DoTitle()
 
