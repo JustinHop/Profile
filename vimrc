@@ -147,11 +147,15 @@ function! DoTitle()
 endfunction
 
 function WriteBackupPath(originalFilespec, isQueryOnly)
-  let WriteBackupRCPathVar=fnamemodify($HOME . '/backup' . expand("%:p"), ":p:h") 
-  if ! isdirectory(WriteBackupRCPathVar)
-    mkdir(WriteBackupRCPathVar, "p")
+  let l:WriteBackupRCPathVar=fnamemodify($HOME . '/backup' . expand("%:p"), ":p:h") 
+  "echo a:originalFilespec
+  "let WriteBackupRCPathVar=fnamemodify($HOME . '/backup' . a:originalFilespec, ":p:h") 
+  if a:isQueryOnly == 1
+    if ! isdirectory(l:WriteBackupRCPathVar)
+      call mkdir(l:WriteBackupRCPathVar, "p")
+    endif
   endif
-  return WriteBackupRCPathVar
+  return l:WriteBackupRCPathVar
 endfunction
 let g:WriteBackup_BackupDir =function('WriteBackupPath')
 
