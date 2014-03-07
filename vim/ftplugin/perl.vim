@@ -1,1 +1,1 @@
-execute "silent! normal :LoadProfiles perl"
+execute "silent! normal :LoadProfiles perl \<CR>"
