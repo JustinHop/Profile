@@ -1,0 +1,54 @@
+[submodule "vim/general/fugitive"]
+	path = vim/general/fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim/general/snipmate"]
+	path = vim/general/snipmate
+	url = https://github.com/msanders/snipmate.vim.git
+[submodule "vim/general/surround"]
+	path = vim/general/surround
+	url = https://github.com/tpope/vim-surround
+[submodule "vim/general/supertab"]
+	path = vim/general/supertab
+	url = https://github.com/ervandew/supertab
+[submodule "vim/general/minibufexpl"]
+	path = vim/general/minibufexpl
+	url = https://github.com/sontek/minibufexpl.vim.git
+[submodule "vim/general/command-t"]
+	path = vim/general/command-t
+	url = https://github.com/wincent/Command-T.git
+[submodule "vim/python/pyflakes"]
+	path = vim/python/pyflakes
+	url = https://github.com/mitechie/pyflakes-pathogen.git
+[submodule "vim/general/ack"]
+	path = vim/general/ack
+	url = https://github.com/mileszs/ack.vim.git
+[submodule "vim/general/gundo"]
+	path = vim/general/gundo
+	url = https://github.com/sjl/gundo.vim.git
+[submodule "vim/python/pydoc"]
+	path = vim/python/pydoc
+	url = https://github.com/fs111/pydoc.vim.git
+[submodule "vim/python/pep8"]
+	path = vim/python/pep8
+	url = https://github.com/vim-scripts/pep8.git
+[submodule "vim/python/py.test"]
+	path = vim/python/py.test
+	url = https://github.com/alfredodeza/pytest.vim.git
+[submodule "vim/general/makegreen"]
+	path = vim/general/makegreen
+	url = https://github.com/reinh/vim-makegreen
+[submodule "vim/general/tasklist"]
+	path = vim/general/tasklist
+	url = https://github.com/vim-scripts/TaskList.vim.git
+[submodule "vim/general/nerdtree"]
+	path = vim/general/nerdtree
+	url = https://github.com/vim-scripts/The-NERD-tree.git
+[submodule "vim/general/ropevim"]
+	path = vim/general/ropevim
+	url = https://github.com/sontek/rope-vim.git
+[submodule "vim/perl/perl-support"]
+	path = vim/perl/perl-support
+	url = https://github.com/vim-scripts/perl-support.vim
+[submodule "vim/general/deletetrailingwhitespace"]
+	path = vim/general/deletetrailingwhitespace
+	url = https://github.com/vim-scripts/DeleteTrailingWhitespace.git
