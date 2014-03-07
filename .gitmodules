@@ -61,9 +61,6 @@
 [submodule "vim/general/sleuth"]
 	path = vim/general/sleuth
 	url = https://github.com/tpope/vim-sleuth.git
-[submodule "vim/general/cbackup"]
-	path = vim/general/cbackup
-	url = git@github.com:JustinHop/cbackup.vim.git
 [submodule "vim/lib/ingo-library"]
 	path = vim/lib/ingo-library
 	url = https://github.com/vim-scripts/ingo-library.git
