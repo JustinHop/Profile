@@ -4,15 +4,12 @@
 "
 "  General Operation
 
-" vimrc-1.9.6
+" vimrc-1.9.9
 
-syntax off
-filetype off
-set nocompatible
 
-execute pathogen#infect()
-call pathogen#incubate()
-call pathogen#helptags()
+let g:profiles_default = ['lib', 'base']
+exec profiles#init()
+
 
 syntax on
 filetype plugin indent on
@@ -21,8 +18,6 @@ set backspace=2
 set ttyfast
 
 set hidden
-
-set tabpagemax=25
 
 if has("win32")
     set cul
@@ -64,22 +59,22 @@ if version >= 700
 endif
 
 "  Indenting Formating
-set autoindent
-set copyindent
-set preserveindent
-set smartindent
-set textwidth=80
-set formatoptions=roq
-set nolist
+"set autoindent
+"set copyindent
+"set preserveindent
+"set smartindent
+"set textwidth=80
+"set formatoptions=roq
+"set nolist
 set showbreak=-->\
 set wrap
 set linebreak
 
-set smarttab
-set softtabstop=4
-set shiftwidth=4
-set tabstop=4
-set expandtab
+"set smarttab
+"set softtabstop=4
+"set shiftwidth=4
+"set tabstop=4
+"set expandtab
 
 set complete=.,k,w,b,t,i
 

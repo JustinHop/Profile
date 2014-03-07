@@ -55,3 +55,9 @@
 [submodule "vim/general/vim-profiles"]
 	path = vim/general/vim-profiles
 	url = https://github.com/mirlord/vim-profiles.git
+[submodule "vim/general/sensible"]
+	path = vim/general/sensible
+	url = https://github.com/tpope/vim-sensible.git
+[submodule "vim/general/sleuth"]
+	path = vim/general/sleuth
+	url = https://github.com/tpope/vim-sleuth.git
