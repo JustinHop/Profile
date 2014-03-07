@@ -11,13 +11,10 @@
 let g:profiles_default = ['lib', 'base']
 exec profiles#init()
 
-let g:backup_directory=$HOME . '/backup'
-let g:backup_purge=0
-
 set backspace=2
 set ttyfast
 
-set hidden
+"set hidden
 
 if has("win32")
   set cul
@@ -149,6 +146,16 @@ function! DoTitle()
   endif
 endfunction
 
+function WriteBackupPath(originalFilespec, isQueryOnly)
+  let WriteBackupRCPathVar=fnamemodify($HOME . '/backup' . expand("%:p"), ":p:h") 
+  if ! isdirectory(WriteBackupRCPathVar)
+    mkdir(WriteBackupRCPathVar, "p")
+  endif
+  return WriteBackupRCPathVar
+endfunction
+let g:WriteBackup_BackupDir =function('WriteBackupPath')
+
+
 "
 "  We are using VIM
 "
@@ -229,6 +236,8 @@ if has("autocmd")
     au BufRead,BufNewFile */syseng-rubix-config/*                 set filetype=spine
     au BufRead,BufNewFile */syseng-rubix-config/*/svn-commit.tmp  set filetype=svn
   augroup END
+
+  au FileType nerdtree setlocal nofoldenable
 
   " ZSH Brokenness
   au FileType zsh set formatoptions=croq

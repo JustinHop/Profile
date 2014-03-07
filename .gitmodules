@@ -67,3 +67,6 @@
 [submodule "vim/general/writebackup"]
 	path = vim/general/writebackup
 	url = https://github.com/vim-scripts/writebackup.git
+[submodule "vim/general/writebackupVersionControl"]
+	path = vim/general/writebackupVersionControl
+	url = https://github.com/vim-scripts/writebackupVersionControl.git
