@@ -10,18 +10,14 @@
 let g:profiles_default = ['lib', 'base']
 exec profiles#init()
 
-
-syntax on
-filetype plugin indent on
-
 set backspace=2
 set ttyfast
 
 set hidden
 
 if has("win32")
-    set cul
-    set cuc
+  set cul
+  set cuc
 endif
 
 set visualbell
@@ -41,7 +37,7 @@ set t_te=
 set nomore
 
 if has("mouse")
-    set mouse=a
+  set mouse=a
 endif
 
 set showmatch
@@ -54,8 +50,8 @@ set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=<%{&t
 "set statusline=#%n\ %<%F%m%r\ %w\ %y\ \<%{&fileencoding},%{&fileformat}>%=%l,%c%V\ of\ %L\ \ \ \%{VimBuddy()}\ \ \%P
 
 if version >= 700
-    "  Virtual Editing
-    set virtualedit=block,onemore
+  "  Virtual Editing
+  set virtualedit=block,onemore
 endif
 
 "  Indenting Formating
@@ -64,8 +60,8 @@ endif
 "set preserveindent
 "set smartindent
 "set textwidth=80
-"set formatoptions=roq
-"set nolist
+set formatoptions=roq
+set nolist
 set showbreak=-->\
 set wrap
 set linebreak
@@ -80,9 +76,9 @@ set complete=.,k,w,b,t,i
 
 " Folding
 if has("folding")
-    set foldenable
-    set foldmethod=indent
-    set foldminlines=3
+  set foldenable
+  set foldmethod=indent
+  set foldminlines=3
 endif
 
 "Searching
@@ -103,13 +99,13 @@ set shortmess=a
 
 " Booyah
 if &t_Co || has("gui_running") && ( expand($TERM) != "screen.linux")
-    syntax on
-    set t_Co=256
+  syntax on
+  set t_Co=256
 endif
 
 if ( expand($TERM) ==# "linux" )
-	set t_Co=8
-	colorscheme default
+  set t_Co=8
+  colorscheme default
 endif
 
 "
@@ -117,36 +113,36 @@ endif
 "     compatible. Need to find what version this started being supported.
 "
 if $VIM_MOUSE
-   ttymouse=$VIM_MOUSE
+  ttymouse=$VIM_MOUSE
 else
-    set ttymouse=xterm2
+  set ttymouse=xterm2
 endif
 
 function! MyPerlSettings()
-    if !did_filetype()
-        set filetype=perl
-    endif
+  if !did_filetype()
+    set filetype=perl
+  endif
 
-    setlocal nosmartindent
-    setlocal noautoindent
-    setlocal indentexpr=
-    setlocal complete+=k
-    setlocal cindent
-    setlocal cinkeys=0{,0},0(,0),:,!^F,o,O,e
-    setlocal formatoptions-=t formatoptions+=croq
-    let perl_extended_vars=1
+  setlocal nosmartindent
+  setlocal noautoindent
+  setlocal indentexpr=
+  setlocal complete+=k
+  setlocal cindent
+  setlocal cinkeys=0{,0},0(,0),:,!^F,o,O,e
+  setlocal formatoptions-=t formatoptions+=croq
+  let perl_extended_vars=1
 
-    compiler perl
-    "colorscheme wuye
+  compiler perl
+  "colorscheme wuye
 endfunction
 
 function! DoTitle()
-    if &term == "screen"
-        let &titlestring=expand("%:t")
-        set t_ts=k
-        set t_fs=\
-        set title
-    endif
+  if &term == "screen"
+    let &titlestring=expand("%:t")
+    set t_ts=k
+    set t_fs=\
+    set title
+  endif
 endfunction
 
 "
@@ -159,107 +155,107 @@ filetype indent on
 set directory=~/tmp
 
 if has("autocmd")
-    filetype plugin indent on
-    "jumpback
-    au BufReadPost *
+  filetype plugin indent on
+  "jumpback
+  au BufReadPost *
         \ if line("'\"") > 0 && line ("'\"") <= line("$") |
         \   exe "normal g'\"" |
         \ endif
 
-    " Backup EVERYTHING MODE!!!!
-    "let BACKUPDIR=expand("$HOME/backup/")
-    "if expand($SUDO_USER)
-    	"let BACKUPDIR=expand("/home/$SUDO_USER/backup/")
-    "endif
-    if expand($BACKUP) !=# "-"
-        if getfsize(expand("%:p")) <= 8024000
-            set nobackup
-            if ! expand(&readonly)
-                au BufReadPost *
-                            \ exe 'silent write! '
-                            \   substitute( expand(
-                            \   substitute( expand(
-                            \       substitute( expand("$HOME/backup/") .
-                            \           substitute( expand("%:p"), '/','_','g') .
-                            \           strftime("%Y%m%d.%H%M%S"),
-                            \       '\s','_', 'g')
-                            \   ), '_','',''),
-                            \   ), 'LXWeb', 'LX_Web', 'g')
-            endif
-        endif
+  " Backup EVERYTHING MODE!!!!
+  "let BACKUPDIR=expand("$HOME/backup/")
+  "if expand($SUDO_USER)
+  "let BACKUPDIR=expand("/home/$SUDO_USER/backup/")
+  "endif
+  if expand($BACKUP) !=# "-"
+    if getfsize(expand("%:p")) <= 8024000
+      set nobackup
+      if ! expand(&readonly)
+        au BufReadPost *
+              \ exe 'silent write! '
+              \   substitute( expand(
+              \   substitute( expand(
+              \       substitute( expand("$HOME/backup/") .
+              \           substitute( expand("%:p"), '/','_','g') .
+              \           strftime("%Y%m%d.%H%M%S"),
+              \       '\s','_', 'g')
+              \   ), '_','',''),
+              \   ), 'LXWeb', 'LX_Web', 'g')
+      endif
+    endif
+  else
+    if has("unix")
+      set backup
+      set backupdir=expand("$HOME/backup")
+    endif
+  endif
+
+  " purdy colors
+  if expand($TERM) == "linux"
+    colorscheme elflord
+  else
+    if filereadable($HOME . "/.vim/colors/advantage.vim")
+      colorscheme advantage
     else
-        if has("unix")
-            set backup
-            set backupdir=expand("$HOME/backup")
-        endif
+      colorscheme elflord
     endif
-
-    " purdy colors
-    if expand($TERM) == "linux"
-    	colorscheme elflord
-    else
-        if filereadable($HOME . "/.vim/colors/advantage.vim")
-            colorscheme advantage
-        else
-    	    colorscheme elflord
-    	endif
-    endif
+  endif
 
 
-    " yank to clipboard
-    if executable("xclip")
-    	"vnoremap y  :yank<CR>:call system("xclip -i", getreg("\""))<CR>gv :yank<CR>
-        nmap \Y : silent call system("xclip ", getreg("\""))<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
-        nmap \y : silent call system("xclip ", getreg("0"))<CR>:echo "Yanked to clipboard: " . getreg("0")<CR>
-        vmap \cy y: silent call system("xclip ", getreg("\""))<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
-    endif
+  " yank to clipboard
+  if executable("xclip")
+    "vnoremap y  :yank<CR>:call system("xclip -i", getreg("\""))<CR>gv :yank<CR>
+    nmap \Y : silent call system("xclip ", getreg("\""))<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
+    nmap \y : silent call system("xclip ", getreg("0"))<CR>:echo "Yanked to clipboard: " . getreg("0")<CR>
+    vmap \cy y: silent call system("xclip ", getreg("\""))<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
+  endif
 
-    " Filetype Detect
-    augroup filetypedetect
-        au BufNewFile,BufRead afiedt.buf                              set filetype=sql
-        au BufNewFile,BufRead /etc/httpd/conf/*.conf                  set filetype=apache
-        au BufNewFile,BufRead /etc/httpd/conf.d/*.conf                set filetype=apache
-        au BufNewFile,BufRead /etc/httpd/virtual/*.conf               set filetype=apache
-        au BufNewFile,BufRead /usr/local/apache2/conf/*.conf          set filetype=apache
-        au BufNewFile,BufRead /usr/local/apache2/conf/UMG_conf/*.conf set filetype=apache
-        au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
-        au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
-        au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
-        au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
-        au BufRead,BufNewFile */syseng-rubix-config/*                 set filetype=spine
-        au BufRead,BufNewFile */syseng-rubix-config/*/svn-commit.tmp  set filetype=svn
-    augroup END
+  " Filetype Detect
+  augroup filetypedetect
+    au BufNewFile,BufRead afiedt.buf                              set filetype=sql
+    au BufNewFile,BufRead /etc/httpd/conf/*.conf                  set filetype=apache
+    au BufNewFile,BufRead /etc/httpd/conf.d/*.conf                set filetype=apache
+    au BufNewFile,BufRead /etc/httpd/virtual/*.conf               set filetype=apache
+    au BufNewFile,BufRead /usr/local/apache2/conf/*.conf          set filetype=apache
+    au BufNewFile,BufRead /usr/local/apache2/conf/UMG_conf/*.conf set filetype=apache
+    au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
+    au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
+    au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
+    au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
+    au BufRead,BufNewFile */syseng-rubix-config/*                 set filetype=spine
+    au BufRead,BufNewFile */syseng-rubix-config/*/svn-commit.tmp  set filetype=svn
+  augroup END
 
-    " ZSH Brokenness
-    au FileType zsh set formatoptions=croq
-    au FileType sh set formatoptions-=t
-    au FileType spec set formatoptions-=a
+  " ZSH Brokenness
+  au FileType zsh set formatoptions=croq
+  au FileType sh set formatoptions-=t
+  au FileType spec set formatoptions-=a
 
-    au FileType perl :call MyPerlSettings()
+  au FileType perl :call MyPerlSettings()
 
-    au BufEnter * :call DoTitle()
+  au BufEnter * :call DoTitle()
 
-    au FileType apache set nosmartindent preserveindent
+  au FileType apache set nosmartindent preserveindent
 
-    au FileType xml,xslt compiler xmllint " Enables :make for XML and HTML validation
-    au FileType html compiler tidy  "           use :cn & :cp to jump between errors
+  au FileType xml,xslt compiler xmllint " Enables :make for XML and HTML validation
+  au FileType html compiler tidy  "           use :cn & :cp to jump between errors
 
-    au FileType html,css,xhtml let html_use_css=1              "       for standards-compliant :TOhtml output
-    au FileType html,css,xhtml let use_xhtml=1                 "       for standards-compliant :TOhtml output
+  au FileType html,css,xhtml let html_use_css=1              "       for standards-compliant :TOhtml output
+  au FileType html,css,xhtml let use_xhtml=1                 "       for standards-compliant :TOhtml output
 
-    au FileType html,css,xhtml,php,javascript colorscheme cleanphp
+  au FileType html,css,xhtml,php,javascript colorscheme cleanphp
 
-    " au FileType php let php_sql_query = 1
-    au BufRead,BufNewFile *.php		set indentexpr= | set smartindent
-    au FileType php let php_htmlInStrings = 1
-    au FileType php let php_folding = 2
-    au FileType php let php_sync_method = 0
-    au FileType php let php_no_ShortTags = 1
+  " au FileType php let php_sql_query = 1
+  au BufRead,BufNewFile *.php		set indentexpr= | set smartindent
+  au FileType php let php_htmlInStrings = 1
+  au FileType php let php_folding = 2
+  au FileType php let php_sync_method = 0
+  au FileType php let php_no_ShortTags = 1
 
-    "  Use enter to activate help jump points & display line numbers
-    "   au FileType help set number
-    au FileType help nmap <buffer> <Return> <C-]>
-    "   au FileType help nmap <buffer> <C-[> <C-O>
+  "  Use enter to activate help jump points & display line numbers
+  "   au FileType help set number
+  au FileType help nmap <buffer> <Return> <C-]>
+  "   au FileType help nmap <buffer> <C-[> <C-O>
 endif
 
 
@@ -315,13 +311,13 @@ set pastetoggle=<F11>
 
 " <F10> do the line wrapping hoobla
 if !exists("*ToggleWrap")
-    function ToggleWrap()
-        set wrap!
-        set list!
-        set linebreak!
-    endfunction
-    map <silent><F10> :call ToggleWrap()<CR>
-    map! <silent><F10> ^[:call ToggleWrap()<CR>
+  function ToggleWrap()
+    set wrap!
+    set list!
+    set linebreak!
+  endfunction
+  map <silent><F10> :call ToggleWrap()<CR>
+  map! <silent><F10> ^[:call ToggleWrap()<CR>
 endif
 
 
@@ -352,39 +348,39 @@ noremap <C-k> gk
 command! Hexmode call ToggleHex()
 
 if !exists("*ToggleHex")
-    function! ToggleHex()
-        " hex mode should be considered a read-only operation
-        " save values for modified and read-only for restoration later,
-        " and clear the read-only flag for now
-        let l:modified=&mod
-        let l:oldreadonly=&readonly
-        let &readonly=0
-        if !exists("b:editHex") || !b:editHex
-            " save old options
-            let b:oldft=&ft
-            let b:oldbin=&bin
-            " set new options
-            setlocal binary " make sure it overrides any textwidth, etc.
-            let &ft="xxd"
-            " set status
-            let b:editHex=1
-            " switch to hex editor
-            %!xxd
-        else
-            " restore old options
-            let &ft=b:oldft
-            if !b:oldbin
-                setlocal nobinary
-            endif
-            " set status
-            let b:editHex=0
-            " return to normal editing
-            %!xxd -r
-        endif
-        " restore values for modified and read only state
-        let &mod=l:modified
-        let &readonly=l:oldreadonly
-    endfunction
+  function! ToggleHex()
+    " hex mode should be considered a read-only operation
+    " save values for modified and read-only for restoration later,
+    " and clear the read-only flag for now
+    let l:modified=&mod
+    let l:oldreadonly=&readonly
+    let &readonly=0
+    if !exists("b:editHex") || !b:editHex
+      " save old options
+      let b:oldft=&ft
+      let b:oldbin=&bin
+      " set new options
+      setlocal binary " make sure it overrides any textwidth, etc.
+      let &ft="xxd"
+      " set status
+      let b:editHex=1
+      " switch to hex editor
+      %!xxd
+    else
+      " restore old options
+      let &ft=b:oldft
+      if !b:oldbin
+        setlocal nobinary
+      endif
+      " set status
+      let b:editHex=0
+      " return to normal editing
+      %!xxd -r
+    endif
+    " restore values for modified and read only state
+    let &mod=l:modified
+    let &readonly=l:oldreadonly
+  endfunction
 endif
 
 "if version >= 700
@@ -444,9 +440,9 @@ let g:spec_chglog_packager = 'Justin Hoppensteadt <justin.hoppensteadt@ticketmas
 "-------------------------------------------------------------------------------
 "
 map  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
-    \                            &modified <CR> :write<CR> :endif<CR>:bnext<CR>
+      \                            &modified <CR> :write<CR> :endif<CR>:bnext<CR>
 imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
-    \                            &modified <CR> :write<CR> :endif<CR>:bnext<CR>
+      \                            &modified <CR> :write<CR> :endif<CR>:bnext<CR>
 "
 "-------------------------------------------------------------------------------
 " Leave the editor with Ctrl-q : Write all changed buffers and exit Vim
@@ -464,34 +460,34 @@ let g:detectindent_preferred_expandtab = 1
 let g:detectindent_preferred_indent = 4
 
 if !exists("*Backspace")
-    func Backspace()
-      if col('.') == 1
-        if line('.')  != 1
-          return  "\<ESC>kA\<Del>"
-        else
-          return ""
-        endif
+  func Backspace()
+    if col('.') == 1
+      if line('.')  != 1
+        return  "\<ESC>kA\<Del>"
       else
-        return "\<Left>\<Del>"
+        return ""
       endif
-    endfunc
-    inoremap <BS> <c-r>=Backspace()<CR>
+    else
+      return "\<Left>\<Del>"
+    endif
+  endfunc
+  inoremap <BS> <c-r>=Backspace()<CR>
 endif
 
 if !exists("*WordProcessorMode")
-func! WordProcessorMode()
-  setlocal formatoptions=1
-  setlocal noexpandtab
-  map j gj
-  map k gk
-  setlocal spell spelllang=en_us
-"  set thesaurus+=/Users/sbrown/.vim/thesaurus/mthesaur.txt
-  set complete+=s
-  set formatprg=par
-  setlocal wrap
-  setlocal linebreak
-endfu
-com! WP call WordProcessorMode()
+  func! WordProcessorMode()
+    setlocal formatoptions=1
+    setlocal noexpandtab
+    map j gj
+    map k gk
+    setlocal spell spelllang=en_us
+    "  set thesaurus+=/Users/sbrown/.vim/thesaurus/mthesaur.txt
+    set complete+=s
+    set formatprg=par
+    setlocal wrap
+    setlocal linebreak
+  endfu
+  com! WP call WordProcessorMode()
 endif
 
 " vim:ft=vim:syn=vim:ts=4
