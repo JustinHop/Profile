@@ -64,3 +64,6 @@
 [submodule "vim/lib/ingo-library"]
 	path = vim/lib/ingo-library
 	url = https://github.com/vim-scripts/ingo-library.git
+[submodule "vim/general/writebackup"]
+	path = vim/general/writebackup
+	url = https://github.com/vim-scripts/writebackup.git
