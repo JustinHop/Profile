@@ -6,19 +6,21 @@
 
 " vimrc-1.9.6
 
+syntax off
+filetype off
+set nocompatible
 
 execute pathogen#infect()
 call pathogen#incubate()
 call pathogen#helptags()
 
-set nocompatible
+syntax on
+filetype plugin indent on
+
 set backspace=2
 set ttyfast
 
 set hidden
-
-filetype plugin indent on
-syntax enable
 
 set tabpagemax=25
 
@@ -278,6 +280,8 @@ nmap <silent> <A-Down> :wincmd j<CR>
 nmap <silent> <A-Left> :wincmd h<CR>
 nmap <silent> <A-Right> :wincmd l<CR>
 
+nmap <silent> <leader>t :NERDTreeToggle<CR>
+
 " this maps shift up and down to scroll
 inoremap <esc>[1;2B <C-E>
 inoremap <esc>[1;2A <C-Y>
@@ -286,7 +290,7 @@ inoremap <esc>[1;2A <C-Y>
 " inoremap # X<BS>#
 
 map   <silent> <F1>    <Esc>
-"map   <silent> <F2>    :DetectIndent<CR>
+map   <silent> <F2>    :GundoToggle<CR>
 "map   <silent> <F3>    :Explore<CR>
 "nmap  <silent> <F4>    :exe ":ptag ".expand("<cword>")<CR>
 "map   <silent> <F6>    :copen<CR>
@@ -295,7 +299,7 @@ map   <silent> <F1>    <Esc>
 map   <silent> <F12>   :let &number=1-&number<Bar>set number?<CR>
 "
 imap  <silent> <F1>    <ESC>
-"imap  <silent> <F2>    <Esc>:DetectIndent<CR>
+imap  <silent> <F2>    <Esc>:GundoToggle<CR>
 "imap  <silent> <F3>    <Esc>:Explore<CR>
 "imap  <silent> <F4>    <Esc>:exe ":ptag ".expand("<cword>")<CR>
 "imap  <silent> <F6>    <Esc>:copen<CR>
