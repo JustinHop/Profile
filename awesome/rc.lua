@@ -581,6 +581,19 @@ awful.rules.rules = {
             awful.titlebar.add(c, { modkey = modkey })
         end
     },
+    { rule = { name = "plugin-container" },
+        properties = { floating = false,
+                        maximized_vertical = true,
+                        maximized_horizontal = true,
+                        fullscreen = true,
+                        border_width = 0 },
+        callback = function (c)
+            awful.titlebar.remove(c, { modkey = modkey })
+            --mywibox[mouse.screen].visible = false
+            --c:add_signal("unmanage", function ()
+            --    mywibox[mouse.screen].visible = true
+            --end)
+        end },
     { rule = { name = "File Operation Progress" },
         properties = { floating = true,
                         border_width = 0 } },
@@ -656,6 +669,13 @@ client.add_signal("unfocus", function(c)
         mousemarker()
     end
 end)
+
+client.add_signal("unmanage", function (c, startup)
+    if c.name ~= "plugin-container" then
+        mywibox[mouse.screen].visible = true
+    end
+end)
+
 for s = 1, screen.count() do
     local i = 1
     while tags[s][i] do

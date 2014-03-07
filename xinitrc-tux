@@ -21,6 +21,8 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 #[ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
 #[ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
 
+xmodmap -e "keycode 135 = Super_L"
+
 echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
 
