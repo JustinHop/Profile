@@ -186,33 +186,6 @@ if has("autocmd")
         \   exe "normal g'\"" |
         \ endif
 
-"  " Backup EVERYTHING MODE!!!!
-"  "let BACKUPDIR=expand("$HOME/backup/")
-"  "if expand($SUDO_USER)
-"  "let BACKUPDIR=expand("/home/$SUDO_USER/backup/")
-"  "endif
-"  if expand($BACKUP) !=# "-"
-"    if getfsize(expand("%:p")) <= 8024000
-"      set nobackup
-"      if ! expand(&readonly)
-"        au BufReadPost *
-"              \ exe 'silent write! '
-"              \   substitute( expand(
-"              \   substitute( expand(
-"              \       substitute( expand("$HOME/backup/") .
-"              \           substitute( expand("%:p"), '/','_','g') .
-"              \           strftime("%Y%m%d.%H%M%S"),
-"              \       '\s','_', 'g')
-"              \   ), '_','',''),
-"              \   ), 'LXWeb', 'LX_Web', 'g')
-"      endif
-"    endif
-"  else
-"    if has("unix")
-"      set backup
-"      set backupdir=expand("$HOME/backup")
-"    endif
-"  endif
 
   " purdy colors
   if expand($TERM) == "linux"
@@ -287,10 +260,6 @@ if has("autocmd")
   au FileType help nmap <buffer> <Return> <C-]>
   "   au FileType help nmap <buffer> <C-[> <C-O>
 endif
-
-
-"let html_number_lines = 0
-"let html_ignore_folding = 1
 
 
 " -------------------------
