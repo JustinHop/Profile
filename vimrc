@@ -12,6 +12,8 @@ let g:profiles_default = ['lib', 'base']
 exec profiles#init()
 call pathogen#helptags()
 
+let Tlist_Use_Right_Window = 1
+
 set backspace=2
 set ttyfast
 
@@ -281,6 +283,7 @@ nmap <silent> <A-Left> :wincmd h<CR>
 nmap <silent> <A-Right> :wincmd l<CR>
 
 nmap <silent> <leader>t :NERDTreeToggle<CR>
+nmap <silent> <leader>T :TlistToggle<CR>
 
 " this maps shift up and down to scroll
 inoremap <esc>[1;2B <C-E>
@@ -291,7 +294,7 @@ inoremap <esc>[1;2A <C-Y>
 
 map   <silent> <F1>    <Esc>
 map   <silent> <F2>    :GundoToggle<CR>
-"map   <silent> <F3>    :Explore<CR>
+map   <silent> <F3>    :TlistToggle<CR>
 "nmap  <silent> <F4>    :exe ":ptag ".expand("<cword>")<CR>
 "map   <silent> <F6>    :copen<CR>
 "map   <silent> <F7>    :cp<CR>
@@ -300,7 +303,7 @@ map   <silent> <F12>   :let &number=1-&number<Bar>set number?<CR>
 "
 imap  <silent> <F1>    <ESC>
 imap  <silent> <F2>    <Esc>:GundoToggle<CR>
-"imap  <silent> <F3>    <Esc>:Explore<CR>
+imap  <silent> <F3>    <Esc>:TlistToggle<CR>
 "imap  <silent> <F4>    <Esc>:exe ":ptag ".expand("<cword>")<CR>
 "imap  <silent> <F6>    <Esc>:copen<CR>
 "imap  <silent> <F7>    <Esc>:cp<CR>
@@ -465,9 +468,6 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
 "    autocmd BufEnter * :lcd %:p:h
 "endif " has("autocmd")
 "
-let g:detectindent_preferred_expandtab = 1
-let g:detectindent_preferred_indent = 4
-
 if !exists("*Backspace")
   func Backspace()
     if col('.') == 1

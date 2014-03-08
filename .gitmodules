@@ -73,3 +73,6 @@
 [submodule "vim/python/python-mode"]
 	path = vim/python/python-mode
 	url = https://github.com/klen/python-mode.git
+[submodule "vim/general/airline"]
+	path = vim/general/airline
+	url = https://github.com/bling/vim-airline
