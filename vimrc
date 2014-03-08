@@ -46,7 +46,7 @@ if has("mouse")
 endif
 
 set showmatch
-set showmode
+set noshowmode
 set showcmd
 set lazyredraw
 
@@ -61,16 +61,16 @@ endif
 
 "  Indenting Formating
 "  Being set through plugin now
-"set autoindent
-"set copyindent
-"set preserveindent
-"set smartindent
-"set textwidth=80
-"set smarttab
-"set softtabstop=4
-"set shiftwidth=4
-"set tabstop=4
-"set expandtab
+set autoindent
+set copyindent
+set preserveindent
+set smartindent
+set textwidth=80
+set smarttab
+set softtabstop=4
+set shiftwidth=4
+set tabstop=4
+set expandtab
 set formatoptions=roq
 set nolist
 set showbreak=-->\
@@ -448,10 +448,10 @@ let g:spec_chglog_packager = 'Justin Hoppensteadt <justin.hoppensteadt@ticketmas
 " Choose :bprevious or :bnext
 "-------------------------------------------------------------------------------
 "
-map  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
-      \                            &modified <CR> :write<CR> :endif<CR>:bnext<CR>
-imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
-      \                            &modified <CR> :write<CR> :endif<CR>:bnext<CR>
+"map  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
+"      \                            &modified <CR> :write<CR> :endif<CR>:bnext<CR>
+"imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
+"      \                            &modified <CR> :write<CR> :endif<CR>:bnext<CR>
 "
 "-------------------------------------------------------------------------------
 " Leave the editor with Ctrl-q : Write all changed buffers and exit Vim
@@ -477,7 +477,7 @@ if !exists("*Backspace")
       return "\<Left>\<Del>"
     endif
   endfunc
-  inoremap <BS> <c-r>=Backspace()<CR>
+  inoremap silent <BS> <c-r>=Backspace()<CR>
 endif
 
 if !exists("*WordProcessorMode")
