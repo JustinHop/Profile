@@ -7,22 +7,25 @@ from random import randint
 
 program = os.path.basename(sys.argv[0])
 from_file = 0
-ICON = u'\u21e8 '               		# rightwards white arrow
+ICON = u'\u21e8 ' # rightwards white arrow
 
 bus = dbus.SessionBus()
-obj = bus.get_object("im.pidgin.purple.PurpleService",
-                     "/im/pidgin/purple/PurpleObject")
+obj = bus.get_object(
+    "im.pidgin.purple.PurpleService",
+    "/im/pidgin/purple/PurpleObject")
 purple = dbus.Interface(obj, "im.pidgin.purple.PurpleInterface")
+
 
 def help():
     print """
-	""" + program + """: Used for setting pidgin status message.
+    """ + program + """: Used for setting pidgin status message.
 
-	Usage: """ + program + """ [-m|-f] status_message
+    Usage: """ + program + """ [-m|-f] status_message
 
-	-m)	Message is information about current song
-	-f)	Message should be read from a file. Random line from the file will be chosen.
-	"""
+    -m)	Message is information about current song
+    -f)	Message should be read from a file.
+            Random line from the file will be chosen.
+    """
     sys.exit(1)
 
 

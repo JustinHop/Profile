@@ -4,7 +4,7 @@
 "
 "  General Operation
 
-" vimrc-1.9.9
+" vimrc-2
 
 
 " Vim Profiles
@@ -13,11 +13,12 @@ exec profiles#init()
 call pathogen#helptags()
 
 let Tlist_Use_Right_Window = 1
+let g:airline#extensions#tabline#enabled = 1
 
 set backspace=2
 set ttyfast
 
-"set hidden
+set hidden
 
 if has("win32")
   set cul
@@ -48,10 +49,10 @@ set showmatch
 set showmode
 set showcmd
 set lazyredraw
-" STOLEN
-"set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=%l,%c%V\ of\ %L\ \ \ \ \ \ \ %P
+
+" Status Line
 set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=<%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}>%<\ \ \ %l,%c%V\ of\ %L\ \ \ %P
-"set statusline=#%n\ %<%F%m%r\ %w\ %y\ \<%{&fileencoding},%{&fileformat}>%=%l,%c%V\ of\ %L\ \ \ \%{VimBuddy()}\ \ \%P
+let g:airline_section_y='%{airline#util#wrap(airline#parts#ffenc(),0)}%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}'
 
 if version >= 700
   "  Virtual Editing
@@ -59,22 +60,22 @@ if version >= 700
 endif
 
 "  Indenting Formating
+"  Being set through plugin now
 "set autoindent
 "set copyindent
 "set preserveindent
 "set smartindent
 "set textwidth=80
-set formatoptions=roq
-set nolist
-set showbreak=-->\
-set wrap
-set linebreak
-
 "set smarttab
 "set softtabstop=4
 "set shiftwidth=4
 "set tabstop=4
 "set expandtab
+set formatoptions=roq
+set nolist
+set showbreak=-->\
+set wrap
+set linebreak
 
 set complete=.,k,w,b,t,i
 
@@ -112,10 +113,6 @@ if ( expand($TERM) ==# "linux" )
   colorscheme default
 endif
 
-"
-"  Same buisness for the ttymouse thing, this prolly is not backwards
-"     compatible. Need to find what version this started being supported.
-"
 if $VIM_MOUSE
   ttymouse=$VIM_MOUSE
 else
@@ -149,10 +146,10 @@ function! DoTitle()
   endif
 endfunction
 
-function WriteBackupPath(originalFilespec, isQueryOnly)
-  let l:WriteBackupRCPathVar=fnamemodify($HOME . '/backup' . expand("%:p"), ":p:h") 
+function! WriteBackupPath(originalFilespec, isQueryOnly)
+  let l:WriteBackupRCPathVar=fnamemodify($HOME . '/backup' . expand("%:p"), ":p:h")
   "echo a:originalFilespec
-  "let WriteBackupRCPathVar=fnamemodify($HOME . '/backup' . a:originalFilespec, ":p:h") 
+  "let WriteBackupRCPathVar=fnamemodify($HOME . '/backup' . a:originalFilespec, ":p:h")
   if a:isQueryOnly == 1
     if ! isdirectory(l:WriteBackupRCPathVar)
       call mkdir(l:WriteBackupRCPathVar, "p")
@@ -300,7 +297,7 @@ map   <silent> <F3>    :TlistToggle<CR>
 "map   <silent> <F7>    :cp<CR>
 "map   <silent> <F8>    :cn<CR>
 map   <silent> <F12>   :let &number=1-&number<Bar>set number?<CR>
-"
+
 imap  <silent> <F1>    <ESC>
 imap  <silent> <F2>    <Esc>:GundoToggle<CR>
 imap  <silent> <F3>    <Esc>:TlistToggle<CR>
@@ -313,7 +310,7 @@ imap  <silent> <F12>   :let &number=1-&number<Bar>set number?<CR>
 
 "imap <F12> :set number! <CR> :set number?<CR>
 "map <F12>  :set number! <CR> :set number?<CR>
-map <F11>  :set paste! <CR> :set paste?<CR>
+"map <F11>  :set paste! <CR> :set paste?<CR>
 "map <F10>  :set wrap! <CR> :set wrap?<CR>
 map <F9>   :set hls! <CR> :set hls?<CR>
 
@@ -499,4 +496,3 @@ if !exists("*WordProcessorMode")
   com! WP call WordProcessorMode()
 endif
 
-" vim:ft=vim:syn=vim:ts=4
