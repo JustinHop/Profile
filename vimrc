@@ -159,11 +159,20 @@ function WriteBackupPath(originalFilespec, isQueryOnly)
 endfunction
 let g:WriteBackup_BackupDir =function('WriteBackupPath')
 
-function! EnableBackup()
+function! EnableBackupExists()
   if ! (exists('g:EnabledBackup'))
     if g:DoBackups == 1
       execute "silent! normal :LoadProfiles backup \<CR>"
       execute "silent! normal :WriteBackup \<CR>"
+    endif
+    let g:EnabledBackup = 1
+  endif
+endfunction
+
+function! EnableBackupNew()
+  if ! (exists('g:EnabledBackup'))
+    if g:DoBackups == 1
+      execute "silent! normal :LoadProfiles backup \<CR>"
     endif
     let g:EnabledBackup = 1
   endif
@@ -252,7 +261,8 @@ if has("autocmd")
 
   let g:DoBackups = 1
   au BufNewFile,BufRead ~/backup/* let g:DoBackups = 0
-  au BufNewFile,BufRead * call EnableBackup()
+  au BufNewFile * call EnableBackupNew()
+  au BufRead * call EnableBackupExists()
 
   au FileType nerdtree setlocal nofoldenable
 
@@ -432,7 +442,7 @@ endif
 "  other
 
 " space like more or less
-nmap <space> <PageDown>
+nmap <space> mz<PageDown>
 "nnoremap <c-space> <PageUp>
 
 "   perl
