@@ -16,9 +16,6 @@
 [submodule "vim/general/command-t"]
 	path = vim/general/command-t
 	url = https://github.com/wincent/Command-T.git
-[submodule "vim/python/pyflakes"]
-	path = vim/python/pyflakes
-	url = https://github.com/mitechie/pyflakes-pathogen.git
 [submodule "vim/general/ack"]
 	path = vim/general/ack
 	url = https://github.com/mileszs/ack.vim.git
