@@ -17,3 +17,4 @@ set softtabstop=4
 
 "execute "silent! normal: LoadProfiles python \<CR>"
 set omnifunc=pythoncomplete#Complete
+let g:flake8_builtins="_,apply"
