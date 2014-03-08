@@ -76,3 +76,6 @@
 [submodule "vim/general/airline"]
 	path = vim/general/airline
 	url = https://github.com/bling/vim-airline
+[submodule "vim/coding/rainbow_parentheses"]
+	path = vim/coding/rainbow_parentheses
+	url = https://github.com/kien/rainbow_parentheses.vim.git
