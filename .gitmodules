@@ -46,9 +46,6 @@
 [submodule "vim/general/ropevim"]
 	path = vim/general/ropevim
 	url = https://github.com/sontek/rope-vim.git
-[submodule "vim/perl/perl-support"]
-	path = vim/perl/perl-support
-	url = https://github.com/vim-scripts/perl-support.vim
 [submodule "vim/general/deletetrailingwhitespace"]
 	path = vim/general/deletetrailingwhitespace
 	url = https://github.com/vim-scripts/DeleteTrailingWhitespace.git
