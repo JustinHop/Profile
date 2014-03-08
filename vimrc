@@ -197,11 +197,12 @@ if has("autocmd")
 
 
   " purdy colors
+  set background=dark
   if expand($TERM) == "linux"
     colorscheme elflord
   else
-    if filereadable($HOME . "/.vim/colors/advantage.vim")
-      colorscheme advantage
+    if filereadable($HOME . "/.vim/colors/badwolf.vim")
+      colorscheme badwolf
     else
       colorscheme elflord
     endif
