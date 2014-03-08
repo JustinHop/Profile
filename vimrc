@@ -10,6 +10,7 @@
 " Vim Profiles
 let g:profiles_default = ['lib', 'base']
 exec profiles#init()
+call pathogen#helptags()
 
 set backspace=2
 set ttyfast
@@ -297,11 +298,6 @@ if has("autocmd")
   au FileType help nmap <buffer> <Return> <C-]>
   "   au FileType help nmap <buffer> <C-[> <C-O>
 endif
-
-
-"let html_number_lines = 0
-"let html_ignore_folding = 1
-
 
 " -------------------------
 "  REMAPPING
