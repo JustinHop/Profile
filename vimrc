@@ -201,8 +201,11 @@ if has("autocmd")
   if expand($TERM) == "linux"
     colorscheme elflord
   else
-    if filereadable($HOME . "/.vim/colors/badwolf.vim")
-      colorscheme badwolf
+    "if filereadable($HOME . "/.vim/colors/badwolf.vim")
+    "  colorscheme badwolf
+    if exists("g:loaded_solarized_menu")
+      let g:solarized_termcolors=256
+      colorscheme solarized
     else
       colorscheme elflord
     endif
