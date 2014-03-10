@@ -85,3 +85,6 @@
 [submodule "colors/gnome-terminal-colors-solarized"]
 	path = colors/gnome-terminal-colors-solarized
 	url = https://github.com/sigurdga/gnome-terminal-colors-solarized.git
+[submodule "awesome/external/awesome-solarized"]
+	path = awesome/external/awesome-solarized
+	url = https://github.com/cycojesus/awesome-solarized.git
