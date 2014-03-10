@@ -79,3 +79,9 @@
 [submodule "vim/coding/rainbow_parentheses"]
 	path = vim/coding/rainbow_parentheses
 	url = https://github.com/kien/rainbow_parentheses.vim.git
+[submodule "colors/dircolors-solarized"]
+	path = colors/dircolors-solarized
+	url = https://github.com/seebi/dircolors-solarized.git
+[submodule "colors/gnome-terminal-colors-solarized"]
+	path = colors/gnome-terminal-colors-solarized
+	url = https://github.com/sigurdga/gnome-terminal-colors-solarized.git
