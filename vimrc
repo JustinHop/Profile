@@ -178,6 +178,18 @@ function! EnableBackupNew()
   endif
 endfunction
 
+function! DoColors()
+  set background=dark
+  let g:solarized_termcolors=256
+  colorscheme elflord
+  if exists('g:loaded_solarized_menu')
+    colorscheme solarized
+  elseif filereadable($HOME . '/.vim/colors/badwolf.vim')
+    colorscheme badwolf
+  endif
+endfunction
+
+
 "
 "  We are using VIM
 "
@@ -195,21 +207,10 @@ if has("autocmd")
         \   exe "normal g'\"" |
         \ endif
 
-
   " purdy colors
   set background=dark
-  if expand($TERM) == "linux"
-    colorscheme elflord
-  else
-    "if filereadable($HOME . "/.vim/colors/badwolf.vim")
-    "  colorscheme badwolf
-    if exists("g:loaded_solarized_menu")
-      let g:solarized_termcolors=256
-      colorscheme solarized
-    else
-      colorscheme elflord
-    endif
-  endif
+  let g:solarized_termcolors=16
+  colorscheme solarized
 
 
   " yank to clipboard
@@ -260,7 +261,7 @@ if has("autocmd")
   au FileType html,css,xhtml let html_use_css=1              "       for standards-compliant :TOhtml output
   au FileType html,css,xhtml let use_xhtml=1                 "       for standards-compliant :TOhtml output
 
-  au FileType html,css,xhtml,php,javascript colorscheme cleanphp
+  "au FileType html,css,xhtml,php,javascript colorscheme cleanphp
 
   " au FileType php let php_sql_query = 1
   au BufRead,BufNewFile *.php		set indentexpr= | set smartindent
