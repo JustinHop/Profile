@@ -17,15 +17,16 @@ if __name__ == '__main__':
     fv = FindVideo()
     video = opts.testfile or fv.getvideo()
 
-    if not video:
-        raise Exception("No video file detected or specified.")
-
     if opts.alist:
+        if not video:
+            raise Exception("No video file detected or specified.")
         if opts.remove:
             fulllist.alist().remove(video)
         else:
             fulllist.alist().append(video)
     elif opts.dlist:
+        if not video:
+            raise Exception("No video file detected or specified.")
         if opts.remove:
             fulllist.dlist().remove(video)
         else:
@@ -36,6 +37,8 @@ if __name__ == '__main__':
         print "D List"
         fulllist.dlist().prettyprintlist()
     elif opts.videoinfo:
+        if not video:
+            raise Exception("No video file detected or specified.")
         v = Vid(video)
         print v.getname(), v.gethumansize(), \
             datetime.fromtimestamp(v.getattr()['stat'][-1])

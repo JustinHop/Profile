@@ -343,6 +343,7 @@ unset CDPATH
 
 # ViM
 VIM=vi
+VIM_PROFILES="lib base"
 if [[ -x `whence vim` ]]; then
     VIM=`whence vim`
 fi
@@ -409,7 +410,6 @@ else
 fi
 
 # might as well start with the gui crap
-alias konqu='konqueror --profile filemanagement '
 alias rn="rename '$_=lc $_;s/ /_/g' "
 #purdy stuff
 if [[ -o interactive ]]; then

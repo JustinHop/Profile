@@ -11,4 +11,3 @@ class FindVideo:
             ps = psutil.Process(pid)
             if ps.name == 'mplayer':
                 return ps.cmdline[-1]
-        raise Exception("No mplayer command found")
