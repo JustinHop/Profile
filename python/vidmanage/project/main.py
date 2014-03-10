@@ -1,13 +1,49 @@
 import sys
+import pickle
+from datetime import datetime
+from pprint import pprint
 
-from lib import VidManage
+from lib import Vid, VidList, VidListFull, VidDList, VidListFile
 from lib import Options
+from lib import FindVideo
 
 if __name__ == '__main__':
     options = Options()
-    opts = options.parse(sys.argv[1:])
+    opts = options.parse()
 
-    v = VidManage(opts)
+    vidlistfile = VidListFile(opts.listfile)
+    fulllist = vidlistfile.load()
 
-    v.date()
-    v.print_example_arg()
+    fv = FindVideo()
+    video = opts.testfile or fv.getvideo()
+
+    if not video:
+        raise Exception("No video file detected or specified.")
+
+    if opts.alist:
+        if opts.remove:
+            fulllist.alist().remove(video)
+        else:
+            fulllist.alist().append(video)
+    elif opts.dlist:
+        if opts.remove:
+            fulllist.dlist().remove(video)
+        else:
+            fulllist.dlist().append(video)
+    elif opts.info:
+        print "A List"
+        fulllist.alist().prettyprintlist()
+        print "D List"
+        fulllist.dlist().prettyprintlist()
+    elif opts.videoinfo:
+        v = Vid(video)
+        print v.getname(), v.gethumansize(), \
+            datetime.fromtimestamp(v.getattr()['stat'][-1])
+    elif opts.output:
+        for v in fulllist.alist().getlist():
+            print v.getname(),
+    elif opts.purgelist:
+        fulllist.dlist().purgelist()
+
+    if not opts.dryrun:
+        vidlistfile.save()
