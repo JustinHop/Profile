@@ -1,8 +1,8 @@
-" Auto expand tabs to spaces
-setlocal expandtab
 
-" Switch syntax highlighting on, if it was not
-syntax on
+set tabstop=8
+set expandtab
+set shiftwidth=4
+set softtabstop=4
 
-inoremap <buffer> " ""<LEFT>
-inoremap <buffer> ' ''<LEFT>
+"execute "silent! normal: LoadProfiles python \<CR>"
+"set omnifunc=pythoncomplete#Complete

@@ -3,59 +3,65 @@
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
-conky --config ~/Profile/conky-$HOST.conf &
+#gnome-settings-daemon &
+#thunar --daemon &
+
+#xfsettingsd
+
+{ nitrogen --restore; } &
+
+{ sleep 2s; conky ; }&
+
+{ xbindkeys --nodaemon ; }&
 
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
-if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
-    ## if not found, launch a new one
-    eval `dbus-launch --sh-syntax --exit-with-session`
-    echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
-fi
+#echo "Session: setting Xdefaults and Xmodmap"
+#[ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
+#[ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
 
-echo "Session: setting Xdefaults and Xmodmap"
-[ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
-[ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
+xmodmap -e "keycode 135 = Super_L"
 
 echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-#if whence runonce >& /dev/null ; then
-#    runonce mpd &
-#    { sleep 1m; runonce mpdas; } &
-#    { sleep 1m; runonce mpn.py; } &
-#    if whence davmail >& /dev/null ; then
-#        { sleep 1m; runonce davmail; } &
-#    fi
-#fi
-#
-
-#awesome &
-
-xbindkeys || true
-clipit &
 numlockx  &
-bluetooth-applet &
-gnome-sound-applet &
-mpd &
+#if ! pgrep -x mpd > /dev/null ; then
+#    mpd
+#fi
+#if ! pgrep -x mpdas > /dev/null ; then
+#    { sleep 5s; mpdas ; } &
+#fi
+#{ sleep 10s; mpc update ; } &
+{ sleep 3s; clipit ; } &
+{ sleep 3s; bluetooth-applet ; } &
+{ sleep 3s; gnome-sound-applet ; } &
+{ sleep 3s; nm-applet ; } &
+#{ sleep 5s; mpdas ; } &
 
-#{ sleep 10s; ~/bin/synergy ; } &
-autocutsel -d -s PRIMARY &
-autocutsel -d -s CLIPBOARD &
-nm-applet &
+#synergys -d INFO -f &
+#autocutsel -d -s PRIMARY &
+#autocutsel -d -s CLIPBOARD &
+#wicd-client &
 
 #xscreensaver-command -exit > /dev/null || true
 #xscreensaver -no-splash &
 
 { while true; do
-    sleep 10s;
     xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
     xmodmap -e 'add Control = Control_L' >& /dev/null;
+    sleep 10s;
 done ; } &
+
+#{ while true; do
+#    nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_ip
+#    tsocks nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_tor_ip
+#    sleep 1m
+#done ; } &
 
 #gnome-power-manager &
 #gnome-settings-daemon &
@@ -67,13 +73,12 @@ done ; } &
 #{ sleep 9s; nitrogen --restore; } &
 ##{ sleep 30s; gnome-do; } &
 #{ sleep 10s; pidgin; } &
-#{ sleep 1m; pidgin_fortune; } &
+{ sleep 1m; pidgin_fortune; } &
 #{ sleep 1m; padevchooser; } &
 #
-gnome-settings-daemon &
 
-#fusesmb ~/network
-
-exec bash -c 'while true ; do awesome ; done;'
+#exec ssh-agent bash -c 'while true ; do awesome ; done;'
+{ sleep 2s; nitrogen --restore; } &
+exec bash -c 'while true ; do awesome; sleep 1s; done;'
 
 #exec ck-launch-session gnome-session

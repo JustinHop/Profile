@@ -73,3 +73,8 @@ prompt_jclint_precmd () {
 }
 
 prompt_jclint_setup "$@"
+<<<<<<< HEAD
+=======
+
+# vim: ft=zsh
+>>>>>>> 1935f7e012325ff5170778f3255a3151c08fb17f

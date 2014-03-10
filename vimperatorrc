@@ -2,18 +2,15 @@
 
 map , gT
 map . gt
-map ga :open file:///usr/local/share/awesome/lib/index.html<CR>
+map u <C-u>
 map <C-l> <C-z><C-l><Esc>
 nmap , gT
 nmap . gt
-nmap ga :open file:///usr/local/share/awesome/lib/index.html<CR>
+nmap u <C-u>
 nmap <C-l> <C-z><C-l><Esc>
-set guioptions=rbmB
-set runtimepath=/home/justin/.vimperator
-vmap , gT
-vmap . gt
-vmap ga :open file:///usr/local/share/awesome/lib/index.html<CR>
-vmap <C-l> <C-z><C-l><Esc>
+
+set focuscontent
+
 source! /home/justin/.vimperatorrc.local
 
 " vim: set ft=vimperator:

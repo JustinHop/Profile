@@ -1,0 +1,13 @@
+#!/bin/bash
+
+(cat /etc/redhat-release;
+    free -m | grep Mem|awk '{ print $2"MB" }';
+    uname -i;
+    cat /proc/cpuinfo | grep processor | nl | tail -n1 | awk '{ print $1" vcpus" }';
+    cat /proc/cpuinfo | grep -P '^cpu MHz\s+:' | head -n 1 | awk '{ print $4" MHz" }';
+    if mount | grep xvda > /dev/null ; then
+        echo virtual
+    else
+        echo real
+    fi ) | tr "\n" ","
+

@@ -18,7 +18,7 @@ shelltitle " $ |$SHELL"
 compacthist on
 bufferfile        $HOME/.screenlogs/.screen_exchange
 startup_message   off
-defscrollback     16384
+defscrollback     32768
 
 # more stolen stuff
 #sorendition "+b kG"
@@ -31,11 +31,11 @@ deflog on
 logfile $HOME/.screenlogs/screen-%Y-%m-%d-%0c:%s-%H-%n.log
 logtstamp on
 
-# 256 color xterm
+## 256 color xterm
 #attrcolor b ".I"
 #termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 #defbce "on"
-#
+##
 
 #termcapinfo xterm*|Eterm|mlterm 'hs:ts=\E]0;:fs=\007:ds=\E]0;screen\007'
 defhstatus "$ORI_XTITLE <[ screen ^E (^Et) ]>"
@@ -100,8 +100,8 @@ caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{rk}%1` %{yk}@
 # Make backspace work
  termcapinfo xterm ‘bc@:bs@’
 
- bindkey -d ^? stuff ^H
- bindkey -d ^@ stuff ^H
+ #bindkey -d ^? stuff ^H
+ #bindkey -d ^@ stuff ^H
   
- bindkey -d -k kb stuff "\010"
+ #bindkey -d -k kb stuff "\010"
 

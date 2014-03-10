@@ -5,7 +5,7 @@
   http://www.opensource.jp/licenses/mit-license.html
 }}}  END LICENSE BLOCK ***/
 // PLUGIN_INFO//{{{
-var PLUGIN_INFO =
+var PLUGIN_INFO = xml`
 <VimperatorPlugin>
   <name>{NAME}</name>
   <description>Allows you to resize textareas.</description>
@@ -15,7 +15,7 @@ var PLUGIN_INFO =
   <license>MIT</license>
   <minVersion>2.0pre</minVersion>
   <maxVersion>2.0α2</maxVersion>
-  <updateURL>http://svn.coderepos.org/share/lang/javascript/vimperator-plugins/trunk/resizable_textarea.js</updateURL>
+  <updateURL>https://github.com/vimpr/vimperator-plugins/raw/master/resizable_textarea.js</updateURL>
   <detail><![CDATA[
 == Usage ==
 === NORMAL MODE or VISUAL MODE or CARET MODE ===
@@ -41,7 +41,7 @@ you can resize current component by using a keyboad.
 "escape" or "enter":
   end of resize.
   ]]></detail>
-</VimperatorPlugin>;
+</VimperatorPlugin>`;
 //}}}
 (function() {
 
