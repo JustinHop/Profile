@@ -1,4 +1,4 @@
 #!/bin/bash
 
-BINPATH=`dirname $0`
-python -d "$BINPATH/../project/main.py" $@
+BINPATH=$(dirname $(readlink -f $0))
+python "$BINPATH/../project/main.py" $@
