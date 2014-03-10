@@ -6,6 +6,8 @@
 *.so
 .*.swp
 
+*.pyc
+
 *BACKUP*
 *.orig
 *.netrwhist
