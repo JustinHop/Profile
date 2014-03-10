@@ -610,6 +610,8 @@ function preexec() {
         *)
         a=${a//.websys.tmcs}
         a=${${1## *}[(w)1]}  # get the command
+        a=${a##*\/}   # get the command basename
+        a=${a[1,10]}
         ;;
     esac
 
@@ -632,14 +634,18 @@ function preexec() {
 function precmd() {
   case "$TERM" in
     screen|screen.rxvt)
-      print -Pn "\ek%-3~\e\\" # set screen title
-      print -Pn "\e]2;%-3~\a" # must (re)set xterm title
+      print -Pn "\ek%1~\e\\" # set screen title
+      print -Pn "\e]2;%1~\a" # must (re)set xterm title
       ;;
   esac
 }
 #
 #  postexec
 #
+
+if [ -f /CHROOT ]; then
+    PS1="$PS1 :CHROOT: "
+fi
 
 if [ -f "$PROFILE_DIR/zshrc.local.post" ]; then
     source "$PROFILE_DIR/zshrc.local.post"

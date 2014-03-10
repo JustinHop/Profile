@@ -14,3 +14,5 @@
 bin/*
 
 zsh/cache
+zshrc.local.post
+zshrc.local.pre
