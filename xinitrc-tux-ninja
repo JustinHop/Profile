@@ -3,7 +3,7 @@
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
-gnome-settings-daemon &
+#gnome-settings-daemon &
 #thunar --daemon &
 
 { sleep 2s; nitrogen --restore; } &
@@ -15,6 +15,7 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 #eval `gnome-keyring-daemon`
 
+xmodmap -e "keycode 135 = Super_L"
 #if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
 #    ## if not found, launch a new one
 #    eval `dbus-launch --sh-syntax --exit-with-session`
@@ -87,6 +88,7 @@ done ; } &
 #
 
 #exec ssh-agent bash -c 'while true ; do awesome ; done;'
+setxkbmap -option "terminate:ctrl_alt_bksp"
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
 
 #exec ck-launch-session gnome-session

@@ -38,6 +38,54 @@ black               = "#000000"
 
 theme.font          = "monospace 10"
 
+theme.colors = {}
+theme.colors.base3 = "#002b36ff"
+theme.colors.base2 = "#073642ff"
+theme.colors.base1 = "#586e75ff"
+theme.colors.base0 = "#657b83ff"
+theme.colors.base00 = "#839496ff"
+theme.colors.base01 = "#93a1a1ff"
+theme.colors.base02 = "#eee8d5ff"
+theme.colors.base03 = "#fdf6e3ff"
+theme.colors.yellow = "#b58900ff"
+theme.colors.orange = "#cb4b16ff"
+theme.colors.red = "#dc322fff"
+theme.colors.magenta = "#d33682ff"
+theme.colors.violet = "#6c71c4ff"
+theme.colors.blue = "#268bd2ff"
+theme.colors.cyan = "#2aa198ff"
+theme.colors.green = "#859900ff"
+
+-- {{{ Colors
+theme.fg_normal = theme.colors.base02
+theme.fg_focus = theme.colors.base03
+theme.fg_urgent = theme.colors.base3
+
+theme.bg_normal = theme.colors.base3
+theme.bg_focus = theme.colors.base1
+theme.bg_urgent = theme.colors.red
+theme.bg_systray = theme.bg_normal
+-- }}}
+
+-- {{{ Borders
+theme.border_normal = theme.bg_normal
+theme.border_focus = theme.bg_focus
+theme.border_marked = theme.bg_urgent
+-- }}}
+
+-- {{{ Titlebars
+theme.titlebar_bg_focus = theme.bg_focus
+theme.titlebar_bg_normal = theme.bg_normal
+-- }}}
+
+-- {{{ Mouse finder
+theme.mouse_finder_color = theme.colors.green
+-- mouse_finder_[timeout|animate_timeout|radius|factor]
+-- }}}
+
+
+
+--[[
 theme.bg_normal     = blue
 theme.bg_focus      = light_blue
 theme.bg_urgent     = yellow
@@ -49,10 +97,12 @@ theme.fg_focus      = black
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize  = "#ffffff"
 
-theme.border_width  = "10"
 theme.border_normal = dark_blue
 theme.border_focus  = purple
 theme.border_marked = hot_pink
+]]--
+
+theme.border_width  = "10"
 
 
 -- There are other variable sets
