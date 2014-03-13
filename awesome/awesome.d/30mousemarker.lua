@@ -1,7 +1,7 @@
 --
 --------------------------------------------------------------------------------
 --         FILE:  30mousemarker.lua
---        USAGE:  ./30mousemarker.lua 
+--        USAGE:  ./30mousemarker.lua
 --  DESCRIPTION:  Follows mouse
 --      OPTIONS:  ---
 -- REQUIREMENTS:  ---
@@ -18,9 +18,9 @@
 function mousemarker() 
     for s=1, screen.count() do
     	if s == mouse.screen then
-    		mymousebox[s].text=[[<span bgcolor="yellow"><b> ■ </b></span>]]
+    		mymousebox[s].text=[[<span bgcolor="#002b36"><b> ■ </b></span>]]
     	else
-    		mymousebox[s].text=[[<span bgcolor="blue"><b> □ </b></span>]]
+    		mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
     	end
     end
 end
