@@ -331,8 +331,8 @@ else
   alias sl="ls -Fr "
 fi
 
-if [[ -f $PROFILE_DIR/dircolors ]]; then
-  eval $(dircolors $PROFILE_DIR/dircolors) 
+if [[ -f $HOME/.dircolors ]]; then
+  eval $(dircolors $HOME/.dircolors) 
 fi
 
 unset CDPATH
