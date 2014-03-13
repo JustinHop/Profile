@@ -29,7 +29,7 @@ theme.fg_normal = theme.colors.base02
 theme.fg_focus = theme.colors.base03
 theme.fg_urgent = theme.colors.base3
 
-theme.bg_normal = theme.colors.base2
+theme.bg_normal = theme.colors.base3
 theme.bg_focus = theme.colors.base1
 theme.bg_urgent = theme.colors.red
 theme.bg_systray = theme.bg_normal
@@ -54,20 +54,8 @@ theme.mouse_finder_color = theme.colors.green
 
 
 --[[
-theme.bg_normal     = blue
-theme.bg_focus      = light_blue
-theme.bg_urgent     = yellow
 theme.bg_minimize   = green
-
-
-theme.fg_normal     = dark_blue
-theme.fg_focus      = black
-theme.fg_urgent     = "#ffffff"
 theme.fg_minimize  = "#ffffff"
-
-theme.border_normal = dark_blue
-theme.border_focus  = purple
-theme.border_marked = hot_pink
 ]]--
 
 theme.border_width  = "10"
