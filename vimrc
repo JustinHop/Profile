@@ -216,9 +216,12 @@ if has("autocmd")
   " yank to clipboard
   if executable("xclip")
     "vnoremap y  :yank<CR>:call system("xclip -i", getreg("\""))<CR>gv :yank<CR>
-    nmap \Y : silent call system("xclip ", getreg("\""))<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
-    nmap \y : silent call system("xclip ", getreg("0"))<CR>:echo "Yanked to clipboard: " . getreg("0")<CR>
-    vmap \cy y: silent call system("xclip ", getreg("\""))<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
+    "nmap <leader>Y : silent call system("xclip ", getreg("\""))\<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
+    "nmap <leader>y : silent call system("xclip ", getreg("0"))\<CR>:echo "Yanked to clipboard: " . getreg("0")<CR>
+    "vmap <leader>cy y: silent call system("xclip ", getreg("\""))\<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
+    nmap <leader>Y : silent call system("xclip ", getreg("\""))\<CR>
+    nmap <leader>y : silent call system("xclip ", getreg("0"))\<CR>
+    vmap <leader>cy y: silent call system("xclip ", getreg("\""))\<CR>
   endif
 
   " Filetype Detect
@@ -286,6 +289,11 @@ nmap <silent> <A-Right> :wincmd l<CR>
 
 nmap <silent> <leader>t :NERDTreeToggle<CR>
 nmap <silent> <leader>T :TlistToggle<CR>
+
+if has("gui_running")
+  map <silent>  <S-Insert>  "+p
+  imap <silent>  <S-Insert>  <Esc>"+pa
+endif
 
 " this maps shift up and down to scroll
 inoremap <esc>[1;2B <C-E>
