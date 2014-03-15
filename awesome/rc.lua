@@ -207,10 +207,10 @@ myalertbox = widget({ type = "textbox", align = "right" })
 
 -- spacer
 lspace = widget({ type = "textbox", align="left", bg = "black", })
-lspace.text=[[<span bgcolor="#002b36"><b>]] .. spacer .. [[</b></span>]]
+lspace.text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
 
 rspace = widget({ type = "textbox", align="right" })
-rspace.text=[[<span bgcolor="#002b36"><b>]] .. spacer .. [[</b></span>]]
+rspace.text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
 
 
 -- Create a systray
