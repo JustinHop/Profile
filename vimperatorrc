@@ -55,7 +55,7 @@ style -name solar http://*,https://* <<EOSOLAR
     h2::first-letter,
     p::first-line {
 
-    color: inherit !important; 
+    color: inherit !important;
     background: none !important;
     }
 
@@ -65,7 +65,7 @@ style -name solar http://*,https://* <<EOSOLAR
     b,i,u,strong{color:#859900}
 
 
-    html, 
+    html,
     body,
     li ul,
     ul li,
@@ -82,10 +82,10 @@ style -name solar http://*,https://* <<EOSOLAR
     [class*="nav"],
     [class*="open"],
     [id*="ropdown"], /*dropdown*/
-    [class*="ropdown"], 
+    [class*="ropdown"],
     div[class*="menu"],
     [class*="tooltip"],
-    div[class*="popup"], 
+    div[class*="popup"],
     div[id*="popup"],
 
     /* Notes, details, etc.  Maybe useful */
@@ -97,7 +97,7 @@ style -name solar http://*,https://* <<EOSOLAR
     div[class*="content"], div[class*="container"],
 
     /* Popup divs that use visibility: hidden and display: none */
-    div[style*="display: block"], 
+    div[style*="display: block"],
     div[style*="visibility: visible"] {
     background-color: #002b36 !important
     }
@@ -129,9 +129,9 @@ style -name solar http://*,https://* <<EOSOLAR
     /* ::: anchor/links ::: */
 
     a {
-    color: #2aa198 !important; 
+    color: #2aa198 !important;
     background-color: #002b36 !important;
-    opacity: 1 !important; 
+    opacity: 1 !important;
     text-indent: 0 !important;
     }
 
@@ -154,12 +154,12 @@ style -name solar http://*,https://* <<EOSOLAR
 
     /* :::::: Headings :::::: */
 
-    h1,h2,h3,h4,h5,h6  { 
+    h1,h2,h3,h4,h5,h6  {
 
     background-image: none !important;
     border-radius: 5px !important;
     -moz-border-radius: 5px !important;
-    -webkit-border-radius: 5px !important; 
+    -webkit-border-radius: 5px !important;
     text-indent: 0 !important;
     }
 
@@ -182,14 +182,14 @@ style -name solar http://*,https://* <<EOSOLAR
 
     color: #586e75 !important;
     background: none #073642 !important;
-    -moz-appearance: none !important; 
+    -moz-appearance: none !important;
     -webkit-appearance: none !important;
     }
 
     input,
-    textarea, 
+    textarea,
     button {
-    border-color: #586e75 !important; 
+    border-color: #586e75 !important;
     border-width: 1px !important;
     }
 
