@@ -72,7 +72,7 @@ set shiftwidth=4
 set tabstop=4
 set expandtab
 set formatoptions=roq
-set nolist
+set list
 set showbreak=-->\
 set wrap
 set linebreak
