@@ -91,3 +91,6 @@
 [submodule "colors/solarized-dark-gtk"]
 	path = colors/solarized-dark-gtk
 	url = https://github.com/jankotek/solarized-dark-gtk.git
+[submodule "vim/coding/salt-vim"]
+	path = vim/coding/salt-vim
+	url = https://github.com/saltstack/salt-vim.git
