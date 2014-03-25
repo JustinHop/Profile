@@ -380,6 +380,10 @@ fi
 alias z=$0
 alias s=sudo
 
+if [[ -x `whence envssh` ]]; then
+  alias essh="envssh -E ~/Profile/rbashrc -- "
+fi
+
 # greppy
 if [[ -x `whence egrep` ]]; then
   alias -g G="|egrep"
@@ -489,7 +493,8 @@ if (( $ZSH_MAJOR >= 4 )); then
     rc_expand_param \
     zle \
     NOverbose \
-    NOsingle_line_zle
+    NOsingle_line_zle \
+    complete_aliases
 fi
 
 ################################################
@@ -528,11 +533,14 @@ if (( $ZSH_MAJOR >= 4 )); then
   # CLEAR OUT THAT DAMNED CD COMPLETION GARBAGE!!!
   zstyle ':completion:*:*:*:users' ignored-patterns \
     adm bin daemon games gdm halt ident junkbust \
-    lp mail mailnull named news nscd \
+    lp mail mailnull named news nscd colors \
     ntp operator pcap postgres radvd rpc rpcuser rpm \
     shutdown squid sshd sync uucp vcsa xfs backup  bind  \
     dictd  gnats  identd  irc  man  messagebus  postfix \
     proxy  sys  www-data
+
+  #compdef _ssh envssh
+  #compdef '_dispatch ssh' essh
 
   # no functions for programs i dont have
   zstyle ':completion:*:functions' ignored-patterns '_*'
@@ -552,6 +560,12 @@ if (( $ZSH_MAJOR >= 4 )); then
   compdef _modprobe remod
   compdef _mozilla firefox-3.5
 fi
+
+_essh () {
+  local service=ssh
+  _ssh "$@"
+}
+compdef _essh essh
 
 #
 # COLOR FUNCTIONS

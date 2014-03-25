@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 '''envssh
 
 Usage:
@@ -21,6 +21,7 @@ Options:
 
 #from __future__ import unicode_literals, print_function
 #from pexpect import *
+#from os.path import expanduser
 import traceback
 import pexpect
 import re
@@ -30,29 +31,34 @@ import termios
 import signal
 import sys
 import os
+from time import sleep
 #import time
 #import errno
 from docopt import docopt
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Justin Hoppensteadt"
 __license__ = "MIT"
 
 global_pexpect_instance = None
+line_counter = 0
 
 
 def main():
     '''Main entry point for the envssh CLI.'''
     args = docopt(__doc__, version=__version__)
-    print(args)
+    #print(args)
+    #f = file(expanduser("~/tmp/envssh.out"), "w")
 
     p = pexpect.spawn('ssh ' + " ".join(args['SSH_OPTIONS']))
+    p.logfile = None
     p.waitnoecho()
     global global_pexpect_instance
     global_pexpect_instance = p
     signal.signal(signal.SIGWINCH, sigwinch_passthrough)
 
     p.expect(r'[$#]')
+    p.waitnoecho()
     try:
         for ENV in re.split(r'\s+', args['--environment']):
             if re.match(r'\D\w+=\w+', ENV):
@@ -67,10 +73,21 @@ def main():
     except IOError:
         pass
     sigwinch_passthrough(None, None)
+    sleep(0.1)
     try:
-        p.interact(chr(29))
+        p.interact(chr(29), output_filter=filter_out)
     except OSError:
         pass
+
+
+def filter_out(stringin):
+    global line_counter
+    line_counter = line_counter + 1
+    if (line_counter > 8):
+        #return str(line_counter) + " " + stringin
+        return stringin
+    else:
+        return ""
 
 
 def sigwinch_passthrough(sig, data):

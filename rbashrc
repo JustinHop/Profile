@@ -1,5 +1,4 @@
-bash
-stty -echo
+setup_env () {
 tput sgr0
 BASE03=$(tput setaf 8)
 BASE02=$(tput setaf 0)
@@ -79,5 +78,5 @@ alias z='/bin/zsh-beta'
 alias zsg='/bin/zsh-beta'
 alias zsj='/bin/zsh-beta'
 set -o vi
-stty echo
-clear
+}
+setup_env
