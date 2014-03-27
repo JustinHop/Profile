@@ -4,6 +4,23 @@
 
 theme = {}
 
+theme.colors = {}
+theme.colors.base3 = "#002b36ff"
+theme.colors.base2 = "#073642ff"
+theme.colors.base1 = "#586e75ff"
+theme.colors.base0 = "#657b83ff"
+theme.colors.base00 = "#839496ff"
+theme.colors.base01 = "#93a1a1ff"
+theme.colors.base02 = "#eee8d5ff"
+theme.colors.base03 = "#fdf6e3ff"
+theme.colors.yellow = "#b58900ff"
+theme.colors.orange = "#cb4b16ff"
+theme.colors.red = "#dc322fff"
+theme.colors.magenta = "#d33682ff"
+theme.colors.violet = "#6c71c4ff"
+theme.colors.blue = "#268bd2ff"
+theme.colors.cyan = "#2aa198ff"
+theme.colors.green = "#859900ff"
 --[[
 theme.font          = "sans 8"
 

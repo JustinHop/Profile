@@ -45,6 +45,7 @@ theme_path = config_dir .. "/themes/" .. hostname .. "/theme.lua"
 if not awful.util.checkfile(theme_path) then
     theme_path = config_dir .. "/themes/justin/theme.lua"
 end
+theme_path = config_dir .. "/themes/justin/theme.lua"
 beautiful.init(theme_path)
 
 -- {{{ Load the functions in awesome.d
@@ -206,10 +207,10 @@ myalertbox = widget({ type = "textbox", align = "right" })
 
 -- spacer
 lspace = widget({ type = "textbox", align="left", bg = "black", })
-lspace.text=[[<span bgcolor="#30C23D"><b>]] .. spacer .. [[</b></span>]]
+lspace.text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
 
 rspace = widget({ type = "textbox", align="right" })
-rspace.text=[[<span bgcolor="#30C23D"><b>]] .. spacer .. [[</b></span>]]
+rspace.text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
 
 
 -- Create a systray

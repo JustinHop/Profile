@@ -380,6 +380,10 @@ fi
 alias z=$0
 alias s=sudo
 
+if [[ -x `whence envssh` ]]; then
+  alias essh="envssh -E ~/Profile/rbashrc -- "
+fi
+
 # greppy
 if [[ -x `whence egrep` ]]; then
   alias -g G="|egrep"
@@ -489,7 +493,8 @@ if (( $ZSH_MAJOR >= 4 )); then
     rc_expand_param \
     zle \
     NOverbose \
-    NOsingle_line_zle
+    NOsingle_line_zle \
+    complete_aliases
 fi
 
 ################################################
@@ -528,11 +533,14 @@ if (( $ZSH_MAJOR >= 4 )); then
   # CLEAR OUT THAT DAMNED CD COMPLETION GARBAGE!!!
   zstyle ':completion:*:*:*:users' ignored-patterns \
     adm bin daemon games gdm halt ident junkbust \
-    lp mail mailnull named news nscd \
+    lp mail mailnull named news nscd colors \
     ntp operator pcap postgres radvd rpc rpcuser rpm \
     shutdown squid sshd sync uucp vcsa xfs backup  bind  \
     dictd  gnats  identd  irc  man  messagebus  postfix \
     proxy  sys  www-data
+
+  #compdef _ssh envssh
+  #compdef '_dispatch ssh' essh
 
   # no functions for programs i dont have
   zstyle ':completion:*:functions' ignored-patterns '_*'
@@ -552,6 +560,12 @@ if (( $ZSH_MAJOR >= 4 )); then
   compdef _modprobe remod
   compdef _mozilla firefox-3.5
 fi
+
+_essh () {
+  local service=ssh
+  _ssh "$@"
+}
+compdef _essh essh
 
 #
 # COLOR FUNCTIONS
@@ -596,41 +610,41 @@ if [[ -o interactive ]]; then
 fi
 
 function preexec() {
-    local a=${${1## *}[(w)1]}  # get the command
-    local b=${a##*\/}   # get the command basename
-    a="${b}${1#$a}"     # add back the parameters
-    a=${a//\%/\%\%}     # escape print specials
-    a=$(print -Pn "$a" | tr -d "\t\n\v\f\r")  # remove fancy whitespace
-    a=${(V)a//\%/\%\%}  # escape non-visibles and print specials
+  local a=${${1## *}[(w)1]}  # get the command
+  local b=${a##*\/}   # get the command basename
+  a="${b}${1#$a}"     # add back the parameters
+  a=${a//\%/\%\%}     # escape print specials
+  a=$(print -Pn "$a" | tr -d "\t\n\v\f\r")  # remove fancy whitespace
+  a=${(V)a//\%/\%\%}  # escape non-visibles and print specials
 
-    case "$b" in
-        ssh)
-        #a=${a#ssh }
-        a=${a%%.*}
-        a=${a##* }
-        ;;
-        *)
-        a=${a//.websys.tmcs}
-        a=${${1## *}[(w)1]}  # get the command
-        a=${a##*\/}   # get the command basename
-        a=${a[1,10]}
-        ;;
-    esac
+  case "$b" in
+    envssh|essh|ssh)
+      #a=${a#ssh }
+      a=${a%%.*}
+      a=${a##* }
+      ;;
+    *)
+      a=${a//.websys.tmcs}
+      a=${${1## *}[(w)1]}  # get the command
+      a=${a##*\/}   # get the command basename
+      a=${a[1,10]}
+      ;;
+  esac
 
 
-case "$TERM" in
-  screen|screen.*)
-    # See screen(1) "TITLES (naming windows)".
-    # "\ek" and "\e\" are the delimiters for screen(1) window titles
-    #print -Pn "\ek%-3~ $a\e\\" # set screen title.  Fix vim: ".
-    #print -Pn "\e]2;%-3~ $a\a" # set xterm title, via screen "Operating System Command"
-    print -Pn "\ek$a\e\\" # set screen title.  Fix vim: ".
-    print -Pn "\e]2;$a\a" # set xterm title, via screen "Operating System Command"
-    ;;
-  rxvt|rxvt-unicode|xterm|xterm-color|xterm-256color)
-    print -Pn "\e]2;%m:%-3~ $a\a"
-    ;;
-esac
+  case "$TERM" in
+    screen|screen.*)
+      # See screen(1) "TITLES (naming windows)".
+      # "\ek" and "\e\" are the delimiters for screen(1) window titles
+      #print -Pn "\ek%-3~ $a\e\\" # set screen title.  Fix vim: ".
+      #print -Pn "\e]2;%-3~ $a\a" # set xterm title, via screen "Operating System Command"
+      print -Pn "\ek$a\e\\" # set screen title.  Fix vim: ".
+      print -Pn "\e]2;$a\a" # set xterm title, via screen "Operating System Command"
+      ;;
+    rxvt|rxvt-unicode|xterm|xterm-color|xterm-256color)
+      print -Pn "\e]2;%m:%-3~ $a\a"
+      ;;
+  esac
 }
 
 function precmd() {

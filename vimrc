@@ -72,7 +72,7 @@ set shiftwidth=4
 set tabstop=4
 set expandtab
 set formatoptions=roq
-set nolist
+set list
 set showbreak=-->\
 set wrap
 set linebreak
@@ -216,9 +216,12 @@ if has("autocmd")
   " yank to clipboard
   if executable("xclip")
     "vnoremap y  :yank<CR>:call system("xclip -i", getreg("\""))<CR>gv :yank<CR>
-    nmap \Y : silent call system("xclip ", getreg("\""))<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
-    nmap \y : silent call system("xclip ", getreg("0"))<CR>:echo "Yanked to clipboard: " . getreg("0")<CR>
-    vmap \cy y: silent call system("xclip ", getreg("\""))<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
+    "nmap <leader>Y : silent call system("xclip ", getreg("\""))\<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
+    "nmap <leader>y : silent call system("xclip ", getreg("0"))\<CR>:echo "Yanked to clipboard: " . getreg("0")<CR>
+    "vmap <leader>cy y: silent call system("xclip ", getreg("\""))\<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
+    nmap <leader>Y : silent call system("xclip ", getreg("\""))\<CR>
+    nmap <leader>y : silent call system("xclip ", getreg("0"))\<CR>
+    vmap <leader>cy y: silent call system("xclip ", getreg("\""))\<CR>
   endif
 
   " Filetype Detect
@@ -241,6 +244,21 @@ if has("autocmd")
   au BufNewFile,BufRead ~/backup/* let g:DoBackups = 0
   au BufNewFile * call EnableBackupNew()
   au BufRead * call EnableBackupExists()
+
+  au BufReadPost * silent! call ReadUndo()
+  au BufWritePost * silent! call WriteUndo()
+  func ReadUndo()
+    if filereadable(expand('%:h'). '/backup/' . expand('%:t'))
+      rundo %:h/backup/%:t
+    endif
+  endfunc
+  func WriteUndo()
+    let dirname = expand('%:h') . '/backup'
+    if !isdirectory(dirname)
+      call mkdir(dirname)
+    endif
+    wundo %:h/backup/%:t
+  endfunc
 
   au FileType nerdtree setlocal nofoldenable
 
@@ -286,6 +304,11 @@ nmap <silent> <A-Right> :wincmd l<CR>
 
 nmap <silent> <leader>t :NERDTreeToggle<CR>
 nmap <silent> <leader>T :TlistToggle<CR>
+
+if has("gui_running")
+  map <silent>  <S-Insert>  "+p
+  imap <silent>  <S-Insert>  <Esc>"+pa
+endif
 
 " this maps shift up and down to scroll
 inoremap <esc>[1;2B <C-E>
