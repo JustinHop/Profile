@@ -596,7 +596,6 @@ if [[ -o interactive ]]; then
 fi
 
 function preexec() {
-<<<<<<< HEAD
     local a=${${1## *}[(w)1]}  # get the command
     local b=${a##*\/}   # get the command basename
     a="${b}${1#$a}"     # add back the parameters
@@ -617,26 +616,6 @@ function preexec() {
         a=${a[1,10]}
         ;;
     esac
-=======
-local a=${${1## *}[(w)1]}  # get the command
-local b=${a##*\/}   # get the command basename
-a="${b}${1#$a}"     # add back the parameters
-a=${a//\%/\%\%}     # escape print specials
-a=$(print -Pn "$a" | tr -d "\t\n\v\f\r")  # remove fancy whitespace
-a=${(V)a//\%/\%\%}  # escape non-visibles and print specials
-
-case "$b" in
-  ssh)
-    #a=${a#ssh }
-    a=${a%%.*}
-    a=${a##* }
-    ;;
-  *)
-    a=${a//.websys.tmcs}
-    a=${${1## *}[(w)1]}  # get the command
-    ;;
-esac
->>>>>>> 1935f7e012325ff5170778f3255a3151c08fb17f
 
 
 case "$TERM" in
@@ -655,37 +634,23 @@ esac
 }
 
 function precmd() {
-<<<<<<< HEAD
-  case "$TERM" in
-    screen|screen.rxvt)
-      print -Pn "\ek%1~\e\\" # set screen title
-      print -Pn "\e]2;%1~\a" # must (re)set xterm title
-      ;;
-  esac
-=======
 case "$TERM" in
   screen|screen.rxvt)
     print -Pn "\ek%-3~\e\\" # set screen title
     print -Pn "\e]2;%-3~\a" # must (re)set xterm title
     ;;
 esac
->>>>>>> 1935f7e012325ff5170778f3255a3151c08fb17f
 }
 #
 #  postexec
 #
 
-<<<<<<< HEAD
 if [ -f /CHROOT ]; then
     PS1="$PS1 :CHROOT: "
 fi
 
-if [ -f "$PROFILE_DIR/zshrc.local.post" ]; then
-    source "$PROFILE_DIR/zshrc.local.post"
-=======
 if [[ -e "$PROFILE_DIR/zshrc.local.post" ]]; then
   source "$PROFILE_DIR/zshrc.local.post"
->>>>>>> 1935f7e012325ff5170778f3255a3151c08fb17f
 fi
 
 # vim:syn=zsh:ft=zsh
