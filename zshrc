@@ -618,7 +618,7 @@ a=$(print -Pn "$a" | tr -d "\t\n\v\f\r")  # remove fancy whitespace
 a=${(V)a//\%/\%\%}  # escape non-visibles and print specials
 
 case "$b" in
-  ssh)
+  *ssh)
     #a=${a#ssh }
     a=${a%%.*}
     a=${a##* }
