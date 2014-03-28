@@ -332,7 +332,7 @@ else
 fi
 
 if [[ -f $HOME/.dircolors ]]; then
-  eval $(dircolors $HOME/.dircolors) 
+  eval $(dircolors $HOME/.dircolors)
 fi
 
 unset CDPATH
@@ -597,9 +597,18 @@ fi
 
 if [[ -o interactive ]]; then
   autoload -U promptinit
+  autoload throw
+  autoload catch
   promptinit
   if (( $ZSH_MAJOR == 4 && $ZSH_MINOR >= 3 || $ZSH_MAJOR > 4 )); then
-    prompt jclint || prompt clint
+    {
+      prompt clint || throw BADPROMPT
+    } always {
+    if catch *; then
+      echo got here
+      prompt clint
+    fi
+  }
   else
     prompt clint
   fi
