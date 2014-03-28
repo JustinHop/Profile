@@ -248,17 +248,18 @@ if has("autocmd")
   au BufReadPost * silent! call ReadUndo()
   au BufWritePost * silent! call WriteUndo()
   func ReadUndo()
-    if filereadable(expand('%:h'). '/backup/' . expand('%:t'))
-      rundo %:h/backup/%:t
+    if filereadable($HOME . '/backup/undo' . expand('%:p'))
+      rundo ~/backup/undo%:p
     endif
   endfunc
   func WriteUndo()
-    let dirname = expand('%:h') . '/backup'
+    let dirname = $HOME . '/backup/undo' . expand('%:p:h')
     if !isdirectory(dirname)
-      call mkdir(dirname)
+      call mkdir(dirname, "p")
     endif
-    wundo %:h/backup/%:t
+    wundo ~/backup/undo%:p
   endfunc
+
 
   au FileType nerdtree setlocal nofoldenable
 
