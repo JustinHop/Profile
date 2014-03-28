@@ -610,39 +610,41 @@ if [[ -o interactive ]]; then
 fi
 
 function preexec() {
-local a=${${1## *}[(w)1]}  # get the command
-local b=${a##*\/}   # get the command basename
-a="${b}${1#$a}"     # add back the parameters
-a=${a//\%/\%\%}     # escape print specials
-a=$(print -Pn "$a" | tr -d "\t\n\v\f\r")  # remove fancy whitespace
-a=${(V)a//\%/\%\%}  # escape non-visibles and print specials
+  local a=${${1## *}[(w)1]}  # get the command
+  local b=${a##*\/}   # get the command basename
+  a="${b}${1#$a}"     # add back the parameters
+  a=${a//\%/\%\%}     # escape print specials
+  a=$(print -Pn "$a" | tr -d "\t\n\v\f\r")  # remove fancy whitespace
+  a=${(V)a//\%/\%\%}  # escape non-visibles and print specials
 
-case "$b" in
-  *ssh)
-    #a=${a#ssh }
-    a=${a%%.*}
-    a=${a##* }
-    ;;
-  *)
-    a=${a//.websys.tmcs}
-    a=${${1## *}[(w)1]}  # get the command
-    ;;
-esac
+  case "$b" in
+    envssh|essh|ssh)
+      #a=${a#ssh }
+      a=${a%%.*}
+      a=${a##* }
+      ;;
+    *)
+      a=${a//.websys.tmcs}
+      a=${${1## *}[(w)1]}  # get the command
+      a=${a##*\/}   # get the command basename
+      a=${a[1,10]}
+      ;;
+  esac
 
 
-case "$TERM" in
-  screen|screen.*)
-    # See screen(1) "TITLES (naming windows)".
-    # "\ek" and "\e\" are the delimiters for screen(1) window titles
-    #print -Pn "\ek%-3~ $a\e\\" # set screen title.  Fix vim: ".
-    #print -Pn "\e]2;%-3~ $a\a" # set xterm title, via screen "Operating System Command"
-    print -Pn "\ek$a\e\\" # set screen title.  Fix vim: ".
-    print -Pn "\e]2;$a\a" # set xterm title, via screen "Operating System Command"
-    ;;
-  rxvt|rxvt-unicode|xterm|xterm-color|xterm-256color)
-    print -Pn "\e]2;%m:%-3~ $a\a"
-    ;;
-esac
+  case "$TERM" in
+    screen|screen.*)
+      # See screen(1) "TITLES (naming windows)".
+      # "\ek" and "\e\" are the delimiters for screen(1) window titles
+      #print -Pn "\ek%-3~ $a\e\\" # set screen title.  Fix vim: ".
+      #print -Pn "\e]2;%-3~ $a\a" # set xterm title, via screen "Operating System Command"
+      print -Pn "\ek$a\e\\" # set screen title.  Fix vim: ".
+      print -Pn "\e]2;$a\a" # set xterm title, via screen "Operating System Command"
+      ;;
+    rxvt|rxvt-unicode|xterm|xterm-color|xterm-256color)
+      print -Pn "\e]2;%m:%-3~ $a\a"
+      ;;
+  esac
 }
 
 function precmd() {
@@ -656,6 +658,10 @@ esac
 #
 #  postexec
 #
+
+if [ -f /CHROOT ]; then
+    PS1="$PS1 :CHROOT: "
+fi
 
 if [[ -e "$PROFILE_DIR/zshrc.local.post" ]]; then
   source "$PROFILE_DIR/zshrc.local.post"
