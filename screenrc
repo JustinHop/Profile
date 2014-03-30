@@ -100,8 +100,8 @@ caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{rk}%1` %{yk}@
 # Make backspace work
  termcapinfo xterm ‘bc@:bs@’
 
- #bindkey -d ^? stuff ^H
- #bindkey -d ^@ stuff ^H
+ bindkey -d ^? stuff ^H
+ bindkey -d ^@ stuff ^H
   
  #bindkey -d -k kb stuff "\010"
 

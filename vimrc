@@ -245,6 +245,22 @@ if has("autocmd")
   au BufNewFile * call EnableBackupNew()
   au BufRead * call EnableBackupExists()
 
+  au BufReadPost * silent! call ReadUndo()
+  au BufWritePost * silent! call WriteUndo()
+  func ReadUndo()
+    if filereadable($HOME . '/backup/undo' . expand('%:p'))
+      rundo ~/backup/undo%:p
+    endif
+  endfunc
+  func WriteUndo()
+    let dirname = $HOME . '/backup/undo' . expand('%:p:h')
+    if !isdirectory(dirname)
+      call mkdir(dirname, "p")
+    endif
+    wundo ~/backup/undo%:p
+  endfunc
+
+
   au FileType nerdtree setlocal nofoldenable
 
   " ZSH Brokenness

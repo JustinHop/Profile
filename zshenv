@@ -163,7 +163,7 @@ PATH=${PATH:s/::/:/}
 PERL_CPANM_OPT="--local-lib=~/perl5"
 
 if [ -d ~/perl5/lib/perl5 ]; then
-    if [ -z $PERL5LIB ]; then
+    if [ -z "$PERL5LIB" ]; then
         export PERL5LIB=~/perl5/lib/perl5
     else
         export PERL5LIB=~/perl5/lib/perl5:$PERLLIB

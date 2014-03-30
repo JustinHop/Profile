@@ -5,7 +5,7 @@
 " based on: Zellner maintained by Ron Aaron <ronaharon@yahoo.com>
 " Last Change:	2003 Sep 09 
 
-set background=light
+set background=dark
 hi clear
 if exists("syntax_on")
   syntax reset
@@ -26,6 +26,7 @@ hi Tag term=bold ctermfg=DarkGreen guifg=DarkGreen
 hi Error term=reverse ctermfg=15 ctermbg=9 guibg=Red guifg=White
 hi Todo term=standout ctermbg=Yellow ctermfg=Black guifg=Blue guibg=#5a5d6a
 hi  StatusLine term=bold,reverse cterm=NONE ctermfg=Yellow ctermbg=DarkGray gui=NONE guifg=Black guibg=#a4b2c5
+hi  LineNr term=reverse cterm=NONE ctermfg=Yellow ctermbg=DarkGray gui=NONE guifg=Black guibg=#a4b2c5
 hi! link MoreMsg Comment
 hi! link ErrorMsg Visual
 hi! link WarningMsg ErrorMsg
