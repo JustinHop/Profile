@@ -40,7 +40,9 @@ prompt_jclint_setup () {
 
   [[ -n $SCHROOT_SESSION_ID ]] && p_schroot="$pc['\(']%F{$pcc[5]}$SCHROOT_SESSION_ID$pc['\)']"
 
-  p_userpwd="$pc['<']%F{$pcc[3]}%n@%M$p_win%F{$pcc[5]}:%F{$pcc[4]}%~$pc['>'] "
+  [[ -e "$HOME/hostinfo" ]] && p_hostinfo="$pc['\(']%F{$pcc[2]}$(read -re < $HOME/hostinfo)$pc['\)']"
+
+  p_userpwd="$pc['<']%F{$pcc[3]}%n@%M$p_win%F{$pcc[5]}:%F{$pcc[4]}%~$pc['>']"
   p_vcs="%(2v.%U%2v%u.)"
 
   p_shlvlhist="%fzsh%(2L./$SHLVL.) %B%h%b "
@@ -50,7 +52,7 @@ prompt_jclint_setup () {
   zle_highlight[(r)default:*]=default:$pcc[2]
 
   prompt="$p_date$p_tty$p_plat$p_ver
-$p_userpwd$p_schroot
+$p_userpwd$p_hostinfo$p_schroot
 $p_shlvlhist$p_rc$p_vcs$p_end"
   PS2='%(4_.\.)%3_> %E'
 
@@ -73,8 +75,5 @@ prompt_jclint_precmd () {
 }
 
 prompt_jclint_setup "$@"
-<<<<<<< HEAD
-=======
 
 # vim: ft=zsh
->>>>>>> 1935f7e012325ff5170778f3255a3151c08fb17f
