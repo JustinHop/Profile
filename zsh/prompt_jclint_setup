@@ -75,5 +75,4 @@ prompt_jclint_precmd () {
 }
 
 prompt_jclint_setup "$@"
-
 # vim: ft=zsh
