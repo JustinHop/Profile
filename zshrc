@@ -595,6 +595,8 @@ if (( $ZSH_MAJOR >= 4 )); then
   colors
 fi
 
+
+
 if [[ -o interactive ]]; then
   autoload -U promptinit
   autoload throw
