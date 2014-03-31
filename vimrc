@@ -189,10 +189,6 @@ function! DoColors()
   endif
 endfunction
 
-
-"
-"  We are using VIM
-"
 filetype on
 filetype plugin on
 filetype indent on
