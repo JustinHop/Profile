@@ -243,6 +243,8 @@ if has("autocmd")
 
   au BufReadPost * silent! call ReadUndo()
   au BufWritePost * silent! call WriteUndo()
+  au BufWritePost * execute "silent! normal :WriteBackup \<CR>"
+
   func ReadUndo()
     if filereadable($HOME . '/backup/undo' . expand('%:p'))
       rundo ~/backup/undo%:p
