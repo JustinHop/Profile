@@ -112,6 +112,8 @@ export SURFRAW_graphical=no
 
 alias J="ssh -A jhoppensteadt@justin2.sys.dev99.websys.tmcs"
 alias JR="ssh -A root@justin2.sys.dev99.websys.tmcs"
+alias B="ssh -A jhoppensteadt@bld1.sys.tools1.websys.tmcs"
+alias BR="ssh -A bld1.sys.tools1.websys.tmcs"
 
 alias IE="wine 'C:\Program Files\Internet Explorer\iexplore'"
 
