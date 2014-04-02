@@ -1,5 +1,4 @@
 #$include /etc/inputrc
-set editing-mode vi
 set keymap vi-insert
 "\e[1~": forward-backward-delete-char
 "\e[H": forward-backward-delete-char
@@ -9,3 +8,4 @@ set keymap vi
 "\e[H": forward-backward-delete-char
 "\eOH": forward-backward-delete-char
 #"\eOH", "\e[1~", "\e[H"
+set editing-mode vi
