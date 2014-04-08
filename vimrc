@@ -354,6 +354,10 @@ if !exists("*ToggleWrap")
   map! <silent><F10> ^[:call ToggleWrap()<CR>
 endif
 
+noremap!  <BS>
+vnoremap  <BS>
+inoremap  <BS>
+cnoremap  <BS>
 
 "" <F9> toggle hlsearch
 "noremap <silent> <F9> :set hlsearch!<cr>
@@ -502,7 +506,7 @@ if !exists("*Backspace")
       return "\<Left>\<Del>"
     endif
   endfunc
-  inoremap silent <BS> <c-r>=Backspace()<CR>
+  inoremap <silent> <BS> <c-r>=Backspace()<CR>
 endif
 
 if !exists("*WordProcessorMode")
