@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -a
+#set -x
+
 TEMPFILE=~/tmp/screens$$
 trap "rm -f $TEMPFILE" 0 1 2 5 15
 
@@ -8,29 +11,42 @@ trap "rm -f $TEMPFILE" 0 1 2 5 15
 SCREEN_ATTACH_ARGS="-A -d -r"
 SCREEN_NEW_ARGS='-A -S $sname -dm $pjob'
 
-while true; do
-    ACTIVE_SCREENS=$(screen -ls | awk '/tached/ { print $1" "$2}' | sort)
+formatscreenlines () {
+    arr=($*)
+    echo ${arr[0]} \'${arr[@]:1}\'
+}
 
-    dialog --backtitle "Screen sessions on $(hostname)" \
+
+
+while true; do
+    #ACTIVE_SCREENS=$(screen -ls | awk '/tached/ { print $1" "$2}' | sort)
+    ACTIVE_SCREENS=$(screen -ls | grep tached | xargs -L 1 -I{} bash -c "set +f;formatscreenlines \"{}\"" )
+
+    eval dialog --backtitle \"Screen sessions on $(hostname)\" \
         --stderr --clear \
-        --menu "Sessions:" 0 0 0 $ACTIVE_SCREENS New "Create new session" 2> $TEMPFILE
+        --menu \"Sessions:\" 0 0 0 $ACTIVE_SCREENS New \"Create new session\" 2> $TEMPFILE
 
     RETVAL=$?
     CHOICE=$(cat $TEMPFILE)
 
-    case $RETVAL in
-        0)
-            if [ "$CHOICE" == "New" ]; then
-                dialog --inputbox "Session Name:" 0 0 2> $TEMPFILE
-                NAME=$(cat $TEMPFILE)
-                screen -A -S $NAME -dm
-            else
-                screen -A -d -r $CHOICE
-            fi
-            ;;
-        *)
-            exit
-            ;;
-    esac
+    if true ; then
+        case $RETVAL in
+            0)
+                if [ "$CHOICE" == "New" ]; then
+                    dialog --inputbox "Session Name:" 0 0 2> $TEMPFILE
+                    NAME=$(cat $TEMPFILE)
+                    echo $NAME
+                    screen -A -S $NAME -dm
+                else
+                    screen -A -d -r $CHOICE
+                fi
+                ;;
+            *)
+                exit
+                ;;
+        esac
+    else
+        echo $ACTIVE_SCREENS
+    fi
 
 done
