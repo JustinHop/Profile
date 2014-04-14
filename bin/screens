@@ -1,17 +1,18 @@
 #!/bin/bash
 
 TEMPFILE=~/tmp/screens$$
-trap "rm -f $TEMPFILE" 0 1 2 5 15
+trap "rm -f $TEMPFILE; pkill -P $$;" 0 1 2 5 15
+#trap "pkill -P $$" 17
 
 
 #ACTIVE_SCREENS=$(screen -ls | awk '/tached/ { print $1}' | sed 's/\./ /' | sort)
-SCREEN_ATTACH_ARGS="-A -d -r"
+SCREEN_ATTACH_ARGS="-A -x -r"
 SCREEN_NEW_ARGS='-A -S $sname -dm $pjob'
 
 while true; do
     ACTIVE_SCREENS=$(screen -ls | awk '/tached/ { print $1" "$2}' | sort)
 
-    dialog --backtitle "Screen sessions on $(hostname)" \
+    tty -s && dialog --backtitle "Screen sessions on $(hostname)" \
         --stderr --clear \
         --menu "Sessions:" 0 0 0 $ACTIVE_SCREENS New "Create new session" 2> $TEMPFILE
 
@@ -21,16 +22,18 @@ while true; do
     case $RETVAL in
         0)
             if [ "$CHOICE" == "New" ]; then
-                dialog --inputbox "Session Name:" 0 0 2> $TEMPFILE
+                tty -s && dialog --inputbox "Session Name:" 0 0 2> $TEMPFILE
                 NAME=$(cat $TEMPFILE)
-                screen -A -S $NAME -dm
+                screen -A -S $NAME -dm || exit
             else
-                screen -A -d -r $CHOICE
+                screen $SCREEN_ATTACH_ARGS $CHOICE || exit
             fi
             ;;
         *)
             exit
             ;;
     esac
+
+    sleep 1s
 
 done
