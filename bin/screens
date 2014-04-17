@@ -25,7 +25,7 @@ while true; do
 
     tty -s && dialog --backtitle "Screen sessions on $(hostname)" \
         --stderr --clear \
-        --menu \"Sessions:\" 0 0 0 $ACTIVE_SCREENS New \"Create new session\" 2> $TEMPFILE
+        --menu "Sessions:" 0 0 0 $ACTIVE_SCREENS New "Create new session" 2> $TEMPFILE
 
     RETVAL=$?
     CHOICE=$(cat $TEMPFILE)
@@ -44,7 +44,5 @@ while true; do
             exit
             ;;
     esac
-
-    sleep 1s
 
 done
