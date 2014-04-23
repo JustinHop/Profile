@@ -54,6 +54,7 @@ numlockx  &
     xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
     xmodmap -e 'add Control = Control_L' >& /dev/null;
+    xmodmap -e "keycode 135 = Super_L"
     sleep 10s;
 done ; } &
 
@@ -76,6 +77,8 @@ done ; } &
 { sleep 1m; pidgin_fortune; } &
 #{ sleep 1m; padevchooser; } &
 #
+
+
 
 #exec ssh-agent bash -c 'while true ; do awesome ; done;'
 { sleep 2s; nitrogen --restore; } &
