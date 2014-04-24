@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+(cat /etc/redhat-release; uname -i;free -m | grep Mem|awk '{ print $2"MB" }';cat /proc/cpuinfo \
+| grep processor | nl | tail -n1 | awk '{ print $1" vcpus" }'; \
+df -h /`echo $HOSTNAME| cut -d. -f1 | tr -d '[:digit:]'`/shared | grep -v Filesystem | awk '{ print $1 }' ) | grep -v fls | tr "\n" ","
+

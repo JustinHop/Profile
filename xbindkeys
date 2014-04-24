@@ -49,41 +49,50 @@
 "ctrltab"
     b:7 
 
-#"unset WINDOWID; xwit -lower" 
-# Next Tag (towards screen)
-#"echo 'awful.tag.viewnext()' | awesome-client"
+#"pvol.py -m"
+#    XF86AudioMute
+#
+#"pvol.py -c -2"
+#    XF86AudioLowerVolume
+#
+#"pvol.py -c 2"
+#    XF86AudioRaiseVolume
+#
+##"unset WINDOWID; xwit -lower" 
+## Next Tag (towards screen)
+##"echo 'awful.tag.viewnext()' | awesome-client"
+##    b:13
+##
+##"echo 'awful.tag.viewnext()' | awesome-client"
+#"winright"
+#    b:12
+###"unset WINDOWID; xwit -focus"
+#"winright"
 #    b:13
+###    b:13 + Release
+##
+###"unset WINDOWID;xwit -raise"
+### Window Raise (away from screen)
+##"echo 'awful.tag.viewprev()' | awesome-client"
+#"winleft"
+#    b:14
+###"unset WINDOWID;xwit -raise"
+### Window Raise (away from screen)
+##"echo 'awful.tag.viewprev()' | awesome-client"
+#"winleft"
+#    b:15
 #
-#"echo 'awful.tag.viewnext()' | awesome-client"
-"winright"
-    b:12
-##"unset WINDOWID; xwit -focus"
-"winright"
-    b:13
-##    b:13 + Release
+#"winleft"
+#    b:10
+##"unset WINDOWID;xwit -focus" 
+##    b:15 + Release
 #
-##"unset WINDOWID;xwit -raise"
-## Window Raise (away from screen)
-#"echo 'awful.tag.viewprev()' | awesome-client"
-"winleft"
-    b:14
-##"unset WINDOWID;xwit -raise"
-## Window Raise (away from screen)
-#"echo 'awful.tag.viewprev()' | awesome-client"
-"winleft"
-    b:15
-
-"winleft"
-    b:10
-#"unset WINDOWID;xwit -focus" 
-#    b:15 + Release
-
-# Thumb press
-"xdotool key XF86Save"
-    b:17
-
-
-
-##################################
-# End of xbindkeys configuration #
-##################################
+## Thumb press
+#"xdotool key XF86Save"
+#    b:17
+#
+#
+#
+###################################
+## End of xbindkeys configuration #
+###################################

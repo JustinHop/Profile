@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cat /etc/motd | grep release | cut -d: -f5 | awk '{ print $1 }'

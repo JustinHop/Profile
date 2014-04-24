@@ -1,10 +1,3 @@
--- io.stderr:write("This is only a test\n")
-awful.util.spawn("echo ++AWESOME++ \| figlet -f small -w 1000")
-awful.util.spawn("awesome --version")
-
-function uptime ()
-    awful.util.spawn("uptime")
-end
 
 settings = {}
 settings.debug = 1

@@ -8,6 +8,8 @@ export __ZSHENV__=0.2.4a
 export HOSTNAME=`hostname`
 export UNAME=`uname`
 
+export PROFILE_DIR=$HOME/Profile
+
 export SHELL=$0
 #
 # WHO AM I
@@ -53,7 +55,7 @@ export SHORTHOST=`echo $HOSTNAME | sed -e 's/.buzznet.com//' -e 's/justinhoppens
 #
 # PATH
 #
-
+PROFILE_DIR=~/Profile
 COMMON_PATH="$HOME/bin:$HOME/Profile/bin:$PATH:/usr/bin/wrappers:/bin:/usr/bin:/usr/local/bin"
 ROOT_PATH="/sbin:/usr/sbin:/usr/local/sbin"
 UNIXWARE_PATH="/usr/dt/bin:/usr/ucb:/usr/X/bin:/opt/vxvm-va/bin"
@@ -73,13 +75,15 @@ SUN_PATH="/usr/ccs/bin:/opt/SUNWspro/bin"
 USER_PATH="$HOME/bin:$HOME/profile/bin:/usr/lib/xscreensaver"
 ENCODE_PATH="/usr/local/enctools/bin"
 NAGIOS_PATH="/usr/local/nagios/libexec"
+LOCAL_PERL5_PATH="$HOME/perl5/bin"
+LOCAL_PYTHON_PATH="$HOME/.local/bin"
 
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH
 typeset -U LD_EXEC_PATH
 typeset -U PKG_CONFIG_PATH
 
-PATH=$ENCODE_PATH:$COMMON_PATH:$ROOT_PATH:$SVN_PATH:$MYSQL_PATH:$POSTFIX:$PHP_PATH
+PATH=$LOCAL_PYTHON_PATH:$LOCAL_PERL5_PATH:$ENCODE_PATH:$COMMON_PATH:$ROOT_PATH:$SVN_PATH:$MYSQL_PATH:$POSTFIX:$PHP_PATH
 PATH=$PATH:$APACHE_PATH:$LAMEPATH:$FFMPEGPATH:$USER_PATH:$NAGIOS_PATH
 
 [ -d $DISTCC_PATH ] && PATH="$DISTCC_PATH:$PATH"
@@ -106,6 +110,12 @@ done
 export SURFRAW_text_browser=elinks
 export SURFRAW_graphical=no
 
+alias J="ssh -A jhoppensteadt@justin2.sys.dev99.websys.tmcs"
+alias JR="ssh -A root@justin2.sys.dev99.websys.tmcs"
+alias B="ssh -A jhoppensteadt@bld1.sys.tools1.websys.tmcs"
+alias BR="ssh -A bld1.sys.tools1.websys.tmcs"
+
+alias IE="wine 'C:\Program Files\Internet Explorer\iexplore'"
 
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
@@ -127,7 +137,7 @@ export PAGER
 if [[ "$TERM" == "screen" ]]; then
     alias htop="TERM=xterm htop"
 fi
- 
+
 DIRSTACKSIZE=20
 LISTMAX=1000
 REPORTTIME=10
@@ -139,7 +149,6 @@ fi
 # SHORTCUTS
 #
 lsrc="/usr/local/src"
-spec="$HOME/rpmbuild/SPECS"
 pf="$HOME/profile"
 pj="$HOME/projects"
 cfi="$HOME/dev/systems/cfengine/trunk/inputs"
@@ -148,6 +157,7 @@ cf="$HOME/dev/systems/cfengine/trunk/"
 fya="/www/wordpress-3.0/wp-content/themes/fya"
 t="/www/wordpress/wp-content/themes"
 p="/www/wordpress/wp-content/plugins"
+spec="$HOME/build/SPECS"
 
 if [[ -d /usr/local/apache2 ]]; then
 	www=/usr/local/apache2
@@ -157,6 +167,21 @@ fi
 
 export DEBEMAIL="debian@justinhoppensteadt.com"
 export DEBFULLNAME="Justin Hoppensteadt"
+
+PATH=${PATH:s/::/:/}
+PERL_CPANM_OPT="--local-lib=~/perl5"
+
+if [ -d ~/perl5/lib/perl5 ]; then
+    if [ -z "$PERL5LIB" ]; then
+        export PERL5LIB=~/perl5/lib/perl5
+    else
+        export PERL5LIB=~/perl5/lib/perl5:$PERLLIB
+    fi
+fi
+
+if [ -f $PROFILE_DIR/zshenv.local ]; then
+	. $PROFILE_DIR/zshenv.local
+fi
 
 export PATH=$HOME/bin:/usr/bin:$PATH
 

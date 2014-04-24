@@ -1,0 +1,29 @@
+#!/usr/bin/expect
+
+puts $argv
+
+#set argc [llength $argv]
+#    for {set i 0} {$i<$argc} {incr i} {
+#    puts "arg $i: [lindex $argv $i]"
+#}
+
+
+set file $env(HOME)
+append file "/Profile/rbashrc"
+set input [open $file "r"]
+
+spawn ssh {*}$argv
+#expect "(%|#|\\\$) $"
+expect "^Last login"
+stty -echo
+send "stty -echo\n"
+send "bash\n"
+while 1 {
+    if {[gets $input line] == -1} break
+    send $line
+    send ";"
+}
+send "stty echo\n"
+send "\n"
+stty echo
+interact

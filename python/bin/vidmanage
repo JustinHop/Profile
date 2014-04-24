@@ -1,0 +1,4 @@
+#!/bin/bash
+
+BINPATH=$(dirname $(readlink -f $0))
+python "$BINPATH/../vidmanage/main.py" "$@"

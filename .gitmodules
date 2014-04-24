@@ -1,0 +1,96 @@
+[submodule "vim/general/fugitive"]
+	path = vim/general/fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim/general/snipmate"]
+	path = vim/general/snipmate
+	url = https://github.com/msanders/snipmate.vim.git
+[submodule "vim/general/surround"]
+	path = vim/general/surround
+	url = https://github.com/tpope/vim-surround
+[submodule "vim/general/supertab"]
+	path = vim/general/supertab
+	url = https://github.com/ervandew/supertab
+[submodule "vim/general/minibufexpl"]
+	path = vim/general/minibufexpl
+	url = https://github.com/sontek/minibufexpl.vim.git
+[submodule "vim/general/command-t"]
+	path = vim/general/command-t
+	url = https://github.com/wincent/Command-T.git
+[submodule "vim/general/ack"]
+	path = vim/general/ack
+	url = https://github.com/mileszs/ack.vim.git
+[submodule "vim/general/gundo"]
+	path = vim/general/gundo
+	url = https://github.com/sjl/gundo.vim.git
+[submodule "vim/python/pydoc"]
+	path = vim/python/pydoc
+	url = https://github.com/fs111/pydoc.vim.git
+[submodule "vim/python/pep8"]
+	path = vim/python/pep8
+	url = https://github.com/vim-scripts/pep8.git
+[submodule "vim/python/py.test"]
+	path = vim/python/py.test
+	url = https://github.com/alfredodeza/pytest.vim.git
+[submodule "vim/general/makegreen"]
+	path = vim/general/makegreen
+	url = https://github.com/reinh/vim-makegreen
+[submodule "vim/general/tasklist"]
+	path = vim/general/tasklist
+	url = https://github.com/vim-scripts/TaskList.vim.git
+[submodule "vim/general/nerdtree"]
+	path = vim/general/nerdtree
+	url = https://github.com/vim-scripts/The-NERD-tree.git
+[submodule "vim/general/ropevim"]
+	path = vim/general/ropevim
+	url = https://github.com/sontek/rope-vim.git
+[submodule "vim/general/deletetrailingwhitespace"]
+	path = vim/general/deletetrailingwhitespace
+	url = https://github.com/vim-scripts/DeleteTrailingWhitespace.git
+[submodule "vim/general/vim-profiles"]
+	path = vim/general/vim-profiles
+	url = https://github.com/mirlord/vim-profiles.git
+[submodule "vim/general/sensible"]
+	path = vim/general/sensible
+	url = https://github.com/tpope/vim-sensible.git
+[submodule "vim/general/sleuth"]
+	path = vim/general/sleuth
+	url = https://github.com/tpope/vim-sleuth.git
+[submodule "vim/lib/ingo-library"]
+	path = vim/lib/ingo-library
+	url = https://github.com/vim-scripts/ingo-library.git
+[submodule "vim/general/writebackup"]
+	path = vim/general/writebackup
+	url = https://github.com/vim-scripts/writebackup.git
+[submodule "vim/general/writebackupVersionControl"]
+	path = vim/general/writebackupVersionControl
+	url = https://github.com/vim-scripts/writebackupVersionControl.git
+[submodule "vim/general/writebackupAutomator"]
+	path = vim/general/writebackupAutomator
+	url = https://github.com/vim-scripts/writebackupAutomator.git
+[submodule "vim/general/visual-increment"]
+	path = vim/general/visual-increment
+	url = https://github.com/vim-scripts/visual-increment.git
+[submodule "vim/python/python-mode"]
+	path = vim/python/python-mode
+	url = https://github.com/klen/python-mode.git
+[submodule "vim/general/airline"]
+	path = vim/general/airline
+	url = https://github.com/bling/vim-airline
+[submodule "vim/coding/rainbow_parentheses"]
+	path = vim/coding/rainbow_parentheses
+	url = https://github.com/kien/rainbow_parentheses.vim.git
+[submodule "colors/dircolors-solarized"]
+	path = colors/dircolors-solarized
+	url = https://github.com/seebi/dircolors-solarized.git
+[submodule "colors/gnome-terminal-colors-solarized"]
+	path = colors/gnome-terminal-colors-solarized
+	url = https://github.com/sigurdga/gnome-terminal-colors-solarized.git
+[submodule "awesome/external/awesome-solarized"]
+	path = awesome/external/awesome-solarized
+	url = https://github.com/cycojesus/awesome-solarized.git
+[submodule "colors/solarized-dark-gtk"]
+	path = colors/solarized-dark-gtk
+	url = https://github.com/jankotek/solarized-dark-gtk.git
+[submodule "vim/coding/salt-vim"]
+	path = vim/coding/salt-vim
+	url = https://github.com/saltstack/salt-vim.git

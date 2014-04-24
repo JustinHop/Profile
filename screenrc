@@ -3,6 +3,9 @@
 # http://root-squash.ath.cx
 #
 
+screen
+screen $SHELL -c 'screen -X backtick 1 0 0 echo "${STY#*.}"'
+
 setenv SCREENRC_VERSION 1.2.4
 setenv SCREEN_SCREEN 1
 setenv SCREEN_HOST $HOSTNAME
@@ -15,7 +18,7 @@ shelltitle " $ |$SHELL"
 compacthist on
 bufferfile        $HOME/.screenlogs/.screen_exchange
 startup_message   off
-defscrollback     16384
+defscrollback     65535
 
 # more stolen stuff
 #sorendition "+b kG"
@@ -28,18 +31,20 @@ deflog on
 logfile $HOME/.screenlogs/screen-%Y-%m-%d-%0c:%s-%H-%n.log
 logtstamp on
 
-# 256 color xterm
+## 256 color xterm
 #attrcolor b ".I"
 #termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 #defbce "on"
-#
+##
 
 #termcapinfo xterm*|Eterm|mlterm 'hs:ts=\E]0;:fs=\007:ds=\E]0;screen\007'
 defhstatus "$ORI_XTITLE <[ screen ^E (^Et) ]>"
 hardstatus off
 
 #caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d %{yk}%D %{gk}%c %{bk}%l"
-caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d %{yk}%D %{gk}%c %{bk}%l"
+#caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d %{yk}%D %{gk}%c %{bk}%l"
+#caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{rk}%1` %{yk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d"
+caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{rk}%1` %{yk}@%H %{ck}%Y%{wk}-%{ck}%m%{wk}-%{ck}%d"
 
 # grabbed from gentoo's screenrc
 # XTERM TWEAKS
@@ -96,7 +101,10 @@ caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{mk}@%H %{ck}%
  termcapinfo xterm ‘bc@:bs@’
 
 # bindkey -d ^? stuff ^H
-#bindkey -d ^@ stuff ^H
+bindkey -d ^@ stuff ^H
   
 # bindkey -d -k kb stuff "\010"
+# bindkey -d ^@ stuff ^H
+  
+ #bindkey -d -k kb stuff "\010"
 

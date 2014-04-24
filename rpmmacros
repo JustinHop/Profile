@@ -1,17 +1,5 @@
-%packager Justin Hoppensteadt <Justin.Hoppensteadt@umgtemp.com> 
-%vendor Universal Music Group
- 
-%_topdir            /LX_Web/RPM
-%_builddir          %{_topdir}/BUILD
-%_rpmdir            %{_topdir}/RPMS
-%_sourcedir         %{_topdir}/SOURCES
-%_specdir           %{_topdir}/SPECS
-%_srcrpmdir         %{_topdir}/SRPMS
-%_buildrootdir      %{_topdir}/TMP
-%_tmppath           %{_topdir}/TMP
-%_query_all_fmt %%{name}-%%{version}-%%{release}.%%{arch}
+%packager Justin Hoppensteadt <justin.hoppensteadt@ticketmaster.com>
+%vendor Live Nation
 
-
-%_signature gpg
-%_gpg_name Justin Hoppensteadt (Universal Music Group RPM Key) <Justin.Hoppensteadt@umgtemp.com>
+%_topdir /bld/shared/home/jhoppensteadt/build
 

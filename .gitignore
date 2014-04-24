@@ -6,11 +6,40 @@
 *.so
 .*.swp
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
 *BACKUP*
 *.orig
 *.netrwhist
 *.netrwhist~
 
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# Rope
+.ropeproject
+
 bin/*
 
 zsh/cache
+zshrc.local.post
+zshrc.local.pre

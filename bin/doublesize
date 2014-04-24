@@ -1,0 +1,5 @@
+#!/bin/bash
+
+
+(cat /etc/redhat-release; uname -i;free -m | grep Mem|awk '{ print $2"*2" }'| bc | tr -d ' ';echo -n "MB,"  ;cat /proc/cpuinfo | grep processor | nl | tail -n1 | awk '{ print $1" vcpus" }' ) | tr "\n" "," | sed 's/,MB/MB/'
+
