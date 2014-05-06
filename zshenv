@@ -10,7 +10,7 @@ export UNAME=`uname`
 
 export PROFILE_DIR=$HOME/Profile
 
-export SHELL=$0
+export SHELL=$(which $0)
 #
 # WHO AM I
 #
@@ -127,6 +127,7 @@ export SVN_EDITOR=vim
 export EDITOR=vim
 export MYSQL_PS1="mysql (\U@\h)::(\d) \c > "
 export FIREFOX_DSP="padsp"
+export NSS_DEFAULT_DB_TYPE=sql
 
 export DEBEMAIL=Justin.Hoppensteadt@umgtemp.com
 export DEBFULLNAME="Justin Hoppensteadt"

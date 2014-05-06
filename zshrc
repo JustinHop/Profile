@@ -537,7 +537,7 @@ if (( $ZSH_MAJOR >= 4 )); then
     ntp operator pcap postgres radvd rpc rpcuser rpm \
     shutdown squid sshd sync uucp vcsa xfs backup  bind  \
     dictd  gnats  identd  irc  man  messagebus  postfix \
-    proxy  sys  www-data
+    proxy  sys  www-data colord
 
   #compdef _ssh envssh
   #compdef '_dispatch ssh' essh
@@ -548,14 +548,16 @@ if (( $ZSH_MAJOR >= 4 )); then
   ### Mine
   for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts ; do
     if [[ -f $hostfile ]]; then
-      etchosts=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < /etc/hosts) )
-      zstyle ':completion:*' hosts $etchosts;
+      etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < /etc/hosts) )
+      #zstyle ':completion:*' hosts $etchosts;
     fi
   done
   if [[ -f "$HOME"/tm.bindForward ]]; then
-    etchosts=( $( perl -ne '/(^[\w\.]*tmcs)/; if ($1) { print $1 . " " }' < "$HOME"/tm.bindForward ))
-    zstyle ':completion:*' hosts $etchosts
+    etchosts+=( $( perl -ne '/(^[\w\.]*tmcs)/; if ($1) { print $1 . " " }' < "$HOME"/tm.bindForward ))
+    #zstyle ':completion:*' hosts $etchosts
   fi
+  etchosts+=({core,mail,tux,tux-ninja,net1,net,sup1,sup,www,eh}{,.justinhoppensteadt.com} $HOSTNAME)
+  zstyle ':completion:*' hosts $etchosts
   compdef _hosts getip
   compdef _modprobe remod
   compdef _mozilla firefox-3.5

@@ -89,6 +89,7 @@ done ; } &
 
 #exec ssh-agent bash -c 'while true ; do awesome ; done;'
 setxkbmap -option "terminate:ctrl_alt_bksp"
+#exec bash -c "sudo -n nice -n -10 sudo -n -u justin bash -c 'while true ; do awesome; sleep 1s; done;' || while true ; do awesome; sleep 1s; done;"
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
 
 #exec ck-launch-session gnome-session
