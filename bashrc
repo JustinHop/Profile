@@ -31,6 +31,7 @@ alias ..="cd .."
 alias ,,="cd .."
 alias ks="ls"
 alias xs="cd"
+alias W="ssh -l jhoppensteadt localhost -p 2222 -i ~/work"
 
 LS=/bin/ls
 NOR=" --color=auto --hide-control-chars --classify "  
