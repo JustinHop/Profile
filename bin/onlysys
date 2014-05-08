@@ -1,12 +1,10 @@
-#!/bin/bash
-IGNORE="^(fw|as|ld.?|nsr|lb|swx|dsx|asx|cyc|rcm|gig|fls|fsx|slb|ra|nls|sjs|hsrp|dhcp|vsr|utl|coresys)(\.|[0-9])"
+#!/usr/bin/env perl
+#
 
+my $IGNORE='^(fw|as|ld.?|nsr|lb|swx|dsx|asx|cyc|rcm|gig|fls|fsx|slb|ra|nls|sjs|hsrp|dhcp|vsr|utl|coresys)(\.|[0-9])';
 
+while (<>){
+    m/$IGNORE/ && do { next };
+    print
+}
 
-while read LINE ; do
-    if [ $1 ] ; then
-        echo $LINE | egrep -v $IGNORE | grep -P '^\w+\d+\.'
-    else
-        echo $LINE | egrep -v $IGNORE | grep websys| grep -P '^\w+\d+\.'
-    fi
-done

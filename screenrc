@@ -52,7 +52,7 @@ caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{rk}%1` %{yk}@
 
 # 80/132 column switching must be enabled for ^AW to work
 # change init sequence to not switch width
-  termcapinfo  xterm Z0=\E[?3h:Z1=\E[?3l:is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l
+#  termcapinfo  xterm Z0=\E[?3h:Z1=\E[?3l:is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l
 
 # Make the output buffer large for (fast) xterms.
 # termcapinfo xterm* OL=10000
@@ -75,7 +75,8 @@ caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{rk}%1` %{yk}@
   termcapinfo xterm* be
 
 # Do not use xterm's alternative window buffer, it breaks scrollback (see bug #61195)
-  termcapinfo xterm|xterms|xs ti@:te=\E[2J
+# termcapinfo xterm|xterms|xs ti@:te=\E[2J
+termcapinfo xterm* ti@:te@
 
 # Extend the vt100 desciption by some sequences.
   termcap  vt100* ms:AL=\E[%dL:DL=\E[%dM:UP=\E[%dA:DO=\E[%dB:LE=\E[%dD:RI=\E[%dC
@@ -101,6 +102,9 @@ caption always "%{wk}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{wk}%?%+Lw %= %{rk}%1` %{yk}@
  termcapinfo xterm ‘bc@:bs@’
 
 # bindkey -d ^? stuff ^H
+bindkey -d ^@ stuff ^H
+  
+# bindkey -d -k kb stuff "\010"
 # bindkey -d ^@ stuff ^H
   
  #bindkey -d -k kb stuff "\010"

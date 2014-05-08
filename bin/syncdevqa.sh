@@ -18,10 +18,4 @@
 #      REVISION:  ---
 #===============================================================================
 
-ssh ops1.sys.devqa1.websys.tmcs '/ops/local/bin/cluster_software_update'
-
-ssh ops2.sys.devqa1.websys.tmcs '/ops/local/bin/cluster_software_update'
-
-ssh ops1.sys.devqa2.websys.tmcs '/ops/local/bin/cluster_software_update'
-
-ssh ops2.sys.devqa2.websys.tmcs '/ops/local/bin/cluster_software_update'
+nhs | grep -P 'ops\d+\.sys\.devqa\d+\.websys\.tmcs' | onall -Qpb "/ops/local/bin/cluster_software_update $@"

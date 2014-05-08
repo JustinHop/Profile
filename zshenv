@@ -150,8 +150,15 @@ fi
 # SHORTCUTS
 #
 lsrc="/usr/local/src"
+pf="$HOME/profile"
+pj="$HOME/projects"
+cfi="$HOME/dev/systems/cfengine/trunk/inputs"
+cfb="$HOME/dev/systems/cfengine/trunk/build"
+cf="$HOME/dev/systems/cfengine/trunk/"
+fya="/www/wordpress-3.0/wp-content/themes/fya"
+t="/www/wordpress/wp-content/themes"
+p="/www/wordpress/wp-content/plugins"
 spec="$HOME/build/SPECS"
-pf="$HOME/Profile"
 
 if [[ -d /usr/local/apache2 ]]; then
 	www=/usr/local/apache2

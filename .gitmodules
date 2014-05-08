@@ -10,9 +10,6 @@
 [submodule "vim/general/supertab"]
 	path = vim/general/supertab
 	url = https://github.com/ervandew/supertab
-[submodule "vim/general/minibufexpl"]
-	path = vim/general/minibufexpl
-	url = https://github.com/sontek/minibufexpl.vim.git
 [submodule "vim/general/command-t"]
 	path = vim/general/command-t
 	url = https://github.com/wincent/Command-T.git
