@@ -1,0 +1,47 @@
+#!/bin/bash
+
+set -a
+#set -x
+
+TEMPFILE=~/tmp/$0-$$
+trap "rm -f $TEMPFILE; pkill -P $$;" 0 1 2 5 15
+#trap "pkill -P $$" 17
+
+
+#ACTIVE_TMUXER=$(screen -ls | awk '/tached/ { print $1}' | sed 's/\./ /' | sort)
+TMUXER_ATTACH_ARGS="-A -x -r"
+TMUXER_NEW_ARGS='-A -S $sname -dm $pjob'
+
+formatscreenlines () {
+    arr=($*)
+    echo ${arr[0]} \'${arr[@]:1}\'
+}
+
+
+while true; do
+    #ACTIVE_TMUXER=$(screen -ls | awk '/tached/ { print $1" "$2}' | sort)
+    ACTIVE_TMUXER=$(screen -ls | grep tached | xargs -L 1 -I{} bash -c "set +f;formatscreenlines \"{}\"" )
+
+    tty -s && dialog --backtitle "Screen sessions on $(hostname)" \
+        --stderr --clear \
+        --menu "Sessions:" 0 0 0 $ACTIVE_TMUXER New "Create new session" 2> $TEMPFILE
+
+    RETVAL=$?
+    CHOICE=$(cat $TEMPFILE)
+
+    case $RETVAL in
+        0)
+            if [ "$CHOICE" == "New" ]; then
+                tty -s && dialog --inputbox "Session Name:" 0 0 2> $TEMPFILE
+                NAME=$(cat $TEMPFILE)
+                screen -A -S $NAME -dm || exit
+            else
+                screen $TMUXER_ATTACH_ARGS $CHOICE || exit
+            fi
+            ;;
+        *)
+            exit
+            ;;
+    esac
+
+done
