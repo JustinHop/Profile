@@ -10,7 +10,7 @@ export UNAME=`uname`
 
 export PROFILE_DIR=$HOME/Profile
 
-export SHELL=$(which $0)
+#export SHELL=$(which $0)
 #
 # WHO AM I
 #
