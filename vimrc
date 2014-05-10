@@ -181,6 +181,11 @@ endfunction
 function! DoColors()
   set background=dark
   let g:solarized_termcolors=256
+  let g:solarized_contrast="high"    "default value is normal
+  let g:solarized_visibility="high"    "default value is normal
+  syntax enable
+  set background=dark
+colorscheme solarized
   colorscheme elflord
   if exists('g:loaded_solarized_menu')
     colorscheme solarized
@@ -195,6 +200,8 @@ filetype indent on
 
 set directory=~/tmp
 
+set clipboard=unnamed,unnamedplus
+
 if has("autocmd")
   filetype plugin indent on
   "jumpback
@@ -205,20 +212,29 @@ if has("autocmd")
 
   " purdy colors
   set background=dark
-  let g:solarized_termcolors=16
+  if has("gui_running")
+    let g:solarized_contrast="high"    "default value is normal
+    let g:solarized_visibility="normal"    "default value is normal
+    let g:solarized_diff="high"    "default value is normal
+  else
+    let g:solarized_termcolors=16
+    let g:solarized_contrast="high"    "default value is normal
+    let g:solarized_visibility="high"    "default value is normal
+    let g:solarized_diff="high"    "default value is normal
+  endif
   colorscheme solarized
 
 
   " yank to clipboard
-  if executable("xclip")
+  "if executable("xclip")
     "vnoremap y  :yank<CR>:call system("xclip -i", getreg("\""))<CR>gv :yank<CR>
     "nmap <leader>Y : silent call system("xclip ", getreg("\""))\<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
     "nmap <leader>y : silent call system("xclip ", getreg("0"))\<CR>:echo "Yanked to clipboard: " . getreg("0")<CR>
     "vmap <leader>cy y: silent call system("xclip ", getreg("\""))\<CR>:echo "Yanked to clipboard: " . getreg("\"")<CR>
-    nmap <leader>Y : silent call system("xclip ", getreg("\""))\<CR>
-    nmap <leader>y : silent call system("xclip ", getreg("0"))\<CR>
-    vmap <leader>cy y: silent call system("xclip ", getreg("\""))\<CR>
-  endif
+   " nmap <leader>Y : silent call system("xclip ", getreg("\""))\<CR>
+   " nmap <leader>y : silent call system("xclip ", getreg("0"))\<CR>
+   " vmap <leader>cy y: silent call system("xclip ", getreg("\""))\<CR>
+  "endif
 
   " Filetype Detect
   augroup filetypedetect
@@ -245,12 +261,12 @@ if has("autocmd")
   au BufWritePost * silent! call WriteUndo()
   au BufWritePost * execute "silent! normal :WriteBackup \<CR>"
 
-  func ReadUndo()
+  func! ReadUndo()
     if filereadable($HOME . '/backup/undo' . expand('%:p'))
       rundo ~/backup/undo%:p
     endif
   endfunc
-  func WriteUndo()
+  func! WriteUndo()
     let dirname = $HOME . '/backup/undo' . expand('%:p:h')
     if !isdirectory(dirname)
       call mkdir(dirname, "p")
@@ -305,8 +321,8 @@ nmap <silent> <leader>t :NERDTreeToggle<CR>
 nmap <silent> <leader>T :TlistToggle<CR>
 
 if has("gui_running")
-  map <silent>  <S-Insert>  "+p
-  imap <silent>  <S-Insert>  <Esc>"+pa
+  nnoremap <silent>  <S-Insert>  "+p
+  inoremap <silent>  <S-Insert>  <Esc>"+pa
 endif
 
 " this maps shift up and down to scroll
