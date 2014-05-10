@@ -219,7 +219,7 @@ if has("autocmd")
   else
     let g:solarized_termcolors=16
     let g:solarized_contrast="high"    "default value is normal
-    let g:solarized_visibility="high"    "default value is normal
+    let g:solarized_visibility="normal"    "default value is normal
     let g:solarized_diff="high"    "default value is normal
   endif
   colorscheme solarized
