@@ -113,12 +113,19 @@ class VidListFull:
     def __init__(self):
         self.Dlist = VidDList()
         self.Alist = VidList()
+        self.Klist = VidList()
+
+    def klist(self):
+        return self.Klist
 
     def dlist(self):
         return self.Dlist
 
     def alist(self):
         return self.Alist
+
+    def setklist(self, klist):
+        self.Klist = klist
 
     def setdlist(self, dlist):
         self.Dlist = dlist

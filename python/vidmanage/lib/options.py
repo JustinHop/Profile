@@ -15,6 +15,10 @@ class Options:
                                 action='store_true',
                                 help="Add curent \
                                 playing video to Alist")
+        self.group.add_argument('-k', '--keep', dest='klist',
+                                action='store_true',
+                                help="Add curent \
+                                playing video to keep list")
         self.group.add_argument('-d', '--delete', dest='dlist',
                                 action='store_true',
                                 help="Add current \
@@ -27,10 +31,12 @@ class Options:
                                 action='store_true',
                                 help="Print information about current \
                                 video being watched, if any")
+        self.group.add_argument('-O', '--outputall', dest='outputall',
+                                action='store_true',
+                                help="Output current alist and klist")
         self.group.add_argument('-o', '--output', dest='output',
                                 action='store_true',
-                                help="Output current alist in xargs \
-                                compatible format")
+                                help="Output current alist")
         self.group.add_argument('-p', '--purge', dest='purgelist',
                                 action='store_true',
                                 help='Delete all videos on remove list')
