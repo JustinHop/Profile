@@ -24,9 +24,9 @@ mv -v ~/tm.bindForward ~/.tm.bindForward.back
 #for zone in clisys.tmcs cloudsys.tmcs coresys.tmcs fieldsys.tmcs netops.tmcs netsys.tmcs stratsys.tmcs techops.tmcs tm.tmcs tw.tmcs uksys.tmcs vista.tmcs websys.tmcs winsys.tmcs syseng.tmcs
 for zone in clisys.tmcs cloudsys.tmcs coresys.tmcs fieldsys.tmcs netops.tmcs netsys.tmcs stratsys.tmcs techops.tmcs tw.tmcs uksys.tmcs vista.tmcs websys.tmcs winsys.tmcs syseng.tmcs tm.tmcs
 do
-    echo $zone
-    dig @10.75.32.5 $zone axfr >> ~/tm.bindForward
-done
+    echo $zone | tee /dev/stderr
+    #dig @10.75.32.5 $zone axfr >> ~/tm.bindForward
+done | xargs -n1 -P4 -I{} dig @10.75.32.5 {} axfr >> ~/tm.bindForward
 
 sed -i '/\.tm\.tmcs\.\s+/d' ~/tm.bindForward
 

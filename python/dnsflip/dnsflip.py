@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 '''dnsflip
 Usage:
-    dnsflip [--forward|--reverse] [FILE...]
+    dnsflip [-frV1As] [FILE...]
     dnsflip -h | --help
     dnsflip --version
 
 Options:
-    -f --forward              Only preform forward lookups. [default: True]
-    -r --reverse              Only preform reverse lookups.
+    -A --all                  All addresses
+    -s --strip                Strip non host info from lines
+    -f --noforward            Do not preform forward lookups.
+    -r --noreverse            Do not preform reverse lookups.
+    -V --verbose              Be verbose, print extra lines
+    -1 --oneline              Output one line with resolution after.
     -v --version              Show version.
     -h --help                 Show this screen.
 '''
@@ -20,7 +24,7 @@ import dns.reversename
 import fileinput
 import re
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Justin Hoppensteadt"
 __license__ = "MIT"
 
@@ -30,6 +34,7 @@ class DNSFlip:
     '''The DNS Flipper'''
 
     def __init__(self):
+        self.args = docopt(__doc__, version=__version__)
         self.ValidIp = re.compile(
             r'((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)'
             r'(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3})')
@@ -46,7 +51,8 @@ class DNSFlip:
             r'*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])')
         self.CommonHost = re.compile(
             r'((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)'
-            r'*(com|org|net|info|tmcs|pl|tv)\.?)', re.IGNORECASE)
+            r'*(au|mx|ca|nz|uk|com|org|net|info|tmcs|pl|tv)\b)',
+            re.IGNORECASE)
 
     def strip(self, stringIn):
         self.stripedLine = []
@@ -62,7 +68,13 @@ class DNSFlip:
         self.ipv4 = ipaddr.group()
         #print self.ipv4
         self.rev = dns.reversename.from_address(self.ipv4)
-        return str(dns.resolver.query(self.rev, "PTR")[0])
+        try:
+            if (self.args['--all']):
+                return ",".join(dns.resolver.query(self.rev, "PTR"))
+            else:
+                return str(dns.resolver.query(self.rev, "PTR")[0])
+        except dns.resolver.NXDOMAIN:
+            return str(self.ipv4)
         #return dns.reversename.to_address(self.rev)
 
     def _resolve(self, hostname):
@@ -70,7 +82,13 @@ class DNSFlip:
         try:
             self.answers = dns.resolver.query(hostname.group(),
                                               'A')
-            return self.answers[0].__str__()
+            if (self.args['--all']):
+                ansstr = []
+                for an in self.answers:
+                    ansstr.append(an.__str__())
+                return ",".join(ansstr)
+            else:
+                return self.answers[0].__str__()
         except dns.resolver.NXDOMAIN:
             return self.host
 
@@ -83,7 +101,6 @@ class DNSFlip:
         self.inputString = stringIn
         self._rev = self.ValidIpNoArpa.subn(self._resolve_r,
                                             self.inputString)[0]
-        #print self._rev
         return self._rev
 
     def forward(self, stringIn):
@@ -97,15 +114,31 @@ class DNSFlip:
     def parse(self, stringIn):
         self.lineout = []
         for chunk in re.findall(r'(\s+|\S+)', stringIn):
-            #print "'" + chunk + "'"
+            self.chunkout = ""
             if (self.CommonHost.match(chunk)):
-                self.lineout.append(self.forward(chunk))
+                if (self.args['--noforward']):
+                    self.lineout.append(chunk)
+                else:
+                    self.chunkout = self.forward(chunk)
             elif (self.ValidIpNoArpa.match(chunk)):
-                #print "Is Reverse"
-                self.lineout.append(self.reverse(chunk))
+                if (self.args['--noreverse']):
+                    self.lineout.append(chunk)
+                else:
+                    self.chunkout = self.forward(chunk)
             else:
-                self.lineout.append(chunk)
-        return "".join(self.lineout)
+                if (self.args['--strip']):
+                    continue
+                else:
+                    self.lineout.append(chunk)
+                continue
+            if (self.args['--oneline']):
+                self.lineout.append(chunk + '[' + self.chunkout + ']')
+            else:
+                self.lineout.append(self.chunkout)
+        if (self.args['--strip']):
+            return " ".join(self.lineout)
+        else:
+            return "".join(self.lineout)
 
     def flip(self, stringIn):
         self.inputStringFull = self.forward(stringIn)
@@ -120,10 +153,9 @@ def main():
     dnsf = DNSFlip()
     for line in fileinput.input(args['FILE']):
         line = line.rstrip()
-        print (line)
+        if (args['--verbose']):
+            print (line)
         print (dnsf.parse(line))
-        if (args['--forward']):
-            print (dnsf.forward(line))
         #print (dnsf.strip(line))
 
 

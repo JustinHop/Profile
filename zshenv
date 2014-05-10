@@ -10,7 +10,7 @@ export UNAME=`uname`
 
 export PROFILE_DIR=$HOME/Profile
 
-export SHELL=$0
+#export SHELL=$(which $0)
 #
 # WHO AM I
 #
@@ -127,6 +127,7 @@ export SVN_EDITOR=vim
 export EDITOR=vim
 export MYSQL_PS1="mysql (\U@\h)::(\d) \c > "
 export FIREFOX_DSP="padsp"
+export NSS_DEFAULT_DB_TYPE=sql
 
 export DEBEMAIL=Justin.Hoppensteadt@umgtemp.com
 export DEBFULLNAME="Justin Hoppensteadt"
@@ -149,8 +150,15 @@ fi
 # SHORTCUTS
 #
 lsrc="/usr/local/src"
+pf="$HOME/profile"
+pj="$HOME/projects"
+cfi="$HOME/dev/systems/cfengine/trunk/inputs"
+cfb="$HOME/dev/systems/cfengine/trunk/build"
+cf="$HOME/dev/systems/cfengine/trunk/"
+fya="/www/wordpress-3.0/wp-content/themes/fya"
+t="/www/wordpress/wp-content/themes"
+p="/www/wordpress/wp-content/plugins"
 spec="$HOME/build/SPECS"
-pf="$HOME/Profile"
 
 if [[ -d /usr/local/apache2 ]]; then
 	www=/usr/local/apache2
