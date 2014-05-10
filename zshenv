@@ -3,7 +3,7 @@
 #  http://justinhoppensteadt.com/svn/profile/zshenv
 #  Both kinds of free
 
-export __ZSHENV__=0.2.4a
+export __ZSHENV__=0.2.6
 
 export HOSTNAME=`hostname`
 export UNAME=`uname`
@@ -95,7 +95,7 @@ if [[ -z "$DONT_TOUCH_LD" ]]; then
     fi
 fi
 
-fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" "$HOME/Profile/zsh" )
+fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" "$HOME/Profile/zsh" "$HOME/Profile/zsh-completions/src" )
 
 for MMAN in "/usr/local/{openldap,svn,netperf,mysql,snort}/man" ; do
 if [[ -d $MMAN ]]; then
