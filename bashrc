@@ -223,4 +223,4 @@ $CYAN\$$GRAY:$CYAN\w\
 $LIGHT_CYAN)$CYAN-$GRAY-$LIGHT_GRAY " 
 PS2="$LIGHT_CYAN-$CYAN-$GRAY-$NO_COLOUR "
 }
-setup_env
+setup_env > /dev/null
