@@ -1,0 +1,9 @@
+
+[roxterm options]
+warn_close=1
+encoding=UTF-8
+prefer_dark_theme=1
+colour_scheme=solarized-dark
+edit_shortcuts=1
+shortcut_scheme=Justin
+profile=Justin

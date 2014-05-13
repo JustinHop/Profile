@@ -85,7 +85,8 @@ settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Termin
 --settings.mouse_marker_synergy = "<span bgcolor=" .. [["]] .. light_green .. [[">[╳]</span>]]
 
 -- This is used later as the default terminal and editor to run.
-terminal = "gnome-terminal"
+-- terminal = "gnome-terminal"
+terminal = "roxterm"
 lock_session = "gnome-screensaver-command -l"
 take_screenshot = "gnome-screenshot -i"
 session_ender = "session_ender.sh"

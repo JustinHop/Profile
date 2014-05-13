@@ -185,14 +185,46 @@ function! DoColors()
   let g:solarized_visibility="high"    "default value is normal
   syntax enable
   set background=dark
-colorscheme solarized
+  colorscheme solarized
   colorscheme elflord
   if exists('g:loaded_solarized_menu')
     colorscheme solarized
   elseif filereadable($HOME . '/.vim/colors/badwolf.vim')
     colorscheme badwolf
   endif
+  if has("gui_running")
+    let g:solarized_termcolors=256
+    let g:solarized_contrast="high"    "default value is normal
+    let g:solarized_visibility="normal"    "default value is normal
+    let g:solarized_diff="high"    "default value is normal
+  else
+    "let g:solarized_termcolors=16
+    let g:solarized_contrast="normal"    "default value is normal
+    let g:solarized_visibility="normal"    "default value is normal
+    let g:solarized_diff="high"    "default value is normal
+  endif
 endfunction
+
+
+if !exists('g:airline_symbols')
+  if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+  endif
+
+  " unicode symbols
+  "let g:airline_left_sep = '»'
+  let g:airline_left_sep = '▶'
+  "let g:airline_right_sep = '«'
+  let g:airline_right_sep = '◀'
+  "let g:airline_symbols.linenr = '␊'
+  let g:airline_symbols.linenr = '␤'
+  let g:airline_symbols.linenr = '¶'
+  let g:airline_symbols.branch = '⎇'
+  "let g:airline_symbols.paste = 'ρ'
+  let g:airline_symbols.paste = 'Þ'
+  "let g:airline_symbols.paste = '∥'
+  let g:airline_symbols.whitespace = 'Ξ'
+endif
 
 filetype on
 filetype plugin on
@@ -212,18 +244,13 @@ if has("autocmd")
 
   " purdy colors
   set background=dark
-  if has("gui_running")
-    let g:solarized_contrast="high"    "default value is normal
-    let g:solarized_visibility="normal"    "default value is normal
-    let g:solarized_diff="high"    "default value is normal
-  else
-    let g:solarized_termcolors=16
-    let g:solarized_contrast="high"    "default value is normal
-    let g:solarized_visibility="normal"    "default value is normal
-    let g:solarized_diff="high"    "default value is normal
-  endif
+  let g:solarized_termcolors=16
   colorscheme solarized
+  au VimEnter * call AirSettings()
 
+  func! AirSettings()
+    exec "silent! normal :AirlineTheme kolor\<CR>"
+  endfunc
 
   " yank to clipboard
   "if executable("xclip")

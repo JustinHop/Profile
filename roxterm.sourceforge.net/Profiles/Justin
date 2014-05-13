@@ -1,0 +1,11 @@
+[roxterm profile]
+colour_scheme=solarized-dark
+font=Droid Sans Mono Bold 9
+show_resize_grip=0
+audible_bell=0
+term=xterm
+scroll_on_output=1
+scrollback_lines=10000
+disable_menu_access=1
+use_custom_command=1
+command=zsh
