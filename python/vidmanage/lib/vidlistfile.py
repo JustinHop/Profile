@@ -4,6 +4,11 @@ import pickle
 import os
 import sys
 
+#
+#   TODO:
+#       Add support for finding if file is
+#       already in list, and handle.
+#
 
 class Vid:
 
