@@ -14,6 +14,7 @@ __pycache__/
 *.orig
 *.netrwhist
 *.netrwhist~
+.netrwhist
 
 # Installer logs
 pip-log.txt

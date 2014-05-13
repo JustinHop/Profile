@@ -24,6 +24,13 @@ if __name__ == '__main__':
             fulllist.alist().remove(video)
         else:
             fulllist.alist().append(video)
+    elif opts.klist:
+        if not video:
+            raise Exception("No video file detected or specified.")
+        if opts.remove:
+            fulllist.klist().remove(video)
+        else:
+            fulllist.klist().append(video)
     elif opts.dlist:
         if not video:
             raise Exception("No video file detected or specified.")
@@ -34,6 +41,8 @@ if __name__ == '__main__':
     elif opts.info:
         print "A List"
         fulllist.alist().prettyprintlist()
+        print "K List"
+        fulllist.klist().prettyprintlist()
         print "D List"
         fulllist.dlist().prettyprintlist()
     elif opts.videoinfo:
@@ -44,7 +53,12 @@ if __name__ == '__main__':
             datetime.fromtimestamp(v.getattr()['stat'][-1])
     elif opts.output:
         for v in fulllist.alist().getlist():
-            print v.getname(),
+            print v.getname()
+    elif opts.outputall:
+        for v in fulllist.alist().getlist():
+            print v.getname()
+        for v in fulllist.klist().getlist():
+            print v.getname()
     elif opts.purgelist:
         fulllist.dlist().purgelist()
 

@@ -1,19 +1,56 @@
-"2.1 (created: 2009/05/21 13:13:06)
+"3.8.2 (created: 2014/02/13 23:52:43)
 
-map , gT
-map . gt
-map u <C-u>
-map <C-l> <C-z><C-l><Esc>
+command! sourcerc :source ~/.vimperatorrc
+command! winnew :winopen
+highlight CmdLine color:  #93a1a1;  background: #002b36; font-size: 14pt;
+highlight CompDesc color: #d33682;
+highlight CompItem[selected] color: cyan;  background: #333;
+highlight CompTitle background: #1c1c1c;
+highlight CompTitle>* color: #cb4b16; border-bottom: 1px solid #3c3c3f; padding: 1px 0.5ex;
+highlight ErrorMsg color: #002b36;  background: red;  font-size: 12pt;
+highlight Function color:  #268bd2;
+highlight Hint font-family: monospace; font-size: 15px; font-weight: normal; color: #dc322f; background-color: #002b36; border-color: #839496; border-width: 0px; border-style: solid; padding: 0px 5px 0px 5px; text-transform: uppercase; background-color: rgba(253, 246, 227, 0.7); border: 1px solid #fdf6e3; -moz-border-radius: 4px; -moz-box-shadow: 0px 0px 1px black;
+highlight HintActive background-color: #dc322f; color: #073642; text-decoration: none; -moz-border-radius: 4px; -moz-box-shadow: 0 0 2px #002b36;
+highlight HintElem background-color: #073642; color: #b58900; text-decoration: none; -moz-border-radius: 4px; -moz-box-shadow: 0 0 2px #002b36;
+highlight Indicator color:  #b58900;
+highlight InfoMsg color:  #93a1a1;  background: #002b36; font-size: 12pt;
+highlight LineNr color:  #dc322f; background: #002b36; font-size: 12pt;
+highlight ModeMsg color:  #93a1a1;  background: #002b36; font-size: 12pt;
+highlight MoreMsg color:  #859900; background: #002b36;
+highlight NonText background: #000;
+highlight Normal color:  #93a1a1;  background: #002b36; font-size: 12pt; opacity: 0.9;
+highlight Null color: CornflowerBlue;
+highlight Number color:  #002b36;
+highlight Object color: #2aa198;
+highlight Question color: #b58900;  background: #002b36;  font-size: 12pt;
+highlight StatusLine color: #002b36; background: #002b36; font-weight: normal; font-size: 12pt;
+highlight String color:  #002b36;
+highlight TabNumber color: #002b36; font-weight: bold; font-size:10pt;
+highlight Tag color: CornflowerBlue;
+highlight Title color:  #002b36;
+highlight URL color:  #859900;
+highlight WarningMsg color: #dc322f;  background: #002b36;  font-size: 12pt;
 nmap , gT
 nmap . gt
 nmap u <C-u>
 nmap <C-l> <C-z><C-l><Esc>
-
+nnoremap S :styletoggle<Space>-name<Space>solar<Return>
 set focuscontent
-colorscheme solarized
+set tabnumbers
 
-style -name solar http://*,https://* <<EOSOLAR
-    /* Firefox Scrollbars */
+nmap gf :open facebook.com
+nmap gj :open https://jira.tm.tmcs/jira/secure/Dashboard.jspa?selectPageId=11464
+nmap ga :open http://alertinator.cloudsys.tmcs/alertinator/index.cgi
+nmap gp :open https://portal.cloudsys.tmcs
+
+
+style! -name=tab chrome://* <<EOF
+.tabbrowser-strip {
+    background                         : #002b36 !important;
+  }
+EOF
+style! -name=solar http://*,https://* <<EOF
+/* Firefox Scrollbars */
     scrollbar {opacity: .75 !important;}
 
     /*Vars
@@ -222,14 +259,7 @@ style -name solar http://*,https://* <<EOSOLAR
 
     /* Mozilla addons shrink/expand sections */
     .expando a {background: none transparent  !important;}
-EOSOLAR
-
-styledisable -name solar
-nnoremap S :styletoggle -name solar<CR>
-
-" Load configuration file into current browser, useful for updating after editing this file.
-command! sourcerc :source ~/.vimperatorrc
-
+EOF
 source! /home/justin/.vimperatorrc.local
 
-" vim: setf vimperator:
+" vim: set ft=vimperator:

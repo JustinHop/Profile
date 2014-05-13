@@ -3,14 +3,13 @@
 #  http://justinhoppensteadt.com/svn/profile/zshenv
 #  Both kinds of free
 
-export __ZSHENV__=0.2.4a
+export __ZSHENV__=0.2.7
 
 export HOSTNAME=`hostname`
 export UNAME=`uname`
 
 export PROFILE_DIR=$HOME/Profile
 
-export SHELL=$0
 #
 # WHO AM I
 #
@@ -95,7 +94,7 @@ if [[ -z "$DONT_TOUCH_LD" ]]; then
     fi
 fi
 
-fpath=( $fpath "$PROFILE_DIR/functions" "~/zsh/functions" "~/.zsh/functions" "$HOME/Profile/zsh" )
+fpath=( ~/{,.,Profile/}zsh/{functions,zsh-completions/src} $fpath )
 
 for MMAN in "/usr/local/{openldap,svn,netperf,mysql,snort}/man" ; do
 if [[ -d $MMAN ]]; then
@@ -127,6 +126,7 @@ export SVN_EDITOR=vim
 export EDITOR=vim
 export MYSQL_PS1="mysql (\U@\h)::(\d) \c > "
 export FIREFOX_DSP="padsp"
+export NSS_DEFAULT_DB_TYPE=sql
 
 export DEBEMAIL=Justin.Hoppensteadt@umgtemp.com
 export DEBFULLNAME="Justin Hoppensteadt"
