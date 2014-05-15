@@ -1,7 +1,7 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.1.5"
+export ZSHRC_VERSION="2.1.6"
 export PROFILE_DIR="$HOME/Profile"
 export ZSH_MAJOR=$(echo $ZSH_VERSION | cut -d. -f1)
 export ZSH_MINOR=$(echo $ZSH_VERSION | cut -d. -f2)
@@ -348,6 +348,7 @@ if [[ -x ~/bin/vim ]]; then
   VIM=~/bin/vim
 fi
 
+alias tmux="TERM=rxvt tmux"
 alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
 
 alias 'sudo vim'='sudo ~/bin/vim'

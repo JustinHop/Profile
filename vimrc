@@ -73,6 +73,7 @@ set tabstop=4
 set expandtab
 set formatoptions=roq
 set list
+set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:￩
 set showbreak=-->\
 set wrap
 set linebreak
@@ -249,7 +250,7 @@ if has("autocmd")
   au VimEnter * call AirSettings()
 
   func! AirSettings()
-    exec "silent! normal :AirlineTheme kolor\<CR>"
+    exec "silent! normal :AirlineTheme solarized\<CR>"
   endfunc
 
   " yank to clipboard
