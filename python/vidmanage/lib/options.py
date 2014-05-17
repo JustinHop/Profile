@@ -42,11 +42,14 @@ class Options:
                                 help='Delete all videos on remove list')
         self.parser.add_argument('-r', '--remove', dest='remove',
                                  action='store_true',
-                                 help='Remove current file from requested \
-                                 list')
+                                 help='Remove current file from all \
+                                 lists')
         self.parser.add_argument('-n', '--dryrun', dest='dryrun',
                                  action='store_true',
                                  help="Dryrun, take no real file actions")
+        self.parser.add_argument('-N', '--notify', dest='notify',
+                                 action='store_true',
+                                 help="Use libnotify notifications.")
         self.parser.add_argument('-f', '--file', dest='listfile',
                                  default=expanduser("~/.vidlist"),
                                  help='Location of list')

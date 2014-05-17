@@ -2,7 +2,8 @@
 from datetime import datetime
 import pickle
 import os
-import sys
+#import sys
+
 
 #
 #   TODO:
@@ -67,8 +68,8 @@ class VidList:
         for vid in self.videolist:
             if vid.getname() == argfilename:
                 self.videolist.remove(vid)
-                return
-        raise Exception(argfilename + " does not exist in list")
+                return "Removed " + argfilename + " from list"
+        #raise Exception(argfilename + " does not exist in list")
 
     def remove_obj(self, argVidobj):
         self.videolist.remove(argVidobj)
