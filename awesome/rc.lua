@@ -336,6 +336,7 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn(lock_session) end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ "Shift" }, "F10",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
@@ -702,7 +703,15 @@ for s = 1, screen.count() do
     end)
 end
 
-if (mousemarker ~= nil) then
-    mousemarker()
+--if (mousemarker ~= nil) then
+function mousemarker()
+   for s=1, screen.count() do
+      if s == mouse.screen then
+    	       mymousebox[s].text=[[<span bgcolor="#b58900"><b> ■ </b></span>]]
+      else
+    	       mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
+      end
+   end
 end
+--end
 
