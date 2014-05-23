@@ -73,7 +73,8 @@ set tabstop=4
 set expandtab
 set formatoptions=roq
 set list
-set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:￩
+"set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:￩
+set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:↩
 set showbreak=-->\
 set wrap
 set linebreak
