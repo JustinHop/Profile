@@ -252,6 +252,8 @@ else
   alias psa="ps -A $TREEPS"
 fi
 
+alias psc='ps xawf -eo pid,user,cgroup,args'
+
 # silly
 alias kew="echo 'Totally.'"
 alias orly="echo yarly"
