@@ -294,7 +294,7 @@ else
 fi
 
 if [[ $GNU_COREUTILS -eq 1 ]]; then
-  export GREP_COLOR=auto
+  export GREP_COLORS=auto
 
   NOR=" --color=auto --hide-control-chars --classify "
 
@@ -470,15 +470,15 @@ setopt   \
   appendhistory \
   banghist \
   extendedhistory \
-  histexpiredupsfirst \
+  NOhistexpiredupsfirst \
   histfindnodups \
-  histignorespace \
-  histignoredups \
+  NOhistignorespace \
+  NOhistignoredups \
   histreduceblanks \
   histverify \
   histfcntllock \
   incappendhistory \
-  sharehistory
+  NOsharehistory
 
 # env vars for history
 if [ -z $HISTFILE ]; then
