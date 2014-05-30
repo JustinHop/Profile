@@ -348,7 +348,7 @@ if [[ -x ~/bin/vim ]]; then
   VIM=~/bin/vim
 fi
 
-alias tmux="TERM=rxvt tmux"
+alias tmux="TERM=rxvt-unicode-256color tmux"
 alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
 
 alias 'sudo vim'='sudo ~/bin/vim'
