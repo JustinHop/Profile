@@ -4,11 +4,15 @@ set -o histexpand
 shopt -s autocd
 shopt -s dirspell
 shopt -s extglob
-shopt -s globasciiranges
 shopt -s histappend
 shopt -s histreedit
 shopt -s histverify
 
+if [[ ${BASH_VERSINFO[0]} -gt 4 ]] || \
+    [[ ${BASH_VERSINFO[0]} == 4 ]] && \
+    [[ ${BASH_VERSINFO[1]} -gt 2 ]] ; then
+  shopt -s globasciiranges
+fi
 
 umask 002
 
