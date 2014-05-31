@@ -35,7 +35,7 @@ if __name__ == '__main__':
                 notify = pynotify.Notification(
                     "VidManager - Appending to Alist",
                     str(videoinformation).replace(
-                        "/media/terra/share/Video", ""),
+                        "/media/twoterra/share/Video", ""),
                     os.path.dirname(
                         os.path.realpath(__file__)) +
                     "/vidmanage.png")
@@ -53,7 +53,7 @@ if __name__ == '__main__':
                 notify = pynotify.Notification(
                     "VidManager - Appending to Klist",
                     str(videoinformation).replace(
-                        "/media/terra/share/Video", ""),
+                        "/media/twoterra/share/Video", ""),
                     os.path.dirname(
                         os.path.realpath(__file__)) +
                     "/vidmanage.png")
@@ -71,7 +71,7 @@ if __name__ == '__main__':
                 notify = pynotify.Notification(
                     "VidManager - Appending to Delete List",
                     str(videoinformation).replace(
-                        "/media/terra/share/Video", ""),
+                        "/media/twoterra/share/Video", ""),
                     os.path.dirname(
                         os.path.realpath(__file__)) +
                     "/vidmanage.png")
@@ -86,7 +86,7 @@ if __name__ == '__main__':
             notify = pynotify.Notification(
                 "VidManager - Removing from lists",
                 str(videoinformation).replace(
-                    "/media/terra/share/Video", ""),
+                    "/media/twoterra/share/Video", ""),
                 os.path.dirname(
                     os.path.realpath(__file__)) +
                 "/vidmanage.png")
@@ -110,7 +110,7 @@ if __name__ == '__main__':
         if opts.notify:
             notify = pynotify.Notification(
                 "VidManager - Information",
-                str(videoinformation).replace("/media/terra/share/Video", ""),
+                str(videoinformation).replace("/media/twoterra/share/Video", ""),
                 os.path.dirname(
                     os.path.realpath(__file__)) +
                 "/vidmanage.png")
