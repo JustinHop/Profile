@@ -1,6 +1,13 @@
 set -o vi
 set -o histexpand
 
+shopt -o autocd
+shopt -o extglob
+shopt -o histappend
+shopt -o histreedit
+shopt -o histverify
+
+
 umask 002
 
 if [ -f "~/bin/zsh" ]; then
