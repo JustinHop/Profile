@@ -1,11 +1,13 @@
 set -o vi
 set -o histexpand
 
-shopt -o autocd
-shopt -o extglob
-shopt -o histappend
-shopt -o histreedit
-shopt -o histverify
+shopt -s autocd
+shopt -s dirspell
+shopt -s extglob
+shopt -s globasciiranges
+shopt -s histappend
+shopt -s histreedit
+shopt -s histverify
 
 
 umask 002
