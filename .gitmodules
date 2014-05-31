@@ -37,9 +37,6 @@
 [submodule "vim/general/nerdtree"]
 	path = vim/general/nerdtree
 	url = https://github.com/vim-scripts/The-NERD-tree.git
-[submodule "vim/general/ropevim"]
-	path = vim/general/ropevim
-	url = https://github.com/sontek/rope-vim.git
 [submodule "vim/general/deletetrailingwhitespace"]
 	path = vim/general/deletetrailingwhitespace
 	url = https://github.com/vim-scripts/DeleteTrailingWhitespace.git
