@@ -232,9 +232,10 @@ filetype on
 filetype plugin on
 filetype indent on
 
+if ! isdirectory($HOME . '/tmp')
+  call mkdir($HOME . '/tmp', "p")
+endif
 set directory=~/tmp
-
-set clipboard=unnamed,unnamedplus
 
 if has("autocmd")
   filetype plugin indent on
@@ -264,6 +265,14 @@ if has("autocmd")
    " nmap <leader>y : silent call system("xclip ", getreg("0"))\<CR>
    " vmap <leader>cy y: silent call system("xclip ", getreg("\""))\<CR>
   "endif
+  "set clipboard=unnamed,unnamedplus
+
+  nnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
+  nnoremap <expr> yy (v:register ==# '"' ? '"+' : '') . 'yy'
+  nnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+  xnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
+  xnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+
 
   " Filetype Detect
   augroup filetypedetect

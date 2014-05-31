@@ -1,3 +1,4 @@
+let g:loaded_sleuth = 1
 " Use two-spaces for indentation
 setlocal expandtab
 setlocal softtabstop=2
