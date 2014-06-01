@@ -8,12 +8,17 @@
 
 
 " Vim Profiles
-let g:profiles_default = ['lib', 'base']
-exec profiles#init()
-call pathogen#helptags()
+if !exists('g:loaded_pathogen')
+  let g:profiles_default = ['lib', 'base']
+  exec profiles#init()
+  call pathogen#helptags()
+endif
 
 let Tlist_Use_Right_Window = 1
-let g:airline#extensions#tabline#enabled = 1
+if !exists('g:loaded_airline')
+  let g:airline#extensions#tabline#enabled = 1
+  let g:airline_section_y='%{airline#util#wrap(airline#parts#ffenc(),0)}%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}'
+endif
 
 set backspace=2
 set ttyfast
@@ -51,8 +56,7 @@ set showcmd
 set lazyredraw
 
 " Status Line
-set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=<%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}>%<\ \ \ %l,%c%V\ of\ %L\ \ \ %P
-let g:airline_section_y='%{airline#util#wrap(airline#parts#ffenc(),0)}%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}'
+"set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=<%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}>%<\ \ \ %l,%c%V\ of\ %L\ \ \ %P
 
 if version >= 700
   "  Virtual Editing
