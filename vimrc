@@ -8,6 +8,10 @@
 
 
 " Vim Profiles
+"
+
+if !exists('g:loaded_justin_vimrc')
+
 if !exists('g:loaded_pathogen')
   let g:profiles_default = ['lib', 'base']
   exec profiles#init()
@@ -271,11 +275,13 @@ if has("autocmd")
   "endif
   "set clipboard=unnamed,unnamedplus
 
-  nnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
-  nnoremap <expr> yy (v:register ==# '"' ? '"+' : '') . 'yy'
-  nnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
-  xnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
-  xnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+  if has('clipboard')
+    nnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
+    nnoremap <expr> yy (v:register ==# '"' ? '"+' : '') . 'yy'
+    nnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+    xnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
+    xnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+  endif
 
 
   " Filetype Detect
@@ -521,11 +527,6 @@ let g:Lua_Company         = 'Live Nation'
 
 let g:spec_chglog_packager = 'Justin Hoppensteadt <justin.hoppensteadt@ticketmaster.com>'
 
-"" insert mode : autocomplete brackets and braces
-"imap ( ()<Left>
-"imap [ []<Left>
-"imap { {}<Left>
-""
 "" visual mode : frame a selection with brackets and braces
 "vmap ( d<Esc>i(<Esc>p
 "vmap [ d<Esc>i[<Esc>p
@@ -585,3 +586,6 @@ if !exists("*WordProcessorMode")
   com! WP call WordProcessorMode()
 endif
 
+
+let g:loaded_justin_vimrc = 1
+endif
