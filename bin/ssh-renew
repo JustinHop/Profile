@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+if [ -f ~/tm.bindForward ]; then
+    rm ~/tm.bindForward
+fi
+
+nhs | xargs -n1 -P8 | grep -vP '^#' > ~/.ssh/known_hosts

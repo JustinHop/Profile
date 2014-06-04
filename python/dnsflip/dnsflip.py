@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 '''dnsflip
 Usage:
-    dnsflip [-frV1As] [FILE...]
+    dnsflip [options] [FILE...]
     dnsflip -h | --help
     dnsflip --version
 
 Options:
-    -A --all                  All addresses
+    -a --all                  All addresses
     -s --strip                Strip non host info from lines
     -f --noforward            Do not preform forward lookups.
     -r --noreverse            Do not preform reverse lookups.
     -V --verbose              Be verbose, print extra lines
+    -p --parens               Add resolved address after query name
+                                in parenthesis
     -1 --oneline              Output one line with resolution after.
     -v --version              Show version.
     -h --help                 Show this screen.
