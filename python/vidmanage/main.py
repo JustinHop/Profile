@@ -34,7 +34,8 @@ if __name__ == '__main__':
             if opts.notify:
                 notify = pynotify.Notification(
                     "VidManager - Appending to Alist",
-                    str(videoinformation),
+                    str(videoinformation).replace(
+                        "/media/twoterra/share/Video", ""),
                     os.path.dirname(
                         os.path.realpath(__file__)) +
                     "/vidmanage.png")
@@ -51,7 +52,8 @@ if __name__ == '__main__':
             if opts.notify:
                 notify = pynotify.Notification(
                     "VidManager - Appending to Klist",
-                    str(videoinformation),
+                    str(videoinformation).replace(
+                        "/media/twoterra/share/Video", ""),
                     os.path.dirname(
                         os.path.realpath(__file__)) +
                     "/vidmanage.png")
@@ -68,7 +70,8 @@ if __name__ == '__main__':
             if opts.notify:
                 notify = pynotify.Notification(
                     "VidManager - Appending to Delete List",
-                    str(videoinformation),
+                    str(videoinformation).replace(
+                        "/media/twoterra/share/Video", ""),
                     os.path.dirname(
                         os.path.realpath(__file__)) +
                     "/vidmanage.png")
@@ -80,11 +83,13 @@ if __name__ == '__main__':
         v = Vid(video)
         videoinformation = v.getname(), v.gethumansize()
         if opts.notify:
-            notify = pynotify.Notification("VidManager - Removing from lists",
-                                           str(videoinformation),
-                                           os.path.dirname(
-                                               os.path.realpath(__file__)) +
-                                           "/vidmanage.png")
+            notify = pynotify.Notification(
+                "VidManager - Removing from lists",
+                str(videoinformation).replace(
+                    "/media/twoterra/share/Video", ""),
+                os.path.dirname(
+                    os.path.realpath(__file__)) +
+                "/vidmanage.png")
             notify.show()
         fulllist.alist().remove(video)
         fulllist.klist().remove(video)
@@ -103,11 +108,12 @@ if __name__ == '__main__':
         videoinformation = v.getname(), v.gethumansize()
             #datetime.fromtimestamp(v.getattr()['stat'][-1])
         if opts.notify:
-            notify = pynotify.Notification("VidManager - Information",
-                                           str(videoinformation),
-                                           os.path.dirname(
-                                               os.path.realpath(__file__)) +
-                                           "/vidmanage.png")
+            notify = pynotify.Notification(
+                "VidManager - Information",
+                str(videoinformation).replace("/media/twoterra/share/Video", ""),
+                os.path.dirname(
+                    os.path.realpath(__file__)) +
+                "/vidmanage.png")
             notify.show()
         else:
             print str(videoinformation)

@@ -232,6 +232,7 @@ fi
 
 alias Xterm='xterm +bc -cr red -j +sb -u8 +vb -bd red -bg black -fg green'
 alias flux='xinit `which startfluxbox`'
+alias vidbox='find /media/twoterra/share/Video -type f | grep -P -v "(crdownload|dtapart|fuse_hidden)" | grep -v -x -F -f <(vidmanage -O)'
 
 alias d=dirs
 alias pu=pushd
@@ -251,6 +252,8 @@ if [[ "$DISTRO" == "cygwin" ]]; then
 else
   alias psa="ps -A $TREEPS"
 fi
+
+alias psc='ps xawf -eo pid,user,cgroup,args'
 
 # silly
 alias kew="echo 'Totally.'"
@@ -291,7 +294,7 @@ else
 fi
 
 if [[ $GNU_COREUTILS -eq 1 ]]; then
-  export GREP_COLOR=auto
+  export GREP_COLORS=auto
 
   NOR=" --color=auto --hide-control-chars --classify "
 
@@ -348,7 +351,10 @@ if [[ -x ~/bin/vim ]]; then
   VIM=~/bin/vim
 fi
 
-alias tmux="TERM=rxvt-unicode-256color tmux"
+if [ "$TERM" = "xterm" ]; then
+  TMUXTERM=rxvt-unicode-256color
+fi
+alias tmux='TERM=$TMUXTERM tmux'
 alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
 
 alias 'sudo vim'='sudo ~/bin/vim'
@@ -465,18 +471,26 @@ setopt   \
   appendhistory \
   banghist \
   extendedhistory \
-  histexpiredupsfirst \
+  NOhistexpiredupsfirst \
   histfindnodups \
-  histignorespace \
-  histignoredups \
+  NOhistignorespace \
+  NOhistignoredups \
   histreduceblanks \
   histverify \
-  incappendhistory
+  histfcntllock \
+  incappendhistory \
+  NOsharehistory
 
 # env vars for history
-export HISTFILE=~/.zhistory
-export HISTSIZE=65535
-export SAVEHIST=65000
+if [ -z $HISTFILE ]; then
+  readonly HISTFILE=~/.zhistory
+fi
+if [ -z $HISTSIZE ]; then
+  readonly HISTSIZE=65535
+fi
+if [ -z $SAVEHIST ]; then
+  readonly SAVEHIST=65000
+fi
 
 # bindings for history
 #bindkey "^XH" set-local-history
@@ -495,7 +509,7 @@ if (( $ZSH_MAJOR >= 4 )); then
     zle \
     NOverbose \
     NOsingle_line_zle \
-    complete_aliases
+    NO_complete_aliases
 fi
 
 ################################################
@@ -538,7 +552,11 @@ if (( $ZSH_MAJOR >= 4 )); then
     ntp operator pcap postgres radvd rpc rpcuser rpm \
     shutdown squid sshd sync uucp vcsa xfs backup  bind  \
     dictd  gnats  identd  irc  man  messagebus  postfix \
-    proxy  sys  www-data colord
+    proxy  sys  www-data colord bin sys sync games news uucp \
+    backup list irc gnats nobody libuuid messagebus usbmux whoopsie \
+    kernoops rtkit speech-dispatcher colord avahi hplip saned sshd \
+    gdm debian-tor statd ftp mpdscribble dnsmasq festival glances
+
 
   #compdef _ssh envssh
   #compdef '_dispatch ssh' essh
