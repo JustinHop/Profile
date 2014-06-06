@@ -336,6 +336,7 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn(lock_session) end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ "Shift" }, "F10",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
@@ -455,6 +456,14 @@ globalkeys = awful.util.table.join(
     end)
 )
 
+video_mode = {
+   i = function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -I") end,
+   a = function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -a") end,
+   k = function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -k") end,
+   d = function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -d") end,
+   r = function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -r") end
+}
+
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill() end),
@@ -485,17 +494,36 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control"},"r", function (c) c:redraw() end),
     awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
     awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey, "Control" }, "c", function (c) exec("kill -CONT " .. c.pid) end),
-    awful.key({ modkey, "Control" }, "s", function (c) exec("kill -STOP " .. c.pid) end),
+    awful.key({ modkey, "Control" }, "c", function (c) awful.util.spawn("kill -CONT " .. c.pid) end),
+    awful.key({ modkey, "Control" }, "s", function (c) awful.util.spawn("kill -STOP " .. c.pid) end),
     awful.key({ modkey,         }, "t", function (c)
         if   c.titlebar then awful.titlebar.remove(c)
         else awful.titlebar.add(c, { modkey = modkey }) end
+    end),
+    awful.key({ modkey }, "v", function(c)
+       keygrabber.run(function(mod, key, event)
+          if event == "release" then return true end
+          keygrabber.stop()
+          if video_mode[key] then video_mode[key](c) end
+          return true
+       end)
     end),
     awful.key({ modkey, "Shift" }, "f", function (c) if awful.client.floating.get(c)
         then awful.client.floating.delete(c);    awful.titlebar.remove(c)
         else awful.client.floating.set(c, true); awful.titlebar.add(c) end
     end)
 )
+
+smplayerkeys = awful.util.table.join(
+   clientkeys,
+   awful.key({ altkey }, "1", function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -I") end),
+   awful.key({ altkey }, "2", function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -a") end),
+   awful.key({ altkey }, "3", function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -k") end),
+   awful.key({ altkey }, "4", function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -d") end),
+   awful.key({ altkey }, "5", function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -r") end)
+)
+
+
 
 -- Compute the maximum number of digit we need, limited to 9
 keynumber = 0
@@ -702,7 +730,15 @@ for s = 1, screen.count() do
     end)
 end
 
-if (mousemarker ~= nil) then
-    mousemarker()
+--if (mousemarker ~= nil) then
+function mousemarker()
+   for s=1, screen.count() do
+      if s == mouse.screen then
+    	       mymousebox[s].text=[[<span bgcolor="#b58900"><b> ■ </b></span>]]
+      else
+    	       mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
+      end
+   end
 end
+--end
 

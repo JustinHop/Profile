@@ -8,12 +8,21 @@
 
 
 " Vim Profiles
-let g:profiles_default = ['lib', 'base']
-exec profiles#init()
-call pathogen#helptags()
+"
+
+if !exists('g:loaded_justin_vimrc')
+
+if !exists('g:loaded_pathogen')
+  let g:profiles_default = ['lib', 'base']
+  exec profiles#init()
+  call pathogen#helptags()
+endif
 
 let Tlist_Use_Right_Window = 1
-let g:airline#extensions#tabline#enabled = 1
+if !exists('g:loaded_airline')
+  let g:airline#extensions#tabline#enabled = 1
+  let g:airline_section_y='%{airline#util#wrap(airline#parts#ffenc(),0)}%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}'
+endif
 
 set backspace=2
 set ttyfast
@@ -51,8 +60,7 @@ set showcmd
 set lazyredraw
 
 " Status Line
-set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=<%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}>%<\ \ \ %l,%c%V\ of\ %L\ \ \ %P
-let g:airline_section_y='%{airline#util#wrap(airline#parts#ffenc(),0)}%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}'
+"set statusline=#%n\ %<%F%m%r\ %w\ %y\ \ <%{&fileencoding},%{&fileformat}>%=<%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}>%<\ \ \ %l,%c%V\ of\ %L\ \ \ %P
 
 if version >= 700
   "  Virtual Editing
@@ -73,7 +81,8 @@ set tabstop=4
 set expandtab
 set formatoptions=roq
 set list
-set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:￩
+"set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:￩
+set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:↩
 set showbreak=-->\
 set wrap
 set linebreak
@@ -231,9 +240,10 @@ filetype on
 filetype plugin on
 filetype indent on
 
+if ! isdirectory($HOME . '/tmp')
+  call mkdir($HOME . '/tmp', "p")
+endif
 set directory=~/tmp
-
-set clipboard=unnamed,unnamedplus
 
 if has("autocmd")
   filetype plugin indent on
@@ -263,6 +273,16 @@ if has("autocmd")
    " nmap <leader>y : silent call system("xclip ", getreg("0"))\<CR>
    " vmap <leader>cy y: silent call system("xclip ", getreg("\""))\<CR>
   "endif
+  "set clipboard=unnamed,unnamedplus
+
+  if has('clipboard')
+    nnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
+    nnoremap <expr> yy (v:register ==# '"' ? '"+' : '') . 'yy'
+    nnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+    xnoremap <expr> y (v:register ==# '"' ? '"+' : '') . 'y'
+    xnoremap <expr> Y (v:register ==# '"' ? '"+' : '') . 'Y'
+  endif
+
 
   " Filetype Detect
   augroup filetypedetect
@@ -507,11 +527,6 @@ let g:Lua_Company         = 'Live Nation'
 
 let g:spec_chglog_packager = 'Justin Hoppensteadt <justin.hoppensteadt@ticketmaster.com>'
 
-"" insert mode : autocomplete brackets and braces
-"imap ( ()<Left>
-"imap [ []<Left>
-"imap { {}<Left>
-""
 "" visual mode : frame a selection with brackets and braces
 "vmap ( d<Esc>i(<Esc>p
 "vmap [ d<Esc>i[<Esc>p
@@ -571,3 +586,6 @@ if !exists("*WordProcessorMode")
   com! WP call WordProcessorMode()
 endif
 
+
+let g:loaded_justin_vimrc = 1
+endif

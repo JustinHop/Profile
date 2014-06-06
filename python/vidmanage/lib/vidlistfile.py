@@ -25,7 +25,12 @@ class Vid:
 
     def deletefile(self):
         print "DELETING", self.v['filename']
-        os.remove(self.v['filename'])
+        try:
+            os.remove(self.v['filename'])
+            return True
+        except OSError:
+            print "could not remove ", self.v['filename']
+            return False
 
     def gettimeadded(self):
         return self.v['timeadded']
