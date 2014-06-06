@@ -1,9 +1,9 @@
 [roxterm profile]
-colour_scheme=solarized-dark
+colour_scheme=super-solarized-dark
 font=Source Code Pro for Powerline Semi-Bold 10
 show_resize_grip=0
 audible_bell=0
-term=xterm-256color
+term=xterm-16color
 scroll_on_output=1
 scrollback_lines=10000
 disable_menu_access=1
