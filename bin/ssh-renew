@@ -1,8 +1,5 @@
 #!/bin/bash
 
+find ~/tm.bindForward -ctime +0 -exec rm {} \;
 
-if [ -f ~/tm.bindForward ]; then
-    rm ~/tm.bindForward
-fi
-
-nhs | xargs -n1 -P8 | grep -vP '^#' > ~/.ssh/known_hosts
+nhs | xargs -n1 -P8 ssh-keyscan | grep -vP '^#' > ~/.ssh/known_hosts
