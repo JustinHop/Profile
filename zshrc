@@ -352,8 +352,9 @@ if [[ -x ~/bin/vim ]]; then
 fi
 
 if [ "$TERM" = "xterm" ]; then
-  alias tmux="TERM=rxvt-unicode-256color tmux"
+  TMUXTERM=rxvt-unicode-256color
 fi
+alias tmux='TERM=$TMUXTERM tmux'
 alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
 
 alias 'sudo vim'='sudo ~/bin/vim'

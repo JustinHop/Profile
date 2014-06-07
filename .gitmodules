@@ -94,3 +94,6 @@
 [submodule "zsh/syntax-highlighting"]
 	path = zsh/syntax-highlighting
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "powerline-fonts"]
+	path = powerline-fonts
+	url = https://github.com/Lokaltog/powerline-fonts.git
