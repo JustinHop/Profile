@@ -115,7 +115,7 @@ set shortmess=a
 " Booyah
 if &t_Co || has("gui_running") && ( expand($TERM) != "screen.linux")
   syntax on
-  set t_Co=256
+  set t_Co=16
 endif
 
 if ( expand($TERM) ==# "linux" )
@@ -208,7 +208,7 @@ function! DoColors()
     let g:solarized_visibility="normal"    "default value is normal
     let g:solarized_diff="high"    "default value is normal
   else
-    "let g:solarized_termcolors=16
+    let g:solarized_termcolors=16
     let g:solarized_contrast="normal"    "default value is normal
     let g:solarized_visibility="normal"    "default value is normal
     let g:solarized_diff="high"    "default value is normal
@@ -217,23 +217,24 @@ endfunction
 
 
 if !exists('g:airline_symbols')
+  let g:airline_powerline_fonts = 1
   if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
+    "let g:airline_symbols = {}
   endif
 
   " unicode symbols
   "let g:airline_left_sep = '»'
-  let g:airline_left_sep = '▶'
+  "let g:airline_left_sep = '▶'
   "let g:airline_right_sep = '«'
-  let g:airline_right_sep = '◀'
+  "let g:airline_right_sep = '◀'
   "let g:airline_symbols.linenr = '␊'
-  let g:airline_symbols.linenr = '␤'
-  let g:airline_symbols.linenr = '¶'
-  let g:airline_symbols.branch = '⎇'
+  "let g:airline_symbols.linenr = '␤'
+  "let g:airline_symbols.linenr = '¶'
+  "let g:airline_symbols.branch = '⎇'
   "let g:airline_symbols.paste = 'ρ'
-  let g:airline_symbols.paste = 'Þ'
+  "let g:airline_symbols.paste = 'Þ'
   "let g:airline_symbols.paste = '∥'
-  let g:airline_symbols.whitespace = 'Ξ'
+  "let g:airline_symbols.whitespace = 'Ξ'
 endif
 
 filetype on
