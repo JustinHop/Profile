@@ -86,7 +86,6 @@ if !exists('g:loaded_justin_vimrc')
   set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:↩
   "set showbreak=-->\
   set showbreak=…\
-  set showbreak=〉\
   set wrap
   set linebreak
 
