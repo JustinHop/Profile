@@ -53,20 +53,20 @@ function import(file)
     -- local ret = awful.util.checkfile( awful.util.getdir("config") .. file ".lua" );
     local ret = awful.util.checkfile(file);
     if type(ret) == "string" then
-    	io.stderr:write(ret, "\n")
-    	return true
+        io.stderr:write(ret, "\n")
+        return true
     else
-    	--io.stderr:write("Returned type: ", type(ret), "\n")
-    	pcall(ret)
-    	--require(file)
+        --io.stderr:write("Returned type: ", type(ret), "\n")
+        pcall(ret)
+        --require(file)
     end
 end
 
 for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/*.lua"):lines() do
-	if string.find(file,"%.lua$") then
-		io.stderr:write("Importing ", file, "\n")
-		import(file)
-	end
+    if string.find(file,"%.lua$") then
+        io.stderr:write("Importing ", file, "\n")
+        import(file)
+    end
 end
 -- }}}
 
@@ -83,6 +83,24 @@ settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Termin
 --settings.mouse_marker_yes = "<span bgcolor=" .. [["]] .. yellow .. [[">[★]</span>]]
 --settings.mouse_marker_no = "[☆]"
 --settings.mouse_marker_synergy = "<span bgcolor=" .. [["]] .. light_green .. [[">[╳]</span>]]
+
+sol = {}
+sol.base03 =   "#002b36"
+sol.base02 =   "#073642"
+sol.base01 =   "#586e75"
+sol.base00 =   "#657b83"
+sol.base0 =    "#839496"
+sol.base1 =    "#93a1a1"
+sol.base2 =    "#eee8d5"
+sol.base3 =    "#fdf6e3"
+sol.yellow =   "#b58900"
+sol.orange =   "#cb4b16"
+sol.red =      "#dc322f"
+sol.magenta =  "#d33682"
+sol.violet =   "#6c71c4"
+sol.blue =     "#268bd2"
+sol.cyan =     "#2aa198"
+sol.green =    "#859900"
 
 -- This is used later as the default terminal and editor to run.
 -- terminal = "gnome-terminal"
@@ -197,6 +215,8 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- Create a textclock widget
 --spacer = "✠"█
 spacer = "┃"
+airspacel = ""
+airspacer = ""
 mytextclock = awful.widget.textclock({ align = "right" },
     "%a %b %d, %r", .5)
 
@@ -213,6 +233,12 @@ lspace.text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b><
 rspace = widget({ type = "textbox", align="right" })
 rspace.text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
 
+airspaceleft = {}
+airspaceleft.a = widget({ type = "textbox", align="left" })
+airspaceleft.a.text=[[<span bgcolor="]] .. sol.base1 .. 
+   [[" color="]] .. sol.base3 .. [["><b>]] .. airspacer .. [[</b></span>]]
+
+airspaceright = widget({ type = "textbox", align="right" })
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
@@ -272,10 +298,10 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 for s = 1, screen.count() do
-	-- My mouse indicator
+    -- My mouse indicator
     mymousebox[s] = widget({ type = "textbox", align = "left" })
     if screen.count() ~= 1 then
-    	mymousebox[s].text = "[-]"
+        mymousebox[s].text = "[-]"
     end
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
@@ -300,7 +326,7 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
-        	lspace,
+            lspace,
             mylauncher,
             lspace,
             mymousebox[s].text  and mymousebox[s] or nil,
@@ -450,7 +476,7 @@ globalkeys = awful.util.table.join(
             if client.focus.type then text = text .. setFg("white", "Type: ") .. client.focus.type .. " " end
             mymsgbox[s].text = text
             naughty.notify{ title = 'Debug Information', text = text, icon = '/usr/share/awesome/icons/awesome64.png'}
-    	    io.stderr:write(text, "\n")
+            io.stderr:write(text, "\n")
 
         end
     end)
@@ -734,9 +760,9 @@ end
 function mousemarker()
    for s=1, screen.count() do
       if s == mouse.screen then
-    	       mymousebox[s].text=[[<span bgcolor="#b58900"><b> ■ </b></span>]]
+               mymousebox[s].text=[[<span bgcolor="#b58900"><b> ■ </b></span>]]
       else
-    	       mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
+               mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
       end
    end
 end
