@@ -4,11 +4,17 @@
 "
 "  General Operation
 
-" vimrc-2.0.1
+" vimrc-2.1.0
 
 
-" Vim Profiles
-"
+"   Figure out if system or local config and if to run or not
+let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+
+if !exists('g:profile_vimrc_paths')
+  let g:profile_vimrc_paths = [ s:path ]
+else
+  call add(g:profile_vimrc_paths, s:path)
+endif
 
 if !exists('g:loaded_justin_vimrc')
   let g:loaded_justin_vimrc = 1
@@ -82,10 +88,9 @@ if !exists('g:loaded_justin_vimrc')
   set expandtab
   set formatoptions=roq
   set list
-  "set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:￩
   set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:↩
   "set showbreak=-->\
-  set showbreak=…\
+  set showbreak="►\ "
   set wrap
   set linebreak
 
@@ -552,7 +557,7 @@ if !exists('g:loaded_justin_vimrc')
   if has("autocmd")
       autocmd BufEnter * :lcd %:p:h
   endif " has("autocmd")
-  
+
   if !exists("*Backspace")
     func Backspace()
       if col('.') == 1
