@@ -6,15 +6,26 @@
 
 " vimrc-2.1.0
 
-
 "   Figure out if system or local config and if to run or not
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+  if !exists('g:profile_vimrc_paths')
+    let g:profile_vimrc_paths = [ s:path ]
+  else
+    call add(g:profile_vimrc_paths, s:path)
+  endif
 
-if !exists('g:profile_vimrc_paths')
-  let g:profile_vimrc_paths = [ s:path ]
-else
-  call add(g:profile_vimrc_paths, s:path)
-endif
+"   Detect and handle system wide install
+let s:profile_vimrc_etc_matchstr = matchstr(s:path, '^/etc/Profile$')
+  if !empty(s:profile_vimrc_etc_matchstr)
+    if !empty($VIM_PROFILE_SKIP_ETC)
+      finish
+    endif
+    if !exists('g:loaded_profile_vimrc_etc')
+      let g:loaded_profile_vimrc_etc = 1
+    else
+      finish
+    endif
+  endif
 
 if !exists('g:loaded_justin_vimrc')
   let g:loaded_justin_vimrc = 1
