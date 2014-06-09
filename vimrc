@@ -264,6 +264,20 @@ if !exists('g:loaded_justin_vimrc')
   endif
   set directory=~/tmp
 
+  "
+  "     Color Settings
+  "
+  set background=dark
+  let g:solarized_termcolors=16
+  colorscheme solarized
+  set guifont=Liberation\ Mono\ for\ Powerline\ 10
+  au VimEnter * call AirSettings()
+
+  func! AirSettings()
+    exec "silent! normal :AirlineTheme solarized\<CR>"
+  endfunc
+
+
   if has("autocmd")
     filetype plugin indent on
     "jumpback
@@ -271,16 +285,6 @@ if !exists('g:loaded_justin_vimrc')
           \ if line("'\"") > 0 && line ("'\"") <= line("$") |
           \   exe "normal g'\"" |
           \ endif
-
-    " purdy colors
-    set background=dark
-    let g:solarized_termcolors=16
-    colorscheme solarized
-    au VimEnter * call AirSettings()
-
-    func! AirSettings()
-      exec "silent! normal :AirlineTheme solarized\<CR>"
-    endfunc
 
     " yank to clipboard
     "if executable("xclip")
