@@ -101,6 +101,14 @@ if [[ -d $MMAN ]]; then
     export MANPATH=$MMAN:$MANPATH
 fi
 done
+export LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+       LESS_TERMCAP_md=$(printf "\e[1;31m") \
+       LESS_TERMCAP_me=$(printf "\e[0m") \
+       LESS_TERMCAP_se=$(printf "\e[0m") \
+       LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+       LESS_TERMCAP_ue=$(printf "\e[0m") \
+       LESS_TERMCAP_us=$(printf "\e[1;32m")
+
 
 #
 # PICKY SETTINGS
@@ -145,25 +153,7 @@ if [[ -z $ORI_XTITLE ]]; then
     export ORI_XTITLE="${USERNAME}@${HOSTNAME}:${UNAME}"
 fi
 
-#
-# SHORTCUTS
-#
-lsrc="/usr/local/src"
-pf="$HOME/profile"
-pj="$HOME/projects"
-cfi="$HOME/dev/systems/cfengine/trunk/inputs"
-cfb="$HOME/dev/systems/cfengine/trunk/build"
-cf="$HOME/dev/systems/cfengine/trunk/"
-fya="/www/wordpress-3.0/wp-content/themes/fya"
-t="/www/wordpress/wp-content/themes"
-p="/www/wordpress/wp-content/plugins"
 spec="$HOME/build/SPECS"
-
-if [[ -d /usr/local/apache2 ]]; then
-	www=/usr/local/apache2
-	wwwc=/usr/local/apache2/conf
-	wwwb=/usr/local/apache2/bin
-fi
 
 export DEBEMAIL="debian@justinhoppensteadt.com"
 export DEBFULLNAME="Justin Hoppensteadt"
