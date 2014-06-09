@@ -96,6 +96,10 @@ fi
 
 fpath=( {/etc,~}/{,.,Profile/}zsh/{functions,zsh-completions/src} $fpath )
 
+
+#
+#   Man Pages
+#
 for MMAN in "/usr/local/{openldap,svn,netperf,mysql,snort}/man" ; do
 if [[ -d $MMAN ]]; then
     export MANPATH=$MMAN:$MANPATH
@@ -124,6 +128,7 @@ alias BR="ssh -A bld1.sys.tools1.websys.tmcs"
 
 alias IE="wine 'C:\Program Files\Internet Explorer\iexplore'"
 
+export GREP_COLOR=auto
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
 export LESS="-isaFMXRU"
