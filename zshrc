@@ -477,16 +477,6 @@ setopt   \
   incappendhistory \
   NOsharehistory
 
-# env vars for history
-if [ -z $HISTFILE ]; then
-  readonly HISTFILE=~/.zhistory
-fi
-if [ -z $HISTSIZE ]; then
-  readonly HISTSIZE=65535
-fi
-if [ -z $SAVEHIST ]; then
-  readonly SAVEHIST=65000
-fi
 
 # bindings for history
 #bindkey "^XH" set-local-history
