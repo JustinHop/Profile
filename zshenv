@@ -115,10 +115,13 @@ export LESS_TERMCAP_mb=$(printf "\e[1;31m") \
        LESS_TERMCAP_md=$(printf "\e[1;31m") \
        LESS_TERMCAP_me=$(printf "\e[0m") \
        LESS_TERMCAP_se=$(printf "\e[0m") \
-       LESS_TERMCAP_so=$(printf "\e[1;41;33m") \
+       LESS_TERMCAP_so=$(printf "\e[1;46;30m") \
        LESS_TERMCAP_ue=$(printf "\e[0m") \
        LESS_TERMCAP_us=$(printf "\e[1;32m")
 
+export LESS="-isaFXRM"
+#export MANLESS="$(echo $LESS | tr -d U)"
+#alias man='LESS=$MANLESS man'
 
 #
 # PICKY SETTINGS
@@ -137,9 +140,6 @@ alias IE="wine 'C:\Program Files\Internet Explorer\iexplore'"
 export GREP_COLOR=auto
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
-export LESS="-isaFMXRU"
-export MANLESS="-isaFMXR"
-alias man='LESS=$MANLESS man'
 export VISUAL=vim
 export SVN_EDITOR=vim
 export EDITOR=vim
