@@ -240,8 +240,8 @@ alias po=popd
 alias m=mail
 alias j=jobs
 
-alias b='export BACKUP=-'
-alias B='export BACKUP=+'
+#alias b='export BACKUP=-'
+#alias B='export BACKUP=+'
 
 if echo $HOST | grep -ve '(tux-ninja|alien)' > /dev/null ; then
   export BACKUP=+
@@ -475,17 +475,17 @@ setopt   \
   histverify \
   histfcntllock \
   incappendhistory \
-  NOsharehistory
+  sharehistory
 
 # env vars for history
 if [ -z $HISTFILE ]; then
-  readonly HISTFILE=~/.zhistory
+   HISTFILE=~/.zhistory
 fi
 if [ -z $HISTSIZE ]; then
-  readonly HISTSIZE=65535
+  HISTSIZE=65535
 fi
 if [ -z $SAVEHIST ]; then
-  readonly SAVEHIST=65000
+  SAVEHIST=65000
 fi
 
 # bindings for history
