@@ -26,10 +26,14 @@ echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
 [ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
 
+xmodmap -e "keycode 135 = Super_L"
+
 echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
 
 setxkbmap -option terminate:ctrl_alt_bksp
+
+numlockx  &
 
 #if whence runonce >& /dev/null ; then
 #    runonce mpd &

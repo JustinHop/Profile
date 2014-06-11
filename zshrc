@@ -1,7 +1,7 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.1.6"
+export ZSHRC_VERSION="2.2.0"
 export PROFILE_DIR="$HOME/Profile"
 export ZSH_MAJOR=$(echo $ZSH_VERSION | cut -d. -f1)
 export ZSH_MINOR=$(echo $ZSH_VERSION | cut -d. -f2)
@@ -476,17 +476,6 @@ setopt   \
   histfcntllock \
   incappendhistory \
   sharehistory
-
-# env vars for history
-if [ -z $HISTFILE ]; then
-   HISTFILE=~/.zhistory
-fi
-if [ -z $HISTSIZE ]; then
-  HISTSIZE=65535
-fi
-if [ -z $SAVEHIST ]; then
-  SAVEHIST=65000
-fi
 
 # bindings for history
 #bindkey "^XH" set-local-history
