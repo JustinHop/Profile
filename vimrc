@@ -39,7 +39,7 @@ if !exists('g:loaded_justin_vimrc')
   let Tlist_Use_Right_Window = 1
   if !exists('g:loaded_airline')
     let g:airline#extensions#tabline#enabled = 1
-    let g:airline_section_y='%{airline#util#wrap(airline#parts#ffenc(),0)}%{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}'
+    let g:airline_section_y='%{airline#util#wrap(airline#parts#ffenc(),0)} %{g:airline_right_alt_sep} %{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}'
   endif
 
   set backspace=2
