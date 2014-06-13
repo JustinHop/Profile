@@ -1,7 +1,7 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.1.6"
+export ZSHRC_VERSION="2.2.0"
 export PROFILE_DIR="$HOME/Profile"
 export ZSH_MAJOR=$(echo $ZSH_VERSION | cut -d. -f1)
 export ZSH_MINOR=$(echo $ZSH_VERSION | cut -d. -f2)
@@ -240,8 +240,8 @@ alias po=popd
 alias m=mail
 alias j=jobs
 
-alias b='export BACKUP=-'
-alias B='export BACKUP=+'
+#alias b='export BACKUP=-'
+#alias B='export BACKUP=+'
 
 if echo $HOST | grep -ve '(tux-ninja|alien)' > /dev/null ; then
   export BACKUP=+
@@ -475,8 +475,7 @@ setopt   \
   histverify \
   histfcntllock \
   incappendhistory \
-  NOsharehistory
-
+  sharehistory
 
 # bindings for history
 #bindkey "^XH" set-local-history

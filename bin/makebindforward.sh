@@ -26,8 +26,9 @@ for zone in clisys.tmcs cloudsys.tmcs coresys.tmcs fieldsys.tmcs netops.tmcs net
 do
     echo $zone | tee /dev/stderr
     #dig @10.75.32.5 $zone axfr >> ~/tm.bindForward
-done | xargs -n1 -P4 -I{} dig @10.75.32.5 {} axfr >> ~/tm.bindForward
+done | xargs -n1 -P4 -I{} dig @10.75.32.5 {} axfr +tcp >> ~/tm.bindForward
 
 sed -i '/\.tm\.tmcs\.\s+/d' ~/tm.bindForward
+sed -i '/\.adm2\./d' ~/tm.bindForward
 
 
