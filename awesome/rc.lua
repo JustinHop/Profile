@@ -593,6 +593,11 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
+    { rule = { class = "screenruler" },
+        properties = { floating = true,
+                        border_width = 0,
+                        callback = function (c) 
+                           awful.titlebar.remove(c, { modkey = modkey }) end } },
     { rule = { class = "kruler" },
         properties = { floating = true,
                         border_width = 0 } },

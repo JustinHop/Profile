@@ -7,6 +7,8 @@ echo > ~/.xsession-errors
 #thunar --daemon &
 
 #xfsettingsd
+{ sleep 5s; xfsettingsd; } &
+{ sleep 6s; xcfe4-volumed; } &
 
 { nitrogen --restore; } &
 
@@ -26,7 +28,6 @@ xmodmap -e "keycode 135 = Super_L"
 echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
 
-setxkbmap -option terminate:ctrl_alt_bksp
 
 numlockx  &
 #if ! pgrep -x mpd > /dev/null ; then
@@ -36,7 +37,7 @@ numlockx  &
 #    { sleep 5s; mpdas ; } &
 #fi
 #{ sleep 10s; mpc update ; } &
-{ sleep 3s; clipit ; } &
+{ sleep 3s; parcellite ; } &
 { sleep 3s; bluetooth-applet ; } &
 { sleep 3s; gnome-sound-applet ; } &
 { sleep 3s; nm-applet ; } &
@@ -51,6 +52,9 @@ numlockx  &
 #xscreensaver -no-splash &
 
 { while true; do
+    setxkbmap -option terminate:ctrl_alt_bksp
+    setxkbmap -option terminate:ctrl_alt_bksp
+    xset r rate 350 50
     xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
     xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
     xmodmap -e 'add Control = Control_L' >& /dev/null;
