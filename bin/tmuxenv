@@ -24,8 +24,10 @@ while (<>) {
             # Live Nation Prod
             print "#[fg=colour14,bg=red]#[fg=colour15,bg=red] PROD "
             . "#[fg=red,bg=colour0,bold]";
-        } 
+        }
 
+    } else {
+        print "#[fg=colour14,bg=colour0]";
     }
 }
 
