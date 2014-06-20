@@ -28,6 +28,9 @@ xmodmap -e "keycode 135 = Super_L"
 echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
 
+setxkbmap -option terminate:ctrl_alt_bksp
+setxkbmap -option ctrl:nocaps
+xset r rate 350 50
 
 numlockx  &
 #if ! pgrep -x mpd > /dev/null ; then
@@ -51,16 +54,13 @@ numlockx  &
 #xscreensaver-command -exit > /dev/null || true
 #xscreensaver -no-splash &
 
-{ while true; do
-    setxkbmap -option terminate:ctrl_alt_bksp
-    setxkbmap -option terminate:ctrl_alt_bksp
-    xset r rate 350 50
-    xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
-    xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
-    xmodmap -e 'add Control = Control_L' >& /dev/null;
-    xmodmap -e "keycode 135 = Super_L"
-    sleep 10s;
-done ; } &
+#{ while true; do
+#    xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
+#    xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
+#    xmodmap -e 'add Control = Control_L' >& /dev/null;
+#    xmodmap -e "keycode 135 = Super_L"
+#    sleep 10s;
+#done ; } &
 
 #{ while true; do
 #    nc v4address.com 23 | tail -n 1 | awk '{ print $5 }' > ~/.external_ip
