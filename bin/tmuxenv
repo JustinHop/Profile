@@ -1,0 +1,40 @@
+#!/usr/bin/perl
+
+use strict;
+
+while (<>) {
+    if ( /^justin\d+:/ ) {
+        #   Justin systems
+        print "#[fg=colour14,bg=colour10]#[fg=colour15,bg=colour10] JDev "
+        . "#[fg=colour10,bg=colour0]";
+    } elsif ( /^(\w+)\@(\w+)(\d+)\.(\w+)\.(\w+)(\d+)\.(\w+)\.tmcs:(\S+)/ ) {
+        # Live Nation Systems
+        my $u = $1;
+        my $c = $2;
+        my $i = $3;
+        my $p = $4;
+        my $C = $5;
+        my $I = $6;
+        my $b = $7;
+        my $p = $8;
+        #print "u=$u c=$c i=$i p=$p C=$C I=$I b=$b p=$p";
+        if ( $C =~ /(ash|phx)/ ||
+            ( $C =~ /cft/ && $I =~ /4/ )
+        ) {
+            # Live Nation Prod
+            print "#[fg=colour14,bg=red]#[fg=colour15,bg=red] PROD "
+            . "#[fg=red,bg=colour0,bold]";
+        }
+
+    } else {
+        print "#[fg=colour14,bg=colour0]";
+    }
+}
+
+#while read LINE ; do
+#    case LINE in
+#        justin*)
+#            echo -n "#[fg=colour14,bg=colour10]#[fg=colour15,bg=colour10] JDev "
+#            echo -n "#[fg=colour10,bg=colour0]"
+#done
+#

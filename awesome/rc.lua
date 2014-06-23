@@ -53,20 +53,20 @@ function import(file)
     -- local ret = awful.util.checkfile( awful.util.getdir("config") .. file ".lua" );
     local ret = awful.util.checkfile(file);
     if type(ret) == "string" then
-    	io.stderr:write(ret, "\n")
-    	return true
+        io.stderr:write(ret, "\n")
+        return true
     else
-    	--io.stderr:write("Returned type: ", type(ret), "\n")
-    	pcall(ret)
-    	--require(file)
+        --io.stderr:write("Returned type: ", type(ret), "\n")
+        pcall(ret)
+        --require(file)
     end
 end
 
 for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/*.lua"):lines() do
-	if string.find(file,"%.lua$") then
-		io.stderr:write("Importing ", file, "\n")
-		import(file)
-	end
+    if string.find(file,"%.lua$") then
+        io.stderr:write("Importing ", file, "\n")
+        import(file)
+    end
 end
 -- }}}
 
@@ -272,10 +272,10 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 for s = 1, screen.count() do
-	-- My mouse indicator
+    -- My mouse indicator
     mymousebox[s] = widget({ type = "textbox", align = "left" })
     if screen.count() ~= 1 then
-    	mymousebox[s].text = "[-]"
+        mymousebox[s].text = "[-]"
     end
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
@@ -300,7 +300,7 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
-        	lspace,
+            lspace,
             mylauncher,
             lspace,
             mymousebox[s].text  and mymousebox[s] or nil,
@@ -450,7 +450,7 @@ globalkeys = awful.util.table.join(
             if client.focus.type then text = text .. setFg("white", "Type: ") .. client.focus.type .. " " end
             mymsgbox[s].text = text
             naughty.notify{ title = 'Debug Information', text = text, icon = '/usr/share/awesome/icons/awesome64.png'}
-    	    io.stderr:write(text, "\n")
+            io.stderr:write(text, "\n")
 
         end
     end)
@@ -593,6 +593,11 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
+    { rule = { class = "screenruler" },
+        properties = { floating = true,
+                        border_width = 0,
+                        callback = function (c) 
+                           awful.titlebar.remove(c, { modkey = modkey }) end } },
     { rule = { class = "kruler" },
         properties = { floating = true,
                         border_width = 0 } },
@@ -734,9 +739,9 @@ end
 function mousemarker()
    for s=1, screen.count() do
       if s == mouse.screen then
-    	       mymousebox[s].text=[[<span bgcolor="#b58900"><b> ■ </b></span>]]
+               mymousebox[s].text=[[<span bgcolor="#b58900"><b> ■ </b></span>]]
       else
-    	       mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
+               mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
       end
    end
 end
