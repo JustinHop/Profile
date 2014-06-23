@@ -12,3 +12,4 @@ command=zsh
 cursor_blink_mode=2
 cursor_shape=0
 hide_mouse=0
+backspace_binding=0
