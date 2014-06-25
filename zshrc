@@ -468,9 +468,9 @@ setopt   \
   banghist \
   extendedhistory \
   NOhistexpiredupsfirst \
-  histfindnodups \
   NOhistignorespace \
   NOhistignoredups \
+  histfindnodups \
   histreduceblanks \
   histverify \
   histfcntllock \
