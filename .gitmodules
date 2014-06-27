@@ -97,3 +97,6 @@
 [submodule "powerline-fonts"]
 	path = powerline-fonts
 	url = https://github.com/Lokaltog/powerline-fonts.git
+[submodule "vim/general/vinegar"]
+	path = vim/general/vinegar
+	url = git://github.com/tpope/vim-vinegar.git
