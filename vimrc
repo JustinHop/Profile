@@ -356,9 +356,13 @@ if !exists('g:loaded_justin_vimrc')
 
     "au FileType perl :call MyPerlSettings()
 
-    au BufEnter * :call DoTitle()
+    if has("gui_running")
+      au BufEnter * :call DoTitle()
+    endif
 
     au FileType apache set nosmartindent preserveindent
+
+    au FileType sls set shiftwidth=2
 
     au FileType xml,xslt compiler xmllint " Enables :make for XML and HTML validation
     au FileType html compiler tidy  "           use :cn & :cp to jump between errors
@@ -571,7 +575,7 @@ if !exists('g:loaded_justin_vimrc')
   " Change the working directory to the directory containing the current file
   "-------------------------------------------------------------------------------
   if has("autocmd")
-      autocmd BufEnter * :lcd %:p:h
+      autocmd BufEnter * silent! :lcd %:p:h
   endif " has("autocmd")
 
   if !exists("*Backspace")
