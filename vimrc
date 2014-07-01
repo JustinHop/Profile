@@ -43,6 +43,8 @@ if !exists('g:loaded_justin_vimrc')
     let g:airline_section_y='%{airline#util#wrap(airline#parts#ffenc(),0)} %{g:airline_right_alt_sep} %{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}'
   endif
 
+  let NERDTreeHijackNetrw=0
+
   set backspace=2
   set ttyfast
 
