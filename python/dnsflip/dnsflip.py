@@ -51,6 +51,7 @@ class DNSFlip:
         self.ValidHost = re.compile(
             r'(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)'
             r'*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])')
+
         self.CommonHost = re.compile(
             r'((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)'
             r'*(au|mx|ca|nz|uk|com|org|net|info|tmcs|pl|tv)\b)',

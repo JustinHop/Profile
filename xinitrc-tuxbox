@@ -3,11 +3,13 @@
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
+unburden-home-dir
+
 #gnome-settings-daemon &
 #thunar --daemon &
 
 #xfsettingsd
-{ sleep 5s; xfsettingsd; } &
+{ sleep 4s; xfsettingsd; } &
 { sleep 6s; xcfe4-volumed; } &
 
 { nitrogen --restore; } &

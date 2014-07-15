@@ -469,13 +469,13 @@ setopt   \
   extendedhistory \
   NOhistexpiredupsfirst \
   NOhistignorespace \
-  NOhistignoredups \
+  histignoredups \
   histfindnodups \
   histreduceblanks \
   histverify \
   histfcntllock \
   incappendhistory \
-  sharehistory
+  NOsharehistory
 
 # bindings for history
 #bindkey "^XH" set-local-history
