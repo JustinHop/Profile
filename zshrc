@@ -1,7 +1,7 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
 
-export ZSHRC_VERSION="2.2.0"
+export ZSHRC_VERSION="2.2.1"
 export PROFILE_DIR="$HOME/Profile"
 export ZSH_MAJOR=$(echo $ZSH_VERSION | cut -d. -f1)
 export ZSH_MINOR=$(echo $ZSH_VERSION | cut -d. -f2)
@@ -431,34 +431,64 @@ fi
 #
 # My Options
 #
-setopt  \
-  NO_allexport \
+
+#   Changing Directories
+setopt \
   auto_cd \
+  autopushd \
+  cdablevars \
+  NO_chasedots \
+  NO_chaselinks \
+  NO_posix_cd \
+  pushd_ignore_dups \
+
+#   Completion
+setopt \
+  always_to_end \
   autolist \
   automenu \
-  autopushd \
+  auto_name_dirs \
   auto_param_keys \
   auto_param_slash \
   auto_remove_slash \
+  bash_auto_list \
+  NO_complete_aliases \
+  completeinword \
+  glob_complete \
+  hash_list_all \
+  list_ambiguous \
+  NO_list_beep \
+  list_types \
+
+#   Expansion and Globs
+setopt \
+  NO_case_glob \
+  extendedglob \
+  glob \
+  glob_assign \
+  NO_glob_dots \
+  magic_equal_subst \
+  multibyte \
+  NO_nomatch \
+  null_glob \
+  numeric_glob_sort \
+  rematch_pcre \
+
+
+setopt  \
+  allexport \
   nobeep \
   NObgnice \
   braceccl \
-  cdablevars \
-  NO_chaselinks \
-  completeinword \
   correct \
-  NO_nullglob \
-  extendedglob \
   NO_flowcontrol \
   functionargzero \
   globassign \
   globcomplete \
   nohup \
   longlistjobs \
-  magicequalsubst \
   multios \
   promptsubst \
-  NO_nomatch \
   vi \
   zle
 
@@ -467,7 +497,7 @@ setopt   \
   appendhistory \
   banghist \
   extendedhistory \
-  NOhistexpiredupsfirst \
+  histexpiredupsfirst \
   NOhistignorespace \
   histignoredups \
   histfindnodups \
@@ -475,10 +505,10 @@ setopt   \
   histverify \
   histfcntllock \
   incappendhistory \
-  NOsharehistory
+  NO_sharehistory
 
 # bindings for history
-#bindkey "^XH" set-local-history
+# bindkey "^G" set-local-history
 
 if (( $ZSH_MAJOR >= 4 )); then
   setopt aliases \
