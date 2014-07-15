@@ -100,3 +100,6 @@
 [submodule "vim/general/vinegar"]
 	path = vim/general/vinegar
 	url = git://github.com/tpope/vim-vinegar.git
+[submodule "zsh/oh-my-zsh"]
+	path = zsh/oh-my-zsh
+	url = https://github.com/robbyrussell/oh-my-zsh.git
