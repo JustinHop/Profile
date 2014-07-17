@@ -110,7 +110,7 @@ class VidDList(VidList):
 
     def purgelist(self):
         print "Removing", self.gethumansize(), "of data."
-        for vid in self.videolist.reverse():
+        for vid in self.videolist:
             vid.deletefile()
             self.remove_obj(vid)
 
