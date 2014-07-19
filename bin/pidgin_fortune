@@ -12,7 +12,7 @@ if [ $FORTUNE_ARG ]; then
     FORTUNE=$OPTARG
 fi
 
-while true ; do
+while ps $PPID > /dev/null ; do
     MESSAGE="$(fortune ${FORTUNE:-zippy})"
     echo $MESSAGE
     ~/bin/pidgin_status.py "$MESSAGE"
