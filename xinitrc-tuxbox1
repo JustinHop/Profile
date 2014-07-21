@@ -1,0 +1,31 @@
+#!/bin/zsh
+{  xfsettingsd --no-daemon; } &
+cat ~/.xsession-errors > ~/.xsession-errors-1
+echo > ~/.xsession-errors
+echo "New Session on $HOSTNAME" | figlet -w 1000
+
+unburden-home-dir
+date
+
+xrandr --output HDMI1 --primary
+{ sleep 1s; xbindkeys --nodaemon ; } &
+
+{ sleep 2s; awsetbg -l; sleep 1s; conky; } &
+
+{ sleep 3s; parcellite ; } &
+{ sleep 3s; nm-applet ; } &
+
+{ sleep 5s; volti; } &
+{ sleep 5s; pasystray; } &
+{ sleep 6s; cryptkeeper; } &
+
+[ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
+[ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
+xmodmap -e "keycode 135 = Super_L"
+setxkbmap -option terminate:ctrl_alt_bksp
+setxkbmap -option ctrl:nocaps
+xset r rate 350 50
+
+numlockx
+feh --bg-scale Pictures/minimalwall-10-33-1-moleskine-minimal-wallpaper.png
+exec bash -c 'while true ; do awesome; sleep 1s; done;'
