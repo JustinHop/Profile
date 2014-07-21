@@ -420,21 +420,6 @@ if [[ -o interactive ]]; then
     whence "color${_COLOR}" >> /dev/null && alias ${_COLOR}="color${_COLOR}"
   done
 fi
-
-#
-#   Persistant Dir Stack
-#
-DIRSTACKSIZE=20
-DIRSTACKFILE=~/.zdirs
-if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
-  dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
-  [[ -d $dirstack[1] ]] && cd $dirstack[1] && cd $OLDPWD
-fi
-chpwd() {
-  print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
-}
-
-
 #
 # Work  Stuff
 #
@@ -555,7 +540,7 @@ if (( $ZSH_MAJOR >= 4 )); then
   zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
   zstyle ':completion:*' matcher-list '' 'r:|[._-]=* r:|=*'
   zstyle ':completion:*' max-errors 2
-  zstyle ':completion:*' menu select=5
+  zstyle ':completion:*' menu select=2
   zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 
   autoload -U compinit
@@ -611,27 +596,6 @@ if (( $ZSH_MAJOR >= 4 )); then
   compdef _modprobe remod
   compdef _mozilla firefox-3.5
   compdef _gnu_generic ssh-keygen
-  #
-  #   TMUX PSYCHO COMPLETION
-  #
-  _tmux_pane_words() {
-    local expl
-    local -a w
-    if [[ -z "$TMUX_PANE" ]]; then
-      _message "not running inside tmux!"
-      return 1
-    fi
-    w=( ${(u)=$(tmux capture-pane \; show-buffer \; delete-buffer)} )
-    _wanted values expl 'words from current tmux pane' compadd -a w
-  }
-
-  zle -C tmux-pane-words-prefix   complete-word _generic
-  zle -C tmux-pane-words-anywhere complete-word _generic
-  bindkey '^Xt' tmux-pane-words-prefix
-  bindkey '^X^X' tmux-pane-words-anywhere
-  zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' completer _tmux_pane_words
-  zstyle ':completion:tmux-pane-words-(prefix|anywhere):*' ignore-line current
-  zstyle ':completion:tmux-pane-words-anywhere:*' matcher-list 'b:=* m:{A-Za-z}={a-zA-Z}'
 fi
 
 _essh () {
