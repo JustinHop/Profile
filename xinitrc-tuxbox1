@@ -21,11 +21,15 @@ xrandr --output HDMI1 --primary
 
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
 [ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
-xmodmap -e "keycode 135 = Super_L"
-setxkbmap -option terminate:ctrl_alt_bksp
-setxkbmap -option ctrl:nocaps
+setxkbmap \
+   -option\
+   -option ctrl:nocaps\
+   -option terminate:ctrl_alt_backspace\
+   -option ctrl:menu_rctrl\
+   -option keypad:pointerkeys
+
 xset r rate 350 50
 
-numlockx
+numlockx on
 feh --bg-scale Pictures/minimalwall-10-33-1-moleskine-minimal-wallpaper.png
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
