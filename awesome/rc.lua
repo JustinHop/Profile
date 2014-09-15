@@ -146,16 +146,16 @@ else
 
     tags2_1 = {
                --names  = { "[web]", "[shell]", "[work]", "[coding]", "[mail/calendar]", "[music]", "[other]" },
-               layout = { layouts[1], layouts[1], layouts[2], layouts[1], layouts[1], layouts[1] }
+               layout = { layouts[1], layouts[1], layouts[2], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1] }
               }
 
     tags2_2 = {
               --names  = { "[code]", "[web]", "[chat]", "[misc]" },
-               layout = { layouts[1], layouts[1], layouts[2], layouts[1], layouts[1], layouts[1] }
+               layout = { layouts[1], layouts[1], layouts[2], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1] }
                }
 
-              tags[1] = awful.tag({ 1, 2, 3, 4, 5, 6 }, 1, tags2_1.layout)
-              tags[2] = awful.tag({ 1, 2, 3, 4, 5, 6 }, 2, layouts[1])
+              tags[1] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 1, tags2_1.layout)
+              tags[2] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, layouts[1])
 end
 
 awful.tag.setnmaster(1, tags[1][2])

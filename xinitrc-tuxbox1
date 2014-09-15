@@ -5,9 +5,9 @@ echo > ~/.xsession-errors
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
 unburden-home-dir
-date
+eval $(keychain --eval --nogui) 
 
-xrandr --output HDMI1 --primary
+xrandr --output VGA1 --primary
 { sleep 1s; xbindkeys --nodaemon ; } &
 
 { sleep 2s; awsetbg -l; sleep 1s; conky; } &
@@ -19,6 +19,7 @@ xrandr --output HDMI1 --primary
 { sleep 5s; pasystray; } &
 { sleep 6s; cryptkeeper; } &
 
+echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
 [ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
 setxkbmap \
@@ -28,8 +29,13 @@ setxkbmap \
    -option ctrl:menu_rctrl\
    -option keypad:pointerkeys
 
+xmodmap -e "keycode 135 = Super_L"
+
+echo "Session: Setting Keyboard Repeat Rate 350ms delay 50hz repeat"
 xset r rate 350 50
 
-numlockx on
+numlockx &
 feh --bg-scale Pictures/minimalwall-10-33-1-moleskine-minimal-wallpaper.png
+date
+echo "New Session on $HOSTNAME" | figlet -w 1000
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
