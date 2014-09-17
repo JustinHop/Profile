@@ -586,6 +586,8 @@ awful.rules.rules = {
                      focus = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
+    { rule = { role = "pop-up" },
+      properties = { floating = true } },
     { rule = { class = "MPlayer" },
       properties = { floating = true,
         border_width = 0 } },

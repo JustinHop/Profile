@@ -1,0 +1,54 @@
+#!/bin/zsh
+cat ~/.xsession-errors > ~/.xsession-errors-1
+echo > ~/.xsession-errors
+echo "New Session on $HOSTNAME" | figlet -w 1000
+
+eval $(keychain --eval --nogui) 
+
+#xrandr --output VGA1 --primary
+{ sleep 1s; xbindkeys --nodaemon ; } &
+
+{ sleep 2s; nitrogen --restore; sleep 1s; conky; } &
+
+{ sleep 3s; parcellite ; } &
+{ sleep 3s; nm-applet ; } &
+{ sleep 3s; bluetooth-applet ; } &
+{ sleep 5s; volti; } &
+{ sleep 5s; pasystray; } &
+{ sleep 6s; cryptkeeper; } &
+
+echo "Session: setting Xdefaults and Xmodmap"
+[ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
+[ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
+{ while true ; do
+      setxkbmap \
+         -option \
+         -option ctrl:nocaps \
+         -option terminate:ctrl_alt_backspace \
+         -option ctrl:menu_rctrl \
+         -option keypad:pointerkeys
+
+      xmodmap -e "keycode 135 = Super_L";
+      xset r rate 350 50;
+      xset s 3600
+      sleep 10s;
+done ; } &
+
+numlockx  &
+
+date
+echo "New Session on $HOSTNAME" | figlet -w 1000
+
+
+#{ while true ; do
+#    xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
+#    xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
+#    xmodmap -e 'add Control = Control_L' >& /dev/null;
+#    xmodmap -e "keycode 135 = Super_L"
+#    sleep 10s;
+#done ; } &
+
+
+{ sleep 5s; xfsettingsd --no-daemon; } &
+#gnome-settings-daemon &
+exec bash -c 'while true ; do awesome; sleep 1s; done;'
