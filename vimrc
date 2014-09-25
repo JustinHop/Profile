@@ -40,6 +40,8 @@ if !exists('g:loaded_justin_vimrc')
   if !exists('g:loaded_airline')
     let g:airline#extensions#tabline#enabled = 1
     "let g:airline_section_a='ⅵ %{airline#util#wrap(airline#section#create_left(["mode", "paste", "iminsert"]),0)}'
+    let g:airline_section_c = '%F'
+    let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
     let g:airline_section_y='%{airline#util#wrap(airline#parts#ffenc(),0)} %{g:airline_right_alt_sep} %{&tabstop}:%{&softtabstop}:%{&shiftwidth}:%{&expandtab}'
   endif
 

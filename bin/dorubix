@@ -7,10 +7,10 @@ while read LINE ; do
     HOSTS="$LINE $HOSTS"
 done
 
-LOG_DIR=/tmp/rubix
+LOG_DIR=~/tmp/rubix
 [ -d $LOG_DIR ] && rm -f $LOG_DIR/* || mkdir $LOG_DIR
-echo $HOSTS | egrep -v $IGNORE \
-        | onall -p -t3000 -o $LOG_DIR -Q "
+for i in $HOSTS ; do echo $i ; done | egrep -v $IGNORE \
+        | onall -t3000 -o $LOG_DIR -r 500 -Q "
                 sleep 0.0\${RANDOM}m
                 test -f /etc/ntp/step-tickers && rm /etc/ntp/step-tickers
                 test -f /etc/init.d/named.rpmorig && rm /etc/init.d/named.rpmorig

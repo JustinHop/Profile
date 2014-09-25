@@ -7,15 +7,19 @@ eval $(keychain --eval --nogui)
 
 #xrandr --output VGA1 --primary
 { sleep 1s; xbindkeys --nodaemon ; } &
+{ sleep 1s; davmail ; } &
 
-{ sleep 2s; nitrogen --restore; sleep 1s; conky; } &
+{ sleep 1s; nitrogen --restore; sleep 1s; conky; } &
 
-{ sleep 3s; parcellite ; } &
-{ sleep 3s; nm-applet ; } &
-{ sleep 3s; bluetooth-applet ; } &
-{ sleep 5s; volti; } &
-{ sleep 5s; pasystray; } &
-{ sleep 6s; cryptkeeper; } &
+{ sleep 2s; parcellite ; } &
+{ sleep 2s; nm-applet ; } &
+{ sleep 2s; bluetooth-applet ; } &
+#{ sleep 5s; volti; } &
+#{ sleep 5s; pasystray; } &
+{ sleep 3s; mopidy; } &
+{ sleep 3s; gnome-sound-applet; } &
+{ sleep 3s; cryptkeeper; } &
+{ sleep 5s; pidgin_fortune; } &
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
@@ -34,21 +38,10 @@ echo "Session: setting Xdefaults and Xmodmap"
       sleep 10s;
 done ; } &
 
-numlockx  &
+numlockx
 
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
-
-#{ while true ; do
-#    xmodmap -e 'remove Lock = Caps_Lock' >& /dev/null;
-#    xmodmap -e 'keysym Caps_Lock = Control_L' >& /dev/null;
-#    xmodmap -e 'add Control = Control_L' >& /dev/null;
-#    xmodmap -e "keycode 135 = Super_L"
-#    sleep 10s;
-#done ; } &
-
-
 { sleep 5s; xfsettingsd --no-daemon; } &
-#gnome-settings-daemon &
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
