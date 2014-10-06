@@ -14,3 +14,4 @@ cursor_shape=0
 hide_mouse=0
 backspace_binding=0
 bell_highlights_tab=0
+scroll_on_keystroke=1
