@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 #
 
-my $IGNORE='(justin|dev99)|^(fw|as|ld.?|nsr|lb|swx|dsx|asx|cyc|rcm|gig|fls|fsx|slb|ra|nls|sjs|hsrp|dhcp|vsr|utl|coresys)(\.|[0-9])';
+my $IGNORE='(justin|dev99)|^(fw|as|ld.?|nsr|snsr|srnsr|lb|swx|dsx|asx|cyc|rcm|gig|fls|fsx|slb|ra|nls|sjs|hsrp|dhcp|vsr|utl|coresys)(\.|[0-9])';
 
 while (<>){
     m/$IGNORE/ && do { next };
