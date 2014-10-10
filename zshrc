@@ -144,61 +144,8 @@ export PATH
 #
 # TERMINAL SETTINGS AND KEYBINDINGS
 #
-autoload -U bindit
-case $TERM in
-  # FN_CHARS=( INSERT HOME PGUP DELETE END PGDN )
-  (*xterm*||dtterm||Eterm||*rxvt*)
-  FN_CHARS=( '^[[2~' '^[[H' '^[[5~'
-  '^[[3~' '^[[F' '^[[6~' )
-
-  bindkey '^[[1~' vi-beginning-of-line   #home
-  bindkey '^[[4~' vi-end-of-line         #end
-
-  #rxvt uglyness
-  bindkey '^[[7~' vi-beginning-of-line   #home
-  bindkey '^[[8~' vi-end-of-line         #end
-  if [[ $UNAME == "SunOS" ]]; then
-    STM="-T xterm"
-    alias BT="TERM=screen-bce"
-    TSCR=" -T screen-bce "
-  fi
-  ;;
-(*linux*)
-  FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
-  '^[[3~' '^[[4~' '^[[6~' )
-  VIM_LINUX_TERM=" -c ':set t_Co=16' "
-  ;;
-(*screen*)
-  FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
-  '^[[3~' '^[[4~' '^[[6~' )
-  SQL_TERM="TERM=xterm "
-  alias XT="TERM=xterm "
-  whence svccfg > /dev/null && alias svccfg="TERM=xterm svccfg"
-  if [[ -z $STY ]]; then
-    STY=a
-  fi
-  ;;
-(*vt*)
-  FN_CHARS=( '^[[2~' '^[OH' '^[[5~'
-  '^[[4~' '^[OF' '^[[6~'  )
-  ;;
-(*ansi*)
-  if [[ -f /etc/termcap ]]; then
-    if grep -e '\<scoansi\>' /etc/termcap* 2&>/dev/null ; then
-      export TERM=scoansi
-    fi
-  fi
-  ;;
-(*)
-  FN_CHARS=( '^[[2~' '^[[1~' '^[[5~'
-  '^[[3~' '^[[4~' '^[[6~' )
-  ;;
-esac
-bindit
-
-# reguardless - they CANT mean anything else
-bindkey '^[OH' vi-beginning-of-line             # home
-bindkey '^[OF' vi-end-of-line                   # end
+autoload -U bindit3
+bindit3
 
 #  some defaults
 #  ^U    clear line
@@ -212,7 +159,6 @@ bindkey '^[OF' vi-end-of-line                   # end
 #  ^B    History expansion
 
 #  F1 = esc on laptops
-bindkey -s '^[OP' '\e'
 
 bindkey '^W' accept-and-menu-complete
 bindkey '^N' vi-repeat-find
@@ -221,6 +167,9 @@ bindkey '^B' expand-history
 bindkey '^Xx' push-line
 bindkey '^U' undo
 bindkey '^R' redo
+
+bindkey -M viins '^r' history-incremental-search-backward
+bindkey -M vicmd '^r' history-incremental-search-backward
 
 if (( $ZSH_MAJOR >= 4 )); then
   bindkey '^O' all-matches
