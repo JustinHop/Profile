@@ -587,8 +587,7 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons } },
     { rule = { role = "pop-up" },
-      properties = { floating = true,
-        tag = tags[1][2] } },
+      properties = { floating = true } },
     { rule = { class = "MPlayer" },
       properties = { floating = true,
         border_width = 0 } },
@@ -613,12 +612,16 @@ awful.rules.rules = {
         properties = { tag = tags[1][3] } },
     { rule = { class = "Android SDK Manager" },
       properties = { floating = true } },
+    { rule = { class = "sun-applet-PluginMain" },
+        properties = { floating = true },
+        callback = function (c)
+            awful.titlebar.add(c, { modkey = modkey })
+        end },
     { rule = { class = "java-lang-Thread" },
         properties = { floating = true },
         callback = function (c)
             awful.titlebar.add(c, { modkey = modkey })
-        end
-    },
+        end },
     { rule = { name = "plugin-container" },
         properties = { floating = false,
                         maximized_vertical = true,

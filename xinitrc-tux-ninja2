@@ -28,7 +28,7 @@ echo "Session: setting Xdefaults and Xmodmap"
       setxkbmap \
          -option \
          -option ctrl:nocaps \
-         -option terminate:ctrl_alt_backspace \
+         -option terminate:ctrl_alt_bksp \
          -option ctrl:menu_rctrl \
          -option keypad:pointerkeys
 
