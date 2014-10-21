@@ -103,3 +103,6 @@
 [submodule "zsh/oh-my-zsh"]
 	path = zsh/oh-my-zsh
 	url = https://github.com/robbyrussell/oh-my-zsh.git
+[submodule "python/lastfm-tools"]
+	path = python/lastfm-tools
+	url = https://github.com/hugovk/lastfm-tools.git
