@@ -545,6 +545,8 @@ if (( $ZSH_MAJOR >= 4 )); then
   compdef _modprobe remod
   compdef _mozilla firefox-3.5
   compdef _gnu_generic ssh-keygen
+  compdef _gnu_generic onall
+  compdef _gnu_generic nhs
 fi
 
 _essh () {

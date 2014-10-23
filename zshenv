@@ -194,4 +194,11 @@ export PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5";
 export PERL5LIB="${HOME}/perl5/lib/perl5:$PERL5LIB";
 export PATH="${HOME}/perl5/bin:$PATH";
 
+if [ -d "$HOME/python" ]; then
+    export WORKON_HOME="$HOME/python"
+    if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+        source /usr/local/bin/virtualenvwrapper.sh
+    fi
+fi
+
 # vim:ft=zsh:syn=zsh
