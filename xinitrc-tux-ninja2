@@ -1,4 +1,7 @@
 #!/bin/zsh
+
+setopt allexport
+
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 echo "New Session on $HOSTNAME" | figlet -w 1000
@@ -11,15 +14,15 @@ eval $(keychain --eval --nogui)
 
 { sleep 1s; nitrogen --restore; sleep 1s; conky; } &
 
-{ sleep 2s; parcellite ; } &
-{ sleep 2s; nm-applet ; } &
-{ sleep 2s; bluetooth-applet ; } &
+{ sleep 1s; clipit ; } &
+{ sleep 1s; nm-applet ; } &
+{ sleep 1s; bluetooth-applet ; } &
 #{ sleep 5s; volti; } &
 #{ sleep 5s; pasystray; } &
-{ sleep 3s; mopidy; } &
-{ sleep 3s; gnome-sound-applet; } &
-{ sleep 3s; cryptkeeper; } &
-{ sleep 5s; pidgin_fortune; } &
+{ sleep 2s; mopidy; } &
+{ sleep 2s; gnome-sound-applet; } &
+{ sleep 2s; cryptkeeper; } &
+{ sleep 3s; pidgin_fortune; } &
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
@@ -45,3 +48,4 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 { sleep 5s; xfsettingsd --no-daemon; } &
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
+#exec xfce4-session
