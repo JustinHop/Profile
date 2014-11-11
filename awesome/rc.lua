@@ -121,46 +121,19 @@ layouts =
 use_titlebar = false
 -- }}}
 
---[[
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    if screen.count() == 1 then
-        tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
-    else
-        tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6 }, s, layouts[1])
-    end
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
-]]--
-tags = {}
-if screen.count() == 1 then
-    tags1_1 = {
-               --names  = { "[web]", "[shell]", "[work]", "[coding]", "[mail/calendar]", "[music]", "[other]" },
-              layout = { layouts[1], layouts[1], layouts[2], layouts[1],
-                         layouts[1], layouts[1], layouts[1], layouts[1], layouts[1] }
-              }
-              tags[1] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 1, tags1_1.layout)
-else
+if screen.count() >= 2 then
 
-    tags2_1 = {
-               --names  = { "[web]", "[shell]", "[work]", "[coding]", "[mail/calendar]", "[music]", "[other]" },
-               layout = { layouts[1], layouts[1], layouts[2], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1] }
-              }
-
-    tags2_2 = {
-              --names  = { "[code]", "[web]", "[chat]", "[misc]" },
-               layout = { layouts[1], layouts[1], layouts[2], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1] }
-               }
-
-              tags[1] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 1, tags2_1.layout)
-              tags[2] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, layouts[1])
+   awful.tag.setnmaster(1, tags[1][2])
+   awful.tag.setmwfact( .8, tags[1][2])
+   awful.tag.setncol( 2, tags[1][2])
 end
-
-awful.tag.setnmaster(1, tags[1][2])
-awful.tag.setmwfact( .8, tags[1][2])
-awful.tag.setncol( 2, tags[1][2])
 -- }}}
 
 -- {{{ Menu
@@ -313,6 +286,8 @@ for s = 1, screen.count() do
         rspace,
         mylayoutbox[s],
         rspace,
+         mymousebox[s].text  and mymousebox[s] or nil,
+         mymousebox[s].text  and rspace or nil,
         mytextclock,
         rspace,
         s == 1 and mysystray or nil,
