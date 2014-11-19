@@ -367,6 +367,7 @@ if !exists('g:loaded_justin_vimrc')
     au FileType apache set nosmartindent preserveindent
 
     au FileType sls set shiftwidth=2
+    au FileType sls set filetype=sls
 
     au FileType xml,xslt compiler xmllint " Enables :make for XML and HTML validation
     au FileType html compiler tidy  "           use :cn & :cp to jump between errors
