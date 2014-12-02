@@ -511,6 +511,7 @@ if (( $ZSH_MAJOR >= 4 )); then
 
   # CLEAR OUT THAT DAMNED CD COMPLETION GARBAGE!!!
   zstyle ':completion:*:*:*:users' ignored-patterns \
+    avahi \
     adm bin daemon games gdm halt ident junkbust \
     lp mail mailnull named news nscd colors \
     ntp operator pcap postgres radvd rpc rpcuser rpm \
@@ -521,7 +522,6 @@ if (( $ZSH_MAJOR >= 4 )); then
     kernoops rtkit speech-dispatcher colord avahi hplip saned sshd \
     gdm debian-tor statd ftp mpdscribble dnsmasq festival glances
 
-
   #compdef _ssh envssh
   #compdef '_dispatch ssh' essh
 
@@ -530,15 +530,16 @@ if (( $ZSH_MAJOR >= 4 )); then
 
   ### Mine
   for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts ; do
-    if [[ -f $hostfile ]]; then
-      etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < /etc/hosts) )
+    if [ -f $hostfile ]; then
+      etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )
       #zstyle ':completion:*' hosts $etchosts;
     fi
   done
-  if [[ -f "$HOME"/tm.bindForward ]]; then
-    etchosts+=( $( perl -ne '/(^[\w\.]*tmcs)/; if ($1) { print $1 . " " }' < "$HOME"/tm.bindForward ))
+  if [ -f "$HOME"/cr.zone ]; then
+    etchosts+=( $( perl -ne '/(^[\w\.]*io)/; if ($1) { print $1 . " " }' < "$HOME"/cr.zone ))
     #zstyle ':completion:*' hosts $etchosts
   fi
+
   etchosts+=({core,mail,tux,tux-ninja,net1,net,sup1,sup,www,eh}{,.justinhoppensteadt.com} $HOSTNAME)
   zstyle ':completion:*' hosts $etchosts
   compdef _hosts getip
@@ -547,6 +548,9 @@ if (( $ZSH_MAJOR >= 4 )); then
   compdef _gnu_generic ssh-keygen
   compdef _gnu_generic onall
   compdef _gnu_generic nhs
+  compdef _gnu_generic cloudlb
+  compdef _gnu_generic cloudservers
+  compdef _gnu_generic cloud_dns
 fi
 
 _essh () {

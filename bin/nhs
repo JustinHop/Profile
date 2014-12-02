@@ -17,7 +17,7 @@ chomp $::fping;
 $::rootDomain = "tmcs";
 $::tinyDnsZoneFile = "";
 $::bindReverseLookupFile = "";
-$::bindForwardLookupFile = "$ENV{'HOME'}/tm.bindForward";
+$::bindForwardLookupFile = "$ENV{'HOME'}/cr.bindForward";
 $::packageRepository = "$ENV{'HOME'}/workbench/rpmlist";
 $::interfaceRepository = "$ENV{'HOME'}/workbench/interfacelist";
 $::operatingSystemRepository = "$ENV{'HOME'}/workbench/oslist";
