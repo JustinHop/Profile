@@ -23,6 +23,9 @@ eval $(keychain --eval --nogui)
 { sleep 2s; gnome-sound-applet; } &
 { sleep 2s; cryptkeeper; } &
 { sleep 3s; pidgin_fortune; } &
+{ sleep 3s; pasystray; } &
+{ sleep 3s; fdpowermon; } &
+{ sleep 5s; xbacklight -set 25; } &
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
