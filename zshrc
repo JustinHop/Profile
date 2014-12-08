@@ -509,6 +509,8 @@ if (( $ZSH_MAJOR >= 4 )); then
   # ignore lost&found
   zstyle ':completion:*:cd:*' ignored-patterns '(*/)#lost+found'
 
+  zstyle ':completion:*:*:*:commands' ignored-patterns servertool serialver
+
   # CLEAR OUT THAT DAMNED CD COMPLETION GARBAGE!!!
   zstyle ':completion:*:*:*:users' ignored-patterns \
     avahi \
