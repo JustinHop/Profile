@@ -1,13 +1,6 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
 
-if [ -f "$HOME"/Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh ]; then
-  source "$HOME"/Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh 
-fi
-if [ -f "$HOME"/Profile/zsh/oh-my-zsh/templates/zshrc.zsh-template ]; then
-  source "$HOME"/Profile/zsh/oh-my-zsh/templates/zshrc.zsh-template 
-fi
-
 export ZSHRC_VERSION="2.2.1"
 export PROFILE_DIR="$HOME/Profile"
 export ZSH_MAJOR=$(echo $ZSH_VERSION | cut -d. -f1)
@@ -153,6 +146,13 @@ export PATH
 #
 autoload -U bindit3
 bindit3
+
+if [ -f "$HOME"/Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh ]; then
+  source "$HOME"/Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh 
+fi
+if [ -f "$HOME"/Profile/zsh/oh-my-zsh/templates/zshrc.zsh-template ]; then
+  source "$HOME"/Profile/zsh/oh-my-zsh/templates/zshrc.zsh-template 
+fi
 
 #  some defaults
 #  ^U    clear line
