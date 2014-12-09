@@ -728,10 +728,15 @@ case "$TERM" in
 esac
 }
 
-
+if [ -f "$HOME"/Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh ]; then
+  source "$HOME"/Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh 
+fi
 if [ -f "$HOME"/Profile/zsh/oh-my-zsh/templates/zshrc.zsh-template ]; then
   source "$HOME"/Profile/zsh/oh-my-zsh/templates/zshrc.zsh-template 
 fi
+
+prompt jclint
+
 #
 #  postexec
 #
