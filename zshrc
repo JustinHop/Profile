@@ -727,6 +727,11 @@ case "$TERM" in
     ;;
 esac
 }
+
+
+if [ -f "$HOME"/Profile/zsh/oh-my-zsh/templates/zshrc.zsh-template ]; then
+  source "$HOME"/Profile/zsh/oh-my-zsh/templates/zshrc.zsh-template 
+fi
 #
 #  postexec
 #
