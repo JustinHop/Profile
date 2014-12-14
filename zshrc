@@ -147,12 +147,18 @@ export PATH
 autoload -U bindit3
 bindit3
 
-if [ -f "$HOME"/Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh ]; then
-  source "$HOME"/Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh 
-fi
-if [ -f "$HOME"/Profile/zsh/oh-my-zsh/templates/zshrc.zsh-template ]; then
-  source "$HOME"/Profile/zsh/oh-my-zsh/templates/zshrc.zsh-template 
-fi
+#
+# FOREGIN MODULES
+#
+
+for _ZSH_ADDON in \
+  Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh \
+  Profile/zsh/zshrc-oh-my-zsh
+do
+  if [ -f "$HOME/$_ZSH_ADDON" ]; then
+    source "$HOME/$_ZSH_ADDON" 
+  fi
+done
 
 #  some defaults
 #  ^U    clear line
@@ -670,18 +676,18 @@ if [[ -o interactive ]]; then
   autoload throw
   autoload catch
   promptinit
-  if (( $ZSH_MAJOR == 4 && $ZSH_MINOR >= 3 || $ZSH_MAJOR > 4 )); then
-    {
-      prompt clint || throw BADPROMPT
-    } always {
-    if catch *; then
-      echo got here
-      prompt clint
-    fi
-  }
-  else
-    prompt clint
-  fi
+#  if (( $ZSH_MAJOR == 4 && $ZSH_MINOR >= 3 || $ZSH_MAJOR > 4 )); then
+#    {
+#      prompt clint || throw BADPROMPT
+#    } always {
+#    if catch *; then
+#      echo got here
+#      prompt clint
+#    fi
+#  }
+#  else
+#    prompt clint
+#  fi
 
   #autoload -U title
   #autoload -U precmd

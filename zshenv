@@ -78,9 +78,9 @@ LOCAL_PERL5_PATH="$HOME/perl5/bin"
 LOCAL_PYTHON_PATH="$HOME/.local/bin"
 
 FILE=~/CROWDRISE/saltstack-filebase
-alias FILE='nocomplete FILE'
+alias FILE='nocorrect FILE'
 PILL=~/CROWDRISE/saltstack-pillar
-alias PILL='nocomplete PILL'
+alias PILL='nocorrect PILL'
 
 typeset -U PATH
 typeset -U LD_LIBRARY_PATH

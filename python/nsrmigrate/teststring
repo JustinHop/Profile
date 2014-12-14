@@ -1,0 +1,17 @@
+google.com 123.34.56.192 -aol.com
+add ns ip 192.168.56.44 255.255.254.0 -type MIP -vServer 
+add ns ip 192.168.56.45 255.255.254.0 -type MIP -vServer 
+add ns ip 192.168.56.46 255.255.254.0 -type MIP -vServer 
+add ns ip 192.168.56.47 255.255.254.0 -type MIP -vServer 
+add server ash1cch4 192.168.57.61
+add server ash1cch5 192.168.56.62
+add server ash1edb2 192.168.57.68
+add server ash1edb3 192.168.56.69
+dd server mcd1.api.ash1.websys 192.168.56.124
+add server mcd2.api.ash1.websys 192.168.56.123
+add server mcd3.api.ash1.websys 192.168.56.132
+add server mcd4.api.ash1.websys 192.168.56.128
+dd lb vserver ash1pwd HTTP 192.168.56.205 80 -persistenceType NONE 
+add lb vserver ash1nta HTTP 192.168.56.206 80 -persistenceType NONE
+add lb vserver ash1apt HTTP 192.168.56.209 80 -persistenceType NONE
+
