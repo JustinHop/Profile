@@ -170,8 +170,11 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- Create a textclock widget
 --spacer = "✠"█
 spacer = "┃"
-mytextclock = awful.widget.textclock({ align = "right" },
-    "%a %b %d, %r", .5)
+mytextclock = {}
+--mytextclock[1] = awful.widget.textclock({ align = "right" }, "%a %b %d, %r", .5)
+mytextclock[1] = awful.widget.textclock({ align = "right" }, "%c %Z", .5)
+mytextclock[2] = awful.widget.textclock({ align = "right" }, "!%c %Z", .5)
+mytextclock[3] = awful.widget.textclock({ align = "right" }, "%a %b %d, %r %Z", .5)
 
 myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
@@ -288,7 +291,7 @@ for s = 1, screen.count() do
         rspace,
          mymousebox[s].text  and mymousebox[s] or nil,
          mymousebox[s].text  and rspace or nil,
-        mytextclock,
+        mytextclock[s],
         rspace,
         s == 1 and mysystray or nil,
         s == 1 and rspace or nil,
