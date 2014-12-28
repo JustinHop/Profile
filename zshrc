@@ -1,6 +1,19 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
 
+#
+# FOREGIN MODULES
+#
+
+for _ZSH_ADDON in \
+  Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh \
+  Profile/zsh/zshrc-oh-my-zsh
+do
+  if [ -f "$HOME/$_ZSH_ADDON" ]; then
+    source "$HOME/$_ZSH_ADDON" 
+  fi
+done
+
 export ZSHRC_VERSION="2.2.1"
 export PROFILE_DIR="$HOME/Profile"
 export ZSH_MAJOR=$(echo $ZSH_VERSION | cut -d. -f1)
@@ -11,10 +24,7 @@ umask 002
 # WORKSPACE AND ENVIRONMENT
 #
 
-if [ -z "$__ZSHENV__" ]; then
-  [ -e "$HOME/.zshenv" ] && source "$HOME/.zshenv"
-fi
-unset $__ZSHENV__
+[ -e "$HOME/.zshenv" ] && source "$HOME/.zshenv"
 
 for SPACE in .undo backup .zsh ; do
   [ ! -d "$HOME/$SPACE"  ] && mkdir "$HOME/$SPACE"
@@ -147,18 +157,6 @@ export PATH
 autoload -U bindit3
 bindit3
 
-#
-# FOREGIN MODULES
-#
-
-for _ZSH_ADDON in \
-  Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh \
-  Profile/zsh/zshrc-oh-my-zsh
-do
-  if [ -f "$HOME/$_ZSH_ADDON" ]; then
-    source "$HOME/$_ZSH_ADDON" 
-  fi
-done
 
 #  some defaults
 #  ^U    clear line
@@ -173,6 +171,7 @@ done
 
 #  F1 = esc on laptops
 
+bindkey -M viins '^W' accept-and-menu-complete
 bindkey '^W' accept-and-menu-complete
 bindkey '^N' vi-repeat-find
 bindkey '^P' vi-rev-repeat-find
@@ -256,7 +255,6 @@ else
 fi
 
 if [[ $GNU_COREUTILS -eq 1 ]]; then
-  export GREP_COLORS=auto
 
   NOR=" --color=auto --hide-control-chars --classify "
 
@@ -321,22 +319,6 @@ export VISUAL=$VIM
 alias vim=$VIM
 alias vi=$VIM$VIM_LINUX_TERM
 alias v=$VIM
-
-# pagers and cutters
-alias -g L="|less"
-alias -g LL="|&less"
-alias -g M="|more"
-alias -g MM="|&more"
-alias -g H="|head"
-alias -g HH="|&head"
-alias -g T="|tail"
-alias -g TT="|&tail"
-alias -g S="|sort"
-alias -g SS="|&sort"
-alias -g U="|uniq"
-alias -g UU="|&uniq"
-alias -g GP="|grep -P"
-alias -g GGP="|&grep -P"
 
 if [[ -x `whence rlwrap` ]]; then
   alias imapfilter='rlwrap imapfilter'
@@ -544,16 +526,12 @@ if (( $ZSH_MAJOR >= 4 )); then
   zstyle ':completion:*:functions' ignored-patterns '_*'
 
   ### Mine
-  for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts ; do
+  for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts "$HOME"/cr.zone  ; do
     if [ -f $hostfile ]; then
       etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )
       #zstyle ':completion:*' hosts $etchosts;
     fi
   done
-  if [ -f "$HOME"/cr.zone ]; then
-    etchosts+=( $( perl -ne '/(^[\w\.]*io)/; if ($1) { print $1 . " " }' < "$HOME"/cr.zone ))
-    #zstyle ':completion:*' hosts $etchosts
-  fi
 
   etchosts+=({core,mail,tux,tux-ninja,net1,net,sup1,sup,www,eh}{,.justinhoppensteadt.com} $HOSTNAME)
   zstyle ':completion:*' hosts $etchosts
@@ -748,6 +726,23 @@ prompt jclint
 #
 #  postexec
 #
+
+# pagers and cutters
+alias -g L="|less"
+alias -g LL="|&less"
+alias -g M="|more"
+alias -g MM="|&more"
+alias -g H="|head"
+alias -g HH="|&head"
+alias -g T="|tail"
+alias -g TT="|&tail"
+alias -g S="|sort"
+alias -g SS="|&sort"
+alias -g U="|uniq"
+alias -g UU="|&uniq"
+alias -g GP="|grep -P"
+alias -g GGP="|&grep -P"
+
 
 if [ -f /CHROOT ]; then
     PS1="$PS1 :CHROOT: "

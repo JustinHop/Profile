@@ -144,7 +144,6 @@ alias X2="TERM=xterm+256color"
 
 alias IE="wine 'C:\Program Files\Internet Explorer\iexplore'"
 
-export GREP_COLOR=auto
 export FTP_PASSIVE=1
 export MINICOM="-c on -m"
 export VISUAL=vim
@@ -192,6 +191,8 @@ if [ -f $PROFILE_DIR/zshenv.local ]; then
 fi
 
 export PATH=$HOME/bin:/usr/bin:$PATH
+
+export NO_AT_BRIDGE=1
 
 export PERL_LOCAL_LIB_ROOT="$PERL_LOCAL_LIB_ROOT:${HOME}/perl5";
 export PERL_MB_OPT="--install_base ${HOME}/perl5";
