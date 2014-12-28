@@ -171,10 +171,12 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 --spacer = "✠"█
 spacer = "┃"
 mytextclock = {}
---mytextclock[1] = awful.widget.textclock({ align = "right" }, "%a %b %d, %r", .5)
 mytextclock[1] = awful.widget.textclock({ align = "right" }, "%c %Z", .5)
-mytextclock[2] = awful.widget.textclock({ align = "right" }, "!%c %Z", .5)
-mytextclock[3] = awful.widget.textclock({ align = "right" }, "%a %b %d, %r %Z", .5)
+mytextclock[2] = awful.widget.textclock({ align = "right" }, "!%c UTC", .5)
+mytextclock[3] = awful.widget.textclock({ align = "right" }, "%a %b %d %r %Z", .5)
+mytextclock[4] = awful.widget.textclock({ align = "right" }, "%c %Z", .5)
+mytextclock[5] = awful.widget.textclock({ align = "right" }, "!%c UTC", .5)
+mytextclock[6] = awful.widget.textclock({ align = "right" }, "%a %b %d %r %Z", .5)
 
 myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
@@ -183,11 +185,8 @@ myalertbox = {}
 myalertbox = widget({ type = "textbox", align = "right" })
 
 -- spacer
-lspace = widget({ type = "textbox", align="left", bg = "black", })
-lspace.text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
-
-rspace = widget({ type = "textbox", align="right" })
-rspace.text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
+lspace = {}
+rspace = {}
 
 
 -- Create a systray
@@ -248,6 +247,11 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 for s = 1, screen.count() do
+    lspace[s] = widget({ type = "textbox", align="left", bg = "black" })
+    lspace[s].text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
+
+    rspace[s] = widget({ type = "textbox", align="right" })
+    rspace[s].text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
     -- My mouse indicator
     mymousebox[s] = widget({ type = "textbox", align = "left" })
     if screen.count() ~= 1 then
@@ -276,25 +280,25 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
-            lspace,
+            lspace[s],
             mylauncher,
-            lspace,
+            lspace[s],
             mymousebox[s].text  and mymousebox[s] or nil,
-            mymousebox[s].text  and lspace or nil,
+            mymousebox[s].text  and lspace[s] or nil,
             mytaglist[s],
-            lspace,
+            lspace[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
-        rspace,
+        rspace[s],
         mylayoutbox[s],
-        rspace,
+        rspace[s],
          mymousebox[s].text  and mymousebox[s] or nil,
-         mymousebox[s].text  and rspace or nil,
+         mymousebox[s].text  and rspace[s] or nil,
         mytextclock[s],
-        rspace,
+        rspace[s],
         s == 1 and mysystray or nil,
-        s == 1 and rspace or nil,
+        s == 1 and rspace[s] or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -732,13 +736,17 @@ end
 
 --if (mousemarker ~= nil) then
 function mousemarker()
-   for s=1, screen.count() do
-      if s == mouse.screen then
-               mymousebox[s].text=[[<span bgcolor="#b58900"><b> ■ </b></span>]]
-      else
-               mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
-      end
-   end
+  for s=1, screen.count() do
+    if s == mouse.screen then
+      mymousebox[s].text=[[<span bgcolor="#b58900"><b> ■ </b></span>]]
+      lspace[s].text=[[<span bgcolor="#b58900" color="#839496"><b>]] .. spacer .. [[</b></span>]]
+      rspace[s].text=[[<span bgcolor="#b58900" color="#839496"><b>]] .. spacer .. [[</b></span>]]
+    else
+      mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
+      lspace[s].text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
+      rspace[s].text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
+    end
+  end
 end
 --end
 
