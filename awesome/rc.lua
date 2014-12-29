@@ -318,11 +318,12 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ }, "XF86ScreenSaver", function () awful.util.spawn(lock_session) end),
-    awful.key({ modkey }, "d",  awful.tag.viewnext       ),
+    awful.key({                   }, "XF86ScreenSaver", function () awful.util.spawn(lock_session) end),
+    awful.key({                   }, "Print", function () awful.util.spawn("scrot -e 'mv $f ~/screenshots/ 2>/dev/null'") end),
+    awful.key({ modkey            }, "d",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
-    awful.key({ modkey }, "c",   function () destroyall()  end     ),
-    awful.key({ modkey }, "i",   function () awful.tag.seticon()  end     ),
+    awful.key({ modkey            }, "c",   function () destroyall()  end     ),
+    awful.key({ modkey            }, "i",   function () awful.tag.seticon()  end     ),
 
 
     awful.key({ modkey,  "Shift"  }, "j",
