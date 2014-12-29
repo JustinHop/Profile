@@ -307,7 +307,7 @@ end
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
+--    awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev),
     awful.button({ }, 13, awful.tag.viewnext),
@@ -363,10 +363,13 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey,           }, "Tab",
         function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
+            awful.client.focus.byidx( 1)
+            if client.focus then client.focus:raise() end
+        end),
+    awful.key({ modkey, "Shift"   }, "Tab",
+        function ()
+            awful.client.focus.byidx(-1)
+            if client.focus then client.focus:raise() end
         end),
 
     -- Standard program
