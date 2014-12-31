@@ -8,19 +8,6 @@ if [[ -z $ZLOGIN_VERSION ]]; then
     uptime
     echo "Welcome $USER, to $HOST on $TTY<$TERM> runnning $OSTYPE on $CPUTYPE"
     echo $DISTRO_VER $0 $ZSH_VERSION
-    if [[ -d /var/roles ]]; then
-        echo -n  "Defined Roles:\t" 
-        count=1
-        for LINE in `print -C 6 \`ls -xw 60 /var/roles\` | tr ' ' '%'` ; do
-            LINE=`echo $LINE | tr '%' ' '`
-            if [[ $count -ge 2 ]];then
-                echo "\t\t$LINE"
-            else
-                echo $LINE
-            fi
-            (( count++ ))
-        done
-    fi
 
     [[ -n `whence fortune` ]] && echo && fortune && echo
 

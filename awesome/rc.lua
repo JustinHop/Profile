@@ -319,11 +319,11 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     awful.key({                   }, "XF86ScreenSaver", function () awful.util.spawn(lock_session) end),
-    awful.key({                   }, "Print", function () awful.util.spawn("scrot -e 'mv $f ~/screenshots/ 2>/dev/null'") end),
-    awful.key({ modkey            }, "d",  awful.tag.viewnext       ),
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
-    awful.key({ modkey            }, "c",   function () destroyall()  end     ),
-    awful.key({ modkey            }, "i",   function () awful.tag.seticon()  end     ),
+    awful.key({                   }, "Print",           function () awful.util.spawn("scrot -e 'mv -v $f ~/Pictures/screenshots/'") end),
+    awful.key({ modkey            }, "d",               awful.tag.viewnext       ),
+    awful.key({ modkey,           }, "Escape",          awful.tag.history.restore),
+    awful.key({ modkey            }, "c",               function () destroyall()  end     ),
+    awful.key({ modkey            }, "i",               function () awful.tag.seticon()  end     ),
 
 
     awful.key({ modkey,  "Shift"  }, "j",
@@ -393,6 +393,7 @@ globalkeys = awful.util.table.join(
     -- Status bar control
     awful.key({ modkey }, "b", function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end),
 
+    --[[
     awful.key({ modkey }, "p", function ()
         if not mywibox[mouse.screen].visible then
             mywibox[mouse.screen].visible = true
@@ -412,6 +413,7 @@ globalkeys = awful.util.table.join(
                            awful.util.eval, awful.prompt.bash,
                            awful.util.getdir("cache") .. "/history_eval")
     end),
+    ]]--
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
@@ -477,8 +479,8 @@ clientkeys = awful.util.table.join(
     -- manipulation
     awful.key({ modkey, "Control" }, "m", function (c) c.minimized = not c.minimized end),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey, "Shift"   }, "o", function () awful.client.movetoscreen() mousemarker() end),
-    awful.key({ modkey,           }, "o", function () awful.client.movetoscreen() mousemarker() end),
+    awful.key({ modkey,           }, "o", function (c) awful.client.movetoscreen(c,c.screen+1) mousemarker() end),
+    awful.key({ modkey, "Shift"   }, "o", function (c) awful.client.movetoscreen(c,c.screen-1) mousemarker() end),
     awful.key({ modkey, }, "r", function (c) c:redraw() end),
     -- TODO: Shift+r to redraw all clients in current tag
     --awful.key({ modkey }, "o",     awful.client.movetoscreen),
@@ -753,4 +755,8 @@ function mousemarker()
   end
 end
 --end
+
+mousetimer = timer({ timeout = .2 })
+mousetimer:add_signal("timeout", function() mousemarker() end)
+mousetimer:start()
 
