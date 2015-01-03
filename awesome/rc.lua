@@ -447,7 +447,6 @@ globalkeys = awful.util.table.join(
             if client.focus.instance then text = text .. setFg("white", "Instance: ") .. client.focus.instance .. " " end
             if client.focus.role then text = text .. setFg("white", "Role: ") .. client.focus.role .. " " end
             if client.focus.type then text = text .. setFg("white", "Type: ") .. client.focus.type .. " " end
-            mymsgbox[s].text = text
             naughty.notify{ title = 'Debug Information', text = text, icon = '/usr/share/awesome/icons/awesome64.png'}
             io.stderr:write(text, "\n")
 
@@ -609,8 +608,11 @@ awful.rules.rules = {
         properties = { tag = tags[1][2] } },
     { rule_any = { class = {"Mail", "Thunderbird"} },
         properties = { tag = tags[1][3] } },
-    { rule = { class = "Android SDK Manager" },
-      properties = { floating = true } },
+    { rule = { class = "Galculator" },
+        properties = { floating = true },
+        callback = function (c)
+            awful.titlebar.add(c, { modkey = modkey })
+        end },
     { rule = { class = "sun-applet-PluginMain" },
         properties = { floating = true },
         callback = function (c)

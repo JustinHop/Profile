@@ -645,6 +645,7 @@ fi
 if (( $ZSH_MAJOR >= 4 )); then
   autoload -U colors
   colors
+  autoload salty
 fi
 
 
