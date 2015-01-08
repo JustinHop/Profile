@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+exec 2>&1
+
+salt-call --force-color state.highstate | tee >(logger -p user.info) /var/log/salt/saltrun-$(date +%s) | less
