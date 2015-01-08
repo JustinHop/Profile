@@ -1,5 +1,6 @@
-#!/bin/zsh
+#!/bin/bash
 
+exec > >(tee /var/log/salt/saltrun-$(date +%s))
 exec 2>&1
 
-salt-call --force-color state.highstate | tee >(logger -p user.info) /var/log/salt/saltrun-$(date +%s) | less
+salt-call --force-color state.highstate 2>&1  | less
