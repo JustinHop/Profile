@@ -300,6 +300,8 @@ fi
 
 unset CDPATH
 
+alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
+
 # ViM
 VIM=vi
 VIM_PROFILES="lib base"
@@ -311,7 +313,7 @@ if [[ -x ~/bin/vim ]]; then
   VIM=~/bin/vim
 fi
 
-alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
+VIM="$VIM -p "
 
 alias 'sudo vim'='sudo ~/bin/vim'
 export EDITOR=$VIM

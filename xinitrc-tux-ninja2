@@ -6,8 +6,6 @@ cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
-eval $(keychain --eval --nogui) 
-
 #xrandr --output VGA1 --primary
 { sleep 1s; xbindkeys --nodaemon ; } &
 { sleep 1s; davmail ; } &
