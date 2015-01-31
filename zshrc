@@ -224,6 +224,7 @@ alias orly="echo yarly"
 alias ,,=".."
 alias ks="ls"
 alias xs="cd"
+alias it=git
 
 # good idea
 alias -g "..."="../.."
