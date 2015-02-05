@@ -20,6 +20,7 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 { sleep 2s; mopidy; } &
 { sleep 2s; gnome-sound-applet; } &
 { sleep 2s; cryptkeeper; } &
+{ sleep 2s; keynav; } &
 { sleep 3s; pidgin_fortune; } &
 { sleep 3s; pasystray; } &
 { sleep 3s; fdpowermon; } &
