@@ -9,6 +9,7 @@ for RCFILE in bashrc \
     vimrc \
     vim \
     rpmmacros \
+    tmux.conf \
     zshenv \
     zlogin \
     zlogout \
