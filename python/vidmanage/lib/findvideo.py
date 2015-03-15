@@ -1,4 +1,5 @@
-import psutil
+import os
+import os.path
 
 
 class FindVideo:
@@ -7,8 +8,7 @@ class FindVideo:
         pass
 
     def getvideo(self):
-        for pid in psutil.get_pid_list():
-            ps = psutil.Process(pid)
-            if ps.name() == 'mplayer':
-                cmdline = ps.cmdline()
-                return cmdline[-1]
+        vidfile = os.path.expanduser('~') + "/tmp/mpv.last"
+        fh = open(vidfile)
+        vid = fh.readline().rstrip()
+        return(vid)

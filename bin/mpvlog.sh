@@ -2,7 +2,7 @@
 
 
 
-tail -n 1000 -q -F ~/tmp/mpv.log 2>/dev/null |\
+tail -n 100 -q -F ~/tmp/mpv.log 2>/dev/null |\
     grep --line-buffered -F '[cplayer] Playing:' |\
     while read I ; do
         echo
