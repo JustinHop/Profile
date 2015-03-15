@@ -2,6 +2,9 @@
 
 setopt allexport
 
+#{ gnome-settings-daemon; } &
+{ xfsettingsd --no-daemon; } &
+
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 echo "New Session on $HOSTNAME" | figlet -w 1000
@@ -10,7 +13,7 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 { sleep 1s; xbindkeys --nodaemon ; } &
 { sleep 1s; davmail ; } &
 
-{ sleep 1s; nitrogen --restore; sleep 1s; conky; } &
+{ sleep 8s; nitrogen --restore; sleep 1s; conky; } &
 
 { sleep 1s; clipit ; } &
 { sleep 1s; nm-applet ; } &
@@ -48,6 +51,6 @@ numlockx
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
-{ sleep 5s; xfsettingsd --no-daemon; } &
+#{ sleep 5s; xfsettingsd --no-daemon; } &
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
 #exec xfce4-session
