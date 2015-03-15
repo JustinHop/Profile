@@ -1,8 +1,9 @@
-#from options import Options
+# from options import Options
 from datetime import datetime
 import pickle
 import os
-#import sys
+import os.path
+# import sys
 
 
 #
@@ -73,8 +74,8 @@ class VidList:
         for vid in self.videolist:
             if vid.getname() == argfilename:
                 self.videolist.remove(vid)
-                return "Removed " + argfilename + " from list"
-        #raise Exception(argfilename + " does not exist in list")
+                print "Removed " + argfilename + " from list"
+        # raise Exception(argfilename + " does not exist in list")
 
     def remove_obj(self, argVidobj):
         self.videolist.remove(argVidobj)
@@ -84,12 +85,18 @@ class VidList:
 
     def printlist(self):
         for vid in self.videolist:
-            print vid.getname(), vid.gethumansize()
+            if os.path.exists(vid.getname()):
+                print(",".join([vid.getname(), vid.gethumansize()]))
+            else:
+                self.remove(vid.getname())
 
     def prettyprintlist(self):
         self.totalbytes = 0
         for vid in self.videolist:
-            print vid.getname(), vid.gethumansize()
+            if os.path.exists(vid.getname()):
+                print(",".join([vid.getname(), vid.gethumansize()]))
+            else:
+                self.remove(vid.getname())
         print "Total:", self.gethumansize()
 
     def getsize(self):
