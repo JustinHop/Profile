@@ -659,8 +659,12 @@ client.add_signal("manage", function (c, startup)
   -- Add a titlebar
   -- awful.titlebar.add(c, { modkey = modkey })
 
+  if c.name == "Screen Ruler" then
+    awful.titlebar.remove(c, {modkey = modkey})
+  end
+
   if awful.client.floating.get(c) then
-    if not c.title ~= "MPlayer" then
+    if not ( c.title ~= "MPlayer" or c.name == "Screen Ruler" ) then
       awful.titlebar.add(c, { modkey = modkey })
     end
   end

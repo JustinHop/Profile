@@ -13,7 +13,10 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 { sleep 1s; xbindkeys --nodaemon ; } &
 { sleep 1s; davmail ; } &
 
-{ sleep 1s; nitrogen --restore; sleep 1s; conky; } &
+{ sleep 1s; nitrogen --restore; } &
+{ sleep 10s; nitrogen --restore; } &
+
+{ conky; } &
 
 { sleep 1s; clipit ; } &
 { sleep 1s; nm-applet ; } &
