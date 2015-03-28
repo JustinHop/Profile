@@ -325,7 +325,6 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey            }, "c",               function () destroyall()  end     ),
     awful.key({ modkey            }, "i",               function () awful.tag.seticon()  end     ),
 
-
     awful.key({ modkey,  "Shift"  }, "j",
         function ()
             awful.client.focus.byidx( 1)
@@ -356,10 +355,8 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey,           }, "l",      function () awful.screen.focus_relative( 1) mousemarker() end),
     awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relative( 1) mousemarker() end),
-
     awful.key({ modkey,           }, "h",      function () awful.screen.focus_relative( -1) mousemarker() end),
     awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1) mousemarker() end),
-
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
 
     awful.key({ modkey,           }, "Tab",
@@ -389,6 +386,15 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
+    awful.key({                   }, "XF86HomePage",          function () awful.util.spawn("mpc stop") end),
+
+    awful.key({                   }, "Cancel",          function () awful.util.spawn("mpc stop") end),
+
+    awful.key({                   }, "Redo",            function () awful.util.spawn("mpc toggle") end),
+    awful.key({                   }, "XF86AudioPlay",   function () awful.util.spawn("mpc toggle") end),
+
+    awful.key({                   }, "SunProps",        function () awful.util.spawn("mpc next") end),
+    awful.key({                   }, "XF86AudioNext",   function () awful.util.spawn("mpc next") end),
     -- Prompts
     -- Status bar control
     awful.key({ modkey }, "b", function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end),
