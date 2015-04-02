@@ -11,7 +11,7 @@ tail -n 100 -q -F ~/tmp/mpv.log 2>/dev/null |\
         echo
         echo
 
-        MOV=$(find /media/twoterra/share/Torrent /media/twoterra/share/Video -type f -name $(basename $(echo $I | cut -d: -f2 ) ) )
+        MOV=$(find /media/1/share/Torrent /media/1/share/Video -type f -name $(basename $(echo $I | cut -d: -f2 ) ) )
         echo $MOV > ~/tmp/mpv.last
         ls -sh --color=always $MOV
         echo

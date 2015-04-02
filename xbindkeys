@@ -42,12 +42,12 @@
 #    XF86Search
 
 # Tilt Right
-"shiftctrltab"
-    b:6 
+#"shiftctrltab"
+#    b:6 
 
 ## Tilt Left
-"ctrltab"
-    b:7 
+#"ctrltab"
+#    b:7 
 
 #"pvol.py -m"
 #    XF86AudioMute

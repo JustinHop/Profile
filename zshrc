@@ -193,7 +193,7 @@ fi
 
 alias Xterm='xterm +bc -cr red -j +sb -u8 +vb -bd red -bg black -fg green'
 alias flux='xinit `which startfluxbox`'
-alias vidbox='find /media/twoterra/share/Video -type f | grep -P -v "(crdownload|dtapart|fuse_hidden)" | grep -v -x -F -f <(vidmanage -O)'
+alias vidbox='find /media/1/share/Video -type f | grep -P -v "(crdownload|dtapart|fuse_hidden)" | grep -v -x -F -f <(vidmanage -O)'
 
 alias d=dirs
 alias pu=pushd
