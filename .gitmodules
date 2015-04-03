@@ -106,3 +106,6 @@
 [submodule "python/lastfm-tools"]
 	path = python/lastfm-tools
 	url = https://github.com/hugovk/lastfm-tools.git
+[submodule "scripts/mpd-libnotify"]
+	path = scripts/mpd-libnotify
+	url = git@github.com:JustinHop/mpd-libnotify.git
