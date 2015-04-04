@@ -207,4 +207,8 @@ if [ -d "$HOME/python" ]; then
     fi
 fi
 
+for GNUBIN in /usr/local/opt/*/libexec/gnubin ; do
+    [ -d $GNUBIN ] && export PATH="$GNUBIN:$PATH"
+done
+
 # vim:ft=zsh:syn=zsh

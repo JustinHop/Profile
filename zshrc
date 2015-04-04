@@ -10,7 +10,7 @@ for _ZSH_ADDON in \
   Profile/zsh/zshrc-oh-my-zsh
 do
   if [ -f "$HOME/$_ZSH_ADDON" ]; then
-    source "$HOME/$_ZSH_ADDON" 
+    source "$HOME/$_ZSH_ADDON"
   fi
 done
 
@@ -129,11 +129,13 @@ case $UNAME in
     ;;
 
   (Darwin)
-    if [[ -f $PROFILE_DIR/dircolors ]]; then
-      export CLICOLOR=`cat $PROFILE_DIR/dircolors`
-    fi
-    alias ls="ls -F "
+    #if [[ -f $PROFILE_DIR/dircolors ]]; then
+    #  export CLICOLOR=`cat $PROFILE_DIR/dircolors`
+    #fi
+    export LC_ALL="C"
     BKT=( ':', ':', '<', '>', '{', '}' )
+    PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+    MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
     TYCOLOR=magenta
     ;;
 
@@ -528,15 +530,19 @@ if (( $ZSH_MAJOR >= 4 )); then
   # no functions for programs i dont have
   zstyle ':completion:*:functions' ignored-patterns '_*'
 
-  ### Mine
-  for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts "$HOME"/cr.zone  ; do
-    if [ -f $hostfile ]; then
-      etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )
-      #zstyle ':completion:*' hosts $etchosts;
-    fi
-  done
+  if [[ "$UNAME" == "Darwin" ]]; then
+    true
+  else
+    ### Mine
+    for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts "$HOME"/cr.zone  ; do
+      if [ -f $hostfile ]; then
+        etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )
+        #zstyle ':completion:*' hosts $etchosts;
+      fi
+    done
+  fi
 
-  etchosts+=({core,mail,tux,tux-ninja,net1,net,sup1,sup,www,eh}{,.justinhoppensteadt.com} $HOSTNAME)
+  etchosts+=({core,mail,tux,tux-ninja,net1,net,sup1,sup,www,eh,apple1,thinkpad1}{,.justinhoppensteadt.com} $HOSTNAME)
   zstyle ':completion:*' hosts $etchosts
   compdef _hosts getip
   compdef _modprobe remod
@@ -610,7 +616,7 @@ if (( $ZSH_MAJOR >= 4 )); then
   raxmon-views-metric-list \
   raxmon-views-overview ; do
 
-  compdef _gnu_generic $RAX 
+  compdef _gnu_generic $RAX
 done
 
 

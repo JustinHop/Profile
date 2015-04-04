@@ -49,8 +49,9 @@ HIST_STAMPS=yyyy-mm-dd
 
 plugins=(git vim-integration vagrant postgres tmux systemadmin python gnu-utils pip mosh nova)
 
-if [ $(uname) == "Darwin" ]; then
-    plugins+=(brew brew-cask macports)
+if [[ "$(uname)" == "Darwin" ]]; then
+    plugins=($plugins brew brew-cask macports)
+fi
 
 
 # User configuration
