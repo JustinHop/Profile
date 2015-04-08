@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 setopt allexport
-nitrogen--restore
+nitrogen --restore
 
 #{ gnome-settings-daemon; } &
 { xfsettingsd --no-daemon; } &
@@ -10,7 +10,7 @@ cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
-#xrandr --output VGA1 --primary
+xrandr --output eDP2 --primary
 { sleep 1s; xbindkeys --nodaemon ; } &
 { sleep 1s; davmail ; } &
 
@@ -32,6 +32,12 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 { sleep 3s; pasystray; } &
 { sleep 3s; fdpowermon; } &
 { sleep 3s; blueman-applet; } &
+{ sleep 5s; xrandr --output DP1 --brightness .8; } &
+{ sleep 5s; xrandr --output eDP2 --brightness .8; } &
+
+{ sleep 5s; pidgin; } &
+{ sleep 5s; thunderbird; } &
+
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
