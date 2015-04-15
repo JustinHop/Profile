@@ -19,6 +19,7 @@ xgamma -gamma .8
 { sleep 4s; nitrogen --restore; } &
 
 { conky; } &
+{ workrave; } &
 
 { sleep 1s; clipit ; } &
 { sleep 1s; solaar ; } &
