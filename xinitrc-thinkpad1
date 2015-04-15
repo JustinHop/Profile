@@ -11,6 +11,8 @@ echo > ~/.xsession-errors
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
 xrandr --output eDP2 --primary
+xgamma -gamma .8
+{ compton -D 5 --config ~/.config/compton.conf; } &
 { sleep 1s; xbindkeys --nodaemon ; } &
 { sleep 1s; davmail ; } &
 
@@ -32,11 +34,12 @@ xrandr --output eDP2 --primary
 { sleep 3s; pasystray; } &
 { sleep 3s; fdpowermon; } &
 { sleep 3s; blueman-applet; } &
+{ sleep 3s; nagstamon; } &
 { sleep 5s; xrandr --output DP1 --brightness .8; } &
 { sleep 5s; xrandr --output eDP2 --brightness .8; } &
 
-{ sleep 5s; pidgin; } &
-{ sleep 5s; thunderbird; } &
+{ sleep 1s; pidgin; } &
+{ sleep 1s; thunderbird; } &
 
 
 echo "Session: setting Xdefaults and Xmodmap"
