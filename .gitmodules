@@ -109,3 +109,6 @@
 [submodule "scripts/mpd-libnotify"]
 	path = scripts/mpd-libnotify
 	url = git@github.com:JustinHop/mpd-libnotify.git
+[submodule "vim/general/puppet"]
+	path = vim/general/puppet
+	url = git://github.com/rodjek/vim-puppet.git
