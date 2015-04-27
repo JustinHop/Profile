@@ -1,7 +1,10 @@
+cd ~/Profile
+git submodule init
+git submodule update
+
 for RCFILE in bashrc \
     gvimrc \
     gitconfig \
-    include \
     inputrc \
     perltidyrc \
     screenrc \
@@ -17,9 +20,14 @@ for RCFILE in bashrc \
     if [[ -f "~/.$RCFILE" ]]; then
         mv -v "~/.$RCFILE" "~/.$RCFILE.old"
     fi
+    if [[ -d "~/.$RCFILE" ]]; then
+        mv -v "~/.$RCFILE" "~/.$RCFILE.old"
+    fi
     ln -sfv ~/Profile/$RCFILE ~/.$RCFILE
 
 done
+
+
 
 mkdir ~/bin ~/backup ~/tmp ~/.screenlogs
 
