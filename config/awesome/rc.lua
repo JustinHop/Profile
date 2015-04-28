@@ -80,6 +80,7 @@ settings.spacer = "~"
 settings.synergylocal=1;
 settings.icon = {}
 settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Terminal-Radioactive.png"
+settings.icon.chrome = os.getenv("HOME") .. "/.config/awesome/icons/google-chrome.png"
 --settings.mouse_marker_yes = "<span bgcolor=" .. [["]] .. yellow .. [[">[★]</span>]]
 --settings.mouse_marker_no = "[☆]"
 --settings.mouse_marker_synergy = "<span bgcolor=" .. [["]] .. light_green .. [[">[╳]</span>]]
@@ -105,16 +106,15 @@ altkey = "Mod1"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
 {
-  awful.layout.suit.tile,
-  awful.layout.suit.max,
-  awful.layout.suit.floating,
-  awful.layout.suit.tile.left,
-  awful.layout.suit.tile.bottom,
-  --awful.layout.suit.tile.top
-  --awful.layout.suit.fair,
-  --awful.layout.suit.fair.horizontal,
-  --awful.layout.suit.max.fullscreen,
-  --awful.layout.suit.magnifier,
+    awful.layout.suit.tile,
+    awful.layout.suit.max,
+    awful.layout.suit.tile.left,
+    awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile.top,
+    awful.layout.suit.fair,
+    awful.layout.suit.fair.horizontal,
+    awful.layout.suit.spiral,
+    awful.layout.suit.floating,
 }
 
 -- Define if we want to use titlebar on all applications.
@@ -128,12 +128,10 @@ for s = 1, screen.count() do
   -- Each screen has its own tag table.
   tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
-if screen.count() >= 2 then
-
-  awful.tag.setnmaster(1, tags[1][2])
-  awful.tag.setmwfact( .8, tags[1][2])
-  awful.tag.setncol( 2, tags[1][2])
-end
+awful.tag.setnmaster(1, tags[1][2])
+awful.tag.setmwfact( .8, tags[1][2])
+awful.tag.setncol( 2, tags[1][2])
+awful.layout.set( awful.layout.suit.max, tags[1][3])
 -- }}}
 
 -- {{{ Menu
@@ -341,16 +339,14 @@ awful.key({ modkey, "Control" }, "k",      function () awful.client.swap.byidx( 
 
 awful.key({ modkey,           }, "w", function () mymainmenu:show({keygrabber=true}) end),
 
-awful.key({ modkey,           }, "Cancel", function () awful.util.spawn("killall -STOP chrome") end),
-awful.key({ modkey, "Shift"   }, "Cancel", function () awful.util.spawn("killall -9 chrome") end),
+--awful.key({ modkey,           }, "Cancel", function () awful.util.spawn("killall -STOP chrome") end),
+--awful.key({ modkey, "Shift"   }, "Cancel", function () awful.util.spawn("killall -9 chrome") end),
 
 -- Layout manipulation
 awful.key({ modkey,           }, "Down",awful.tag.viewprev       ),
-awful.key({ modkey,           }, "j",   awful.tag.viewprev       ),
 awful.key({ "Shift"           }, "F10", awful.tag.viewprev       ),
 
 awful.key({ modkey,           }, "Up",  awful.tag.viewnext       ),
-awful.key({ modkey,           }, "k",   awful.tag.viewnext       ),
 awful.key({ "Shift"           }, "F11", awful.tag.viewnext       ),
 
 --awful.key({ modkey,           }, "l",      function () awful.screen.focus_relative( 1) mousemarker() end),
@@ -359,12 +355,22 @@ awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relati
 awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1) mousemarker() end),
 awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
 
+awful.key({ modkey,           }, "j",
+function ()
+  awful.client.focus.byidx( 1)
+  if client.focus then client.focus:raise() end
+end),
 awful.key({ modkey,           }, "Tab",
 function ()
   awful.client.focus.byidx( 1)
   if client.focus then client.focus:raise() end
 end),
 awful.key({ modkey, "Shift"   }, "Tab",
+function ()
+  awful.client.focus.byidx(-1)
+  if client.focus then client.focus:raise() end
+end),
+awful.key({ modkey,           }, "k",
 function ()
   awful.client.focus.byidx(-1)
   if client.focus then client.focus:raise() end
@@ -376,12 +382,12 @@ awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal
 awful.key({ modkey, "Control" }, "r", awesome.restart),
 awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
-awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incmwfact( 0.05)    end),
-awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incmwfact(-0.05)    end),
+awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
+awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
 awful.key({ modkey, "Control" }, "h",     function () awful.tag.incnmaster( 1)      end),
 awful.key({ modkey, "Control" }, "l",     function () awful.tag.incnmaster(-1)      end),
-awful.key({ modkey,           }, "h",     function () awful.tag.incncol( 1)         end),
-awful.key({ modkey,           }, "l",     function () awful.tag.incncol(-1)         end),
+awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incncol( 1)         end),
+awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incncol(-1)         end),
 
 awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
 awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
@@ -469,53 +475,53 @@ video_mode = {
 }
 
 clientkeys = awful.util.table.join(
-awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill() end),
-awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle()                     ),
-awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
-awful.key({ modkey, "Shift"   }, "t",      function (c) c.ontop = not c.ontop            end),
-awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
-awful.key({ modkey,           }, "m",
-function (c)
-  c.maximized_horizontal = not c.maximized_horizontal
-  c.maximized_vertical   = not c.maximized_vertical
-end),
--- manipulation
-awful.key({ modkey, "Control" }, "m", function (c) c.minimized = not c.minimized end),
-awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-awful.key({ modkey,           }, "o", function (c) awful.client.movetoscreen(c,c.screen+1) mousemarker() end),
-awful.key({ modkey, "Shift"   }, "o", function (c) awful.client.movetoscreen(c,c.screen-1) mousemarker() end),
-awful.key({ modkey, }, "r", function (c) c:redraw() end),
--- TODO: Shift+r to redraw all clients in current tag
---awful.key({ modkey }, "o",     awful.client.movetoscreen),
-awful.key({ modkey }, "Next",  function () awful.client.moveresize( 20,  20, -40, -40) end),
-awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20,  40,  40) end),
-awful.key({ modkey }, "Down",  function () awful.client.moveresize(  0,  20,   0,   0) end),
-awful.key({ modkey }, "Up",    function () awful.client.moveresize(  0, -20,   0,   0) end),
-awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20,   0,   0,   0) end),
-awful.key({ modkey }, "Right", function () awful.client.moveresize( 20,   0,   0,   0) end),
-awful.key({ modkey, "Control"},"r", function (c) c:redraw() end),
-awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
-awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
-awful.key({ modkey, "Control" }, "c", function (c) awful.util.spawn("kill -CONT " .. c.pid) end),
-awful.key({ modkey, "Control" }, "s", function (c) awful.util.spawn("kill -STOP " .. c.pid) end),
-awful.key({ modkey,         }, "t", function (c)
-  if   c.titlebar then awful.titlebar.remove(c)
-  else awful.titlebar.add(c, { modkey = modkey }) end
-end),
-awful.key({ modkey }, "v", function(c)
-  keygrabber.run(function(mod, key, event)
-    if event == "release" then return true end
-    keygrabber.stop()
-    if video_mode[key] then video_mode[key](c) end
-    return true
+  awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
+  awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill() end),
+  awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle()                     ),
+  awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
+  awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
+  awful.key({ modkey, "Shift"   }, "t",      function (c) c.ontop = not c.ontop            end),
+  awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
+  awful.key({ modkey,           }, "m",
+  function (c)
+    c.maximized_horizontal = not c.maximized_horizontal
+    c.maximized_vertical   = not c.maximized_vertical
+  end),
+  -- manipulation
+  awful.key({ modkey, "Control" }, "m", function (c) c.minimized = not c.minimized end),
+  awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
+  awful.key({ modkey,           }, "o", function (c) awful.client.movetoscreen(c,c.screen+1) mousemarker() end),
+  awful.key({ modkey, "Shift"   }, "o", function (c) awful.client.movetoscreen(c,c.screen-1) mousemarker() end),
+  awful.key({ modkey, }, "r", function (c) c:redraw() end),
+  -- TODO: Shift+r to redraw all clients in current tag
+  --awful.key({ modkey }, "o",     awful.client.movetoscreen),
+  awful.key({ modkey }, "Next",  function () awful.client.moveresize( 20,  20, -40, -40) end),
+  awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20,  40,  40) end),
+  awful.key({ modkey }, "Down",  function () awful.client.moveresize(  0,  20,   0,   0) end),
+  awful.key({ modkey }, "Up",    function () awful.client.moveresize(  0, -20,   0,   0) end),
+  awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20,   0,   0,   0) end),
+  awful.key({ modkey }, "Right", function () awful.client.moveresize( 20,   0,   0,   0) end),
+  awful.key({ modkey, "Control"},"r", function (c) c:redraw() end),
+  awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
+  awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
+  awful.key({ modkey, "Control" }, "c", function (c) awful.util.spawn("kill -CONT " .. c.pid) end),
+  awful.key({ modkey, "Control" }, "s", function (c) awful.util.spawn("kill -STOP " .. c.pid) end),
+  awful.key({ modkey,         }, "t", function (c)
+    if   c.titlebar then awful.titlebar.remove(c)
+    else awful.titlebar.add(c, { modkey = modkey }) end
+  end),
+  awful.key({ modkey }, "v", function(c)
+    keygrabber.run(function(mod, key, event)
+      if event == "release" then return true end
+      keygrabber.stop()
+      if video_mode[key] then video_mode[key](c) end
+      return true
+    end)
+  end),
+  awful.key({ modkey, "Shift" }, "f", function (c) if awful.client.floating.get(c)
+    then awful.client.floating.delete(c);    awful.titlebar.remove(c)
+    else awful.client.floating.set(c, true); awful.titlebar.add(c) end
   end)
-end),
-awful.key({ modkey, "Shift" }, "f", function (c) if awful.client.floating.get(c)
-  then awful.client.floating.delete(c);    awful.titlebar.remove(c)
-  else awful.client.floating.set(c, true); awful.titlebar.add(c) end
-end)
 )
 
 smplayerkeys = awful.util.table.join(
@@ -601,68 +607,72 @@ awful.rules.rules = {
     properties = { floating = true,
     border_width = 0 } },
   { rule = { class = "pinentry" },
-  properties = { floating = true } },
+    properties = { floating = true } },
   { rule = { class = "gimp" },
-  properties = { floating = true } },
+    properties = { floating = true } },
+  { rule = { name = "Google-chrome" },
+  callback = function (c)
+    awful.client.property.set(c, "icon", settings.icon.chrome)
+  end },
   { rule = { name = "bubble" },
-  properties = { floating = true,
-  border_width = 0 },
-  callback = function (c)
-    awful.titlebar.remove(c, { modkey = modkey })
-  end },
+    properties = { floating = true,
+    border_width = 0 },
+    callback = function (c)
+      awful.titlebar.remove(c, { modkey = modkey })
+    end },
   { rule = { name = "Screen Ruler" },
-  properties = { floating = true,
-  border_width = 0 },
-  callback = function (c)
-    awful.titlebar.remove(c, { modkey = modkey })
-  end },
+    properties = { floating = true,
+    border_width = 0 },
+    callback = function (c)
+      awful.titlebar.remove(c, { modkey = modkey })
+    end },
   { rule = { class = "kruler" },
-  properties = { floating = true,
-  border_width = 0 } },
+    properties = { floating = true,
+    border_width = 0 } },
   { rule = { class = "Kruler" },
-  properties = { floating = true,
-  border_width = 0 } },
+    properties = { floating = true,
+    border_width = 0 } },
   { rule = { class = "HipChat" },
-  properties = { tag = tags[1][2] } },
+    properties = { tag = tags[1][2] } },
   { rule = { class = "Pidgin" },
-  properties = { tag = tags[1][2] } },
+    properties = { tag = tags[1][2] } },
   { rule_any = { class = {"Mail", "Thunderbird"} },
-  properties = { tag = tags[1][3] } },
+    properties = { tag = tags[1][3] } },
   { rule = { class = "Galculator" },
-  properties = { floating = true },
-  callback = function (c)
-    awful.titlebar.add(c, { modkey = modkey })
-  end },
+    properties = { floating = true },
+    callback = function (c)
+      awful.titlebar.add(c, { modkey = modkey })
+    end },
   { rule = { class = "sun-applet-PluginMain" },
-  properties = { floating = true },
-  callback = function (c)
-    awful.titlebar.add(c, { modkey = modkey })
-  end },
+    properties = { floating = true },
+    callback = function (c)
+      awful.titlebar.add(c, { modkey = modkey })
+    end },
   { rule = { class = "java-lang-Thread" },
-  properties = { floating = true },
-  callback = function (c)
-    awful.titlebar.add(c, { modkey = modkey })
-  end },
+    properties = { floating = true },
+    callback = function (c)
+      awful.titlebar.add(c, { modkey = modkey })
+    end },
   { rule = { name = "plugin-container" },
-  properties = { floating = false,
-  maximized_vertical = true,
-  maximized_horizontal = true,
-  fullscreen = true,
-  border_width = 0 },
-  callback = function (c)
-    awful.titlebar.remove(c, { modkey = modkey })
-    --mywibox[mouse.screen].visible = false
-    --c:add_signal("unmanage", function ()
-    --    mywibox[mouse.screen].visible = true
-    --end)
-  end },
+    properties = { floating = false,
+    maximized_vertical = true,
+    maximized_horizontal = true,
+    fullscreen = true,
+    border_width = 0 },
+    callback = function (c)
+      awful.titlebar.remove(c, { modkey = modkey })
+      --mywibox[mouse.screen].visible = false
+      --c:add_signal("unmanage", function ()
+      --    mywibox[mouse.screen].visible = true
+      --end)
+    end },
   { rule = { name = "File Operation Progress" },
-  properties = { floating = true,
-  border_width = 0 } },
-  -- Set Firefox to always map on tags number 2 of screen 1.
-  -- { rule = { class = "Firefox" },
-  --   properties = { tag = tags[1][2] } },
-  --]]
+    properties = { floating = true,
+    border_width = 0 } },
+    -- Set Firefox to always map on tags number 2 of screen 1.
+    -- { rule = { class = "Firefox" },
+    --   properties = { tag = tags[1][2] } },
+    --]]
 }
 -- }}
 
