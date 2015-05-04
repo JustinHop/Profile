@@ -610,9 +610,9 @@ awful.rules.rules = {
     properties = { floating = true } },
   { rule = { class = "gimp" },
     properties = { floating = true } },
-  { rule = { name = "Google-chrome" },
+  { rule = { class = 'Google-chrome' },
   callback = function (c)
-    awful.client.property.set(c, "icon", settings.icon.chrome)
+    c.icon = image(settings.icon.chrome)
   end },
   { rule = { name = "bubble" },
     properties = { floating = true,
@@ -649,6 +649,11 @@ awful.rules.rules = {
       awful.titlebar.add(c, { modkey = modkey })
     end },
   { rule = { class = "java-lang-Thread" },
+    properties = { floating = true },
+    callback = function (c)
+      awful.titlebar.add(c, { modkey = modkey })
+    end },
+  { rule = { class = "KeePass2" },
     properties = { floating = true },
     callback = function (c)
       awful.titlebar.add(c, { modkey = modkey })

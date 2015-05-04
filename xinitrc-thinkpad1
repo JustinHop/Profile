@@ -23,7 +23,7 @@ xgamma -gamma .8
 
 { sleep 1s; clipit ; } &
 { sleep 1s; solaar ; } &
-{ sleep 1s; xbacklight -set 25; } &
+{ sleep 1s; xbacklight -set 80; } &
 { sleep 1s; nm-applet ; } &
 { sleep 1s; bluetooth-applet ; } &
 { sleep 2s; ~/mopidy/bin/mopidy ; } &
@@ -39,8 +39,9 @@ xgamma -gamma .8
 { sleep 5s; xrandr --output DP1 --brightness .8; } &
 { sleep 5s; xrandr --output eDP2 --brightness .8; } &
 
-{ sleep 1s; pidgin; } &
-{ sleep 1s; thunderbird; } &
+{ sleep 1s;  pidgin; } &
+{ sleep 10s; hipchat; } &
+{ sleep 1s;  thunderbird; } &
 
 
 echo "Session: setting Xdefaults and Xmodmap"
