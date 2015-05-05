@@ -10,7 +10,13 @@ class HipChatFortune
         bus = DBus::SessionBus.instance
         loop << bus
 
-        zippy = IO.popen('fortune zippy')
+        num = rand(4)
+
+        if num = 2
+            zippy = IO.popen('fortune -l zippy')
+        else
+            zippy = IO.popen('fortune zippy')
+        end
         @fortune = zippy.readlines
         zippy.close
         p @fortune.join("")
