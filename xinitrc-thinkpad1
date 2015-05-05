@@ -59,7 +59,13 @@ echo "Session: setting Xdefaults and Xmodmap"
       xset r rate 350 50;
       xset s 3600
       sleep 10s;
+
+      let GAP_Y=$(xrandr --current | grep eDP1 | awk '{ print $4 }' | tr + ' ' | awk '{ print $3 }')+40
+      sed -i "s/^gap_y.*/gap_y $GAP_Y/" ~/Profile/conky-thinkpad1.conf
+
 done ; } &
+
+
 
 numlockx
 
