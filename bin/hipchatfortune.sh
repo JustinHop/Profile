@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 TIME=300s
 
 if [ $1 ]; then
