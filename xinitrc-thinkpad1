@@ -32,15 +32,19 @@ xgamma -gamma .8
 { sleep 2s; cryptkeeper; } &
 { sleep 2s; keynav; } &
 { sleep 3s; pidgin_fortune; } &
+{ sleep 3s; pidgin_fortune; } &
 { sleep 3s; pasystray; } &
 { sleep 3s; fdpowermon; } &
 { sleep 3s; blueman-applet; } &
 { sleep 3s; nagstamon; } &
 { sleep 5s; xrandr --output DP1 --brightness .8; } &
 { sleep 5s; xrandr --output eDP2 --brightness .8; } &
+{ sleep 5s; xrandr --output DP2-2 --brightness .8; } &
+{ sleep 5s; xrandr --output DP2-3 --brightness .8; } &
 
 { sleep 1s;  pidgin; } &
-{ sleep 10s; hipchat; } &
+{ sleep 5s;  hipchat; } &
+{ sleep 8s;  ~/Profile/bin/hipchatfortune.sh; } &
 { sleep 1s;  thunderbird; } &
 
 
@@ -58,10 +62,15 @@ echo "Session: setting Xdefaults and Xmodmap"
       xmodmap -e "keycode 135 = Super_L";
       xset r rate 350 50;
       xset s 3600
-      sleep 10s;
 
       let GAP_Y=$(xrandr --current | grep eDP1 | awk '{ print $4 }' | tr + ' ' | awk '{ print $3 }')+40
-      sed -i "s/^gap_y.*/gap_y $GAP_Y/" ~/Profile/conky-thinkpad1.conf
+      sed "s/^gap_y.*/gap_y $GAP_Y/" < ~/Profile/conky-thinkpad1.conf | tee ~/tmp/conky-thinkpad1.conf
+
+      if ! diff ~/Profile/conky-thinkpad1.conf ~/tmp/conky-thinkpad1.conf ; then
+            mv -v ~/tmp/conky-thinkpad1.conf ~/Profile/conky-thinkpad1.conf
+      fi
+
+      sleep 10s;
 
 done ; } &
 
