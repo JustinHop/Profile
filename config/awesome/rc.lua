@@ -129,9 +129,10 @@ for s = 1, screen.count() do
   tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
 awful.tag.setnmaster(1, tags[1][2])
-awful.tag.setmwfact( .8, tags[1][2])
-awful.tag.setncol( 2, tags[1][2])
-awful.layout.set( awful.layout.suit.max, tags[1][3])
+awful.tag.incnmaster(1, tags[1][2])
+awful.tag.setmwfact(.8, tags[1][2])
+awful.tag.setncol(2, tags[1][2])
+awful.layout.set(awful.layout.suit.max, tags[1][3])
 -- }}}
 
 -- {{{ Menu
