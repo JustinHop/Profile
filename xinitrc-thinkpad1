@@ -4,7 +4,7 @@ setopt allexport
 nitrogen --restore
 
 #{ gnome-settings-daemon; } &
-{ xfsettingsd --no-daemon; } &
+{ sleep 2s; xfsettingsd --no-daemon; } &
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
@@ -31,7 +31,6 @@ xgamma -gamma .8
 { sleep 2s; xfce4-volumed; } &
 { sleep 2s; cryptkeeper; } &
 { sleep 2s; keynav; } &
-{ sleep 3s; hipchatfortune.sh; } &
 { sleep 3s; pasystray; } &
 { sleep 3s; fdpowermon; } &
 { sleep 3s; blueman-applet; } &
@@ -41,10 +40,11 @@ xgamma -gamma .8
 { sleep 5s; xrandr --output DP2-2 --brightness .8; } &
 { sleep 5s; xrandr --output DP2-3 --brightness .8; } &
 
-{ sleep 1s;  pidgin; } &
-hipchat &
-{ sleep 8s;  ~/Profile/bin/hipchatfortune.sh; } &
-{ sleep 1s;  thunderbird; } &
+{ sleep 1s; pidgin; } &
+{ sleep 6s; pidgin_fortune; } &
+{ sleep 6s; hipchat; } &
+{ sleep 9s; hipchatfortune.sh; } &
+{ sleep 1s; thunderbird; } &
 
 
 echo "Session: setting Xdefaults and Xmodmap"
@@ -63,7 +63,7 @@ echo "Session: setting Xdefaults and Xmodmap"
       xset s 3600
 
       let GAP_Y=$(xrandr --current | grep eDP1 | awk '{ print $4 }' | tr + ' ' | awk '{ print $3 }')+40
-      sed "s/^gap_y.*/gap_y $GAP_Y/" < ~/Profile/conky-thinkpad1.conf | tee ~/tmp/conky-thinkpad1.conf
+      sed "s/^gap_y.*/gap_y $GAP_Y/" < ~/Profile/conky-thinkpad1.conf > ~/tmp/conky-thinkpad1.conf
 
       if ! diff ~/Profile/conky-thinkpad1.conf ~/tmp/conky-thinkpad1.conf ; then
             mv -v ~/tmp/conky-thinkpad1.conf ~/Profile/conky-thinkpad1.conf
@@ -79,7 +79,7 @@ done ; } &
       redir --lport 6600 --cport 6601 --debug &
       wait $!
       notify-send -i /usr/share/icons/HighContrast/48x48/devices/audio-headset.png -a mpd "Toggle MPD Port to 6602" "Connecting to port 6602. MPD"
-      redir --lport 6600 --cport 6601 --debug &
+      redir --lport 6600 --cport 6602 --debug &
       wait $!
 done ; } &
 
@@ -90,6 +90,4 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 sleep 1s
 
-#{ sleep 5s; xfsettingsd --no-daemon; } &
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
-#exec xfce4-session
