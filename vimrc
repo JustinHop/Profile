@@ -105,8 +105,8 @@ if !exists('g:loaded_justin_vimrc')
   set expandtab
   set formatoptions=roq
   set list
-  set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:↩
-  "set showbreak=-->\
+  "set listchars=tab:⇥\ ,trail:␣,extends:⇉,precedes:⇇,nbsp:·,eol:↩
+  set showbreak=-->\
   set showbreak="►\ "
   set wrap
   set linebreak

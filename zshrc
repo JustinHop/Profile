@@ -129,14 +129,19 @@ case $UNAME in
     ;;
 
   (Darwin)
-    #if [[ -f $PROFILE_DIR/dircolors ]]; then
-    #  export CLICOLOR=`cat $PROFILE_DIR/dircolors`
-    #fi
-    export LC_ALL="C"
+    export LANG=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+
     BKT=( ':', ':', '<', '>', '{', '}' )
     PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
     MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
     TYCOLOR=magenta
+    if [ -f /usr/local/opt/coreutils/libexec/gnubin/ls ] ; then
+      export GNU_COREUTILS=1
+      LS=/usr/local/opt/coreutils/libexec/gnubin/ls
+    else
+      LS=/bin/ls
+    fi
     ;;
 
   (CYGWIN_NT-5.1)
