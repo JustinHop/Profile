@@ -154,7 +154,7 @@ _P_GT="\[${BOLD}${BASE2}\]>"
 _P_AT="\[${BOLD}${BASE2}\]@"
 _P_C="\[${BOLD}${BASE2}\]:"
 _P_USER="\[${BOLD}${CYAN}\]\u"
-_P_HOST="\[$CYAN\]\H"
+_P_HOST="\[$CYAN\]$(hostname -f)"
 _P_PWD="\[$BLUE\]\w"
 _P_LINE1="${_P_LT}${_P_USER}${_P_AT}${_P_HOST}${_P_C}${_P_PWD}${_P_GT}"
 PS1="${_P_LINE1}\n\[${BOLD}${BASE3}\]\$ \[$RESET\]"
@@ -225,7 +225,7 @@ local temp=$(tty)
 local GRAD1=${temp:5}
 PS1="$TITLEBAR\
 $GRAY-$CYAN-$LIGHT_CYAN(\
-$CYAN\u$GRAY@$CYAN\h\
+$CYAN\u$GRAY@$CYAN$(hostname -f)\
 $LIGHT_CYAN)$CYAN-$LIGHT_CYAN(\
 $CYAN\#$GRAY/$CYAN$GRAD1\
 $LIGHT_CYAN)$CYAN-$LIGHT_CYAN(\

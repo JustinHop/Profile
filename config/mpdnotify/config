@@ -1,5 +1,3 @@
-#!/bin/bash
-#
 # mpdnotify config - any valid bash is allowed, you
 # only need to define handle_event() for the deamon
 # to run properly
@@ -16,12 +14,14 @@
 #
 ###
 
+set -a
+
 # Constants
 if [ "$MPD_HOST" ]; then HOST="$MPD_HOST"; else HOST="localhost"; fi
 if [ "$MPD_PORT" ]; then PORT="$MPD_PORT"; else PORT="6600"; fi
 MPD_TCP="/dev/tcp/$HOST/$PORT"
 coverDir="$HOME/.covers"
-tmpCover="/tmp/cover"
+tmpCover="~/tmp/cover"
 baseCover="$HOME/Profile/scripts/mpd-libnotify/extras/base.png"
 topCover="$HOME/Profile/scripts/mpd-libnotify/extras/top.png"
 noCover="$HOME/Profile/scripts/mpd-libnotify/extras/NOCOVER.png"
@@ -30,104 +30,157 @@ mpdPID=$(pidof mpd)
 if [ -z $mpdPID ]; then
   mpdPID=$(pidof -x mopidy)
 fi
-mpdArtist="Could not find Artist's name"
-mpdTitle="Could not find Song's title"
-mpdAlbum="Could not find Album's name"
-mpcLength="Could not find Song's length"
-mpcInfo="Cound not find Song's info"
+
+DEBUG=1
+
 showCover="true"
 expireTime="5000"
 logout="true"
-TOGGLE=1
+
+declare -p D
 
 
-function mpd_sndcommmand() {
-    # $1 command
-    exec 5<> $MPD_TCP 2>/dev/null
-    [[ $? -gt 0 ]] && return 1
-    echo $1 >&5
-    echo "close" >&5
-    tmp=$(cat <&5)
-    exec 5>&-
-    _ret=$(head -n -1 <<< "$tmp" | tail -n +2)
-    return 0
+mpd_sndcommmand() {
+  [ $DEBUG ] && echo "mpd_sndcommand() $@"
+  # $1 command
+  exec 5<> $MPD_TCP 2>/dev/null
+  [[ $? -gt 0 ]] && return 1
+  echo $1 >&5
+  echo "close" >&5
+  tmp=$(cat <&5)
+  exec 5>&-
+  #_ret=$(head -n -1 <<< "$tmp" | tail -n +2)
+  _ret=$(head -n -1 <<< "$tmp" | sed -r "s/^OK /Server: /" | grep :)
+  [ $DEBUG ] && echo "mpd_sndcommand() exit"
+  return 0
 }
 
-function mpd_getinfo() {
-    mpd_sndcommmand currentsong
-    [[ $? -gt 0 ]] && return 1
-    _tmp=$_ret
-    mpdTitle=$(grep "^Title: " <<< "$_tmp" 2>/dev/null | sed "s/Title: //")
-    mpdArtist=$(grep "^Artist: " <<< "$_tmp" 2>/dev/null | sed "s/Artist: //")
-    mpdAlbum=$(grep "^Album: " <<< "$_tmp" 2>/dev/null | sed "s/Album: //")
-    _songtime=$(grep "^Time: " <<< "$_tmp" 2>/dev/null | sed "s/Time: //" | cut -f 1 -d :)
-    (( _mm=$_songtime / 60 ))
-    [[ ${#_mm} -eq 1 ]] && _mm="0$_mm"
-    (( _ss=$_songtime - $_mm * 60 ))
-    [[ ${#_ss} -eq 1 ]] && _ss="0$_ss"
-    mpdLength="$_mm:$_ss"
-    mpd_sndcommmand "status"
-    _tmp=$_ret
-    mpdSongID=$(grep "^songid: " <<< "$_tmp" 2>/dev/null | sed "s/songid: //")
-    mpdPlaylistL=$(grep "^playlistlength: " <<< "$_tmp" 2>/dev/null | sed "s/playlistlength: //")
-}
-
-
-function fetch_cover() {
-    album=$1
-    file="$coverDir/$album"
-    if [ ! -f "$file" ] ; then
-        logger "$file is not in covers... " >/dev/null
-        url="http://www.albumart.org/index.php?srchkey=${album// /+}&itempage=1&newsearch=1&searchindex=Music"
-        cover_url=$(curl -s "$url" | awk -F 'src=' '/zoom-icon.jpg/ {print $2}' | cut -d '"' -f 2 | head -n1)
-        if [ -n "$cover_url" ]; then
-            logger "$file retrieved and placed in covers directory..." >/dev/null
-            wget -q -O "$file" "$cover_url"
-        else
-            logger "ERROR: Album cover not found online. Searched for: ${album// /+}" >/dev/null
-        fi
+mpd_parseinfo() {
+  [ $DEBUG ] && echo "mpd_parseinfo() $@"
+      [ $DEBUG ] && declare -p D
+  [ $DEBUG ] && echo "RET: $_ret"
+  [ $DEBUG ] && echo "RET: END"
+  [ $DEBUG ] && wc <<< "$_ret"
+  #tr "\n" "\0" <<< "$_ret" | xargs -n1 -P4 -0 | while read line; do
+  echo -e "$_ret" |while read -r line; do
+  [ $DEBUG ] && declare -p D
+    if [ "$line" ]; then
+      [ $DEBUG ] && echo "LINE: $line"
+      [ $DEBUG ] && echo "LINE: END"
+      _label=$(grep -oP '^[^:]+:' <<< "$line" 2>/dev/null | tr '[A-Z]' '[a-z]' | tr -d ":")
+      _value="$(perl -pe 's/^[^:]+:\s//; s/\&/&amp/g;' <<< \"$line\" )"
+      [ $DEBUG ] && echo LABEL: $_label
+      [ $DEBUG ] && echo VALUE: $_value
+      if ! [ -z "$_label" ]; then
+        eval D+=(["$_label"]=\"$_value\")
+      fi
+      [ $DEBUG ] && declare -p D
     fi
+  done
+  [ $DEBUG ] && echo "mpd_parseinfo() exit"
 }
+
+
+mpd_getinfo() {
+  [ $DEBUG ] && echo "mpd_getinfo() $@"
+  mpd_sndcommmand currentsong
+  #[[ $? -gt 0 ]] && return 1
+  _tmp="$_ret"
+  mpd_parseinfo
+  _songtime=$(grep "^Time: " <<< "$_tmp" 2>/dev/null | sed "s/Time: //" | cut -f 1 -d :)
+  (( _mm=$_songtime / 60 ))
+  [[ ${#_mm} -eq 1 ]] && _mm="0$_mm"
+  (( _ss=$_songtime - $_mm * 60 ))
+  [[ ${#_ss} -eq 1 ]] && _ss="0$_ss"
+  D[length]="$_mm:$_ss"
+  #mpd_sndcommmand "status"
+  #[[ $? -gt 0 ]] && return 1
+  #_tmp="$_ret"
+  #mpd_parseinfo
+  [ $DEBUG ] && echo "mpd_getinfo() exit"
+  return 0
+}
+
+
+fetch_cover() {
+  [ $DEBUG ] && echo "fetch_cover() $@"
+#  album=$1
+#  file="$coverDir/$album"
+#  if [ ! -f "$file" ] ; then
+#    logger "$file is not in covers... " >/dev/null
+#    url="http://www.albumart.org/index.php?srchkey=${album// /+}&itempage=1&newsearch=1&searchindex=Music"
+#    cover_url=$(curl -s "$url" | awk -F 'src=' '/zoom-icon.jpg/ {print $2}' | cut -d '"' -f 2 | head -n1)
+#    if [ -n "$cover_url" ]; then
+#      logger "$file retrieved and placed in covers directory..." >/dev/null
+#      wget -q -O "$file" "$cover_url"
+#    else
+#      logger "ERROR: Album cover not found online. Searched for: ${album// /+}" >/dev/null
+#    fi
+#  fi
+  [ $DEBUG ] && echo "fetch_cover() exit"
+}
+
+do_notify() {
+  [ $DEBUG ] && echo "do_notify() $@"
+#  if [ "${D[server]}" ]; then
+#    _title="${D[server]}"
+#    #unset D[ok]
+#  fi
+#  if [ "${D[name]}" ]; then
+#    if [ "$_title" ]; then
+#      _title="${D[name]} :: $_title"
+#    else
+#      _title="${D[name]}"
+#    fi
+#    #unset D[name]
+#  fi
+#  for _key in ${!D[@]} ; do
+#    [ $DEBUG ] && echo "_key=$_key"
+#    if [ "$_send" ]; then
+#      _send="$_send\n<i>$_key:</i> ${D[$_key]}"
+#    else
+#      _send="<i>$_key:</i> ${D[$_key]}"
+#    fi
+#  done
+
+  [ $DEBUG ] && echo notify-send --expire-time="${expireTime}" -i "${tmpCover}" "$_title" "$(declare -p D)"
+  notify-send --expire-time="${expireTime}" -i "${tmpCover}" "$_title" "$(declare -p D)"
+
+  [ $DEBUG ] && echo "do_notify() exit"
+}
+
 
 handle_event() {
-    if [ "$TOGGLE" ]; then
-        unset TOGGLE
-    else
-        TOGGLE=1
-        mpd_getinfo
-        if [ "${showCover}" = "true" ]; then
-            if [ -f "/tmp/cover" ]; then rm /tmp/cover; fi
-            if [ -f "$coverDir/$mpdAlbum" ]; then
-                cp "$coverDir/$mpdAlbum" /tmp/cover
-            else
-                fetch_cover "$mpdAlbum"
-                if [ -f "$coverDir/$mpdAlbum" ]; then
-                    cp "$coverDir/$mpdAlbum" /tmp/cover
-                else
-                    cp "$noCover" /tmp/cover
-                fi
-            fi
-
-            mogrify -resize 65x65! $tmpCover
-            convert $baseCover "$tmpCover" -geometry +4+3 -composite $topCover -geometry +0+0 -composite "$tmpCover"
-            mpdAlbum=$(echo "$mpdAlbum" | sed -e 's/&/&amp;/')
-            mpdTitle=$(echo "$mpdTitle" | sed -e 's/&/&amp;/')
-            mpdArtist=$(echo "$mpdArtist" | sed -e 's/&/&amp;/')
-            [[ "${#mpdArtist}" -gt "25" ]] && mpdArtist=$(echo "${mpdArtist:0:25}...")
-            [[ "${#mpdTitle}" -gt "25" ]] && mpdTitle=$(echo "${mpdTitle:0:25}...")
-            [[ "${#mpdAlbum}" -gt "25" ]] && mpdAlbum=$(echo "${mpdAlbum:0:25}...")
-            notify-send --expire-time="${expireTime}" -i "${tmpCover}" "MPD Notification" "$(echo "<u>${mpdTitle}</u>"; echo "By: <i>${mpdArtist}</i>"; echo "From: <i>${mpdAlbum}</i>"; echo "Length: <i>${mpdLength}</i>"; echo "Position: <i>${mpdSongID} / ${mpdPlaylistL}</i>")"
-
+  [ $DEBUG ] && echo "handle_event() $@"
+#  if [ "${D[toggle]}" ]; then
+#    unset D[toggle]
+#  else
+    mpd_getinfo
+    if [ "${showCover}" = "true" ]; then
+      if [ -f "$tmpCover" ]; then rm -v $tmpCover; fi
+      if [ -f "$coverDir/$mpdAlbum" ]; then
+        cp -v "$coverDir/$mpdAlbum" $tmpCover
+      else
+        fetch_cover "$mpdAlbum"
+        if [ -f "$coverDir/$mpdAlbum" ]; then
+          cp "$coverDir/$mpdAlbum" $tmpCover
         else
-            notify-send --expire-time="${expireTime}" "MPD Notification" "$(echo "<u>${mpdTitle}</u>"; echo "By: <i>${mpdArtist}</i>"; echo "From: <i>${mpdAlbum}</i>"; echo "Length: <i>${mpdLength}</i>"; echo "Position: <i>${mpdSongID} / ${mpdPlaylistL}</i>")"
+          cp "$noCover" $tmpCover
         fi
+      fi
 
+      mogrify -resize 65x65! $tmpCover
+      convert $baseCover "$tmpCover" -geometry +4+3 -composite $topCover -geometry +0+0 -composite "$tmpCover"
 
-
-        if [ "$logout" == "true" ]; then
-            echo -e "$mpdTitle \n $mpdArtist \n $mpdAlbum \n" > $HOME/mpdout
-        fi
     fi
+
+    do_notify
+
+#  fi
+  if [ "$logout" == "true" ]; then
+    echo -e "$mpdTitle \n $mpdArtist \n $mpdAlbum \n" > $HOME/mpdout
+  fi
+  [ $DEBUG ] && echo "handle_event() exit"
 }
 
 # handle_event() {

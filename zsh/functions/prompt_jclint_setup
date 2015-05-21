@@ -42,7 +42,7 @@ prompt_jclint_setup () {
 
   [[ -e "$HOME/hostinfo" ]] && p_hostinfo="$pc['\(']%F{$pcc[2]}$(read -re < $HOME/hostinfo)$pc['\)']"
 
-  p_userpwd="$pc['<']%F{$pcc[3]}%n@%M$p_win%F{$pcc[5]}:%F{$pcc[4]}%~$pc['>']"
+  p_userpwd="$pc['<']%F{$pcc[3]}%n@$(hostname -f)$p_win%F{$pcc[5]}:%F{$pcc[4]}%~$pc['>']"
   p_vcs="%(2v.%U%2v%u.)"
 
   p_shlvlhist="%fzsh%(2L./$SHLVL.) %B%h%b "

@@ -539,7 +539,7 @@ if (( $ZSH_MAJOR >= 4 )); then
     true
   else
     ### Mine
-    for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts "$HOME"/cr.zone  ; do
+    for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts "$HOME"/3dna.io  ; do
       if [ -f $hostfile ]; then
         etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )
         #zstyle ':completion:*' hosts $etchosts;

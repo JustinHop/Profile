@@ -1,26 +1,29 @@
 #!/bin/zsh
 
 setopt allexport
-nitrogen--restore
+nitrogen --restore
 
 #{ gnome-settings-daemon; } &
-{ xfsettingsd --no-daemon; } &
+{ sleep 2s; xfsettingsd --no-daemon; } &
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
-#xrandr --output VGA1 --primary
+xrandr --output eDP1 --primary
+xgamma -gamma .8
+{ compton -D 5 --config ~/.config/compton.conf; } &
 { sleep 1s; xbindkeys --nodaemon ; } &
 { sleep 1s; davmail ; } &
 
 { sleep 4s; nitrogen --restore; } &
 
 { conky; } &
+{ workrave; } &
 
 { sleep 1s; clipit ; } &
 { sleep 1s; solaar ; } &
-{ sleep 1s; xbacklight -set 25; } &
+{ sleep 1s; xbacklight -set 80; } &
 { sleep 1s; nm-applet ; } &
 { sleep 1s; bluetooth-applet ; } &
 { sleep 2s; ~/mopidy/bin/mopidy ; } &
@@ -28,10 +31,21 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 { sleep 2s; xfce4-volumed; } &
 { sleep 2s; cryptkeeper; } &
 { sleep 2s; keynav; } &
-{ sleep 3s; pidgin_fortune; } &
 { sleep 3s; pasystray; } &
 { sleep 3s; fdpowermon; } &
 { sleep 3s; blueman-applet; } &
+{ sleep 3s; nagstamon; } &
+{ sleep 5s; xrandr --output DP1 --brightness .8; } &
+{ sleep 5s; xrandr --output eDP1 --brightness .8; } &
+{ sleep 5s; xrandr --output DP2-2 --brightness .8; } &
+{ sleep 5s; xrandr --output DP2-3 --brightness .8; } &
+
+{ sleep 1s; pidgin; } &
+{ sleep 6s; pidgin_fortune; } &
+{ sleep 6s; hipchat; } &
+{ sleep 9s; hipchatfortune.sh; } &
+{ sleep 1s; thunderbird; } &
+
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
@@ -47,7 +61,26 @@ echo "Session: setting Xdefaults and Xmodmap"
       xmodmap -e "keycode 135 = Super_L";
       xset r rate 350 50;
       xset s 3600
+
+      let GAP_Y=$(xrandr --current | grep eDP1 | awk '{ print $4 }' | tr + ' ' | awk '{ print $3 }')+40
+      sed "s/^gap_y.*/gap_y $GAP_Y/" < ~/Profile/conky-thinkpad1.conf > ~/tmp/conky-thinkpad1.conf
+
+      if ! diff ~/Profile/conky-thinkpad1.conf ~/tmp/conky-thinkpad1.conf ; then
+            mv -v ~/tmp/conky-thinkpad1.conf ~/Profile/conky-thinkpad1.conf
+      fi
+
       sleep 10s;
+
+done ; } &
+
+{ while true ; do
+      set -x
+      notify-send -i /usr/share/icons/HighContrast/48x48/devices/audio-headset.png -a mpd "Toggle MPD Port to 6601" "Connecting to port 6601. Mopidy"
+      redir --lport 6600 --cport 6601 --debug &
+      wait $!
+      notify-send -i /usr/share/icons/HighContrast/48x48/devices/audio-headset.png -a mpd "Toggle MPD Port to 6602" "Connecting to port 6602. MPD"
+      redir --lport 6600 --cport 6602 --debug &
+      wait $!
 done ; } &
 
 numlockx
@@ -57,6 +90,4 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 sleep 1s
 
-#{ sleep 5s; xfsettingsd --no-daemon; } &
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
-#exec xfce4-session
