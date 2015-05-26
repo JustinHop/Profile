@@ -112,3 +112,6 @@
 [submodule "vim/general/puppet"]
 	path = vim/general/puppet
 	url = git://github.com/rodjek/vim-puppet.git
+[submodule "vim/coding/tabular"]
+	path = vim/coding/tabular
+	url = https://github.com/vim-scripts/Tabular.git
