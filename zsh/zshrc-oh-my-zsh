@@ -46,7 +46,7 @@ HIST_STAMPS=yyyy-mm-dd
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git vim-integration vagrant tmux systemadmin python gnu-utils pip mosh nova)
+plugins=(git vim-integration vagrant tmux systemadmin python gnu-utils pip mosh nova aws gem ruby rvm jsontools)
 
 # User configuration
 

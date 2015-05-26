@@ -22,7 +22,7 @@ untracked = cyan
 
 [user]
 	name = Justin Hoppensteadt
-	email = git@justinhoppensteadt.com
+	email = hop@nationbuilder.com
 [branch]
 	autosetupmerge = true
 [push]

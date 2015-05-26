@@ -29,6 +29,8 @@ let s:profile_vimrc_etc_matchstr = matchstr(s:path, '^/etc/Profile$')
 
 if !exists('g:loaded_justin_vimrc')
   let g:loaded_justin_vimrc = 1
+  let g:pymode_lint_mccabe_complexity = 14
+  let g:pymode_lint_checkers=['pyflakes', 'pep8']
 
   if !exists('g:loaded_pathogen')
     let g:profiles_default = ['lib', 'base']
