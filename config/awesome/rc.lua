@@ -490,7 +490,8 @@ clientkeys = awful.util.table.join(
   end),
   -- manipulation
   awful.key({ modkey, "Control" }, "m", function (c) c.minimized = not c.minimized end),
-  awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
+  awful.key({ modkey, "Control" }, "Tab", function () awful.client.swap.byidx(  1) awful.client.focus.byidx( -1)   end),
+  awful.key({ modkey, "Shift", "Control" }, "Tab", function () awful.client.swap.byidx(  -1) awful.client.focus.byidx( 1)   end),
   awful.key({ modkey,           }, "o", function (c) awful.client.movetoscreen(c,c.screen+1) mousemarker() end),
   awful.key({ modkey, "Shift"   }, "o", function (c) awful.client.movetoscreen(c,c.screen-1) mousemarker() end),
   awful.key({ modkey, }, "r", function (c) c:redraw() end),
