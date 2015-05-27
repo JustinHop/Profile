@@ -476,43 +476,43 @@ video_mode = {
 }
 
 clientkeys = awful.util.table.join(
-  awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-  awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill() end),
-  awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle()                     ),
-  awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-  awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
-  awful.key({ modkey, "Shift"   }, "t",      function (c) c.ontop = not c.ontop            end),
-  awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
-  awful.key({ modkey,           }, "m",
+  awful.key({ modkey,                                     } , "f",      function (c) c.fullscreen = not c.fullscreen  end),
+  awful.key({ modkey, "Shift"                             } , "c",      function (c) c:kill() end),
+  awful.key({ modkey, "Control"                           } , "space",  awful.client.floating.toggle()                     ),
+  awful.key({ modkey, "Control"                           } , "Return", function (c) c:swap(awful.client.getmaster()) end),
+  awful.key({ modkey, "Shift"                             } , "r",      function (c) c:redraw()                       end),
+  awful.key({ modkey, "Shift"                             } , "t",      function (c) c.ontop = not c.ontop            end),
+  awful.key({ modkey,                                     } , "n",      function (c) c.minimized = not c.minimized    end),
+  awful.key({ modkey,                                     } , "m",
     function (c)
       c.maximized_horizontal = not c.maximized_horizontal
       c.maximized_vertical   = not c.maximized_vertical
     end),
   -- manipulation
-  awful.key({ modkey, "Control" }, "m",     function (c) c.minimized = not c.minimized end),
-  awful.key({ modkey, "Control" }, "Tab",   function () awful.client.swap.byidx(  1) awful.client.focus.byidx( -1)   end),
-  awful.key({ modkey, "Shift", "Control" }, "Tab", function () awful.client.swap.byidx(  -1) awful.client.focus.byidx( 1)   end),
-  awful.key({ modkey,           }, "o", function (c) awful.client.movetoscreen(c,c.screen+1) mousemarker() end),
-  awful.key({ modkey, "Shift"   }, "o", function (c) awful.client.movetoscreen(c,c.screen-1) mousemarker() end),
-  awful.key({ modkey, }, "r", function (c) c:redraw() end),
+  awful.key({ modkey, "Control"                           } , "m",     function (c) c.minimized = not c.minimized end),
+  awful.key({ modkey, "Control"                           } , "Tab",   function () awful.client.swap.byidx(  1) awful.client.focus.byidx( -1)   end),
+  awful.key({ modkey, "Shift", "Control"                  } , "Tab", function () awful.client.swap.byidx(  -1) awful.client.focus.byidx( 1)   end),
+  awful.key({ modkey,                                     } , "o", function (c) awful.client.movetoscreen(c,c.screen+1) mousemarker() end),
+  awful.key({ modkey, "Shift"                             } , "o", function (c) awful.client.movetoscreen(c,c.screen-1) mousemarker() end),
+  awful.key({ modkey,                                     } , "r", function (c) c:redraw() end),
   -- TODO: Shift+r to redraw all clients in current tag
-  --awful.key({ modkey }, "o",     awful.client.movetoscreen),
-  awful.key({ modkey }, "Next",  function () awful.client.moveresize( 20,  20, -40, -40) end),
-  awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20,  40,  40) end),
-  awful.key({ modkey }, "Down",  function () awful.client.moveresize(  0,  20,   0,   0) end),
-  awful.key({ modkey }, "Up",    function () awful.client.moveresize(  0, -20,   0,   0) end),
-  awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20,   0,   0,   0) end),
-  awful.key({ modkey }, "Right", function () awful.client.moveresize( 20,   0,   0,   0) end),
-  awful.key({ modkey, "Control"},"r", function (c) c:redraw() end),
-  awful.key({ modkey, "Shift" }, "0", function (c) c.sticky = not c.sticky end),
-  awful.key({ modkey, "Shift" }, "m", function (c) c:swap(awful.client.getmaster()) end),
-  awful.key({ modkey, "Control" }, "c", function (c) awful.util.spawn("kill -CONT " .. c.pid) end),
-  awful.key({ modkey, "Control" }, "s", function (c) awful.util.spawn("kill -STOP " .. c.pid) end),
-  awful.key({ modkey,         }, "t", function (c)
+  --awful.key({ modkey                                    } , "o",     awful.client.movetoscreen),
+  awful.key({ modkey                                      } , "Next",  function () awful.client.moveresize( 20,  20, -40, -40) end),
+  awful.key({ modkey                                      } , "Prior", function () awful.client.moveresize(-20, -20,  40,  40) end),
+  awful.key({ modkey                                      } , "Down",  function () awful.client.moveresize(  0,  20,   0,   0) end),
+  awful.key({ modkey                                      } , "Up",    function () awful.client.moveresize(  0, -20,   0,   0) end),
+  awful.key({ modkey                                      } , "Left",  function () awful.client.moveresize(-20,   0,   0,   0) end),
+  awful.key({ modkey                                      } , "Right", function () awful.client.moveresize( 20,   0,   0,   0) end),
+  awful.key({ modkey, "Control"                           } ,"r", function (c) c:redraw() end),
+  awful.key({ modkey, "Shift"                             } , "0", function (c) c.sticky = not c.sticky end),
+  awful.key({ modkey, "Shift"                             } , "m", function (c) c:swap(awful.client.getmaster()) end),
+  awful.key({ modkey, "Control"                           } , "c", function (c) awful.util.spawn("kill -CONT " .. c.pid) end),
+  awful.key({ modkey, "Control"                           } , "s", function (c) awful.util.spawn("kill -STOP " .. c.pid) end),
+  awful.key({ modkey,                                     } , "t", function (c)
     if   c.titlebar then awful.titlebar.remove(c)
-    else awful.titlebar.add(c, { modkey = modkey }) end
+    else awful.titlebar.add(c, { modkey = modkey          } ) end
   end),
-  awful.key({ modkey }, "v", function(c)
+  awful.key({ modkey                                      } , "v", function(c)
     keygrabber.run(function(mod, key, event)
       if event == "release" then return true end
       keygrabber.stop()
@@ -520,9 +520,13 @@ clientkeys = awful.util.table.join(
       return true
     end)
   end),
-  awful.key({ modkey, "Shift" }, "f", function (c) if awful.client.floating.get(c)
-    then awful.client.floating.delete(c);    awful.titlebar.remove(c)
-    else awful.client.floating.set(c, true); awful.titlebar.add(c) end
+  awful.key({ modkey, "Shift"                             } , "f", function (c) if awful.client.floating.get(c)
+    then
+      awful.client.floating.delete(c);
+      awful.titlebar.remove(c)
+  else
+    awful.client.floating.set(c, true);
+    awful.titlebar.add(c) end
   end)
 )
 

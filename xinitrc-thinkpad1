@@ -18,6 +18,8 @@ xgamma -gamma .8
 
 { sleep 4s; nitrogen --restore; } &
 
+mpd &
+
 { conky; } &
 { workrave; } &
 
@@ -41,10 +43,11 @@ xgamma -gamma .8
 { sleep 5s; xrandr --output DP2-3 --brightness .8; } &
 
 { sleep 1s; pidgin; } &
-{ sleep 6s; pidgin_fortune; } &
-{ sleep 6s; hipchat; } &
-{ sleep 9s; hipchatfortune.sh; } &
+{ sleep 6s; ~/bin/pidgin_fortune; } &
+{ sleep 10s; hipchat; } &
+{ sleep 2m; ~/bin/hipchatfortune.sh; } &
 { sleep 1s; thunderbird; } &
+{ sleep 2m; ~/bin/popup.py; } &
 
 
 echo "Session: setting Xdefaults and Xmodmap"
