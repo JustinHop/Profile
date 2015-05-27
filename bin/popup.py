@@ -6,6 +6,7 @@ import urllib
 import json
 import os.path
 import sys
+import time
 # import pprint
 
 HOST = 'localhost'
@@ -41,7 +42,6 @@ class SongNotify:
             return
 
         if song.title and song.artist:
-            # hello = pynotify.Notification(
             self.notify.update(
                 str(song.title),
                 str(song.string),
@@ -49,22 +49,22 @@ class SongNotify:
 
         else:
             if isinstance(song.name, str) and isinstance(song.title, str):
-                # hello = pynotify.Notification(
                 self.notify.update(
                     str(song.name),
                     str(song.title),
                     ICON32)
 
             else:
-                # hello = pynotify.Notification(
                 self.notify.update(
                     "Music Player Daemon - Untitled Media",
                     str(song.string),
                     song.icon)
 
         print("['Notification: ', 'show']")
-        self.notify.show()
-        # hello.show()
+        try:
+            self.notify.show()
+        except glib.GError:
+            print("['Notification: ', 'failed']")
 
 LASTFMAPIKEY = "e5d743dba724b90c0e522ad8ea7b4afc"
 
@@ -132,11 +132,17 @@ class MpdWatcher:
     def __init__(self, host, port):
         self.client = MPDClient()
 
-        try:
-            self.client.connect(HOST, PORT)
-        except SocketError:
-            print("Failed to connect to MPD, exiting")
-            sys.exit(1)
+        #try:
+        #    self.client.connect(HOST, PORT)
+        #except:
+        #    print("Failed to connect to MPD")
+        while True:
+            try:
+                self.client.connect(HOST, PORT)
+                break
+            except:
+                print("Failed to connect to MPD")
+                time.sleep(1)
         self.notify = SongNotify()
 
         self.song = None

@@ -4,7 +4,8 @@ setopt allexport
 nitrogen --restore
 
 #{ gnome-settings-daemon; } &
-{ sleep 2s; xfsettingsd --no-daemon; } &
+{ sleep 2s; xfsettingsd         --no-daemon; } &
+{ sleep 3s; xfce4-power-manager --no-daemon; } &
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
@@ -13,7 +14,7 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 xrandr --output eDP1 --primary
 xgamma -gamma .8
 { compton -D 5 --config ~/.config/compton.conf ; } &
-{ mpd                                          ; } &
+{ mpd; mpc stop                                ; } &
 
 { conky                                        ; } &
 { workrave                                     ; } &
@@ -29,7 +30,6 @@ xgamma -gamma .8
 { sleep 1s  ; nm-applet                             ; } &
 { sleep 1s  ; bluetooth-applet                      ; } &
 { sleep 2s  ; ~/mopidy/bin/mopidy                   ; } &
-#{ sleep 2s ; redshift-gtk                          ; } &
 { sleep 2s  ; xfce4-volumed                         ; } &
 { sleep 2s  ; cryptkeeper                           ; } &
 { sleep 2s  ; keynav                                ; } &
@@ -46,7 +46,7 @@ xgamma -gamma .8
 { sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
 { sleep 10s ; hipchat                               ; } &
 { sleep 2m  ; ~/bin/hipchatfortune.sh               ; } &
-{ sleep 1s  ; thunderbird                           ; } &
+{ sleep 1m  ; thunderbird                           ; } &
 
 { sleep 2m  ; while true ; do ~/bin/popup.py ; sleep 1s ; done ; } &
 
