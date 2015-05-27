@@ -294,6 +294,8 @@ if !exists('g:loaded_justin_vimrc')
           \   exe "normal g'\"" |
           \ endif
 
+    au BufReadPost * silent! exe "normal zr"
+
     " yank to clipboard
     "if executable("xclip")
       "vnoremap y  :yank<CR>:call system("xclip -i", getreg("\""))<CR>gv :yank<CR>
@@ -326,6 +328,7 @@ if !exists('g:loaded_justin_vimrc')
       au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
       au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
       au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
+      au BufRead,BufNewFile *.pp                                    set filetype=puppet
       au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
       au BufRead,BufNewFile */syseng-rubix-config/*                 set filetype=spine
       au BufRead,BufNewFile */syseng-rubix-config/*/svn-commit.tmp  set filetype=svn

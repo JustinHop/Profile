@@ -12,7 +12,7 @@ class HipChatFortune
 
         num = rand(4)
 
-        if num = 2
+        if num == 2
             zippy = IO.popen('fortune -l zippy')
         else
             zippy = IO.popen('fortune zippy')
