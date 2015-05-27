@@ -12,42 +12,43 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 xrandr --output eDP1 --primary
 xgamma -gamma .8
-{ compton -D 5 --config ~/.config/compton.conf; } &
-{ sleep 1s; xbindkeys --nodaemon ; } &
-{ sleep 1s; davmail ; } &
+{ compton -D 5 --config ~/.config/compton.conf ; } &
+{ mpd                                          ; } &
 
-{ sleep 4s; nitrogen --restore; } &
+{ conky                                        ; } &
+{ workrave                                     ; } &
 
-mpd &
+{ sleep 1s  ; xbindkeys --nodaemon                  ; } &
+{ sleep 1s  ; davmail                               ; } &
+{ sleep 4s  ; nitrogen --restore                    ; } &
 
-{ conky; } &
-{ workrave; } &
 
-{ sleep 1s; clipit ; } &
-{ sleep 1s; solaar ; } &
-{ sleep 1s; xbacklight -set 80; } &
-{ sleep 1s; nm-applet ; } &
-{ sleep 1s; bluetooth-applet ; } &
-{ sleep 2s; ~/mopidy/bin/mopidy ; } &
-#{ sleep 2s; redshift-gtk; } &
-{ sleep 2s; xfce4-volumed; } &
-{ sleep 2s; cryptkeeper; } &
-{ sleep 2s; keynav; } &
-{ sleep 3s; pasystray; } &
-{ sleep 3s; fdpowermon; } &
-{ sleep 3s; blueman-applet; } &
-{ sleep 3s; nagstamon; } &
-{ sleep 5s; xrandr --output DP1 --brightness .8; } &
-{ sleep 5s; xrandr --output eDP1 --brightness .8; } &
-{ sleep 5s; xrandr --output DP2-2 --brightness .8; } &
-{ sleep 5s; xrandr --output DP2-3 --brightness .8; } &
+{ sleep 1s  ; clipit                                ; } &
+{ sleep 1s  ; solaar                                ; } &
+{ sleep 1s  ; xbacklight -set 80                    ; } &
+{ sleep 1s  ; nm-applet                             ; } &
+{ sleep 1s  ; bluetooth-applet                      ; } &
+{ sleep 2s  ; ~/mopidy/bin/mopidy                   ; } &
+#{ sleep 2s ; redshift-gtk                          ; } &
+{ sleep 2s  ; xfce4-volumed                         ; } &
+{ sleep 2s  ; cryptkeeper                           ; } &
+{ sleep 2s  ; keynav                                ; } &
+{ sleep 3s  ; pasystray                             ; } &
+{ sleep 3s  ; fdpowermon                            ; } &
+{ sleep 3s  ; blueman-applet                        ; } &
+{ sleep 3s  ; nagstamon                             ; } &
+{ sleep 5s  ; xrandr --output DP1 --brightness .8   ; } &
+{ sleep 5s  ; xrandr --output eDP1 --brightness .8  ; } &
+{ sleep 5s  ; xrandr --output DP2-2 --brightness .8 ; } &
+{ sleep 5s  ; xrandr --output DP2-3 --brightness .8 ; } &
 
-{ sleep 1s; pidgin; } &
-{ sleep 6s; ~/bin/pidgin_fortune; } &
-{ sleep 10s; hipchat; } &
-{ sleep 2m; ~/bin/hipchatfortune.sh; } &
-{ sleep 1s; thunderbird; } &
-{ sleep 2m; ~/bin/popup.py; } &
+{ sleep 1s  ; pidgin                                ; } &
+{ sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
+{ sleep 10s ; hipchat                               ; } &
+{ sleep 2m  ; ~/bin/hipchatfortune.sh               ; } &
+{ sleep 1s  ; thunderbird                           ; } &
+
+{ sleep 2m  ; while true ; do ~/bin/popup.py ; sleep 1s ; done ; } &
 
 
 echo "Session: setting Xdefaults and Xmodmap"
