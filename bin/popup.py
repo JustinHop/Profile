@@ -6,7 +6,7 @@ import urllib
 import json
 import os.path
 import sys
-import pprint
+# import pprint
 
 HOST = 'localhost'
 PORT = '6600'
@@ -19,6 +19,9 @@ class SongNotify:
 
     def __init__(self):
         pynotify.init("mpd-notify")
+        self.notify = pynotify.Notification("Music Player Daemon",
+                "popup.pl", ICON)
+        self.songstring=""
 
     def newSong(self, song):
         song.string = ""
@@ -33,26 +36,35 @@ class SongNotify:
                 print(["key: ", key])
                 print(["value: ", getattr(song, key)])
 
+        if self.songstring == song.string:
+            print("No Update")
+            return
+
         if song.title and song.artist:
-            hello = pynotify.Notification(
+            # hello = pynotify.Notification(
+            self.notify.update(
                 str(song.title),
                 str(song.string),
                 song.icon)
 
         else:
             if isinstance(song.name, str) and isinstance(song.title, str):
-                hello = pynotify.Notification(
+                # hello = pynotify.Notification(
+                self.notify.update(
                     str(song.name),
                     str(song.title),
                     ICON32)
 
             else:
-                hello = pynotify.Notification(
+                # hello = pynotify.Notification(
+                self.notify.update(
                     "Music Player Daemon - Untitled Media",
                     str(song.string),
                     song.icon)
 
-        hello.show()
+        print("['Notification: ', 'show']")
+        self.notify.show()
+        # hello.show()
 
 LASTFMAPIKEY = "e5d743dba724b90c0e522ad8ea7b4afc"
 
@@ -135,24 +147,18 @@ class MpdWatcher:
             self.client.send_idle()
             select([self.client], [], [])
             changed = self.client.fetch_idle()
-            if 'player' in changed:
-                # for key in self.client.currentsong():
-                #    print(key)
+            for change in changed:
+                print(["Change: ", change])
+            # if set(changed).intersection(set(['player','playlist'])):
+            if set(changed).intersection(set(['player'])):
                 self.updateSong(self.client.currentsong())
 
     def updateSong(self, song):
-        if 'id' not in song:
-            return
-
-        if self.song and song['id'] == self.song.id:
-            return
-
         self.song = Song(song)
 
+        print(["State: ", self.client.status()['state']])
         if self.client.status()['state'] == 'play':
             self.notify.newSong(self.song)
-        else:
-            print(self.client.status()['state'])
 
 
 def test():
