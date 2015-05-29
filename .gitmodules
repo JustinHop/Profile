@@ -115,3 +115,6 @@
 [submodule "vim/coding/tabular"]
 	path = vim/coding/tabular
 	url = https://github.com/vim-scripts/Tabular.git
+[submodule "vim/ruby/ruby"]
+	path = vim/ruby/ruby
+	url = https://github.com/vim-ruby/vim-ruby.git

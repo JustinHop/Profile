@@ -39,7 +39,7 @@ foreach (@ARGV){
     $SANEFILE = lc $SANEFILE;
     my $LS; 
     my $NUMBER = 1;
-    my $BACK = $DIR . "/" . join(":", $SANEFILE, $HOST, $DATE, "0001");
+    my $BACK = $DIR . join(":", $SANEFILE, $HOST, $DATE, "0001");
 
     if ( -e $BACK )  {
 
@@ -56,7 +56,8 @@ foreach (@ARGV){
     $COUNT=sprintf("%04d", $NUMBER );
 
     #print "Backing up $FILE to $DIR/$FILE\:$HOST\:$DATE\:$COUNT" . "\n";
-    print `cp -av \"$FILE\" \"$DIR/$SANEFILE\:$HOST\:$DATE\:$COUNT\"`; 
+    #print `set -x; cd \$(dirname \"$FILE\");pwd; mkdir -pv \$(dirname \"$DIR/$SANEFILE\"); cp -av \$(basename \"$FILE\") \"$DIR/$SANEFILE\:$HOST\:$DATE\:$COUNT\"`; 
+    print `cd \$(dirname \"$FILE\");mkdir -pv \$(dirname \"$DIR/$SANEFILE\"); cp -av \$(basename \"$FILE\") \"$DIR/$SANEFILE\:$HOST\:$DATE\:$COUNT\"`; 
         
 }
 
