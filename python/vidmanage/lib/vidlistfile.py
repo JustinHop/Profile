@@ -17,7 +17,7 @@ class Vid:
     def __init__(self, videofile):
         self.v = {'filename': videofile, 'timeadded': datetime.now()}
         self.attr()
-        print self.v['filename'], self.gethumansize()
+        print "Created Vid instance:", self.v['filename'], self.gethumansize()
 
     def attr(self):
         self.v['filename'] = os.path.realpath(self.v['filename'])
