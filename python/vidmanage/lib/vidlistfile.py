@@ -77,6 +77,12 @@ class VidList:
                 print "Removed " + argfilename + " from list"
         # raise Exception(argfilename + " does not exist in list")
 
+    def query(self, argfilename):
+        for vid in self.videolist:
+            if vid.getname() == argfilename:
+                return True
+        return False
+
     def remove_obj(self, argVidobj):
         self.videolist.remove(argVidobj)
 
