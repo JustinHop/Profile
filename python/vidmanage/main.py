@@ -1,14 +1,17 @@
-#import sys
+# Author: Justin Hoppensteadt <py@justinhoppensteadt.com>
+# Copyright: BSD
+
+# import sys
 import os
 import warnings
-#import pickle
+# import pickle
 import pynotify
 
-#from datetime import datetime
-#from pprint import pprint
+# from datetime import datetime
+# from pprint import pprint
 
 from lib import Vid, VidListFile
-#VidList, VidListFull, VidDList
+# VidList, VidListFull, VidDList
 from lib import Options
 from lib import FindVideo
 
@@ -156,11 +159,13 @@ if __name__ == '__main__':
                 raise Exception("No video file detected or specified.")
             v = Vid(video)
             videoinformation = v.getname(), v.gethumansize()
-                #datetime.fromtimestamp(v.getattr()['stat'][-1])
+            #       datetime.fromtimestamp(v.getattr()['stat'][-1])
             if opts.notify:
                 notify = pynotify.Notification(
                     "VidManager - Information",
-                    str(videoinformation).replace("/media/twoterra/share/Video", ""),
+                    str(videoinformation).replace(
+                        "/media/twoterra/share/Video",
+                        ""),
                     os.path.dirname(
                         os.path.realpath(__file__)) +
                     "/vidmanage.png")

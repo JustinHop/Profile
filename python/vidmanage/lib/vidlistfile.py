@@ -1,3 +1,6 @@
+# Author: Justin Hoppensteadt <py@justinhoppensteadt.com>
+# Copyright: BSD
+
 # from options import Options
 from datetime import datetime
 import pickle
@@ -125,7 +128,7 @@ class VidDList(VidList):
         print "Removing", self.gethumansize(), "of data."
         for vid in self.videolist:
             vid.deletefile()
-            self.remove_obj(vid)
+            # self.remove_obj(vid)
 
     def printlist(self):
         for vid in self.videolist:
