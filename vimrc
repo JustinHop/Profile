@@ -93,7 +93,8 @@ if !exists('g:loaded_justin_vimrc')
     set virtualedit=block,onemore
   endif
 
-  set timeoutlen=1000 ttimeoutlen=0
+  " set esckeys
+  " set timeoutlen=1000 ttimeoutlen=0
 
   "  Indenting Formating
   "  Being set through plugin now
@@ -297,6 +298,15 @@ if !exists('g:loaded_justin_vimrc')
           \ endif
 
     au BufReadPost * silent! exe "normal zr"
+
+    if ! has('gui_running')
+      set ttimeoutlen=10
+      augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=1000
+      augroup END
+    endif
 
     " yank to clipboard
     "if executable("xclip")

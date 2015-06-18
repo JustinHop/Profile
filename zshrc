@@ -170,6 +170,10 @@ bindit3
 #  ^B    History expansion
 
 #  F1 = esc on laptops
+noop () { }
+
+zle -N noop
+bindkey -M vicmd '\e' noop
 
 bindkey -M viins '^W' accept-and-menu-complete
 bindkey '^W' accept-and-menu-complete
