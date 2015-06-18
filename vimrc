@@ -93,6 +93,8 @@ if !exists('g:loaded_justin_vimrc')
     set virtualedit=block,onemore
   endif
 
+  set timeoutlen=1000 ttimeoutlen=0
+
   "  Indenting Formating
   "  Being set through plugin now
   set autoindent

@@ -10,6 +10,8 @@ export UNAME=`uname`
 
 export PROFILE_DIR=$HOME/Profile
 
+export KEYTIMEOUT=1
+
 #
 # WHO AM I
 #
