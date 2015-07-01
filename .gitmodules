@@ -118,3 +118,6 @@
 [submodule "vim/ruby/ruby"]
 	path = vim/ruby/ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
+[submodule "vim/general/systemd"]
+	path = vim/general/systemd
+	url = https://github.com/Matt-Deacalion/vim-systemd-syntax.git
