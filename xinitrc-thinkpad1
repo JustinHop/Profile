@@ -44,9 +44,9 @@ xgamma -gamma .8
 
 { sleep 1s  ; pidgin                                ; } &
 { sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
-{ sleep 10s ; hipchat                               ; } &
-{ sleep 2m  ; ~/bin/hipchatfortune.sh               ; } &
-{ sleep 1m  ; thunderbird                           ; } &
+{ sleep 1m  ; claws-mail                            ; } &
+
+{ sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator ; } &
 
 { sleep 2m  ; while true ; do ~/bin/popup.py ; sleep 1s ; done ; } &
 

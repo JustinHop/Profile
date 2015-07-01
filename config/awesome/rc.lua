@@ -645,7 +645,7 @@ awful.rules.rules = {
     properties = { tag = tags[1][2] } },
   { rule = { class = "Pidgin" },
     properties = { tag = tags[1][2] } },
-  { rule_any = { class = {"Mail", "Thunderbird"} },
+  { rule_any = { class = {"Mail", "Thunderbird", "claws-mail"} },
     properties = { tag = tags[1][3] } },
   { rule = { class = "Galculator" },
     properties = { floating = true },
