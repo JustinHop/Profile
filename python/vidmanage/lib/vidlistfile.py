@@ -20,7 +20,7 @@ class Vid:
     def __init__(self, videofile):
         self.v = {'filename': videofile, 'timeadded': datetime.now()}
         self.attr()
-        print "Created Vid instance:", self.v['filename'], self.gethumansize()
+        print("Created Vid instance:", self.v['filename'], self.gethumansize())
 
     def attr(self):
         self.v['filename'] = os.path.realpath(self.v['filename'])
@@ -28,12 +28,12 @@ class Vid:
         self.v['stat'] = os.stat(self.v['filename'])
 
     def deletefile(self):
-        print "DELETING", self.v['filename']
+        print("DELETING", self.v['filename'])
         try:
             os.remove(self.v['filename'])
             return True
         except OSError:
-            print "could not remove ", self.v['filename']
+            print("could not remove ", self.v['filename'])
             return False
 
     def gettimeadded(self):
@@ -77,7 +77,7 @@ class VidList:
         for vid in self.videolist:
             if vid.getname() == argfilename:
                 self.videolist.remove(vid)
-                print "Removed " + argfilename + " from list"
+                print("Removed " + argfilename + " from list")
         # raise Exception(argfilename + " does not exist in list")
 
     def query(self, argfilename):
@@ -95,7 +95,7 @@ class VidList:
     def printlist(self):
         for vid in self.videolist:
             if os.path.exists(vid.getname()):
-                print(",".join([vid.getname(), vid.gethumansize()]))
+                print((",".join([vid.getname(), vid.gethumansize()])))
             else:
                 self.remove(vid.getname())
 
@@ -103,10 +103,10 @@ class VidList:
         self.totalbytes = 0
         for vid in self.videolist:
             if os.path.exists(vid.getname()):
-                print(",".join([vid.getname(), vid.gethumansize()]))
+                print((",".join([vid.getname(), vid.gethumansize()])))
             else:
                 self.remove(vid.getname())
-        print "Total:", self.gethumansize()
+        print("Total:", self.gethumansize())
 
     def getsize(self):
         totalbytes = 0
@@ -125,14 +125,14 @@ class VidList:
 class VidDList(VidList):
 
     def purgelist(self):
-        print "Removing", self.gethumansize(), "of data."
+        print("Removing", self.gethumansize(), "of data.")
         for vid in self.videolist:
             vid.deletefile()
             # self.remove_obj(vid)
 
     def printlist(self):
         for vid in self.videolist:
-            print vid.getname(), vid.gethumansize()
+            print(vid.getname(), vid.gethumansize())
 
 
 class VidListFull:

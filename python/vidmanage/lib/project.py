@@ -1,4 +1,4 @@
-from process import Process
+from .process import Process
 
 
 class VidManage:
@@ -11,7 +11,7 @@ class VidManage:
         self._get_date()
 
     def _get_date(self):
-        print self.process.execute("date")
+        print(self.process.execute("date"))
 
     def print_example_arg(self):
-        print self.options.example
+        print(self.options.example)

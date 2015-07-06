@@ -44,7 +44,7 @@ if __name__ == '__main__':
                 v = Vid(video)
                 videoinformation = v.getname(), v.gethumansize()
                 if fulllist.alist().query(video):
-                    print("A list: " + str(videoinformation))
+                    print(("A list: " + str(videoinformation)))
                     if opts.notify:
                         notify = pynotify.Notification(
                             "VidManager - Video on Alist",
@@ -55,7 +55,7 @@ if __name__ == '__main__':
                             "/vidmanage.png")
                         notify.show()
                 if fulllist.klist().query(video):
-                    print("K list: " + str(videoinformation))
+                    print(("K list: " + str(videoinformation)))
                     if opts.notify:
                         notify = pynotify.Notification(
                             "VidManager - Video on Klist",
@@ -66,7 +66,7 @@ if __name__ == '__main__':
                             "/vidmanage.png")
                         notify.show()
                 if fulllist.dlist().query(video):
-                    print("D list: " + str(videoinformation))
+                    print(("D list: " + str(videoinformation)))
                     if opts.notify:
                         notify = pynotify.Notification(
                             "VidManager - Video on Dlist",
@@ -148,11 +148,11 @@ if __name__ == '__main__':
             fulllist.klist().remove(video)
             fulllist.dlist().remove(video)
         elif opts.info:
-            print "A List"
+            print("A List")
             fulllist.alist().prettyprintlist()
-            print "K List"
+            print("K List")
             fulllist.klist().prettyprintlist()
-            print "D List"
+            print("D List")
             fulllist.dlist().prettyprintlist()
         elif opts.videoinfo:
             if not video:
@@ -171,19 +171,19 @@ if __name__ == '__main__':
                     "/vidmanage.png")
                 notify.show()
             else:
-                print str(videoinformation)
+                print(str(videoinformation))
         elif opts.output:
             for v in fulllist.alist().getlist():
                 try:
-                    print v.getname()
+                    print(v.getname())
                 except:
                     warnings.warn("Bad video somewhere removed")
                     fulllist.alist().remove(video)
         elif opts.outputall:
             for v in fulllist.alist().getlist():
-                print v.getname()
+                print(v.getname())
             for v in fulllist.klist().getlist():
-                print v.getname()
+                print(v.getname())
         elif opts.purgelist:
             fulllist.dlist().purgelist()
 
