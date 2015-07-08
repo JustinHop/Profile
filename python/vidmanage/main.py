@@ -94,6 +94,8 @@ if __name__ == '__main__':
                         "/vidmanage.png")
                     notify.show()
                 fulllist.alist().append(video)
+                fulllist.klist().remove(video)
+                fulllist.dlist().remove(video)
         elif opts.klist:
             if not video:
                 raise Exception("No video file detected or specified.")
@@ -112,6 +114,8 @@ if __name__ == '__main__':
                         "/vidmanage.png")
                     notify.show()
                 fulllist.klist().append(video)
+                fulllist.alist().remove(video)
+                fulllist.dlist().remove(video)
         elif opts.dlist:
             if not video:
                 raise Exception("No video file detected or specified.")
@@ -130,6 +134,8 @@ if __name__ == '__main__':
                         "/vidmanage.png")
                     notify.show()
                 fulllist.dlist().append(video)
+                fulllist.alist().remove(video)
+                fulllist.klist().remove(video)
         elif opts.remove:
             if not video:
                 raise Exception("No video file detected or specified.")
