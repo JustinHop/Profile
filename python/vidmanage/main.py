@@ -5,7 +5,7 @@
 import os
 import warnings
 # import pickle
-import pynotify
+import notify2
 
 # from datetime import datetime
 # from pprint import pprint
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     vidlistfile = VidListFile(opts.listfile)
     fulllist = vidlistfile.load()
 
-    pynotify.init("image")
+    notify2.init("vidmanage")
 
     videos = []
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
                 if fulllist.alist().query(video):
                     print(("A list: " + str(videoinformation)))
                     if opts.notify:
-                        notify = pynotify.Notification(
+                        notify = notify2.Notification(
                             "VidManager - Video on Alist",
                             str(videoinformation).replace(
                                 "/media/1/share/Video", ""),
@@ -57,7 +57,7 @@ if __name__ == '__main__':
                 if fulllist.klist().query(video):
                     print(("K list: " + str(videoinformation)))
                     if opts.notify:
-                        notify = pynotify.Notification(
+                        notify = notify2.Notification(
                             "VidManager - Video on Klist",
                             str(videoinformation).replace(
                                 "/media/1/share/Video", ""),
@@ -68,7 +68,7 @@ if __name__ == '__main__':
                 if fulllist.dlist().query(video):
                     print(("D list: " + str(videoinformation)))
                     if opts.notify:
-                        notify = pynotify.Notification(
+                        notify = notify2.Notification(
                             "VidManager - Video on Dlist",
                             str(videoinformation).replace(
                                 "/media/1/share/Video", ""),
@@ -85,7 +85,7 @@ if __name__ == '__main__':
                 v = Vid(video)
                 videoinformation = v.getname(), v.gethumansize()
                 if opts.notify:
-                    notify = pynotify.Notification(
+                    notify = notify2.Notification(
                         "VidManager - Appending to Alist",
                         str(videoinformation).replace(
                             "/media/twoterra/share/Video", ""),
@@ -103,7 +103,7 @@ if __name__ == '__main__':
                 v = Vid(video)
                 videoinformation = v.getname(), v.gethumansize()
                 if opts.notify:
-                    notify = pynotify.Notification(
+                    notify = notify2.Notification(
                         "VidManager - Appending to Klist",
                         str(videoinformation).replace(
                             "/media/twoterra/share/Video", ""),
@@ -121,7 +121,7 @@ if __name__ == '__main__':
                 v = Vid(video)
                 videoinformation = v.getname(), v.gethumansize()
                 if opts.notify:
-                    notify = pynotify.Notification(
+                    notify = notify2.Notification(
                         "VidManager - Appending to Delete List",
                         str(videoinformation).replace(
                             "/media/twoterra/share/Video", ""),
@@ -136,7 +136,7 @@ if __name__ == '__main__':
             v = Vid(video)
             videoinformation = v.getname(), v.gethumansize()
             if opts.notify:
-                notify = pynotify.Notification(
+                notify = notify2.Notification(
                     "VidManager - Removing from lists",
                     str(videoinformation).replace(
                         "/media/twoterra/share/Video", ""),
@@ -161,7 +161,7 @@ if __name__ == '__main__':
             videoinformation = v.getname(), v.gethumansize()
             #       datetime.fromtimestamp(v.getattr()['stat'][-1])
             if opts.notify:
-                notify = pynotify.Notification(
+                notify = notify2.Notification(
                     "VidManager - Information",
                     str(videoinformation).replace(
                         "/media/twoterra/share/Video",
