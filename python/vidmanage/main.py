@@ -88,14 +88,17 @@ if __name__ == '__main__':
                     notify = notify2.Notification(
                         "VidManager - Appending to Alist",
                         str(videoinformation).replace(
-                            "/media/twoterra/share/Video", ""),
+                            "/media/1/share/Video", ""),
                         os.path.dirname(
                             os.path.realpath(__file__)) +
                         "/vidmanage.png")
                     notify.show()
-                fulllist.alist().append(video)
-                fulllist.klist().remove(video)
-                fulllist.dlist().remove(video)
+                try:
+                    fulllist.alist().append(video)
+                    fulllist.klist().remove(video)
+                    fulllist.dlist().remove(video)
+                except:
+                    pass
         elif opts.klist:
             if not video:
                 raise Exception("No video file detected or specified.")
@@ -108,14 +111,17 @@ if __name__ == '__main__':
                     notify = notify2.Notification(
                         "VidManager - Appending to Klist",
                         str(videoinformation).replace(
-                            "/media/twoterra/share/Video", ""),
+                            "/media/1/share/Video", ""),
                         os.path.dirname(
                             os.path.realpath(__file__)) +
                         "/vidmanage.png")
                     notify.show()
-                fulllist.klist().append(video)
-                fulllist.alist().remove(video)
-                fulllist.dlist().remove(video)
+                try:
+                    fulllist.klist().append(video)
+                    fulllist.alist().remove(video)
+                    fulllist.dlist().remove(video)
+                except:
+                    pass
         elif opts.dlist:
             if not video:
                 raise Exception("No video file detected or specified.")
@@ -128,7 +134,7 @@ if __name__ == '__main__':
                     notify = notify2.Notification(
                         "VidManager - Appending to Delete List",
                         str(videoinformation).replace(
-                            "/media/twoterra/share/Video", ""),
+                            "/media/1/share/Video", ""),
                         os.path.dirname(
                             os.path.realpath(__file__)) +
                         "/vidmanage.png")
@@ -145,7 +151,7 @@ if __name__ == '__main__':
                 notify = notify2.Notification(
                     "VidManager - Removing from lists",
                     str(videoinformation).replace(
-                        "/media/twoterra/share/Video", ""),
+                        "/media/1/share/Video", ""),
                     os.path.dirname(
                         os.path.realpath(__file__)) +
                     "/vidmanage.png")
@@ -170,7 +176,7 @@ if __name__ == '__main__':
                 notify = notify2.Notification(
                     "VidManager - Information",
                     str(videoinformation).replace(
-                        "/media/twoterra/share/Video",
+                        "/media/1/share/Video",
                         ""),
                     os.path.dirname(
                         os.path.realpath(__file__)) +

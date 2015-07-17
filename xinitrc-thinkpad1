@@ -14,7 +14,7 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 xrandr --output eDP1 --primary
 xgamma -gamma .8
 { compton -D 5 --config ~/.config/compton.conf ; } &
-{ mpd; mpc stop                                ; } &
+{ mpd; mpc pause                               ; } &
 
 { conky                                        ; } &
 { workrave                                     ; } &
@@ -44,9 +44,9 @@ xgamma -gamma .8
 
 { sleep 1s  ; pidgin                                ; } &
 { sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
-{ sleep 1m  ; claws-mail                            ; } &
+{ sleep 1m  ; claws-mail  2>&1 | fold -w 80 -s      ; } &
 
-{ sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator ; } &
+{ sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 | fold -w 80 -s ; } &
 
 { sleep 2m  ; while true ; do ~/bin/popup.py ; sleep 1s ; done ; } &
 
