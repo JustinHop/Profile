@@ -126,12 +126,16 @@ class VidDList(VidList):
 
     def purgelist(self):
         print("Removing", self.gethumansize(), "of data.")
-        for vid in self.videolist:
-            try:
-                self.remove(vid.getname())
-                vid.deletefile()
-            except ValueError:
-                print("Could not delete ", vid.getname())
+        count = 0
+        while self.videolist:
+            count = count + 1
+            print("Iteration", count)
+            for vid in self.videolist:
+                try:
+                    self.remove(vid.getname())
+                    vid.deletefile()
+                except ValueError:
+                    print("Could not delete ", vid.getname())
 
     def printlist(self):
         for vid in self.videolist:
