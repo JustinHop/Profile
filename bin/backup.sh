@@ -20,32 +20,33 @@ EOF
 
 _BD="$HOME"/backup
 
-_CMD=cmp
-[[ "$verbose" == "true" ]] && _V="-v" && _CMD=diff
-[[ "$dry_run" == "true" ]] && _E="echo" && echo "Dry run"
+_CMD="diff -rq"
+[[ "$debug" == "true" ]] && verbose="true"
+[[ "$verbose" == "true" ]] && _V="-v" && _CMD="diff -rs"
+[[ "$dry_run" == "true" ]] && _E="echo -e Would Excute:\t" && echo "Dry run"
 
 realpath() {
     if [ -f "$1" ]; then
         echo $(cd $(dirname "$1"); pwd)/$(basename "$1");
         return 0
     elif [ -d "$1" ]; then
-        echo $(cd $(dirname "$1"); pwd);
+        echo $(cd "$1"; pwd);
         return 0
     fi
     return 1
 }
 
 lastbackup() {
-    if ls -tr "$1":* 2> /dev/null | tail -n 1 ; then
+    if ls -trd "$1":* 2> /dev/null | tail -n 1 ; then
         return 0
     fi
     return 1
 }
 
 dump() {
-    for D in "$@"; do
+    [[ "$debug" == "true" ]] && for D in "$@"; do
         eval DD=\$$D
-        [[ "$D" ]] && [[ "$DD" ]] && echo -e "\t$D=$DD"
+        [[ "$D" ]] && [[ "$DD" ]] && echo -e "DEBUG:\t$D=$DD"
     done
 }
 
@@ -54,12 +55,12 @@ dobackup() {
 }
 
 for F in "${FILE[@]}"; do
-    [[ "$verbose" == "true" ]] && echo handling $F
+    [[ "$debug" == "true" ]] && echo Arg: $F
     RP="$(realpath "$F")"; [[ "$RP" ]] || continue
     BP="$_BD/${RP#$HOME/}"
     BD="$(dirname "$BP")"
-    LB="$(lastbackup "$BP")"
-    [[ "$debug" == "true" ]] && dump RP BP BD LB
+    LB="$(realpath "$(lastbackup "$BP")")"
+    dump RP BP BD LB
     [[ -d "$BD" ]] || $_E mkdir $_V -p "$BD"
     [[ "$LB" ]] && $_CMD "$RP" "$LB" || dobackup && continue
     dobackup
