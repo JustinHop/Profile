@@ -121,3 +121,6 @@
 [submodule "vim/general/systemd"]
 	path = vim/general/systemd
 	url = https://github.com/Matt-Deacalion/vim-systemd-syntax.git
+[submodule "python/docopts"]
+	path = python/docopts
+	url = https://github.com/docopt/docopts.git
