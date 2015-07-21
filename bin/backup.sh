@@ -21,9 +21,9 @@ EOF
 _BD="$HOME"/backup
 
 _CMD="diff -rq"
-[[ "$debug" == "true" ]] && verbose="true"
-[[ "$verbose" == "true" ]] && _V="-v" && _CMD="diff -rs"
-[[ "$dry_run" == "true" ]] && _E="echo -e Would Excute:\t" && echo "Dry run"
+[[ "$debug"   == "true" ]]  && verbose="true"
+[[ "$verbose" == "true" ]]  && _V="-v"                      && _CMD="diff -rs"
+[[ "$dry_run" == "true" ]]  && _E="echo -e Would Excute:\t" && echo "Dry run"
 
 realpath() {
     if [ -f "$1" ]; then

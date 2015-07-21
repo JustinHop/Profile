@@ -36,7 +36,7 @@ xgamma -gamma .8
 { sleep 3s  ; pasystray                             ; } &
 { sleep 3s  ; fdpowermon                            ; } &
 { sleep 3s  ; blueman-applet                        ; } &
-{ sleep 3s  ; nagstamon                             ; } &
+#{ sleep 3s  ; nagstamon                             ; } &
 { sleep 5s  ; xrandr --output DP1 --brightness .8   ; } &
 { sleep 5s  ; xrandr --output eDP1 --brightness .8  ; } &
 { sleep 5s  ; xrandr --output DP2-2 --brightness .8 ; } &
