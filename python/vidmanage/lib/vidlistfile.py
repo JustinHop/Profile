@@ -6,6 +6,7 @@ from datetime import datetime
 import pickle
 import os
 import os.path
+import re
 # import sys
 
 
@@ -26,6 +27,8 @@ class Vid:
         self.v['filename'] = os.path.realpath(self.v['filename'])
         self.v['directory'] = os.path.dirname(self.v['filename'])
         self.v['stat'] = os.stat(self.v['filename'])
+        for ATTR in ['filename', 'directory', 'stat']:
+            self.v[ATTR] = re.sub(r'^/mnt/auto', '/media', self.v[ATTR])
 
     def deletefile(self):
         print("DELETING", self.v['filename'])
@@ -43,6 +46,8 @@ class Vid:
         return self.v
 
     def getname(self):
+        self.v['filename'] = re.sub(r'^/mnt/auto', '/media',
+                                    self.v['filename'])
         return self.v['filename']
 
     def getsize(self):
