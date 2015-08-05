@@ -15,6 +15,8 @@ from lib import Vid, VidListFile
 from lib import Options
 from lib import FindVideo
 
+base = '/mnt/1/Video'
+
 if __name__ == '__main__':
     options = Options()
     opts = options.parse()
@@ -42,7 +44,7 @@ if __name__ == '__main__':
                 raise Exception("No video file detected or specified.")
             else:
                 v = Vid(video)
-                videoinformation = v.getname(), v.gethumansize()
+                videoinformation = v.v['filename'], v.gethumansize()
                 if fulllist.alist().query(video):
                     print(("A list: " + str(videoinformation)))
                     if opts.notify:
@@ -173,11 +175,20 @@ if __name__ == '__main__':
             videoinformation = v.getname(), v.gethumansize()
             #       datetime.fromtimestamp(v.getattr()['stat'][-1])
             if opts.notify:
+                lists = ""
+                for L in ["a", "k", "d"]:
+                    for LL in eval("fulllist." + L + "()"):
+                        try:
+                            if LL.filename == v.getname():
+                                lists = lists + "On " + L + " list\n"
+                            else:
+                                print("Not equal to", L, str(videoinformation))
+                        except AttributeError:
+                            pass
+
                 notify = notify2.Notification(
                     "VidManager - Information",
-                    str(videoinformation).replace(
-                        "/media/1/share/Video",
-                        ""),
+                    str(videoinformation) + "\n" + lists,
                     os.path.dirname(
                         os.path.realpath(__file__)) +
                     "/vidmanage.png")

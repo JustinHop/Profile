@@ -193,6 +193,9 @@ if [ -f $PROFILE_DIR/zshenv.local ]; then
 fi
 
 export PATH=$HOME/bin:/usr/bin:$PATH
+if [ "$VIRTUAL_ENV" ]; then
+    export PATH=$VIRTUAL_ENV/bin:$PATH
+fi
 
 export NO_AT_BRIDGE=1
 
@@ -208,5 +211,9 @@ if [ -d "$HOME/python" ]; then
         source /usr/local/bin/virtualenvwrapper.sh
     fi
 fi
+
+export GOPATH="$HOME/go"
+export PATH=$GOPATH/bin:$PATH
+
 
 # vim:ft=zsh:syn=zsh

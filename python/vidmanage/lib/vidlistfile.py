@@ -7,6 +7,8 @@ import pickle
 import os
 import os.path
 import re
+
+base = '/mnt/auto/1/share/Video/'
 # import sys
 
 
@@ -24,16 +26,19 @@ class Vid:
         print("Created Vid instance:", self.v['filename'], self.gethumansize())
 
     def attr(self):
-        self.v['filename'] = os.path.realpath(self.v['filename'])
-        self.v['directory'] = os.path.dirname(self.v['filename'])
-        self.v['stat'] = os.stat(self.v['filename'])
-        for ATTR in ['filename', 'directory', 'stat']:
-            self.v[ATTR] = re.sub(r'^/mnt/auto', '/media', self.v[ATTR])
+        self.v['filename'] = re.sub(r'^.*Video/', '', self.v['filename'])
+        self.v['real_filename'] = os.path.realpath(base + self.v['filename'])
+        self.v['directory'] = os.path.dirname(self.v['real_filename'])
+        try:
+            self.v['stat'] = os.stat(self.v['real_filename'])
+            self.v['valid'] = True
+        except OSError:
+            self.v['valid'] = False
 
     def deletefile(self):
         print("DELETING", self.v['filename'])
         try:
-            os.remove(self.v['filename'])
+            os.remove(self.v['real_filename'])
             return True
         except OSError:
             print("could not remove ", self.v['filename'])
@@ -43,15 +48,19 @@ class Vid:
         return self.v['timeadded']
 
     def getattr(self):
+        self.attr()
         return self.v
 
     def getname(self):
-        self.v['filename'] = re.sub(r'^/mnt/auto', '/media',
-                                    self.v['filename'])
-        return self.v['filename']
+        self.attr()
+        return self.v['real_filename']
 
     def getsize(self):
-        return self.v['stat'].st_size
+        self.attr()
+        try:
+            return self.v['stat'].st_size
+        except OSError:
+            return "0"
 
     def gethumansize(self):
         for num in [self.getsize()]:
@@ -87,7 +96,7 @@ class VidList:
 
     def query(self, argfilename):
         for vid in self.videolist:
-            if vid.getname() == argfilename:
+            if vid.v['filename'] == argfilename:
                 return True
         return False
 
@@ -153,6 +162,15 @@ class VidListFull:
         self.Dlist = VidDList()
         self.Alist = VidList()
         self.Klist = VidList()
+
+    def a(self):
+        return self.Alist.videolist
+
+    def d(self):
+        return self.Dlist.videolist
+
+    def k(self):
+        return self.Klist.videolist
 
     def klist(self):
         return self.Klist

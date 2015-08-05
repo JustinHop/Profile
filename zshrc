@@ -197,7 +197,8 @@ fi
 
 alias Xterm='xterm +bc -cr red -j +sb -u8 +vb -bd red -bg black -fg green'
 alias flux='xinit `which startfluxbox`'
-alias vidbox='find /media/1/share/Video -type f -size +100M | grep -P -v "(crdownload|dtapart|fuse_hidden)" | grep -v -x -F -f <(vidmanage -O)'
+alias vidbo='find /mnt/auto/1/share/Video -type f -size +100M | grep -P -v "(crdownload|dtapart|fuse_hidden|3D)" | grep -v -x -F -f <(vidmanage -O)'
+alias vidbox='vidbo | rl | head -n 300 | rl'
 
 alias d=dirs
 alias pu=pushd
