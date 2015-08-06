@@ -5,7 +5,7 @@ use IPC::Open2;
 use strict;
 use warnings;
 
-$::svnId = '$Id: nhs 7074 2012-10-18 02:50:53Z todd.jimenez $';
+$::svnId = '$Id: nhs 7932 2013-07-24 13:49:13Z charles cooke $';
 $::releaseDate = (split(' ', $::svnId))[3];
 $::releaseTime = (split(' ', $::svnId))[4];
 $::version = "$::releaseDate $::releaseTime";
@@ -17,7 +17,7 @@ chomp $::fping;
 $::rootDomain = "tmcs";
 $::tinyDnsZoneFile = "";
 $::bindReverseLookupFile = "";
-$::bindForwardLookupFile = "$ENV{'HOME'}/cr.bindForward";
+$::bindForwardLookupFile = "$ENV{'HOME'}/tm.bindForward";
 $::packageRepository = "$ENV{'HOME'}/workbench/rpmlist";
 $::interfaceRepository = "$ENV{'HOME'}/workbench/interfacelist";
 $::operatingSystemRepository = "$ENV{'HOME'}/workbench/oslist";
@@ -29,6 +29,28 @@ my $autodig = 1;
 my $binddaysold = 5;
 my @dnsDomains = qw(tmcs);
 my $dnsTimeout = 10;
+
+# we won't try to do an AXFR from these servers
+# they either don't exist (lame delegation) or are firewalled on tcp/53
+# both make nhs take AGES to generate its cache file
+#  - first few are non-existent
+#  - lb1-dns*.coresys.tmcs are for GSLB and don't contain anything we need
+our @ns_blacklist = qw(
+  a.ns.sap.tmcs
+  b.ns.sap.tmcs
+  ns1.epi.tmcs
+  ns2.epi.tmcs
+  sunca-ad-a01.corp
+  usashldns01.lyv.tmcs
+  lb1-dns.sys.phx1.coresys.tmcs
+  lb1-dns.sys.ash1.coresys.tmcs
+  lb1-dns.sys.lgw1.coresys.tmcs
+  lb1-dns.sys.ams1.coresys.tmcs
+  lb1-dns.sys.mty1.coresys.tmcs
+  lb1-dns.sys.mex1.coresys.tmcs
+  lb1-dns.sys.syd1.coresys.tmcs
+  lb1-dns.sys.mel1.coresys.tmcs
+);
 
 @::getOptionsOptions = (
 			\%::commandLineOptions,
@@ -606,7 +628,7 @@ foreach my $host (@::returnValues) {
     }
 
     if (defined $cluster) {
-	if ($cluster =~ m/([^\s\d\.]+)(\d+)/) {
+	if ($cluster =~ m/([^\s\d\.]+)(\d+[a-z]?)/) {
 	    $location = $1;
 	}
     }
@@ -717,6 +739,10 @@ sub autodig_axfr {
 	my($domain, @nameservers) = @_;
 
 	foreach my $nameserver (@nameservers) {
+		if (scalar(grep { $_ eq $nameserver } @ns_blacklist)) {
+			print STDERR "skipping blacklisted nameserver $nameserver for $domain\n" if $::debug;
+			next;
+		}
 
 		if ($::debug) {
 			print STDERR "attempting zone transfer"
@@ -878,8 +904,11 @@ sub buildHostnameFormats {
     my $regexpLocation = exists $$configRef{location} ?
 	$$configRef{location} : '[^\d\s\.]+';
 
-    my $regexpLocationInstance = exists $$configRef{locationInstance} ?
+    my $regexpLocationInstanceV1 = exists $$configRef{locationInstance} ?
 	$$configRef{locationInstance} : '\d+';
+
+    my $regexpLocationInstanceV2 = exists $$configRef{locationInstance} ?
+	$$configRef{locationInstance} : '\d+[a-z]?';
 
     my $regexpClass = exists $$configRef{class} ?
 	$$configRef{class} : '[^\d\s\.]+';
@@ -899,8 +928,11 @@ sub buildHostnameFormats {
     $regexpClassInstance = exists $$configRef{odd} ?
 	'\d*[13579]' : $regexpClassInstance;
 
-    my $regexpCluster = exists $$configRef{cluster} ?
-	$$configRef{cluster} : $regexpLocation . $regexpLocationInstance;
+    my $regexpClusterV1 = exists $$configRef{cluster} ?
+	$$configRef{cluster} : $regexpLocation . $regexpLocationInstanceV1;
+
+    my $regexpClusterV2 = exists $$configRef{cluster} ?
+	$$configRef{cluster} : $regexpLocation . $regexpLocationInstanceV2;
 
     my $regexpProduct = exists $$configRef{product} ?
 	$$configRef{product} : '[^\d\s\.]+';
@@ -911,24 +943,24 @@ sub buildHostnameFormats {
     my %hostnameFormat;
 
     # hostname format v1, lax1pxy1.tm.tmcs
-    $hostnameFormat{v1} = "($regexpCluster)" . "($regexpClass)"
+    $hostnameFormat{v1} = "($regexpClusterV1)" . "($regexpClass)"
 	. "($regexpClassInstance)" . "\\." . "($regexpBusinessUnit)" . "\\."
 	. $::rootDomain;
 
     # hostname format v2, lca1cch1.oly.tm.tmcs
-    $hostnameFormat{v2} = "($regexpCluster)" . "($regexpClass)"
+    $hostnameFormat{v2} = "($regexpClusterV1)" . "($regexpClass)"
 	. "($regexpClassInstance)" . "\\."  . "($regexpProduct)" . "\\."
         . "($regexpBusinessUnit)" . "\\." . $::rootDomain;
 
     # hostname format v3, pxy1.tmol.dev2.tm.tmcs
     $hostnameFormat{v3} = "($regexpClass)" . "($regexpClassInstance)" . "\\."
-	. "($regexpProduct)" . "\\." . "($regexpCluster)" . "\\."
+	. "($regexpProduct)" . "\\." . "($regexpClusterV2)" . "\\."
         . "($regexpBusinessUnit)" . "\\." . $::rootDomain;
 
     # hostname format v4, ilom-apt2.tmol.bej1.websys.tmcs
     $hostnameFormat{v4} = "($regexpSuperClass)" . "-" . "($regexpSubClass)"
 	. "($regexpClassInstance)" . "\\." . "($regexpProduct)" . "\\."
-	. "($regexpCluster)" . "\\." . "($regexpBusinessUnit)" . "\\." 
+	. "($regexpClusterV2)" . "\\." . "($regexpBusinessUnit)" . "\\." 
 	. $::rootDomain;
 
     return \%hostnameFormat;
