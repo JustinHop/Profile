@@ -2,7 +2,6 @@
 Description=Window manager target
 Wants=default.target
 Wants=hopsession.target
-Requires=dbus.socket
 AllowIsolate=true
 
 [Install]

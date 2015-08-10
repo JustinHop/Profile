@@ -1,10 +1,10 @@
 [Unit]
 Description=X Settings Manager for XFCE
+Before=awesome.service
 
 [Service]
-ExecStart=/usr/bin/xfsettingsd --replace --no-daemon
+ExecStart=/usr/bin/xfsettingsd --no-daemon
 Restart=always
-RestartSec=5
 
 [Install]
 WantedBy=hopsession.target

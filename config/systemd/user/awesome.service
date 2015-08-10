@@ -1,6 +1,6 @@
 [Unit]
 Description=Highly configurable X window manager
-Before=hopsession.target
+Wants=xfsettingsd.service
 
 [Service]
 Type=simple

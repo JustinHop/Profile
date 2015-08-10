@@ -3,7 +3,7 @@ Description=Desktop Stats Display for X
 Requires=xfsettingsd.service
 
 [Service]
-ExecStart="%h/Profile/bin/conky"
+ExecStart=/home/justin/Profile/bin/conky
 Restart=always
 RestartSec=5
 
