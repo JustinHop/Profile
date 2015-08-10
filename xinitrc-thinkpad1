@@ -4,8 +4,21 @@ setopt allexport
 nitrogen --restore
 
 #{ gnome-settings-daemon; } &
-{ sleep 2s; xfsettingsd         --no-daemon; } &
-{ sleep 3s; xfce4-power-manager --no-daemon; } &
+#{ sleep 2s; xfsettingsd         --no-daemon; } &
+#{ sleep 3s; xfce4-power-manager --no-daemon; } &
+
+systemctl --user import-environment  \
+      DBUS_SESSION_BUS_ADDRESS \
+      DISPLAY \
+      GPG_AGENT_INFO \
+      SSH_AGENT_PID \
+      SSH_AUTH_SOCK \
+      XAUTHORITY \
+      XDG_RUNTIME_DIR \
+      XDG_SEAT \
+      XDG_SESSION_COOKIE \
+      XDG_SESSION_ID \
+      XDG_VTNR
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
@@ -13,8 +26,8 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 xrandr --output eDP1 --primary
 xgamma -gamma .8
-{ compton -D 5 --config ~/.config/compton.conf ; } &
-{ mpd; mpc pause                               ; } &
+#{ compton -D 5 --config ~/.config/compton.conf ; } &
+#{ mpd; mpc pause                               ; } &
 
 { conky                                        ; } &
 { workrave                                     ; } &
@@ -28,8 +41,8 @@ xgamma -gamma .8
 { sleep 1s  ; xbacklight -set 80                    ; } &
 { sleep 1s  ; nm-applet                             ; } &
 { sleep 1s  ; bluetooth-applet                      ; } &
-{ sleep 2s  ; ~/mopidy/bin/mopidy                   ; } &
-{ sleep 2s  ; xfce4-volumed                         ; } &
+#{ sleep 2s  ; ~/mopidy/bin/mopidy                   ; } &
+#{ sleep 2s  ; xfce4-volumed                         ; } &
 { sleep 2s  ; cryptkeeper                           ; } &
 { sleep 2s  ; keynav                                ; } &
 { sleep 3s  ; pasystray                             ; } &
@@ -41,10 +54,10 @@ xgamma -gamma .8
 { sleep 5s  ; xrandr --output DP2-2 --brightness .8 ; } &
 { sleep 5s  ; xrandr --output DP2-3 --brightness .8 ; } &
 
-{ sleep 1s  ; pidgin                                ; } &
-{ sleep 1s  ; scudcloud                             ; } &
-{ sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
-{ sleep 1m  ; claws-mail  2>&1 | fold -w 80 -s      ; } &
+#{ sleep 1s  ; pidgin                                ; } &
+#{ sleep 1s  ; scudcloud                             ; } &
+#{ sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
+#{ sleep 1m  ; claws-mail  2>&1 | fold -w 80 -s      ; } &
 
 { sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 | fold -w 80 -s ; } &
 

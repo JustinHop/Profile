@@ -1,0 +1,15 @@
+[Unit]
+Description=Highly configurable X window manager
+Before=hopsession.target
+After=default.target
+Requires=default.target
+
+[Service]
+Type=simple
+GuessMainPID=yes
+ExecStart=/usr/bin/awesome
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=wm.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=X Settings Manager for XFCE
+
+[Service]
+ExecStart=/usr/bin/xfsettingsd --replace --no-daemon
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=hopsession.target
