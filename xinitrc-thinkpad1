@@ -3,10 +3,6 @@
 setopt allexport
 nitrogen --restore
 
-#{ gnome-settings-daemon; } &
-#{ sleep 2s; xfsettingsd         --no-daemon; } &
-#{ sleep 3s; xfce4-power-manager --no-daemon; } &
-
 systemctl --user import-environment  \
       DBUS_SESSION_BUS_ADDRESS \
       DISPLAY \
@@ -26,28 +22,24 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 xrandr --output eDP1 --primary
 xgamma -gamma .8
-#{ compton -D 5 --config ~/.config/compton.conf ; } &
-#{ mpd; mpc pause                               ; } &
+#{ workrave                                     ; } &
 
-{ conky                                        ; } &
-{ workrave                                     ; } &
-
-{ sleep 1s  ; xbindkeys --nodaemon                  ; } &
-{ sleep 1s  ; davmail                               ; } &
+#{ sleep 1s  ; xbindkeys --nodaemon                  ; } &
+#{ sleep 1s  ; davmail                               ; } &
 { sleep 4s  ; nitrogen --restore                    ; } &
 
-{ sleep 1s  ; clipit                                ; } &
-{ sleep 1s  ; solaar                                ; } &
+#{ sleep 1s  ; clipit                                ; } &
+#{ sleep 1s  ; solaar                                ; } &
 { sleep 1s  ; xbacklight -set 80                    ; } &
-{ sleep 1s  ; nm-applet                             ; } &
-{ sleep 1s  ; bluetooth-applet                      ; } &
+#{ sleep 1s  ; nm-applet                             ; } &
+#{ sleep 1s  ; bluetooth-applet                      ; } &
 #{ sleep 2s  ; ~/mopidy/bin/mopidy                   ; } &
 #{ sleep 2s  ; xfce4-volumed                         ; } &
-{ sleep 2s  ; cryptkeeper                           ; } &
-{ sleep 2s  ; keynav                                ; } &
-{ sleep 3s  ; pasystray                             ; } &
-{ sleep 3s  ; fdpowermon                            ; } &
-{ sleep 3s  ; blueman-applet                        ; } &
+#{ sleep 2s  ; cryptkeeper                           ; } &
+#{ sleep 2s  ; keynav                                ; } &
+#{ sleep 3s  ; pasystray                             ; } &
+#{ sleep 3s  ; fdpowermon                            ; } &
+#{ sleep 3s  ; blueman-applet                        ; } &
 #{ sleep 3s  ; nagstamon                             ; } &
 { sleep 5s  ; xrandr --output DP1 --brightness .8   ; } &
 { sleep 5s  ; xrandr --output eDP1 --brightness .8  ; } &
@@ -59,9 +51,9 @@ xgamma -gamma .8
 #{ sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
 #{ sleep 1m  ; claws-mail  2>&1 | fold -w 80 -s      ; } &
 
-{ sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 | fold -w 80 -s ; } &
+#{ sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 | fold -w 80 -s ; } &
 
-{ sleep 2m  ; while true ; do ~/bin/popup.py ; sleep 1s ; done ; } &
+#{ sleep 2m  ; while true ; do ~/bin/popup.py ; sleep 1s ; done ; } &
 
 
 echo "Session: setting Xdefaults and Xmodmap"
@@ -107,4 +99,4 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 sleep 1s
 
-exec bash -c 'while true ; do awesome; sleep 1s; done;'
+exec cat

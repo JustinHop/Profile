@@ -1,0 +1,11 @@
+[Unit]
+Description=Keybinding Manager
+Requires=xfsettingsd.service
+
+[Service]
+ExecStart=/usr/bin/xbindkeys
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=hopsession.target

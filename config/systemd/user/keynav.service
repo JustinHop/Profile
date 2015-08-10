@@ -1,0 +1,11 @@
+[Unit]
+Description=Shortcut Manager
+Requires=xfsettingsd.service
+
+[Service]
+ExecStart=/usr/bin/keynav
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=hopsession.target

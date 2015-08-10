@@ -1,0 +1,11 @@
+[Unit]
+Description=Volume Manager for XFCE and X
+Requires=xfsettingsd.service
+
+[Service]
+ExecStart=/usr/bin/xfce4-volumed
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=hopsession.target

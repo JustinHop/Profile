@@ -1,8 +1,6 @@
 [Unit]
 Description=Highly configurable X window manager
 Before=hopsession.target
-After=default.target
-Requires=default.target
 
 [Service]
 Type=simple

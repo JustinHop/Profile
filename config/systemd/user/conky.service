@@ -1,0 +1,11 @@
+[Unit]
+Description=Desktop Stats Display for X
+Requires=xfsettingsd.service
+
+[Service]
+ExecStart="%h/Profile/bin/conky"
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=hopsession.target

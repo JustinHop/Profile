@@ -1,0 +1,11 @@
+[Unit]
+Description=PulseAudio Manager
+Requires=xfsettingsd.service
+
+[Service]
+ExecStart=/usr/bin/pasystray
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=hopsession.target
