@@ -1,5 +1,0 @@
-[Socket]
-ListenStream=6602
-
-[Install]
-WantedBy=hopsession.target

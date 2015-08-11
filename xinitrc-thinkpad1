@@ -16,8 +16,7 @@ systemctl --user import-environment  \
       XDG_SESSION_ID \
       XDG_VTNR
 
-awesome &
-AWESOME=$!
+xfsettingsd 
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
@@ -32,18 +31,18 @@ xgamma -gamma .8 &
 { sleep 4s  ; nitrogen --restore                    ; } &
 { sleep 10s  ; nitrogen --restore                    ; } &
 
-#{ sleep 1s  ; clipit                                ; } &
-#{ sleep 1s  ; solaar                                ; } &
+{ sleep 1s  ; clipit                                ; } &
+{ sleep 1s  ; solaar                                ; } &
 { sleep 1s  ; xbacklight -set 80                    ; } &
-#{ sleep 1s  ; nm-applet                             ; } &
-#{ sleep 1s  ; bluetooth-applet                      ; } &
-#{ sleep 2s  ; ~/mopidy/bin/mopidy                   ; } &
-#{ sleep 2s  ; xfce4-volumed                         ; } &
-#{ sleep 2s  ; cryptkeeper                           ; } &
-#{ sleep 2s  ; keynav                                ; } &
-#{ sleep 3s  ; pasystray                             ; } &
-#{ sleep 3s  ; fdpowermon                            ; } &
-#{ sleep 3s  ; blueman-applet                        ; } &
+{ sleep 1s  ; nm-applet                             ; } &
+{ sleep 1s  ; bluetooth-applet                      ; } &
+{ sleep 2s  ; ~/mopidy/bin/mopidy                   ; } &
+{ sleep 2s  ; xfce4-volumed                         ; } &
+{ sleep 2s  ; cryptkeeper                           ; } &
+{ sleep 2s  ; keynav                                ; } &
+{ sleep 3s  ; pasystray                             ; } &
+{ sleep 3s  ; fdpowermon                            ; } &
+{ sleep 3s  ; blueman-applet                        ; } &
 #{ sleep 3s  ; nagstamon                             ; } &
 { sleep 5s  ; xrandr --output DP1 --brightness .8   ; } &
 { sleep 5s  ; xrandr --output eDP1 --brightness .8  ; } &
@@ -55,9 +54,9 @@ xgamma -gamma .8 &
 #{ sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
 #{ sleep 1m  ; claws-mail  2>&1 | fold -w 80 -s      ; } &
 
-#{ sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 | fold -w 80 -s ; } &
+{ sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 | fold -w 80 -s ; } &
 
-#{ sleep 2m  ; while true ; do ~/bin/popup.py ; sleep 1s ; done ; } &
+{ sleep 2m  ; while true ; do ~/bin/popup.py ; sleep 1s ; done ; } &
 
 
 echo "Session: setting Xdefaults and Xmodmap"
@@ -101,6 +100,4 @@ numlockx
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
-#sleep 2s
-wait $AWESOME
 exec bash -c "while true ; do awesome; sleep 5s; done"
