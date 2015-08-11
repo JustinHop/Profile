@@ -3,33 +3,25 @@
 setopt allexport
 nitrogen --restore
 
-systemctl --user import-environment  \
-      DBUS_SESSION_BUS_ADDRESS \
-      DISPLAY \
-      GPG_AGENT_INFO \
-      SSH_AGENT_PID \
-      SSH_AUTH_SOCK \
-      XAUTHORITY \
-      XDG_RUNTIME_DIR \
-      XDG_SEAT \
-      XDG_SESSION_COOKIE \
-      XDG_SESSION_ID \
-      XDG_VTNR
-
-xfsettingsd 
+#{ gnome-settings-daemon; } &
+{ sleep 2s; xfsettingsd         --no-daemon; } &
+{ sleep 3s; xfce4-power-manager --no-daemon; } &
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
-xrandr --output eDP1 --primary --mode 1920x1080 &
-xgamma -gamma .8 &
-#{ workrave                                     ; } &
+xrandr --output eDP1 --primary
+xgamma -gamma .8
+{ compton -D 5 --config ~/.config/compton.conf ; } &
+{ mpd; mpc pause                               ; } &
 
-#{ sleep 1s  ; xbindkeys --nodaemon                  ; } &
-#{ sleep 1s  ; davmail                               ; } &
+{ conky                                        ; } &
+{ workrave                                     ; } &
+
+{ sleep 1s  ; xbindkeys --nodaemon                  ; } &
+{ sleep 1s  ; davmail                               ; } &
 { sleep 4s  ; nitrogen --restore                    ; } &
-{ sleep 10s  ; nitrogen --restore                    ; } &
 
 { sleep 1s  ; clipit                                ; } &
 { sleep 1s  ; solaar                                ; } &
@@ -49,10 +41,10 @@ xgamma -gamma .8 &
 { sleep 5s  ; xrandr --output DP2-2 --brightness .8 ; } &
 { sleep 5s  ; xrandr --output DP2-3 --brightness .8 ; } &
 
-#{ sleep 1s  ; pidgin                                ; } &
-#{ sleep 1s  ; scudcloud                             ; } &
-#{ sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
-#{ sleep 1m  ; claws-mail  2>&1 | fold -w 80 -s      ; } &
+{ sleep 1s  ; pidgin                                ; } &
+{ sleep 1s  ; scudcloud                             ; } &
+{ sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
+{ sleep 1m  ; claws-mail  2>&1 | fold -w 80 -s      ; } &
 
 { sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 | fold -w 80 -s ; } &
 
@@ -85,19 +77,21 @@ echo "Session: setting Xdefaults and Xmodmap"
 
 done ; } &
 
-#{ while false ; do
-#      set -x
-#      notify-send -i /usr/share/icons/HighContrast/48x48/devices/audio-headset.png -a mpd "Toggle MPD Port to 6601" "Connecting to port 6601. MPD"
-#      redir --lport 6600 --cport 6601 --debug &
-#      wait $!
-#      notify-send -i /usr/share/icons/HighContrast/48x48/devices/audio-headset.png -a mpd "Toggle MPD Port to 6602" "Connecting to port 6602. Mopidy"
-#      redir --lport 6600 --cport 6602 --debug &
-#      wait $!
-#done ; } &
+{ while true ; do
+      set -x
+      notify-send -i /usr/share/icons/HighContrast/48x48/devices/audio-headset.png -a mpd "Toggle MPD Port to 6601" "Connecting to port 6601. MPD"
+      redir --lport 6600 --cport 6601 --debug &
+      wait $!
+      notify-send -i /usr/share/icons/HighContrast/48x48/devices/audio-headset.png -a mpd "Toggle MPD Port to 6602" "Connecting to port 6602. Mopidy"
+      redir --lport 6600 --cport 6602 --debug &
+      wait $!
+done ; } &
 
 numlockx
 
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
-exec bash -c "while true ; do awesome; sleep 5s; done"
+sleep 1s
+
+exec bash -c 'while true ; do awesome; sleep 1s; done;'
