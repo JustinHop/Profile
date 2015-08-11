@@ -1,0 +1,14 @@
+[Unit]
+Description=MPD Notifier
+Requires=mpd.service
+After=awesome.service
+
+[Service]
+Type=idle
+TimeStartSec=20
+ExecStart=/home/justin/Profile/bin/popup.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=hopsession.target

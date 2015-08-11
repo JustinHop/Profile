@@ -1,0 +1,8 @@
+[Unit]
+Description=Window manager target
+Wants=default.target
+Wants=hopsession.target
+AllowIsolate=true
+
+[Install]
+Alias=default.target

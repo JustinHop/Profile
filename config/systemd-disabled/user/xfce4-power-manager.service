@@ -1,0 +1,11 @@
+[Unit]
+Description=Power Manager for XFCE and X
+Wants=xfsettingsd.service awesome.service
+
+[Service]
+TimeStartSec=5
+ExecStart=/usr/bin/xfce4-power-manager
+Restart=always
+
+[Install]
+WantedBy=hopsession.target
