@@ -4,7 +4,8 @@ setopt allexport
 nitrogen --restore
 
 #{ gnome-settings-daemon; } &
-{ sleep 2s; xfsettingsd         --no-daemon; } &
+{ sleep 1s; xfsettingsd         --no-daemon; } &
+{ sleep 3s; xfce4-volumed                  ; } &
 { sleep 3s; xfce4-power-manager --no-daemon; } &
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
@@ -21,30 +22,29 @@ xgamma -gamma .8
 
 { sleep 1s  ; xbindkeys --nodaemon                  ; } &
 { sleep 1s  ; davmail                               ; } &
-{ sleep 4s  ; nitrogen --restore                    ; } &
+{ sleep 5s  ; nitrogen --restore                    ; } &
 
 { sleep 1s  ; clipit                                ; } &
 { sleep 1s  ; solaar                                ; } &
 { sleep 1s  ; xbacklight -set 80                    ; } &
 { sleep 1s  ; nm-applet                             ; } &
 { sleep 1s  ; bluetooth-applet                      ; } &
-{ sleep 2s  ; ~/mopidy/bin/mopidy                   ; } &
-{ sleep 2s  ; xfce4-volumed                         ; } &
-{ sleep 2s  ; cryptkeeper                           ; } &
-{ sleep 2s  ; keynav                                ; } &
-{ sleep 3s  ; pasystray                             ; } &
-{ sleep 3s  ; fdpowermon                            ; } &
-{ sleep 3s  ; blueman-applet                        ; } &
+{ sleep 1s  ; ~/mopidy/bin/mopidy                   ; } &
+{ sleep 1s  ; cryptkeeper                           ; } &
+{ sleep 1s  ; keynav                                ; } &
+{ sleep 1s  ; pasystray                             ; } &
+{ sleep 1s  ; fdpowermon                            ; } &
+{ sleep 1s  ; blueman-applet                        ; } &
 #{ sleep 3s  ; nagstamon                             ; } &
 { sleep 5s  ; xrandr --output DP1 --brightness .8   ; } &
 { sleep 5s  ; xrandr --output eDP1 --brightness .8  ; } &
 { sleep 5s  ; xrandr --output DP2-2 --brightness .8 ; } &
 { sleep 5s  ; xrandr --output DP2-3 --brightness .8 ; } &
 
-{ sleep 1s  ; pidgin                                ; } &
-{ sleep 1s  ; scudcloud                             ; } &
-{ sleep 6s  ; ~/bin/pidgin_fortune                  ; } &
-{ sleep 1m  ; claws-mail  2>&1 | fold -w 80 -s      ; } &
+{ sleep 10s  ; pidgin                                ; } &
+#{ sleep 1s  ; scudcloud                             ; } &
+{ sleep 10s  ; ~/bin/pidgin_fortune                  ; } &
+{ sleep 10s  ; claws-mail  2>&1 | fold -w 80 -s      ; } &
 
 { sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 | fold -w 80 -s ; } &
 
@@ -75,16 +75,6 @@ echo "Session: setting Xdefaults and Xmodmap"
 
       sleep 10s;
 
-done ; } &
-
-{ while true ; do
-      set -x
-      notify-send -i /usr/share/icons/HighContrast/48x48/devices/audio-headset.png -a mpd "Toggle MPD Port to 6601" "Connecting to port 6601. MPD"
-      redir --lport 6600 --cport 6601 --debug &
-      wait $!
-      notify-send -i /usr/share/icons/HighContrast/48x48/devices/audio-headset.png -a mpd "Toggle MPD Port to 6602" "Connecting to port 6602. Mopidy"
-      redir --lport 6600 --cport 6602 --debug &
-      wait $!
 done ; } &
 
 numlockx
