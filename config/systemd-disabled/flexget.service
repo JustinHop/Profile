@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=simple
 User=flexget
-Group=flexget
-UMask=000
+Group=users
+UMask=0002
 WorkingDirectory=/home/flexget
 Environment=VIRTUAL_ENV="/home/flexget/flexget"
 Environment=PATH="$VIRTUAL_ENV/bin:$PATH"
