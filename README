@@ -2,5 +2,14 @@ This is my ~/Profile directory.
 
 Like stuff? Use it.
 
+How to use it
+
+cd ~
+git clone https://github.com/JustinHop/Profile.git
+cd Profile
+. ./zsh/functions/make_home_dir
+
+and enjoy
+
 Justin Hoppensteadt
 www.justinhoppensteadt.com
