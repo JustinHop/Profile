@@ -1,55 +1,55 @@
 #!/bin/zsh
 
 setopt allexport
-nitrogen --restore
+nitrogen --restore &
 
 #{ gnome-settings-daemon; } &
-{ sleep 1s; xfsettingsd         --no-daemon; } &
-{ sleep 3s; xfce4-volumed                  ; } &
-{ sleep 3s; xfce4-power-manager --no-daemon; } &
+{ sleep 1s; xfsettingsd         --no-daemon                     ; } &
+{ sleep 3s; xfce4-volumed                                       ; } &
+{ sleep 3s; xfce4-power-manager --no-daemon                     ; } &
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
-xrandr --output eDP1 --primary
-xgamma -gamma .8
-{ compton -D 5 --config ~/.config/compton.conf ; } &
-{ mpd; mpc pause                               ; } &
+xrandr --output eDP1 --primary &
+xgamma -gamma .8 &
+{ compton -D 5 --config ~/.config/compton.conf                  ; } &
+{ mpd; mpc pause                                                ; } &
+{ ~/Profile/bin/porttoggle.sh                                   ; } &
+{ sleep 1s  ; ~/mopidy/bin/mopidy                               ; } &
+{ sleep 1m  ; while true ; do mpdfavd        ; sleep 5s ; done  ; } &
+{ sleep 1m  ; while true ; do ~/bin/popup.py ; sleep 5s ; done  ; } &
 
-{ conky                                        ; } &
-{ workrave                                     ; } &
+{ conky                                                         ; } &
+{ workrave                                                      ; } &
 
-{ sleep 1s  ; xbindkeys --nodaemon                  ; } &
-{ sleep 1s  ; davmail                               ; } &
-{ sleep 5s  ; nitrogen --restore                    ; } &
+{ sleep 1s  ; xbindkeys --nodaemon                              ; } &
+{ sleep 1s  ; davmail                                           ; } &
+{ sleep 5s  ; nitrogen --restore                                ; } &
 
-{ sleep 1s  ; clipit                                ; } &
-{ sleep 1s  ; solaar                                ; } &
-{ sleep 1s  ; xbacklight -set 80                    ; } &
-{ sleep 1s  ; nm-applet                             ; } &
-{ sleep 1s  ; bluetooth-applet                      ; } &
-{ sleep 1s  ; ~/mopidy/bin/mopidy                   ; } &
-{ sleep 1s  ; cryptkeeper                           ; } &
-{ sleep 1s  ; keynav                                ; } &
-{ sleep 1s  ; pasystray                             ; } &
-{ sleep 1s  ; fdpowermon                            ; } &
-{ sleep 1s  ; blueman-applet                        ; } &
-#{ sleep 3s  ; nagstamon                             ; } &
-{ sleep 5s  ; xrandr --output DP1 --brightness .8   ; } &
-{ sleep 5s  ; xrandr --output eDP1 --brightness .8  ; } &
-{ sleep 5s  ; xrandr --output DP2-2 --brightness .8 ; } &
-{ sleep 5s  ; xrandr --output DP2-3 --brightness .8 ; } &
+{ sleep 1s  ; clipit                                            ; } &
+{ sleep 1s  ; solaar                                            ; } &
+{ sleep 1s  ; xbacklight -set 80                                ; } &
+{ sleep 1s  ; nm-applet                                         ; } &
+{ sleep 1s  ; bluetooth-applet                                  ; } &
+{ sleep 1s  ; cryptkeeper                                       ; } &
+{ sleep 1s  ; keynav                                            ; } &
+{ sleep 1s  ; pasystray                                         ; } &
+{ sleep 1s  ; fdpowermon                                        ; } &
+{ sleep 1s  ; blueman-applet                                    ; } &
+#{ sleep 3s  ; nagstamon                                        ; } &
+{ sleep 5s  ; xrandr --output DP1 --brightness .8               ; } &
+{ sleep 5s  ; xrandr --output eDP1 --brightness .8              ; } &
+{ sleep 5s  ; xrandr --output DP2-2 --brightness .8             ; } &
+{ sleep 5s  ; xrandr --output DP2-3 --brightness .8             ; } &
 
-{ sleep 10s  ; pidgin                                ; } &
-#{ sleep 1s  ; scudcloud                             ; } &
-{ sleep 10s  ; ~/bin/pidgin_fortune                  ; } &
-{ sleep 10s  ; claws-mail  2>&1 | fold -w 80 -s      ; } &
+{ sleep 10s  ; pidgin                                           ; } &
+#{ sleep 1s  ; scudcloud                                        ; } &
+{ sleep 10s  ; ~/bin/pidgin_fortune                             ; } &
+{ sleep 10s  ; claws-mail  2>&1 | fold -w 80 -s                 ; } &
 
 { sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 | fold -w 80 -s ; } &
-
-{ sleep 2m  ; while true ; do ~/bin/popup.py ; sleep 1s ; done ; } &
-
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
@@ -71,6 +71,14 @@ echo "Session: setting Xdefaults and Xmodmap"
 
       if ! diff ~/Profile/conky-thinkpad1.conf ~/tmp/conky-thinkpad1.conf ; then
             mv -v ~/tmp/conky-thinkpad1.conf ~/Profile/conky-thinkpad1.conf
+      fi
+
+      local _PIDS=($(pgrep xfce4-volumed))
+      if [[ "$_PIDS" ]]; then
+            if (( "$(ps -o pmem $_PIDS[1])" > 1 )); then
+                  pkill $_PIDS;
+                  { xfce4-volumed; } &
+            fi
       fi
 
       sleep 10s;
