@@ -215,5 +215,6 @@ fi
 export GOPATH="$HOME/go"
 export PATH=$GOPATH/bin:$PATH
 
+export PROXYRESOLV_DNS=10.75.32.5
 
 # vim:ft=zsh:syn=zsh

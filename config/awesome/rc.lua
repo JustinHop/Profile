@@ -393,6 +393,8 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
   awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
+  awful.key({                   }, "Pause",          function () awful.util.spawn(lock_session) end),
+
   awful.key({                   }, "XF86HomePage",    function () awful.util.spawn("mpc stop") end),
   awful.key({                   }, "Cancel",          function () awful.util.spawn("mpc stop") end),
 

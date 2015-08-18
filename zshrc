@@ -534,12 +534,16 @@ if (( $ZSH_MAJOR >= 4 )); then
   zstyle ':completion:*:functions' ignored-patterns '_*'
 
   ### Mine
-  for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts "$HOME"/3dna.io  ; do
-    if [ -f $hostfile ]; then
-      etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )
-      #zstyle ':completion:*' hosts $etchosts;
-    fi
-  done
+  CH(){
+    for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts "$HOME"/tm.bindForward  ; do
+      if [ -f $hostfile ]; then
+        etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )
+        #zstyle ':completion:*' hosts $etchosts;
+      fi
+    done
+    zstyle ':completion:*' hosts $etchosts
+  }
+
 
   etchosts+=({core,mail,tux,tux-ninja,net1,net,sup1,sup,www,eh}{,.justinhoppensteadt.com} $HOSTNAME)
   zstyle ':completion:*' hosts $etchosts
