@@ -19,6 +19,8 @@ xgamma -gamma .8 &
 { ~/Profile/bin/porttoggle.sh                                   ; } &
 { sleep 1s  ; ~/mopidy/bin/mopidy                               ; } &
 { sleep 1m  ; while true ; do mpdfavd        ; sleep 5s ; done  ; } &
+{ sleep 1m  ; while true ; do mpdscribbe --no-daemon ;
+                                               sleep 5s ; done  ; } &
 { sleep 1m  ; while true ; do ~/bin/popup.py ; sleep 5s ; done  ; } &
 
 { conky                                                         ; } &
