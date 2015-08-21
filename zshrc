@@ -200,6 +200,8 @@ alias flux='xinit `which startfluxbox`'
 alias vidbo='find /mnt/auto/1/share/Video -type f -size +100M | grep -P -v "(crdownload|dtapart|fuse_hidden|3D)" | grep -v -x -F -f <(vidmanage -O)'
 alias vidbox='vidbo | rl | head -n 300 | rl'
 
+alias VPN='openconnect --dump-http-traffic -c ~/.cisco/certificates/client/private/bothkeys.pem -k ~/.cisco/certificates/client/private/client.key --cafile /etc/ssl/certs/ca-certificates.crt -v --os=win --script-tun --script "ocproxy -D 5000 -L 5053:10.75.32.5:53 -L 5054:10.75.33.5:53 -L 5001:jump.ash.syseng.tmcs:22 -L 5002:cas-na.lyv.livenation.com:993 --dns 10.75.32.5 --dns 10.75.33.5 --domain websys.tmcs" ashasg2.ticketmaster.com'
+
 alias d=dirs
 alias pu=pushd
 alias po=popd
