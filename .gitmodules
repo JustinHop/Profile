@@ -124,3 +124,6 @@
 [submodule "python/docopts"]
 	path = python/docopts
 	url = https://github.com/docopt/docopts.git
+[submodule "scripts/nir"]
+	path = scripts/nir
+	url = https://github.com/mrnetops/nir.git

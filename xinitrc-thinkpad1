@@ -19,7 +19,7 @@ xgamma -gamma .8 &
 { ~/Profile/bin/porttoggle.sh                                   ; } &
 { sleep 1s  ; ~/mopidy/bin/mopidy                               ; } &
 { sleep 1m  ; while true ; do mpdfavd        ; sleep 5s ; done  ; } &
-{ sleep 1m  ; while true ; do mpdscribbe --no-daemon ;
+{ sleep 1m  ; while true ; do mpdscribble --no-daemon ;
                                                sleep 5s ; done  ; } &
 { sleep 1m  ; while true ; do ~/bin/popup.py ; sleep 5s ; done  ; } &
 
@@ -51,7 +51,9 @@ xgamma -gamma .8 &
 { sleep 10s  ; ~/bin/pidgin_fortune                             ; } &
 { sleep 10s  ; claws-mail  2>&1 | fold -w 80 -s                 ; } &
 
-{ sleep 1m  ; /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 | fold -w 80 -s ; } &
+{ sleep 1m  ; 
+      /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 \
+      | fold -w 80 -s ; } &
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
@@ -86,6 +88,14 @@ echo "Session: setting Xdefaults and Xmodmap"
       sleep 10s;
 
 done ; } &
+
+{ while true ; do
+      ( curl -s icanhazip.com > ~/.external_ip ) || true
+      ( curl -s --socks5 localhost:9050 icanhazip.com > ~/.external_tor_ip ) || true
+
+      sleep 5m;
+done ; } &
+
 
 numlockx
 
