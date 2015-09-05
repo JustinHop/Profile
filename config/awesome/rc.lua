@@ -177,6 +177,13 @@ mytextclock[4] = awful.widget.textclock({ align = "right" }, "%c %Z", .5)
 mytextclock[5] = awful.widget.textclock({ align = "right" }, "!%c UTC", .5)
 mytextclock[6] = awful.widget.textclock({ align = "right" }, "%a %b %d %r %Z", .5)
 
+require('calendar2')
+count=1
+while count <= #mytextclock do
+  calendar2.addCalendarToWidget(mytextclock[count])
+  count=count+1
+end
+
 myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
 
