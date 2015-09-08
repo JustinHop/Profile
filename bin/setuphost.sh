@@ -6,6 +6,8 @@ dotransfer() {
     HOST="${1}"
     echo $HOST
     echo "$HOST : $(scp ~/b ${HOST}:)"
+    echo "$HOST : $(scp ~/.screenrc ${HOST}:)"
+    ssh ${HOST} mkdir .screenlogs
     echo "$HOST : $(scp /usr/share/terminfo/r/rxvt-unicode-256color ${HOST}:/usr/share/terminfo/r)"
 }
 
