@@ -1,0 +1,9 @@
+[Unit]
+Description=Keybinding Manager
+Requires=xfsettingsd.service
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/xbindkeys
+Restart=always
+RestartSec=5

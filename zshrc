@@ -197,7 +197,10 @@ fi
 
 alias Xterm='xterm +bc -cr red -j +sb -u8 +vb -bd red -bg black -fg green'
 alias flux='xinit `which startfluxbox`'
-alias vidbox='find /media/1/share/Video -type f -size +100M | grep -P -v "(crdownload|dtapart|fuse_hidden)" | grep -v -x -F -f <(vidmanage -O)'
+alias vidbo='find /mnt/auto/1/share/Video -type f -size +100M | grep -P -v "(crdownload|dtapart|fuse_hidden|3D)" | grep -v -x -F -f <(vidmanage -O)'
+alias vidbox='vidbo | rl | head -n 300 | rl'
+
+alias VPN='openconnect --dump-http-traffic -c ~/.cisco/certificates/client/private/bothkeys.pem -k ~/.cisco/certificates/client/private/client.key --cafile /etc/ssl/certs/ca-certificates.crt -v --os=win --script-tun --script "ocproxy -D 5000 -L 5053:10.75.32.5:53 -L 5054:10.75.33.5:53 -L 5001:jump.ash.syseng.tmcs:22 -L 5002:cas-na.lyv.livenation.com:993 --dns 10.75.32.5 --dns 10.75.33.5 --domain websys.tmcs" ashasg2.ticketmaster.com'
 
 alias d=dirs
 alias pu=pushd
@@ -533,12 +536,16 @@ if (( $ZSH_MAJOR >= 4 )); then
   zstyle ':completion:*:functions' ignored-patterns '_*'
 
   ### Mine
-  for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts "$HOME"/3dna.io  ; do
-    if [ -f $hostfile ]; then
-      etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )
-      #zstyle ':completion:*' hosts $etchosts;
-    fi
-  done
+  CH(){
+    for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts "$HOME"/tm.bindForward  ; do
+      if [ -f $hostfile ]; then
+        etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )
+        #zstyle ':completion:*' hosts $etchosts;
+      fi
+    done
+    zstyle ':completion:*' hosts $etchosts
+  }
+
 
   etchosts+=({core,mail,tux,tux-ninja,net1,net,sup1,sup,www,eh}{,.justinhoppensteadt.com} $HOSTNAME)
   zstyle ':completion:*' hosts $etchosts

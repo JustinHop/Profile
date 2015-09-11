@@ -1,0 +1,17 @@
+[Unit]
+Description=Transmission Daemon
+After=network.target
+
+[Service]
+Type=simple
+User=flexget
+Group=users
+UMask=0002
+WorkingDirectory=/home/flexget
+ExecStart=/usr/bin/transmission-daemon --config-dir=/home/flexget/.config/transmission
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

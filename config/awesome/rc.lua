@@ -177,6 +177,13 @@ mytextclock[4] = awful.widget.textclock({ align = "right" }, "%c %Z", .5)
 mytextclock[5] = awful.widget.textclock({ align = "right" }, "!%c UTC", .5)
 mytextclock[6] = awful.widget.textclock({ align = "right" }, "%a %b %d %r %Z", .5)
 
+require('calendar2')
+count=1
+while count <= #mytextclock do
+  calendar2.addCalendarToWidget(mytextclock[count])
+  count=count+1
+end
+
 myimgbox = {}
 myimgbox = widget({ type = "imagebox", align = "right" })
 
@@ -392,6 +399,8 @@ globalkeys = awful.util.table.join(
 
   awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
   awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
+
+  awful.key({                   }, "Pause",          function () awful.util.spawn(lock_session) end),
 
   awful.key({                   }, "XF86HomePage",    function () awful.util.spawn("mpc stop") end),
   awful.key({                   }, "Cancel",          function () awful.util.spawn("mpc stop") end),
@@ -641,8 +650,9 @@ awful.rules.rules = {
   { rule = { class = "Kruler" },
     properties = { floating = true,
       border_width = 0 } },
-  { rule = { class = "HipChat" },
-    properties = { tag = tags[1][2] } },
+  { rule = { class = "scudcloud" },
+    properties = { floating = false,
+      tag = tags[1][2] } },
   { rule = { class = "Pidgin" },
     properties = { tag = tags[1][2] } },
   { rule = { class = "Claws-mail" },

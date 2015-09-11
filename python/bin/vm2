@@ -1,0 +1,4 @@
+#!/bin/bash
+
+BINPATH=$(dirname $(readlink -f $0))
+python3 "$BINPATH/../vm2/vm2.py" "$@"

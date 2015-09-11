@@ -1,0 +1,14 @@
+[Unit]
+Description=Mopidy Music Daemon
+After=sound.target xfsettingsd.service
+
+[Service]
+Type=idle
+ExecStart=/home/justin/mopidy/bin/mopidy -v
+Environment=VIRTUAL_ENV="%h/mopidy"
+Environment=PATH="$VIRTUAL_ENV/bin:$PATH"
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=hopsession.target

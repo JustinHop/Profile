@@ -1,0 +1,14 @@
+[Unit]
+Description=Clipboard Manager
+Wants=xfsettingsd.service 
+After=awesome.service
+
+[Service]
+Type=idle
+TimeStartSec=10
+ExecStart=/usr/bin/clipit
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=hopsession.target

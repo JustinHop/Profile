@@ -1,0 +1,14 @@
+[Unit]
+Description=X Settings Manager for XFCE
+Before=awesome.service
+After=x11-common.service
+
+[Service]
+#BusName=org.xfce.Xfconf
+TimeStartSec=1
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/xfsettingsd --no-daemon
+Restart=always
+
+[Install]
+WantedBy=wm.target
