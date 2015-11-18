@@ -1,12 +1,15 @@
 -- Standard awesome library
-require("awful")
+local gears = require("gears")
+local awful = require("awful")
+awful.rules = require("awful.rules")
 require("awful.autofocus")
-require("awful.rules")
-require("beautiful")
---require("obvious")
---require("obvious.volume_alsa")
+-- Widget and layout library
+local wibox = require("wibox")
+-- Theme handling library
+local beautiful = require("beautiful")
 -- Notification library
-require("naughty")
+local naughty = require("naughty")
+local menubar = require("menubar")
 
 -- Load Debian menu entries
 require("debian.menu")
@@ -27,7 +30,7 @@ end
 -- Handle runtime errors after startup
 do
   local in_error = false
-  awesome.add_signal("debug::error", function (err)
+  awesome.connect_signal("debug::error", function (err)
     -- Make sure we don't go into an endless error loop
     if in_error then return end
     in_error = true
@@ -136,11 +139,6 @@ awful.layout.set(awful.layout.suit.max, tags[1][3])
 -- }}}
 
 -- {{{ Menu
--- Create a textbox widget
-mytextbox = widget({ type = "textbox", align = "right" })
--- Set the default text in textbox
-mytextbox.text = "<b> " .. awesome.release .. " </b>"
-
 -- Create a laucher widget and a main menu
 myawesomemenu = {
   { "manual", terminal .. " -e man awesome" },
@@ -160,8 +158,11 @@ mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesom
 } });
 
 -- Launcher
-mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
+mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
   menu = mymainmenu })
+
+-- Menubar configuration
+menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
 
@@ -169,13 +170,15 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- Create a textclock widget
 --spacer = "✠"█
 spacer = "┃"
-mytextclock = {}
-mytextclock[1] = awful.widget.textclock({ align = "right" }, "%c %Z", .5)
-mytextclock[2] = awful.widget.textclock({ align = "right" }, "!%c UTC", .5)
-mytextclock[3] = awful.widget.textclock({ align = "right" }, "%a %b %d %r %Z", .5)
-mytextclock[4] = awful.widget.textclock({ align = "right" }, "%c %Z", .5)
-mytextclock[5] = awful.widget.textclock({ align = "right" }, "!%c UTC", .5)
-mytextclock[6] = awful.widget.textclock({ align = "right" }, "%a %b %d %r %Z", .5)
+mytextclock = awful.widget.textclock("%c %Z")
+--[[
+mytextclock[1] = awful.widget.textclock("%c %Z")
+mytextclock[2] = awful.widget.textclock("!%c UTC")
+mytextclock[3] = awful.widget.textclock("%a %b %d %r %Z")
+mytextclock[4] = awful.widget.textclock("%c %Z")
+mytextclock[5] = awful.widget.textclock("!%c UTC")
+mytextclock[6] = awful.widget.textclock("%a %b %d %r %Z")
+]]--
 
 require('calendar2')
 count=1
@@ -184,19 +187,6 @@ while count <= #mytextclock do
   count=count+1
 end
 
-myimgbox = {}
-myimgbox = widget({ type = "imagebox", align = "right" })
-
-myalertbox = {}
-myalertbox = widget({ type = "textbox", align = "right" })
-
--- spacer
-lspace = {}
-rspace = {}
-
-
--- Create a systray
-mysystray = widget({ type = "systray" })
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -253,61 +243,44 @@ mytasklist.buttons = awful.util.table.join(
   end))
 
 for s = 1, screen.count() do
-  lspace[s] = widget({ type = "textbox", align="left", bg = "black" })
-  lspace[s].text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
+    -- Create a promptbox for each screen
+    mypromptbox[s] = awful.widget.prompt()
+    -- Create an imagebox widget which will contains an icon indicating which layout we're using.
+    -- We need one layoutbox per screen.
+    mylayoutbox[s] = awful.widget.layoutbox(s)
+    mylayoutbox[s]:buttons(awful.util.table.join(
+                           awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
+                           awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
+                           awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
+                           awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
+    -- Create a taglist widget
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
-  rspace[s] = widget({ type = "textbox", align="right" })
-  rspace[s].text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
-  -- My mouse indicator
-  mymousebox[s] = widget({ type = "textbox", align = "left" })
-  if screen.count() ~= 1 then
-    mymousebox[s].text = "[-]"
-  end
-  -- Create a promptbox for each screen
-  mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
-  -- Create an imagebox widget which will contains an icon indicating which layout we're using.
-  -- We need one layoutbox per screen.
-  mylayoutbox[s] = awful.widget.layoutbox(s)
-  mylayoutbox[s]:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
-    awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
-    awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
-    awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
-  -- Create a taglist widget
-  mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
+    -- Create a tasklist widget
+    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
-  -- Create a tasklist widget
-  mytasklist[s] = awful.widget.tasklist(function(c)
-    return awful.widget.tasklist.label.currenttags(c, s)
-  end, mytasklist.buttons)
+    -- Create the wibox
+    mywibox[s] = awful.wibox({ position = "top", screen = s })
 
-  -- Create the wibox
-  mywibox[s] = awful.wibox({ position = "top", screen = s, height = "30" })
-  -- Add widgets to the wibox - order matters
-  mywibox[s].widgets = {
-    {
-      lspace[s],
-      mylauncher,
-      lspace[s],
-      mymousebox[s].text  and mymousebox[s] or nil,
-      mymousebox[s].text  and lspace[s] or nil,
-      mytaglist[s],
-      lspace[s],
-      mypromptbox[s],
-      layout = awful.widget.layout.horizontal.leftright
-    },
-    rspace[s],
-    mylayoutbox[s],
-    rspace[s],
-    mymousebox[s].text  and mymousebox[s] or nil,
-    mymousebox[s].text  and rspace[s] or nil,
-    mytextclock[s],
-    rspace[s],
-    s == 1 and mysystray or nil,
-    s == 1 and rspace[s] or nil,
-    mytasklist[s],
-    layout = awful.widget.layout.horizontal.rightleft
-  }
+    -- Widgets that are aligned to the left
+    local left_layout = wibox.layout.fixed.horizontal()
+    left_layout:add(mylauncher)
+    left_layout:add(mytaglist[s])
+    left_layout:add(mypromptbox[s])
+
+    -- Widgets that are aligned to the right
+    local right_layout = wibox.layout.fixed.horizontal()
+    if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(mytextclock)
+    right_layout:add(mylayoutbox[s])
+
+    -- Now bring it all together (with the tasklist in the middle)
+    local layout = wibox.layout.align.horizontal()
+    layout:set_left(left_layout)
+    layout:set_middle(mytasklist[s])
+    layout:set_right(right_layout)
+
+    mywibox[s]:set_widget(layout)
 end
 -- }}}
 
@@ -695,130 +668,81 @@ awful.rules.rules = {
   { rule = { name = "File Operation Progress" },
     properties = { floating = true,
       border_width = 0 } },
--- Set Firefox to always map on tags number 2 of screen 1.
--- { rule = { class = "Firefox" },
---   properties = { tag = tags[1][2] } },
---]]
 }
 -- }}
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
-client.add_signal("manage", function (c, startup)
-  -- Add a titlebar
-  -- awful.titlebar.add(c, { modkey = modkey })
-
-  if c.name == "Screen Ruler" then
-    awful.titlebar.remove(c, {modkey = modkey})
-  end
-
-  if awful.client.floating.get(c) then
-    if not ( c.title ~= "MPlayer" or c.name == "Screen Ruler" ) then
-      awful.titlebar.add(c, { modkey = modkey })
-    end
-  end
-
-  -- Enable sloppy focus
-  c:add_signal("mouse::enter", function(c)
-    if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-      and awful.client.focus.filter(c) then
-      client.focus = c
-    end
-  end)
-
-  if not startup then
-    -- Set the windows at the slave,
-    -- i.e. put it at the end of others instead of setting it master.
-    -- awful.client.setslave(c)
-
-    -- Put windows in a smart way, only if they does not set an initial position.
-    if not c.size_hints.user_position and not c.size_hints.program_position then
-      awful.placement.no_overlap(c)
-      awful.placement.no_offscreen(c)
-    end
-  end
-end)
-
-client.add_signal("focus", function(c)
-  c.border_color = beautiful.border_focus
-  --if c:isvisible() then awful.tag.seticon(c.icon) end
-  --[[
-  local i = 1
-  local tt = c:tags()
-  while next(tt[i])
-  ndump(tt[i])
-  i++
-  ]]--
-  if (set_tag_icon ~= nil) then
-    set_tag_icon()
-  end
-  if (mousemarker ~= nil) then
-    mousemarker()
-  end
-end)
-client.add_signal("unfocus", function(c)
-  c.border_color = beautiful.border_normal
-  --awful.tag.seticon()
-  --[[
-  if not awful.tag.selected():clients() then
-  --awful.tag.seticon(nil,awful.tag.selected())
-  end
-  ]]--
-  if (set_tag_icon ~= nil) then
-    set_tag_icon()
-  end
-  if (mousemarker ~= nil) then
-    mousemarker()
-  end
-end)
-
-client.add_signal("unmanage", function (c, startup)
-  if c.name ~= "plugin-container" then
-    mywibox[mouse.screen].visible = true
-  end
-end)
-
-for s = 1, screen.count() do
-  local i = 1
-  while tags[s][i] do
-    tags[s][i]:add_signal("property::selected", function(t)
-      if (set_tag_icon ~= nil) then
-        set_tag_icon()
-      end
-      --ndump(t.name)
-      --if not next(t:clients()) then
-      --    awful.tag.seticon(nil,t)
-      --end
+client.connect_signal("manage", function (c, startup)
+    -- Enable sloppy focus
+    c:connect_signal("mouse::enter", function(c)
+        if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+            and awful.client.focus.filter(c) then
+            client.focus = c
+        end
     end)
-    i = i + 1
-  end
-  screen[s]:add_signal("property::screen", function()
-    --ndump("property::screen")
-    if client.focus then
-    --awful.tag.seticon(client.focus.icon)
-    else
-    --awful.tag.seticon()
+
+    if not startup then
+        -- Set the windows at the slave,
+        -- i.e. put it at the end of others instead of setting it master.
+        -- awful.client.setslave(c)
+
+        -- Put windows in a smart way, only if they does not set an initial position.
+        if not c.size_hints.user_position and not c.size_hints.program_position then
+            awful.placement.no_overlap(c)
+            awful.placement.no_offscreen(c)
+        end
+    elseif not c.size_hints.user_position and not c.size_hints.program_position then
+        -- Prevent clients from being unreachable after screen count change
+        awful.placement.no_offscreen(c)
     end
-  end)
-end
 
---if (mousemarker ~= nil) then
-function mousemarker()
-  for s=1, screen.count() do
-    if s == mouse.screen then
-      mymousebox[s].text=[[<span bgcolor="#b58900"><b> ■ </b></span>]]
-      lspace[s].text=[[<span bgcolor="#b58900" color="#839496"><b>]] .. spacer .. [[</b></span>]]
-      rspace[s].text=[[<span bgcolor="#b58900" color="#839496"><b>]] .. spacer .. [[</b></span>]]
-    else
-      mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
-      lspace[s].text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
-      rspace[s].text=[[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]]
+    local titlebars_enabled = false
+    if titlebars_enabled and (c.type == "normal" or c.type == "dialog") then
+        -- buttons for the titlebar
+        local buttons = awful.util.table.join(
+                awful.button({ }, 1, function()
+                    client.focus = c
+                    c:raise()
+                    awful.mouse.client.move(c)
+                end),
+                awful.button({ }, 3, function()
+                    client.focus = c
+                    c:raise()
+                    awful.mouse.client.resize(c)
+                end)
+                )
+
+        -- Widgets that are aligned to the left
+        local left_layout = wibox.layout.fixed.horizontal()
+        left_layout:add(awful.titlebar.widget.iconwidget(c))
+        left_layout:buttons(buttons)
+
+        -- Widgets that are aligned to the right
+        local right_layout = wibox.layout.fixed.horizontal()
+        right_layout:add(awful.titlebar.widget.floatingbutton(c))
+        right_layout:add(awful.titlebar.widget.maximizedbutton(c))
+        right_layout:add(awful.titlebar.widget.stickybutton(c))
+        right_layout:add(awful.titlebar.widget.ontopbutton(c))
+        right_layout:add(awful.titlebar.widget.closebutton(c))
+
+        -- The title goes in the middle
+        local middle_layout = wibox.layout.flex.horizontal()
+        local title = awful.titlebar.widget.titlewidget(c)
+        title:set_align("center")
+        middle_layout:add(title)
+        middle_layout:buttons(buttons)
+
+        -- Now bring it all together
+        local layout = wibox.layout.align.horizontal()
+        layout:set_left(left_layout)
+        layout:set_right(right_layout)
+        layout:set_middle(middle_layout)
+
+        awful.titlebar(c):set_widget(layout)
     end
-  end
-end
---end
+end)
 
-mousetimer = timer({ timeout = .2 })
-mousetimer:add_signal("timeout", function() mousemarker() end)
-mousetimer:start()
-
+client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+-- }}}
