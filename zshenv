@@ -217,4 +217,6 @@ export PATH=$GOPATH/bin:$PATH
 
 export PROXYRESOLV_DNS=10.75.32.5
 
+eval $(thefuck --alias)
+
 # vim:ft=zsh:syn=zsh

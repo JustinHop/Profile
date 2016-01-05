@@ -14,7 +14,7 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 xrandr --output eDP1 --primary &
 xgamma -gamma .8 &
-{ compton -D 5 --config ~/.config/compton.conf                  ; } &
+#{ compton -D 5 --config ~/.config/compton.conf                 ; } &
 { mpd; mpc pause                                                ; } &
 { ~/Profile/bin/porttoggle.sh                                   ; } &
 { sleep 1s  ; ~/mopidy/bin/mopidy                               ; } &
