@@ -36,8 +36,8 @@ our $fping	= 'fping';
 
 our %default = (
     user	=> 'root',
-    rate	=> 20,
-    timeout	=> 300,
+    rate	=> 80,
+    timeout	=> 0,
     delay	=> 0,
     syslist	=> "-",
 );
@@ -102,7 +102,10 @@ if (exists $opt{help}) { usage('extended'); exit 1; }
 
 our $ssh_args	= "-l $opt{user} -xT " 
 		. '-o "PasswordAuthentication no" ' 
-		. '-o "StrictHostKeyChecking no" ';
+		. '-o "StrictHostKeyChecking no" '
+		. '-o "ServerAliveInterval 3" '
+		. '-o "ConnectTimeout 15" '
+		. '-o "BatchMode yes" ';
 
 if (exists $opt{ssh_quiet}) {
     $ssh_args   .= '-q ';
