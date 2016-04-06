@@ -5,5 +5,9 @@ if pidof -x dispatch ; then
     SOCKS="--proxy-server=socks://localhost:1080"
 fi
 
-exec optirun google-chrome --disable-session-crashed-bubble $SOCKS "$@"
+if [[ "$HOSTNAME" == "thinkpad1" ]] ; then
+    OPTI=optirun
+fi
+
+exec $OPTI google-chrome --disable-session-crashed-bubble $SOCKS "$@"
 
