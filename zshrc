@@ -202,11 +202,15 @@ alias vidbox='vidbo | rl | head -n 300 | rl'
 
 alias VPN='openconnect --dump-http-traffic -c ~/.cisco/certificates/client/private/bothkeys.pem -k ~/.cisco/certificates/client/private/client.key --cafile /etc/ssl/certs/ca-certificates.crt -v --os=win --script-tun --script "ocproxy -D 5000 -L 5053:10.75.32.5:53 -L 5054:10.75.33.5:53 -L 5001:jump.ash.syseng.tmcs:22 -L 5002:cas-na.lyv.livenation.com:993 --dns 10.75.32.5 --dns 10.75.33.5 --domain websys.tmcs" ashasg2.ticketmaster.com'
 
+alias fixperms='sudo find -type d -exec chmod 775 {} \; ; sudo find . -type f -exec chmod 664 {} \;'
+
 alias d=dirs
 alias pu=pushd
 alias po=popd
 alias m=mail
 alias j=jobs
+
+alias p=proxychains
 
 #alias b='export BACKUP=-'
 #alias B='export BACKUP=+'
@@ -382,6 +386,8 @@ if [[ -f $HOME/.id ]]; then
   alias huh="cat $HOME/.id"
 fi
 
+alias mpv="optirun mpv"
+
 #
 # My Options
 #
@@ -537,7 +543,7 @@ if (( $ZSH_MAJOR >= 4 )); then
 
   ### Mine
   CH(){
-    for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts "$HOME"/tm.bindForward  ; do
+    for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts ; do
       if [ -f $hostfile ]; then
         etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )
         #zstyle ':completion:*' hosts $etchosts;
@@ -546,6 +552,7 @@ if (( $ZSH_MAJOR >= 4 )); then
     zstyle ':completion:*' hosts $etchosts
   }
 
+  CH
 
   etchosts+=({core,mail,tux,tux-ninja,net1,net,sup1,sup,www,eh}{,.justinhoppensteadt.com} $HOSTNAME)
   zstyle ':completion:*' hosts $etchosts
