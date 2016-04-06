@@ -386,7 +386,9 @@ if [[ -f $HOME/.id ]]; then
   alias huh="cat $HOME/.id"
 fi
 
-alias mpv="optirun mpv"
+if [[ "$HOSTNAME" == "thinkpad1" ]]; then
+  alias mpv="optirun mpv"
+fi
 
 #
 # My Options
