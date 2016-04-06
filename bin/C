@@ -1,9 +1,10 @@
 #!/bin/bash
 SOCKS=
+CMD='google-chrome --disable-session-crashed-bubble $SOCKS "$@"' 
 
 if pidof -x dispatch ; then
     SOCKS="--proxy-server=socks://localhost:1080"
 fi
 
-exec optirun google-chrome --disable-session-crashed-bubble $SOCKS "$@"
+exec  bash -c "if ! optirun $CMD ; then $CMD ; fi"
 

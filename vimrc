@@ -220,8 +220,8 @@ if !exists('g:loaded_justin_vimrc')
   function! DoColors()
     set background=dark
     let g:solarized_termcolors=256
-    let g:solarized_contrast="high"    "default value is normal
-    let g:solarized_visibility="high"    "default value is normal
+    let g:solarized_contrast="normal"    "default value is normal
+    let g:solarized_visibility="normal"    "default value is normal
     syntax enable
     set background=dark
     colorscheme solarized
@@ -279,7 +279,7 @@ if !exists('g:loaded_justin_vimrc')
   "     Color Settings
   "
   set background=dark
-  let g:solarized_termcolors=16
+  let g:solarized_termcolors=256
   colorscheme solarized
   set guifont=Liberation\ Mono\ for\ Powerline\ 10
   au VimEnter * call AirSettings()

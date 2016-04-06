@@ -10,7 +10,7 @@ for _ZSH_ADDON in \
   Profile/zsh/zshrc-oh-my-zsh
 do
   if [ -f "$HOME/$_ZSH_ADDON" ]; then
-    source "$HOME/$_ZSH_ADDON" 
+    source "$HOME/$_ZSH_ADDON"
   fi
 done
 
@@ -628,7 +628,7 @@ if (( $ZSH_MAJOR >= 4 )); then
   raxmon-views-metric-list \
   raxmon-views-overview ; do
 
-  compdef _gnu_generic $RAX 
+  compdef _gnu_generic $RAX
 done
 
 
