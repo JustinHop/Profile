@@ -1,0 +1,21 @@
+#!/bin/bash
+
+openconnect --dump-http-traffic \
+    -c ~/.cisco/certificates/client/private/bothkeys.pem \
+    -k ~/.cisco/certificates/client/private/client.key \
+    --cafile /etc/ssl/certs/ca-certificates.crt \
+    -v \
+    --os=win \
+    --script-tun \
+    --script "ocproxy -D 5000 \
+                -L 5053:10.75.32.5:53 \
+                -L 5054:10.75.33.5:53 \
+                -L 5001:jump.ash.syseng.tmcs:22 \
+                -L 5002:cas-na.lyv.livenation.com:993 \
+                -L 5003:in-smtp.livenation.com:25 \
+                -L 5004:in-smtp.livenation.com:465 \
+                -L 5005:cas-na.lyv.livenation.com:587 \
+                --dns 10.75.32.5 \
+                --dns 10.75.33.5 \
+                --domain websys.tmcs" \
+    asg.ticketmaster.com

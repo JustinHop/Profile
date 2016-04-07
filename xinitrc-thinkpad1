@@ -46,10 +46,10 @@ xgamma -gamma .8 &
 { sleep 5s  ; xrandr --output DP2-2 --brightness .8             ; } &
 { sleep 5s  ; xrandr --output DP2-3 --brightness .8             ; } &
 
-{ sleep 10s  ; pidgin                                           ; } &
+{ sleep 90s  ; pidgin                                           ; } &
 #{ sleep 1s  ; scudcloud                                        ; } &
-{ sleep 10s  ; ~/bin/pidgin_fortune                             ; } &
-{ sleep 10s  ; claws-mail  2>&1 | fold -w 80 -s                 ; } &
+{ sleep 95s  ; ~/bin/pidgin_fortune                             ; } &
+{ sleep 90s  ; claws-mail  2>&1 | fold -w 80 -s                 ; } &
 
 { sleep 1m  ; 
       /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 \
