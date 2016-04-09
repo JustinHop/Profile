@@ -47,6 +47,9 @@ zsh/cache
 zshrc.local.post
 zshrc.local.pre
 
+hosts
+davmail.properties
+
 config/mpdnotify/log
 config/mpdnotify/pid
 python/tweet-poc/log
