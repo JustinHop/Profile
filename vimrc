@@ -4,7 +4,7 @@
 "
 "  General Operation
 
-" vimrc-2.1.0
+" vimrc-2.1.1
 
 "   Figure out if system or local config and if to run or not
 let s:path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
@@ -438,7 +438,7 @@ if !exists('g:loaded_justin_vimrc')
   "map   <silent> <F6>    :copen<CR>
   "map   <silent> <F7>    :cp<CR>
   "map   <silent> <F8>    :cn<CR>
-  map   <silent> <F12>   :let &number=1-&number<Bar>set number?<CR>
+  map   <silent> <F11>   :let &number=1-&number<Bar>set number?<CR>
 
   imap  <silent> <F1>    <ESC>
   imap  <silent> <F2>    <Esc>:GundoToggle<CR>
@@ -447,7 +447,7 @@ if !exists('g:loaded_justin_vimrc')
   "imap  <silent> <F6>    <Esc>:copen<CR>
   "imap  <silent> <F7>    <Esc>:cp<CR>
   "imap  <silent> <F8>    <Esc>:cn<CR>
-  imap  <silent> <F12>   :let &number=1-&number<Bar>set number?<CR>
+  imap  <silent> <F11>   <ESC>:let &number=1-&number<Bar>set number?<CR>i
 
 
   "imap <F12> :set number! <CR> :set number?<CR>
@@ -458,7 +458,7 @@ if !exists('g:loaded_justin_vimrc')
 
 
   " this one maps pastemode toggle to F11
-  set pastetoggle=<F11>
+  set pastetoggle=<F12>
 
   " <F10> do the line wrapping hoobla
   if !exists("*ToggleWrap")
@@ -467,9 +467,9 @@ if !exists('g:loaded_justin_vimrc')
       set list!
       set linebreak!
     endfunction
-    map <silent><F10> :call ToggleWrap()<CR>
-    map! <silent><F10> ^[:call ToggleWrap()<CR>
   endif
+  nmap <silent><F10> :call ToggleWrap()<CR>
+  imap <silent><F10> <ESC>:call ToggleWrap()<CR>i
 
   noremap!  <BS>
   vnoremap  <BS>
