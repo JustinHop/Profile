@@ -127,3 +127,6 @@
 [submodule "scripts/nir"]
 	path = scripts/nir
 	url = https://github.com/mrnetops/nir.git
+[submodule "vim/general/csapprox"]
+	path = vim/general/csapprox
+	url = https://github.com/godlygeek/csapprox.git

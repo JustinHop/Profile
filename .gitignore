@@ -49,3 +49,7 @@ zshrc.local.pre
 
 config/mpdnotify/log
 config/mpdnotify/pid
+python/tweet-poc/log
+python/tweet-poc/log/*
+config/mpv/watch_later
+config/mpv/watch_later/*

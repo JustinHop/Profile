@@ -144,7 +144,7 @@ if !exists('g:loaded_justin_vimrc')
   " Booyah
   if &t_Co || has("gui_running") && ( expand($TERM) != "screen.linux")
     syntax on
-    set t_Co=16
+    " set t_Co=16
   endif
 
   if ( expand($TERM) ==# "linux" )
@@ -237,7 +237,7 @@ if !exists('g:loaded_justin_vimrc')
       let g:solarized_visibility="normal"    "default value is normal
       let g:solarized_diff="high"    "default value is normal
     else
-      let g:solarized_termcolors=16
+      " let g:solarized_termcolors=16
       let g:solarized_contrast="normal"    "default value is normal
       let g:solarized_visibility="normal"    "default value is normal
       let g:solarized_diff="high"    "default value is normal
