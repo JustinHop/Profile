@@ -130,3 +130,6 @@
 [submodule "vim/general/csapprox"]
 	path = vim/general/csapprox
 	url = https://github.com/godlygeek/csapprox.git
+[submodule "vim/go/vim-go"]
+	path = vim/go/vim-go
+	url = https://github.com/fatih/vim-go.git
