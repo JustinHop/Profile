@@ -43,6 +43,7 @@ untracked = cyan
     co = checkout
     df = diff
     lg = log -p
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 
 [difftool]
 	prompt = false

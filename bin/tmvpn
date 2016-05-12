@@ -15,6 +15,8 @@ openconnect --dump-http-traffic \
                 -L 5003:in-smtp.livenation.com:25 \
                 -L 5004:in-smtp.livenation.com:465 \
                 -L 5005:cas-na.lyv.livenation.com:587 \
+                -L 5006:git.tm.tmcs:22 \
+                -L 5007:git.tm.tmcs:443 \
                 --dns 10.75.32.5 \
                 --dns 10.75.33.5 \
                 --domain websys.tmcs" \

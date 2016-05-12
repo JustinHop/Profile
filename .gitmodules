@@ -133,3 +133,6 @@
 [submodule "vim/go/vim-go"]
 	path = vim/go/vim-go
 	url = https://github.com/fatih/vim-go.git
+[submodule "vim/general/terraform"]
+	path = vim/general/terraform
+	url = https://github.com/hashivim/vim-terraform.git
