@@ -50,19 +50,14 @@ plugins=(
     aws
     colored-man-pages
     colorize
-    gem
     git
     gnu-utils
     jsontools
     mosh
-    nova
     pip
     python
-    ruby
-    rvm
     systemadmin
     tmux
-    vagrant
     vim-integration
     )
 
