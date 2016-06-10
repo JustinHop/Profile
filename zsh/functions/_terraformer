@@ -1,0 +1,7 @@
+#compdef terraformer
+# Justin.Hoppensteadt@ticketmaster.com
+
+_arguments \
+    ':directory:_directories' \
+    '*::[Terraform Options]:_terraform'
+
