@@ -1,0 +1,6 @@
+#compdef proxychains
+
+shift words
+(( CURRENT-- ))
+
+_normal
