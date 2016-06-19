@@ -15,7 +15,8 @@ from lib import Vid, VidListFile
 from lib import Options
 from lib import FindVideo
 
-base = '/mnt/1/Video'
+base = '/mnt/auto/1/share/Video'
+base2 = '/mnt/auto/4/share/Video'
 
 if __name__ == '__main__':
     options = Options()

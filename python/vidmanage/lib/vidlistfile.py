@@ -6,9 +6,10 @@ from datetime import datetime
 import pickle
 import os
 import os.path
-import re
+# import re
 
 base = '/mnt/auto/1/share/Video/'
+base2 = '/mnt/auto/4/share/Video/'
 # import sys
 
 
@@ -26,8 +27,8 @@ class Vid:
         print("Created Vid instance:", self.v['filename'], self.gethumansize())
 
     def attr(self):
-        self.v['filename'] = re.sub(r'^.*Video/', '', self.v['filename'])
-        self.v['real_filename'] = os.path.realpath(base + self.v['filename'])
+        # self.v['filename'] = re.sub(r'^.*Video/', '', self.v['filename'])
+        self.v['real_filename'] = os.path.realpath(self.v['filename'])
         self.v['directory'] = os.path.dirname(self.v['real_filename'])
         try:
             self.v['stat'] = os.stat(self.v['real_filename'])
@@ -58,7 +59,7 @@ class Vid:
     def getsize(self):
         self.attr()
         try:
-            return self.v['stat'].st_size
+            return self.v['stat'].st_size or "0"
         except OSError:
             return "0"
 
