@@ -180,10 +180,11 @@ mytextclock[4] = awful.widget.textclock("%c %Z", .5)
 mytextclock[5] = awful.widget.textclock("!%c UTC", .5)
 mytextclock[6] = awful.widget.textclock("%a %b %d %r %Z", .5)
 
-require('calendar2')
+--local calendar2 = require('calendar2')
+local cal = require('cal')
 count=1
 while count <= #mytextclock do
-  calendar2.addCalendarToWidget(mytextclock[count])
+  cal.register(mytextclock[count])
   count=count+1
 end
 
