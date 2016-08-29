@@ -19,7 +19,8 @@
 #===============================================================================
 
 sleep .01s
-echo "if client.focus then awful.tag.seticon(client.focus.icon) else awful.tag.seticon() end" | awesome-client &
+#
+cat ~/Profile/config/awesome/icon.lua | awesome-client
 #
 #how its done on the old tux
 #( awesome-client < ~/Profile/awesome/tagset.lua ) &

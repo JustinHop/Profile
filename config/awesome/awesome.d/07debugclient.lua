@@ -15,6 +15,8 @@
 --------------------------------------------------------------------------------
 --
 
+local naughty = require("naughty")
+
 function pdump(o)
     naughty.notify({ text = string.gsub( dump(o), ",", "\n" ) })
 end

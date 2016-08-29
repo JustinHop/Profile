@@ -274,7 +274,7 @@ for s = 1, screen.count() do
                            awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.noempty, mytaglist.buttons)
 
     -- Create a tasklist widget
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
@@ -516,10 +516,7 @@ clientkeys = awful.util.table.join(
   awful.key({ modkey, "Shift"                             } , "m", function (c) c:swap(awful.client.getmaster()) end),
   awful.key({ modkey, "Control"                           } , "c", function (c) awful.util.spawn("kill -CONT " .. c.pid) end),
   awful.key({ modkey, "Control"                           } , "s", function (c) awful.util.spawn("kill -STOP " .. c.pid) end),
-  awful.key({ modkey,                                     } , "t", function (c)
-    if   c.titlebar then awful.titlebar.remove(c)
-    else awful.titlebar.add(c, { modkey = modkey          } ) end
-  end),
+  awful.key({ modkey,                                     } , "t", function (c) awful.titlebar.toggle(c) end),
   awful.key({ modkey, "Shift"                             } , "f", function (c) if awful.client.floating.get(c)
     then
       awful.client.floating.delete(c);
@@ -707,11 +704,17 @@ client.connect_signal("manage", function (c, startup)
     c:connect_signal("mouse::enter", function(c)
         -- naughty.notify{ title = 'Debug Information', text = c.name, icon = c.icon}
         mousemarker()
+        -- set_tag_icon(c)
 
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
             and awful.client.focus.filter(c) then
             client.focus = c
         end
+    end)
+
+    c:connect_signal("mouse::leave", function(c)
+        mousemarker()
+        -- set_tag_icon(c)
     end)
 
     if not startup then
@@ -729,7 +732,7 @@ client.connect_signal("manage", function (c, startup)
         awful.placement.no_offscreen(c)
     end
 
-    local titlebars_enabled = false
+    local titlebars_enabled = true
     if titlebars_enabled and (c.type == "normal" or c.type == "dialog") then
         -- buttons for the titlebar
         local buttons = awful.util.table.join(
@@ -772,6 +775,7 @@ client.connect_signal("manage", function (c, startup)
         layout:set_middle(middle_layout)
 
         awful.titlebar(c):set_widget(layout)
+        awful.titlebar.hide(c)
     end
 end)
 
