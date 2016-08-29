@@ -17,11 +17,12 @@
 
 function mousemarker() 
     for s=1, screen.count() do
-    	if s == mouse.screen then
-    	  mymousebox[s].text=[[<span bgcolor="#002b36"><b> ■ </b></span>]]
-    	else
-    	  mymousebox[s].text=[[<span bgcolor="#002b36"><b> □ </b></span>]]
-    	end
+        if s == mouse.screen then
+            -- mymousebox[s]:set_markup("<span background='#002B36' color='#839496'><b> ■ </b></span>")
+            mymousebox[s]:set_markup("<span background='#859900' color='#839496'><b> ■ </b></span>")
+        else
+            mymousebox[s]:set_markup("<span background='#002B36' color='#839496'><b> □ </b></span>")
+        end
     end
 end
 

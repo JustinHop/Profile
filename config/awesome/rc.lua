@@ -201,16 +201,16 @@ mymousebox = {}
 mydebugbox = {}
 mymsgbox = {}
 mytaglist.buttons = awful.util.table.join(
-  awful.button({ }, 1, awful.tag.viewonly),
-  awful.button({ modkey }, 1, awful.client.movetotag),
-  awful.button({ }, 3, awful.tag.viewtoggle),
-  awful.button({ modkey }, 3, awful.client.toggletag),
-  awful.button({ }, 4, awful.tag.viewnext),
-  awful.button({ }, 5, awful.tag.viewprev),
-  awful.button({ }, 10, awful.tag.viewprev),
-  awful.button({ }, 13, awful.tag.viewnext),
-  awful.button({ }, 14, awful.tag.viewprev),
-  awful.button({ }, 15, awful.tag.viewprev)
+                    awful.button({ }, 1, awful.tag.viewonly),
+                    awful.button({ modkey }, 1, awful.client.movetotag),
+                    awful.button({ }, 3, awful.tag.viewtoggle),
+                    awful.button({ modkey }, 3, awful.client.toggletag),
+                    awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 13, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 10, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 14, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 15, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
 )
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
@@ -252,16 +252,15 @@ mytasklist.buttons = awful.util.table.join(
 for s = 1, screen.count() do
     -- My mouse indicator
     mymousebox[s] = wibox.widget.textbox()
-    if screen.count() ~= 1 then
-      mymousebox[s].text = "[-]"
-    end
-   lspace[s] = wibox.widget.textbox()
-   lspace[s]:set_markup([[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]])
-   lspace[s]:set_align('left')
+    mymousebox[s]:set_text("-")
 
-   rspace[s] = wibox.widget.textbox()
-   rspace[s]:set_markup([[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]])
-   rspace[s]:set_align('right')
+    lspace[s] = wibox.widget.textbox()
+    lspace[s]:set_markup([[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]])
+    lspace[s]:set_align('left')
+
+    rspace[s] = wibox.widget.textbox()
+    rspace[s]:set_markup([[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]])
+    rspace[s]:set_align('right')
 
 
     -- Create a promptbox for each screen
@@ -281,15 +280,15 @@ for s = 1, screen.count() do
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    mywibox[s] = awful.wibox({ position = "top", screen = s, height = "30" })
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
     left_layout:add(lspace[s])
-    left_layout:add(mylauncher)
-    left_layout:add(lspace[s])
     if screen.count() > 1 then left_layout:add(mymousebox[s]) end
     if screen.count() > 1 then left_layout:add(lspace[s]) end
+    left_layout:add(mylauncher)
+    left_layout:add(lspace[s])
     left_layout:add(mytaglist[s])
     left_layout:add(lspace[s])
     left_layout:add(mypromptbox[s])
@@ -300,11 +299,11 @@ for s = 1, screen.count() do
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(rspace[s])
     right_layout:add(mytextclock[s])
-    if mymousebox[s].text then left_layout:add(mymousebox[s]) end
-    if mymousebox[s].text then left_layout:add(rspace[s]) end
     right_layout:add(rspace[s])
     right_layout:add(mylayoutbox[s])
     right_layout:add(rspace[s])
+    if screen.count() > 1 then right_layout:add(mymousebox[s]) end
+    if screen.count() > 1 then right_layout:add(rspace[s]) end
 
     -- Now bring it all together (with the tasklist in the middle)
     local layout = wibox.layout.align.horizontal()
@@ -484,14 +483,6 @@ globalkeys = awful.util.table.join(
   end)
 )
 
-video_mode = {
-  i = function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -I") end,
-  a = function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -a") end,
-  k = function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -k") end,
-  d = function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -d") end,
-  r = function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -r") end
-}
-
 clientkeys = awful.util.table.join(
   awful.key({ modkey,                                     } , "f",      function (c) c.fullscreen = not c.fullscreen  end),
   awful.key({ modkey, "Shift"                             } , "c",      function (c) c:kill() end),
@@ -529,14 +520,6 @@ clientkeys = awful.util.table.join(
     if   c.titlebar then awful.titlebar.remove(c)
     else awful.titlebar.add(c, { modkey = modkey          } ) end
   end),
-  awful.key({ modkey                                      } , "v", function(c)
-    keygrabber.run(function(mod, key, event)
-      if event == "release" then return true end
-      keygrabber.stop()
-      if video_mode[key] then video_mode[key](c) end
-      return true
-    end)
-  end),
   awful.key({ modkey, "Shift"                             } , "f", function (c) if awful.client.floating.get(c)
     then
       awful.client.floating.delete(c);
@@ -546,16 +529,6 @@ clientkeys = awful.util.table.join(
     awful.titlebar.add(c) end
   end)
 )
-
-smplayerkeys = awful.util.table.join(
-  clientkeys,
-  awful.key({ altkey }, "1", function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -I") end),
-  awful.key({ altkey }, "2", function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -a") end),
-  awful.key({ altkey }, "3", function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -k") end),
-  awful.key({ altkey }, "4", function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -d") end),
-  awful.key({ altkey }, "5", function (c) awful.util.spawn("/home/justin/bin/vidmanage -N -r") end)
-)
-
 
 
 -- Compute the maximum number of digit we need, limited to 9
@@ -732,6 +705,9 @@ awful.rules.rules = {
 client.connect_signal("manage", function (c, startup)
     -- Enable sloppy focus
     c:connect_signal("mouse::enter", function(c)
+        -- naughty.notify{ title = 'Debug Information', text = c.name, icon = c.icon}
+        mousemarker()
+
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
             and awful.client.focus.filter(c) then
             client.focus = c
