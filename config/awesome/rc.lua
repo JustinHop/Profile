@@ -317,12 +317,12 @@ end
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-  --    awful.button({ }, 3, function () mymainmenu:toggle() end),
-  awful.button({ }, 4, awful.tag.viewnext),
-  awful.button({ }, 5, awful.tag.viewprev),
-  awful.button({ }, 13, awful.tag.viewnext),
-  awful.button({ }, 10, awful.tag.viewprev),
-  awful.button({ }, 15, awful.tag.viewprev)
+                    awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 13, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 10, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 14, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
+                    awful.button({ }, 15, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
 ))
 -- }}}
 
@@ -585,9 +585,10 @@ clientbuttons = awful.util.table.join(
   awful.button({ modkey }, 3, awful.mouse.client.resize),
   awful.button({ }, 6, function (c) awful.util.spawn("xdotool key ctrl+shift+Tab") end),
   awful.button({ }, 7, function (c) awful.util.spawn("xdotool key ctrl+Tab") end),
-  awful.button({ }, 13, awful.tag.viewnext),
-  awful.button({ }, 10, awful.tag.viewprev),
-  awful.button({ }, 15, awful.tag.viewprev)
+  awful.button({ }, 13, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
+  awful.button({ }, 10, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
+  awful.button({ }, 14, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
+  awful.button({ }, 15, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
 )
 
 -- Set keys
