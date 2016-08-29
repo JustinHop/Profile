@@ -14,10 +14,10 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 xrandr --output eDP1 --primary &
 xgamma -gamma .8 &
-#{ compton -D 5 --config ~/.config/compton.conf                 ; } &
-{ mpd; mpc pause                                                ; } &
+{ compton -D 5 --config ~/.config/compton.conf                  ; } &
+{ sleep 10s ; mpd; sleep 2s;  mpc pause                         ; } &
 { ~/Profile/bin/porttoggle.sh                                   ; } &
-{ sleep 1s  ; ~/mopidy/bin/mopidy                               ; } &
+{ sleep 1m  ; ~/mopidy/bin/mopidy                               ; } &
 { sleep 1m  ; while true ; do mpdfavd        ; sleep 5s ; done  ; } &
 { sleep 1m  ; while true ; do mpdscribble --no-daemon ;
                                                sleep 5s ; done  ; } &
@@ -27,7 +27,7 @@ xgamma -gamma .8 &
 { workrave                                                      ; } &
 
 { sleep 1s  ; xbindkeys --nodaemon                              ; } &
-{ sleep 1s  ; davmail                                           ; } &
+#{ sleep 1s  ; davmail                                           ; } &
 { sleep 5s  ; nitrogen --restore                                ; } &
 
 { sleep 1s  ; clipit                                            ; } &
@@ -51,9 +51,9 @@ xgamma -gamma .8 &
 { sleep 95s  ; ~/bin/pidgin_fortune                             ; } &
 { sleep 90s  ; claws-mail  2>&1 | fold -w 80 -s                 ; } &
 
-{ sleep 1m  ; 
+{ sleep 1m  ;
       /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 \
-      | fold -w 80 -s ; } &
+            > /dev/null ; } &
 
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
@@ -89,12 +89,12 @@ echo "Session: setting Xdefaults and Xmodmap"
 
 done ; } &
 
-{ while true ; do
-      ( curl -s icanhazip.com > ~/.external_ip ) || true
-      ( curl -s --socks5 localhost:9050 icanhazip.com > ~/.external_tor_ip ) || true
-
-      sleep 5m;
-done ; } &
+#{ while true ; do
+#      ( curl -s icanhazip.com > ~/.external_ip ) || true
+#      ( curl -s --socks5 localhost:9050 icanhazip.com > ~/.external_tor_ip ) || true
+#
+#      sleep 5m;
+#done ; } &
 
 
 numlockx
