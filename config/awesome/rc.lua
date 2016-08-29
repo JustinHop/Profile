@@ -705,7 +705,6 @@ client.connect_signal("manage", function (c, startup)
     c:connect_signal("mouse::enter", function(c)
         -- naughty.notify{ title = 'Debug Information', text = c.name, icon = c.icon}
         mousemarker()
-        -- set_tag_icon(c)
 
         if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
             and awful.client.focus.filter(c) then
@@ -715,7 +714,6 @@ client.connect_signal("manage", function (c, startup)
 
     c:connect_signal("mouse::leave", function(c)
         mousemarker()
-        -- set_tag_icon(c)
     end)
 
     if not startup then
@@ -780,6 +778,14 @@ client.connect_signal("manage", function (c, startup)
     end
 end)
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+
+client.connect_signal("focus", function(c) 
+    c.border_color = beautiful.border_focus
+    set_tag_icon_client(c)
+end)
+client.connect_signal("unfocus", function(c) 
+    c.border_color = beautiful.border_normal
+    clear_tag_icon()
+end)
 -- }}}
+-- vim: set sw=4 ft=lua tw=4 et 

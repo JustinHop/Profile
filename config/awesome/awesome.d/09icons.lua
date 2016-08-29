@@ -28,7 +28,21 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 
 
-function set_tag_icon()
-    -- os.execute("set-awesome-client-icon.sh")
-    os.execute("true")
+function set_tag_icon_client(c)
+    if client.focus and c.screen == mouse.screen then
+        local cicon = config_dir .. "/icons/" .. string.lower(client.focus.class) .. ".png"
+        if io.open(cicon, "r") then
+            awful.tag.seticon(cicon)
+        else
+            awful.tag.seticon()
+        end
+
+    else
+        awful.tag.seticon()
+    end
 end
+
+function clear_tag_icon()
+    pcall(function () awful.tag.seticon() end)
+end
+-- vim: set sw=4 ft=lua tw=4 et 
