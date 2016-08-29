@@ -27,7 +27,15 @@ for RCFILE in bashrc \
 
 done
 
+if [[ ! -d ~/.config ]]; then
+    mkdir ~/.config
+fi
 
+for CONFIG in ~/Profile/config/* ; do
+    if [[ ! -e ~/Profile/config/$CONFIG ]]; then
+        ln -sfv $CONFIG ~/.config
+    fi
+done
 
 mkdir ~/bin ~/backup ~/tmp ~/.screenlogs
 
