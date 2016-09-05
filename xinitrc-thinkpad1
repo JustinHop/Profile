@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+start=$(date +%s.%N)
+
 setopt allexport
 nitrogen --restore &
 
@@ -102,6 +104,13 @@ numlockx
 date
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
+end=$(date +%s.%N)
+let "duration = end - start"
+
 sleep 1s
+
+echo "###################################################"
+echo "Session began in $duration seconds"
+echo "###################################################"
 
 exec bash -c 'while true ; do awesome; sleep 1s; done;'

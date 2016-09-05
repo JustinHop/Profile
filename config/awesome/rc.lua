@@ -132,7 +132,7 @@ for s = 1, screen.count() do
   tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
 awful.tag.setnmaster(1, tags[1][2])
-awful.tag.incnmaster(1, tags[1][2])
+--awful.tag.incnmaster(1, tags[1][2])
 awful.tag.setmwfact(.8, tags[1][2])
 awful.tag.setncol(2, tags[1][2])
 awful.layout.set(awful.layout.suit.max, tags[1][3])
@@ -607,6 +607,13 @@ awful.rules.rules = {
                    raise = true,
                    keys = clientkeys,
                    buttons = clientbuttons } },
+  { rule = { class = "Conky" },
+    properties = {
+      border_width = 0,
+      floating = true,
+      sticky = true,
+      ontop = false,
+      focusable = false } },
   { rule = { role = "pop-up" },
     properties = { floating = true } },
   { rule = { class = "Nagstamon" },
@@ -619,10 +626,6 @@ awful.rules.rules = {
     properties = { floating = true } },
   { rule = { class = "gimp" },
     properties = { floating = true } },
-  { rule = { class = 'Google-chrome' },
-    callback = function (c)
-      c.icon = image(settings.icon.chrome)
-    end },
   { rule = { name = "bubble" },
     properties = { floating = true,
       border_width = 0 },
