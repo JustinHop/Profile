@@ -6,9 +6,9 @@ setopt allexport
 nitrogen --restore &
 
 #{ gnome-settings-daemon; } &
-{ sleep 1s; xfsettingsd         --no-daemon                     ; } &
-{ sleep 3s; xfce4-volumed                                       ; } &
-{ sleep 3s; xfce4-power-manager --no-daemon                     ; } &
+{           xfsettingsd         --no-daemon                     ; } &
+{ sleep 1s; xfce4-volumed                                       ; } &
+{ sleep 1s; xfce4-power-manager --no-daemon                     ; } &
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
@@ -28,7 +28,7 @@ xgamma -gamma .8 &
 { conky                                                         ; } &
 { workrave                                                      ; } &
 
-{ sleep 1s  ; xbindkeys --nodaemon                              ; } &
+#{ sleep 1s  ; xbindkeys --nodaemon                              ; } &
 #{ sleep 1s  ; davmail                                           ; } &
 { sleep 5s  ; nitrogen --restore                                ; } &
 
@@ -36,7 +36,6 @@ xgamma -gamma .8 &
 { sleep 1s  ; solaar                                            ; } &
 { sleep 1s  ; xbacklight -set 80                                ; } &
 { sleep 1s  ; nm-applet                                         ; } &
-{ sleep 1s  ; bluetooth-applet                                  ; } &
 { sleep 1s  ; cryptkeeper                                       ; } &
 { sleep 1s  ; keynav                                            ; } &
 { sleep 1s  ; pasystray                                         ; } &

@@ -31,12 +31,15 @@ if !exists('g:loaded_justin_vimrc')
   let g:loaded_justin_vimrc = 1
   let g:pymode_lint_mccabe_complexity = 14
   let g:pymode_lint_checkers=['pyflakes', 'pep8']
+  let g:pymode_rope_completion = 1
+  let g:pymode_rope_complete_on_dot = 1
   let g:go_highlight_functions = 1
   let g:go_highlight_methods = 1
   let g:go_highlight_fields = 1
   let g:go_highlight_types = 1
   let g:go_highlight_operators = 1
   let g:go_highlight_build_constraints = 1
+
 
   if !exists('g:loaded_pathogen')
     let g:profiles_default = ['lib', 'base']

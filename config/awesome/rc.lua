@@ -610,6 +610,7 @@ awful.rules.rules = {
   { rule = { class = "Conky" },
     properties = {
       border_width = 0,
+      dockable = true,
       skip_taskbar = true,
       floating = true,
       sticky = true,
