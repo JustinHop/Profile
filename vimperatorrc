@@ -260,6 +260,9 @@ style! -name=solar http://*,https://* <<EOF
     /* Mozilla addons shrink/expand sections */
     .expando a {background: none transparent  !important;}
 EOF
+
+js services.services.autoCompleteSearch.class_="@mozilla.org/autocomplete/search;1?name=unifiedcomplete"
+
 source! /home/justin/.vimperatorrc.local
 
 " vim: set ft=vimperator:
