@@ -13,7 +13,7 @@ EOF
 prompt_jclint_setup () {
   local -a pcc
   local -A pc
-  local p_date p_tty p_plat p_ver p_userpwd p_apm p_shlvlhist p_rc p_end p_win p_schroot
+  local p_date p_tty p_plat p_ver p_userpwd p_apm p_shlvlhist p_rc p_end p_win p_schroot p_virtenv
 
   autoload -Uz vcs_info
 
@@ -40,6 +40,8 @@ prompt_jclint_setup () {
 
   [[ -n $SCHROOT_SESSION_ID ]] && p_schroot="$pc['\(']%F{$pcc[5]}$SCHROOT_SESSION_ID$pc['\)']"
 
+  [[ -n $VIRTUAL_ENV ]] && p_virtenv="$pc['\(']%F{$pcc[4]}${VIRTUAL_ENV:t}$pc['\)']"
+
   [[ -e "$HOME/hostinfo" ]] && p_hostinfo="$pc['\(']%F{$pcc[2]}$(read -re < $HOME/hostinfo)$pc['\)']"
 
   p_userpwd="$pc['<']%F{$pcc[3]}%n@$(hostname -f)$p_win%F{$pcc[5]}:%F{$pcc[4]}%~$pc['>']"
@@ -53,7 +55,7 @@ prompt_jclint_setup () {
 
   prompt="$p_date$p_tty$p_plat$p_ver
 $p_userpwd$p_hostinfo$p_schroot
-$p_shlvlhist$p_rc$p_vcs$p_end"
+$p_virtenv$p_shlvlhist$p_rc$p_vcs$p_end"
   PS2='%(4_.\.)%3_> %E'
 
   add-zsh-hook precmd prompt_jclint_precmd

@@ -743,7 +743,11 @@ esac
 
 bindkey -v
 
-prompt jclint
+if [ -z "$SCHROOT_SESSION_ID" ]; then
+  prompt jclint
+else
+  prompt jclint green white
+fi
 
 #
 #  postexec
