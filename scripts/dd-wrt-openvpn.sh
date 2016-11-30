@@ -3,9 +3,7 @@
 USERNAME="Your_PIA_Username"
 PASSWORD="Your_PIA_Password"
 PROTOCOL="udp"
-# Add - delete - edit servers between ##BB## and ##EE##
 REMOTE_SERVERS="remote us-california.privateinternetaccess.com 1197"
-"
 
 CA_CRT='-----BEGIN CERTIFICATE-----
 MIIHqzCCBZOgAwIBAgIJAJ0u+vODZJntMA0GCSqGSIb3DQEBDQUAMIHoMQswCQYD
@@ -51,6 +49,27 @@ iyd1Fzx0yujuiXDROLhISLQDRjVVAvawrAtLZWYK31bY7KlezPlQnl/D9Asxe85l
 +no177N9L2Y+M9TcTA62ZyMXShHQGeh20rb4kK8f+iFX8NxtdHVSkxMEFSfDDyQ=
 -----END CERTIFICATE-----'
 
+CRL='-----BEGIN X509 CRL-----
+MIIDWDCCAUAwDQYJKoZIhvcNAQENBQAwgegxCzAJBgNVBAYTAlVTMQswCQYDVQQI
+EwJDQTETMBEGA1UEBxMKTG9zQW5nZWxlczEgMB4GA1UEChMXUHJpdmF0ZSBJbnRl
+cm5ldCBBY2Nlc3MxIDAeBgNVBAsTF1ByaXZhdGUgSW50ZXJuZXQgQWNjZXNzMSAw
+HgYDVQQDExdQcml2YXRlIEludGVybmV0IEFjY2VzczEgMB4GA1UEKRMXUHJpdmF0
+ZSBJbnRlcm5ldCBBY2Nlc3MxLzAtBgkqhkiG9w0BCQEWIHNlY3VyZUBwcml2YXRl
+aW50ZXJuZXRhY2Nlc3MuY29tFw0xNjA3MDgxOTAwNDZaFw0zNjA3MDMxOTAwNDZa
+MCYwEQIBARcMMTYwNzA4MTkwMDQ2MBECAQYXDDE2MDcwODE5MDA0NjANBgkqhkiG
+9w0BAQ0FAAOCAgEAppFfEpGsasjB1QgJcosGpzbf2kfRhM84o2TlqY1ua+Gi5TMd
+KydA3LJcNTjlI9a0TYAJfeRX5IkpoglSUuHuJgXhP3nEvX10mjXDpcu/YvM8TdE5
+JV2+EGqZ80kFtBeOq94WcpiVKFTR4fO+VkOK9zwspFfb1cNs9rHvgJ1QMkRUF8Pp
+LN6AkntHY0+6DnigtSaKqldqjKTDTv2OeH3nPoh80SGrt0oCOmYKfWTJGpggMGKv
+IdvU3vH9+EuILZKKIskt+1dwdfA5Bkz1GLmiQG7+9ZZBQUjBG9Dos4hfX/rwJ3eU
+8oUIm4WoTz9rb71SOEuUUjP5NPy9HNx2vx+cVvLsTF4ZDZaUztW9o9JmIURDtbey
+qxuHN3prlPWB6aj73IIm2dsDQvs3XXwRIxs8NwLbJ6CyEuvEOVCskdM8rdADWx1J
+0lRNlOJ0Z8ieLLEmYAA834VN1SboB6wJIAPxQU3rcBhXqO9y8aa2oRMg8NxZ5gr+
+PnKVMqag1x0IxbIgLxtkXQvxXxQHEMSODzvcOfK/nBRBsqTj30P+R87sU8titOox
+NeRnBDRNhdEy/QGAqGh62ShPpQUCJdnKRiRTjnil9hMQHevoSuFKeEMO30FQL7BZ
+yo37GFU+q1WPCplVZgCP9hC8Rn5K2+f6KLFo5bhtowSmu+GY1yZtg+RTtsA=
+-----END X509 CRL-----'
+
 OPVPNENABLE=`nvram get openvpncl_enable | awk '$1 == "0" {print $1}'`
 
 if [ "$OPVPNENABLE" != 0 ]; then
@@ -62,19 +81,21 @@ sleep 10
 mkdir /tmp/pia; cd /tmp/pia
 echo -e "$USERNAME\n$PASSWORD" > userpass.conf
 echo "$CA_CRT" > ca.crt
+echo "$CRL" > crl.pem
 echo "#!/bin/sh
 iptables -t nat -I POSTROUTING -o tun0 -j MASQUERADE" > route-up.sh
 echo "#!/bin/sh
 iptables -t nat -D POSTROUTING -o tun0 -j MASQUERADE" > route-down.sh
-chmod 644 ca.crt; chmod 600 userpass.conf; chmod 700 route-up.sh route-down.sh
+chmod 644 ca.crt; chmod 644 crl.pem; chmod 600 userpass.conf; chmod 700 route-up.sh route-down.sh
 sleep 10
 echo "client
 auth sha256
 auth-user-pass /tmp/pia/userpass.conf
-ca ca.crt
+ca /tmp/pia/ca.crt
 cipher aes-256-cbc
 comp-lzo
 dev tun0
+disable-occ
 fast-io
 log-append piavpn.log
 management 127.0.0.1 5001
@@ -92,7 +113,6 @@ script-security 2
 status status
 status-version 3
 tls-client
-tun-mtu 1500
 verb 4
 daemon
 $REMOTE_SERVERS" > pia.conf
