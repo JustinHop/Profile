@@ -6,6 +6,7 @@ docker run \
 	--rm \
 	--interactive \
 	--tty \
+	-p 127.0.0.1:5000:5000 \
 	-p 127.0.0.1:5001:5001 \
 	-p 127.0.0.1:5006:5006 \
 	-p 127.0.0.1:5007:5007 \
@@ -14,7 +15,7 @@ docker run \
 	--name tmvpn \
 	--network=bridge \
 	--cap-add=NET_ADMIN \
-	jhoppensteadt/openconnect $VPNPW
+	jhoppensteadt/openconnect "$VPNPW"
 
 
 #openconnect --dump-http-traffic \

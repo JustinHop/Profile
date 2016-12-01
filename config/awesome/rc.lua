@@ -661,6 +661,8 @@ awful.rules.rules = {
     properties = { tag = tags[1][3] } },
   { rule_any = { class = {"Mail", "Thunderbird", "Claws-mail"} },
     properties = { tag = tags[1][3] } },
+  { rule = { class = "zoom" },
+    properties = { tag = tags[1][9] } },
   { rule = { class = "Galculator" },
     properties = { floating = true },
     callback = function (c)

@@ -565,72 +565,6 @@ if (( $ZSH_MAJOR >= 4 )); then
   compdef _gnu_generic cloudlb
   compdef _gnu_generic cloudservers
   compdef _gnu_generic cloud_dns
-  for RAX in \
-  raxmon \
-  raxmon-agent-connections-list \
-  raxmon-agent-host-info \
-  raxmon-agent-host-info-types \
-  raxmon-agent-installer \
-  raxmon-agents-list \
-  raxmon-agent-tokens-create \
-  raxmon-agent-tokens-delete \
-  raxmon-agent-tokens-list \
-  raxmon-alarms-changelog-list \
-  raxmon-alarms-create \
-  raxmon-alarms-delete \
-  raxmon-alarms-disable \
-  raxmon-alarms-enable \
-  raxmon-alarms-list \
-  raxmon-alarms-notification-history-list \
-  raxmon-alarms-notification-history-list-checks \
-  raxmon-alarms-test \
-  raxmon-alarms-update \
-  raxmon-alarms-validate-criteria \
-  raxmon-audits-list \
-  raxmon-checks-create \
-  raxmon-checks-delete \
-  raxmon-checks-disable \
-  raxmon-checks-enable \
-  raxmon-checks-list \
-  raxmon-checks-test \
-  raxmon-checks-test-existing \
-  raxmon-checks-update \
-  raxmon-check-types-list \
-  raxmon-entities-agent-targets \
-  raxmon-entities-create \
-  raxmon-entities-delete \
-  raxmon-entities-host-info \
-  raxmon-entities-list \
-  raxmon-entities-update \
-  raxmon-limits-list \
-  raxmon-metrics-list \
-  raxmon-monitoring-zones-list \
-  raxmon-monitoring-zones-traceroute \
-  raxmon-notification-plans-create \
-  raxmon-notification-plans-delete \
-  raxmon-notification-plans-list \
-  raxmon-notification-plans-update \
-  raxmon-notifications-create \
-  raxmon-notifications-delete \
-  raxmon-notifications-list \
-  raxmon-notifications-test \
-  raxmon-notifications-test-existing \
-  raxmon-notifications-update \
-  raxmon-notification-types-list \
-  raxmon-suppression-logs-list \
-  raxmon-suppressions-create \
-  raxmon-suppressions-delete \
-  raxmon-suppressions-get \
-  raxmon-suppressions-list \
-  raxmon-suppressions-update \
-  raxmon-version-check \
-  raxmon-views-agent-host-info \
-  raxmon-views-metric-list \
-  raxmon-views-overview ; do
-
-  compdef _gnu_generic $RAX
-done
-
 
 fi
 
@@ -743,7 +677,7 @@ esac
 
 bindkey -v
 
-if [ -z "$SCHROOT_SESSION_ID" ]; then
+if [ -z "$SCHROOT_SESSION_ID$VIRTUAL_ENV" ]; then
   prompt jclint
 else
   prompt jclint green white
