@@ -136,12 +136,6 @@
 [submodule "vim/general/terraform"]
 	path = vim/general/terraform
 	url = https://github.com/hashivim/vim-terraform.git
-[submodule "tools/terraform"]
-	path = tools/terraform
-	url = https://github.com/hashicorp/terraform.git
 [submodule "vim/coding/vim-hclfmt"]
 	path = vim/coding/vim-hclfmt
 	url = https://github.com/fatih/vim-hclfmt.git
-[submodule "tools/mpdproxy"]
-	path = tools/mpdproxy
-	url = https://github.com/floriandejonckheere/mpdproxy.git
