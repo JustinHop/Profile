@@ -136,6 +136,7 @@ awful.tag.setnmaster(1, tags[1][2])
 awful.tag.setmwfact(.8, tags[1][2])
 awful.tag.setncol(2, tags[1][2])
 awful.layout.set(awful.layout.suit.max, tags[1][3])
+awful.layout.set(awful.layout.suit.max, tags[1][9])
 -- }}}
 
 -- {{{ Menu

@@ -18,7 +18,7 @@ xrandr --output eDP1 --primary &
 xgamma -gamma .8 &
 { compton -D 5 --config ~/.config/compton.conf                  ; } &
 { sleep 10s ; mpd; sleep 2s;  mpc pause                         ; } &
-{ ~/Profile/bin/porttoggle.sh                                   ; } &
+{ ~/Profile/bin/porttoggler.sh                                  ; } &
 { sleep 1m  ; ~/mopidy/bin/mopidy                               ; } &
 { sleep 1m  ; while true ; do mpdfavd        ; sleep 5s ; done  ; } &
 { sleep 1m  ; while true ; do mpdscribble --no-daemon ;
