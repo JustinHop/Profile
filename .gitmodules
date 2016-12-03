@@ -139,3 +139,6 @@
 [submodule "vim/coding/vim-hclfmt"]
 	path = vim/coding/vim-hclfmt
 	url = https://github.com/fatih/vim-hclfmt.git
+[submodule "tools/terraform"]
+	path = tools/terraform
+	url = https://github.com/hashicorp/terraform.git
