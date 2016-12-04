@@ -39,6 +39,7 @@ if !exists('g:loaded_justin_vimrc')
   let g:go_highlight_types = 1
   let g:go_highlight_operators = 1
   let g:go_highlight_build_constraints = 1
+  let g:terraform_fmt_on_save = 0
 
 
   if !exists('g:loaded_pathogen')
@@ -344,12 +345,10 @@ if !exists('g:loaded_justin_vimrc')
       au BufNewFile,BufRead /etc/httpd/conf/*.conf                  set filetype=apache
       au BufNewFile,BufRead /etc/httpd/conf.d/*.conf                set filetype=apache
       au BufNewFile,BufRead /etc/httpd/virtual/*.conf               set filetype=apache
-      au BufNewFile,BufRead /usr/local/apache2/conf/*.conf          set filetype=apache
-      au BufNewFile,BufRead /usr/local/apache2/conf/UMG_conf/*.conf set filetype=apache
       au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
-      au BufNewFile,BufRead */cfengine/*/inputs/*.conf              set filetype=cfengine
       au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
       au BufRead,BufNewFile *.pp                                    set filetype=puppet
+      au BufRead,BufNewFile *.tf                                    set filetype=terraform
       au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
       au BufRead,BufNewFile */syseng-rubix-config/*                 set filetype=spine
       au BufRead,BufNewFile */syseng-rubix-config/*/svn-commit.tmp  set filetype=svn
