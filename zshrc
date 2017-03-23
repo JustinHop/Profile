@@ -470,6 +470,10 @@ setopt   \
 # bindings for history
 # bindkey "^G" set-local-history
 
+if [ "$ZSH_MAJOR"."$ZSH_MINOR" = "5.1" ]; then
+  setopt NOallexport
+fi
+
 if (( $ZSH_MAJOR >= 4 )); then
   setopt aliases \
     listpacked \
