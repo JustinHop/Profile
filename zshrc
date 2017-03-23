@@ -386,7 +386,7 @@ if [[ -f $HOME/.id ]]; then
   alias huh="cat $HOME/.id"
 fi
 
-alias mpv="optirun mpv"
+#alias mpv="optirun mpv"
 
 #
 # My Options

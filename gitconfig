@@ -27,13 +27,13 @@ untracked = cyan
 	autosetupmerge = true
 [push]
 	default = current
-[merge]
-	tool = diffconflicts
+#[merge]
+#	tool = diffconflicts
 [github]
 	user = JustinHop
 	token = 8a7fd39a33a0c83817788483c51bef80
-[diff]
-	tool = vimdiff
+#[diff]
+#	tool = vimdiff
 
 
   [alias]
@@ -44,10 +44,14 @@ untracked = cyan
     df = diff
     lg = log -p
   hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  sync = !sh -c 'git stash && git pull --rebase --tags ${1-origin} master && git stash pop' -
 
-[difftool]
-	prompt = false
-[mergetool "diffconflicts"]
-	cmd = diffconflicts vim $BASE $LOCAL $REMOTE $MERGED
-	trustExitCode = true
-	keepBackup = false
+
+#[difftool]
+#	prompt = false
+#[mergetool "diffconflicts"]
+#	cmd = diffconflicts vim $BASE $LOCAL $REMOTE $MERGED
+#	trustExitCode = true
+#	keepBackup = false
+[rerere]
+	enabled = 1
