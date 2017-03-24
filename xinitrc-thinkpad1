@@ -5,7 +5,6 @@ start=$(date +%s.%N)
 setopt allexport
 nitrogen --restore &
 
-#{ gnome-settings-daemon; } &
 {           xfsettingsd         --no-daemon                     ; } &
 { sleep 1s; xfce4-volumed                                       ; } &
 { sleep 1s; xfce4-power-manager --no-daemon                     ; } &
@@ -18,10 +17,10 @@ xrandr --output eDP1 --primary &
 xgamma -gamma .8 &
 { compton -D 5 --config ~/.config/compton.conf                  ; } &
 { sleep 5s ; mpd; sleep 2s;  mpc pause                         ; } &
-{ sleep 10s; ~/go/bin/mpdprxy --port 6600 \
+{ sleep 2m; ~/go/bin/mpdprxy --port 6600 \
       --hosts localhost:6601,localhost:6602 \
       --http 6610                                               ; } &
-{ sleep 5s ; ~/mopidy/bin/mopidy                               ; } &
+{ sleep 1m ; source ~/mopidy/bin/activate; mopidy               ; } &
 { sleep 5m  ; while true ; do mpdfavd        ; sleep 5s ; done  ; } &
 { sleep 5m  ; while true ; do mpdscribble --no-daemon ;
                                                sleep 5s ; done  ; } &
@@ -30,8 +29,6 @@ xgamma -gamma .8 &
 { conky                                                         ; } &
 { workrave                                                      ; } &
 
-#{ sleep 1s  ; xbindkeys --nodaemon                              ; } &
-#{ sleep 1s  ; davmail                                           ; } &
 { sleep 5s  ; nitrogen --restore                                ; } &
 
 { sleep 1s  ; clipit                                            ; } &
@@ -43,14 +40,12 @@ xgamma -gamma .8 &
 { sleep 1s  ; pasystray                                         ; } &
 { sleep 1s  ; fdpowermon                                        ; } &
 { sleep 1s  ; blueman-applet                                    ; } &
-#{ sleep 3s  ; nagstamon                                        ; } &
 { sleep 5s  ; xrandr --output DP1 --brightness .8               ; } &
 { sleep 5s  ; xrandr --output eDP1 --brightness .8              ; } &
 { sleep 5s  ; xrandr --output DP2-2 --brightness .8             ; } &
 { sleep 5s  ; xrandr --output DP2-3 --brightness .8             ; } &
 
 { sleep 90s  ; pidgin                                           ; } &
-#{ sleep 1s  ; scudcloud                                        ; } &
 { sleep 95s  ; ~/bin/pidgin_fortune                             ; } &
 { sleep 90s  ; claws-mail  2>&1 | fold -w 80 -s                 ; } &
 
@@ -91,14 +86,6 @@ echo "Session: setting Xdefaults and Xmodmap"
       sleep 10s;
 
 done ; } &
-
-#{ while true ; do
-#      ( curl -s icanhazip.com > ~/.external_ip ) || true
-#      ( curl -s --socks5 localhost:9050 icanhazip.com > ~/.external_tor_ip ) || true
-#
-#      sleep 5m;
-#done ; } &
-
 
 numlockx
 

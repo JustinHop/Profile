@@ -681,6 +681,10 @@ esac
 
 bindkey -v
 
+if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
+  source "$PWD"/bin/activate
+fi
+
 if [ -z "$SCHROOT_SESSION_ID$VIRTUAL_ENV" ]; then
   prompt jclint
 else
@@ -712,7 +716,7 @@ if [ -f /CHROOT ]; then
     PS1="$PS1 :CHROOT: "
 fi
 
-if [[ -e "$PROFILE_DIR/zshrc.local.post" ]]; then
+if [[ -f "$PROFILE_DIR/zshrc.local.post" ]]; then
   source "$PROFILE_DIR/zshrc.local.post"
 fi
 

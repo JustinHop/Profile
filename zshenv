@@ -197,6 +197,8 @@ if [ "$VIRTUAL_ENV" ]; then
     export PATH=$VIRTUAL_ENV/bin:$PATH
 fi
 
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
 export NO_AT_BRIDGE=1
 
 export PERL_LOCAL_LIB_ROOT="$PERL_LOCAL_LIB_ROOT:${HOME}/perl5";
