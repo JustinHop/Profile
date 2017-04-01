@@ -400,7 +400,7 @@ setopt \
   NO_posix_cd \
   pushd_ignore_dups \
 
-#   Completion
+  #   Completion
 setopt \
   always_to_end \
   autolist \
@@ -418,7 +418,7 @@ setopt \
   NO_list_beep \
   list_types \
 
-#   Expansion and Globs
+  #   Expansion and Globs
 setopt \
   NO_case_glob \
   extendedglob \
@@ -430,7 +430,7 @@ setopt \
   NO_nomatch \
   null_glob \
   numeric_glob_sort \
-  rematch_pcre \
+  rematch_pcre
 
 
 setopt  \
@@ -612,18 +612,18 @@ if [[ -o interactive ]]; then
   autoload throw
   autoload catch
   promptinit
-#  if (( $ZSH_MAJOR == 4 && $ZSH_MINOR >= 3 || $ZSH_MAJOR > 4 )); then
-#    {
-#      prompt clint || throw BADPROMPT
-#    } always {
-#    if catch *; then
-#      echo got here
-#      prompt clint
-#    fi
-#  }
-#  else
-#    prompt clint
-#  fi
+  #  if (( $ZSH_MAJOR == 4 && $ZSH_MINOR >= 3 || $ZSH_MAJOR > 4 )); then
+  #    {
+  #      prompt clint || throw BADPROMPT
+  #    } always {
+  #    if catch *; then
+  #      echo got here
+  #      prompt clint
+  #    fi
+  #  }
+  #  else
+  #    prompt clint
+  #  fi
 
   #autoload -U title
   #autoload -U precmd
@@ -669,12 +669,12 @@ function preexec() {
 }
 
 function precmd() {
-case "$TERM" in
-  screen|screen.rxvt)
-    print -Pn "\ek%-3~\e\\" # set screen title
-    print -Pn "\e]2;%-3~\a" # must (re)set xterm title
-    ;;
-esac
+  case "$TERM" in
+    screen|screen.rxvt)
+      print -Pn "\ek%-3~\e\\" # set screen title
+      print -Pn "\e]2;%-3~\a" # must (re)set xterm title
+      ;;
+  esac
 }
 
 bindkey -v
@@ -712,7 +712,7 @@ alias -g X="|xargs"
 
 
 if [ -f /CHROOT ]; then
-    PS1="$PS1 :CHROOT: "
+  PS1="$PS1 :CHROOT: "
 fi
 
 if [[ -f "$PROFILE_DIR/zshrc.local.post" ]]; then
