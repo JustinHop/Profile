@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #read -p "PASSWORD: " -s VPNPW
+docker rm tmvpn || true
 
 docker run \
 	--rm \

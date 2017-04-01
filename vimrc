@@ -354,6 +354,9 @@ if !exists('g:loaded_justin_vimrc')
       au BufRead,BufNewFile */syseng-rubix-config/*/svn-commit.tmp  set filetype=svn
     augroup END
 
+    autocmd BufWritePost *.go silent! normal! zv
+
+
     let g:DoBackups = 1
     au BufNewFile,BufRead ~/backup/* let g:DoBackups = 0
     au BufNewFile * call EnableBackupNew()
