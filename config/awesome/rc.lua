@@ -175,8 +175,8 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 spacer = "┃"
 mytextclock = {}
 mytextclock[1] = awful.widget.textclock("%c %Z", .5)
-mytextclock[2] = awful.widget.textclock("!%c UTC", .5)
-mytextclock[3] = awful.widget.textclock("%a %b %d %r %Z", .5)
+mytextclock[2] = awful.widget.textclock("%a %b %d %r %Z", .5)
+mytextclock[3] = awful.widget.textclock("!%c UTC", .5)
 mytextclock[4] = awful.widget.textclock("%c %Z", .5)
 mytextclock[5] = awful.widget.textclock("!%c UTC", .5)
 mytextclock[6] = awful.widget.textclock("%a %b %d %r %Z", .5)
