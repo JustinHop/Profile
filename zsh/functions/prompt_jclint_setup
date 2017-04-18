@@ -18,7 +18,7 @@ prompt_jclint_setup () {
   autoload -Uz vcs_info
 
   pcc[1]=${1:-${${SSH_CLIENT+'yellow'}:-'red'}}
-  pcc[2]=${2:-'cyan'}
+  pcc[2]=${2:-${${VIRTUAL_ENV+'blue'}:-'cyan'}}
   pcc[3]=${3:-'green'}
   pcc[4]=${4:-'yellow'}
   pcc[5]=${5:-'white'}
@@ -33,6 +33,9 @@ prompt_jclint_setup () {
   p_date="$pc['\[']%F{$pcc[2]}%D{%a %y/%m/%d %R %Z}$pc['\]']"
   p_tty="$pc['\[']%F{$pcc[3]}%l$pc['\]']"
   p_plat="$pc['\[']%F{$pcc[2]}${MACHTYPE}/${OSTYPE}/$(uname -r)$pc['\]']"
+
+  [[ -f /proc/1/cgroup ]] && grep docker /proc/1/cgroup > /dev/null && p_plat="$pc['\[']%F{$pcc[2]}${MACHTYPE}/${OSTYPE}/Docker$pc['\]']"
+
   p_ver="$pc['\[']%F{$pcc[2]}${ZSH_VERSION}$pc['\]']"
 
 
@@ -40,7 +43,7 @@ prompt_jclint_setup () {
 
   [[ -n $SCHROOT_SESSION_ID ]] && p_schroot="$pc['\(']%F{$pcc[5]}$SCHROOT_SESSION_ID$pc['\)']"
 
-  [[ -n $VIRTUAL_ENV ]] && p_virtenv="$pc['\(']%F{$pcc[4]}${VIRTUAL_ENV:t}$pc['\)']"
+  [[ -n $VIRTUAL_ENV ]] && p_virtenv="$pc['\(']%F{$pcc[4]}VENV:${VIRTUAL_ENV:t}$pc['\)']"
 
   [[ -e "$HOME/hostinfo" ]] && p_hostinfo="$pc['\(']%F{$pcc[2]}$(read -re < $HOME/hostinfo)$pc['\)']"
 

@@ -683,11 +683,7 @@ if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
   source "$PWD"/bin/activate
 fi
 
-if [ -z "$SCHROOT_SESSION_ID$VIRTUAL_ENV" ]; then
-  prompt jclint
-else
-  prompt jclint green white
-fi
+prompt jclint
 
 #
 #  postexec
