@@ -1,9 +1,11 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
 
-#
-# FOREGIN MODULES
-#
+if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
+  source "$PWD"/bin/activate
+fi
+
+local _ZSH_ADDON
 
 for _ZSH_ADDON in \
   Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh \
@@ -26,6 +28,7 @@ umask 002
 
 [ -e "$HOME/.zshenv" ] && source "$HOME/.zshenv"
 
+local SPACE
 for SPACE in .undo backup .zsh ; do
   [ ! -d "$HOME/$SPACE"  ] && mkdir "$HOME/$SPACE"
 done
@@ -184,8 +187,10 @@ bindkey '^Xx' push-line
 bindkey '^U' undo
 bindkey '^R' redo
 
-bindkey -M viins '^r' history-incremental-search-backward
-bindkey -M vicmd '^r' history-incremental-search-backward
+bindkey -M viins '^R' history-incremental-search-backward
+bindkey -M viins '^S' history-incremental-search-forward
+#bindkey -M vicmd '/' history-incremental-search-backward
+#bindkey -M vicmd '?' history-incremental-search-forward
 
 if (( $ZSH_MAJOR >= 4 )); then
   bindkey '^O' all-matches
@@ -313,24 +318,24 @@ unset CDPATH
 alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
 
 # ViM
-VIM=vi
-VIM_PROFILES="lib base"
+local _VIM
+_VIM=vi
+export VIM_PROFILES="lib base"
 if [[ -x `whence vim` ]]; then
-  VIM=`whence vim`
+  _VIM=`whence vim`
 fi
 
 if [[ -x ~/bin/vim ]]; then
-  VIM=~/bin/vim
+  _VIM=~/bin/vim
 fi
 
-VIM="$VIM -p "
+_VIM="$_VIM -p "
 
-alias 'sudo vim'='sudo ~/bin/vim'
-export EDITOR=$VIM
-export VISUAL=$VIM
-alias vim=$VIM
-alias vi=$VIM$VIM_LINUX_TERM
-alias v=$VIM
+export EDITOR=$_VIM
+export VISUAL=$_VIM
+alias vim=$_VIM
+alias vi=$_VIM$VIM_LINUX_TERM
+alias v=$_VIM
 
 if [[ -x `whence rlwrap` ]]; then
   alias imapfilter='rlwrap imapfilter'
@@ -338,10 +343,6 @@ fi
 
 alias z=$0
 alias s=sudo
-
-if [[ -x `whence envssh` ]]; then
-  alias essh="envssh -E ~/Profile/rbashrc -- "
-fi
 
 # greppy
 if [[ -x `whence egrep` ]]; then
@@ -679,10 +680,6 @@ function precmd() {
 
 bindkey -v
 
-if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
-  source "$PWD"/bin/activate
-fi
-
 prompt jclint
 
 #
@@ -705,11 +702,7 @@ alias -g UU="|&uniq"
 alias -g GP="|grep -P"
 alias -g GGP="|&grep -P"
 alias -g X="|xargs"
-
-
-if [ -f /CHROOT ]; then
-  PS1="$PS1 :CHROOT: "
-fi
+alias -g XX="|&xargs"
 
 if [[ -f "$PROFILE_DIR/zshrc.local.post" ]]; then
   source "$PROFILE_DIR/zshrc.local.post"

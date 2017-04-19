@@ -13,7 +13,7 @@ EOF
 prompt_jclint_setup () {
   local -a pcc
   local -A pc
-  local p_date p_tty p_plat p_ver p_userpwd p_apm p_shlvlhist p_rc p_end p_win p_schroot p_virtenv
+  local p_date p_tty p_plat p_ver p_userpwd p_apm p_shlvlhist p_rc p_end p_win p_schroot p_virtenv p_ssh
 
   autoload -Uz vcs_info
 
@@ -34,7 +34,7 @@ prompt_jclint_setup () {
   p_tty="$pc['\[']%F{$pcc[3]}%l$pc['\]']"
   p_plat="$pc['\[']%F{$pcc[2]}${MACHTYPE}/${OSTYPE}/$(uname -r)$pc['\]']"
 
-  [[ -f /proc/1/cgroup ]] && grep docker /proc/1/cgroup > /dev/null && p_plat="$pc['\[']%F{$pcc[2]}${MACHTYPE}/${OSTYPE}/Docker$pc['\]']"
+  [[ -f /.dockerenv ]] && p_plat="$pc['\[']%F{$pcc[2]}Docker Container$pc['\]']"
 
   p_ver="$pc['\[']%F{$pcc[2]}${ZSH_VERSION}$pc['\]']"
 
@@ -47,6 +47,8 @@ prompt_jclint_setup () {
 
   [[ -e "$HOME/hostinfo" ]] && p_hostinfo="$pc['\(']%F{$pcc[2]}$(read -re < $HOME/hostinfo)$pc['\)']"
 
+  [[ -n "$SSH_CLIENT" ]] && p_ssh="$pc['\(']%F{$pcc[3]}REMOTE$pc['\)']"
+
   p_userpwd="$pc['<']%F{$pcc[3]}%n@$(hostname -f)$p_win%F{$pcc[5]}:%F{$pcc[4]}%~$pc['>']"
   p_vcs="%(2v.%U%2v%u.)"
 
@@ -57,7 +59,7 @@ prompt_jclint_setup () {
   zle_highlight[(r)default:*]=default:$pcc[2]
 
   prompt="$p_date$p_tty$p_plat$p_ver
-$p_userpwd$p_hostinfo$p_schroot
+$p_userpwd$p_ssh$p_hostinfo$p_schroot
 $p_virtenv$p_shlvlhist$p_rc$p_vcs$p_end"
   PS2='%(4_.\.)%3_> %E'
 

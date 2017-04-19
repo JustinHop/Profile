@@ -151,11 +151,11 @@ if !exists('g:loaded_justin_vimrc')
 
   set shortmess=a
 
-  " Booyah
-  if &t_Co || has("gui_running") && ( expand($TERM) != "screen.linux")
-    syntax on
-    " set t_Co=16
-  endif
+"  " Booyah
+"  if &t_Co || has("gui_running") && ( expand($TERM) != "screen.linux")
+"    syntax on
+"    " set t_Co=16
+"  endif
 
   if ( expand($TERM) ==# "linux" )
     set t_Co=8
