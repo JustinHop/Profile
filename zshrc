@@ -490,6 +490,11 @@ if (( $ZSH_MAJOR >= 4 )); then
     NO_complete_aliases
 fi
 
+if (( $ZSH_MAJOR >= 5 )); then
+  autoload -U compinit && compinit
+  autoload -U bashcompinit && bashcompinit
+fi
+
 ################################################
 # The following lines were added by compinstall
 ################################################
@@ -506,9 +511,10 @@ if (( $ZSH_MAJOR >= 4 )); then
   zstyle ':completion:*' menu select=2
   zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 
-  autoload -U compinit
-  compinit -u
-  #        ^^ shuts it up
+  if (( $ZSH_MAJOR < 5 )); then
+    autoload -U compinit
+    compinit -u
+  fi
 fi
 # End of lines added by compinstall
 
