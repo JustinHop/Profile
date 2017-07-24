@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run -it -e AWS_REGION=us-east-1 -v ~/.aws:/root/.aws iwatth/terraforming "$@" --profile tm-nonprod-ReadOnly-Techops

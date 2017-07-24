@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run --rm -it -v $(pwd):/cfg -v ~/.aws:/.aws --network=container:tmvpn 889199535989.dkr.ecr.us-east-1.amazonaws.com/ticketmaster/terraformer:v0.8.8 "$@"

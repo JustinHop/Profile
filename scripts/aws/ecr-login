@@ -1,0 +1,8 @@
+#!/bin/bash
+set -a
+
+#eval $(docker run --rm -e AWS_REGION=us-east-1 -v ~/.aws:/.aws -e AWS_PROFILE=tm-prod-Ops-Techops -e REGISTRIES=889199535989 ticketmaster/ecr-login)
+#eval $(docker run --rm -e AWS_REGION=us-east-1 -v ~/.aws:/.aws -e AWS_PROFILE=tm-sandbox-Ops-Techops -e REGISTRIES=638386993804 ticketmaster/ecr-login)
+#eval $(aws --profile tm-prod-Ops-Techops --region us-east-1 ecr get-login)
+
+eval $(docker run --rm -e AWS_REGION=us-east-1 -v ~/.aws:/.aws -e AWS_PROFILE=tm-nonprod-ReadOnly-Techops --network=container:tmvpn -e REGISTRIES=889199535989 ticketmaster/ecr-login)
