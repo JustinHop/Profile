@@ -413,6 +413,7 @@ if !exists('g:loaded_justin_vimrc')
     au FileType php let php_sync_method = 0
     au FileType php let php_no_ShortTags = 1
 
+    au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=<:>
     "  Use enter to activate help jump points & display line numbers
     "   au FileType help set number
     au FileType help nmap <buffer> <Return> <C-]>

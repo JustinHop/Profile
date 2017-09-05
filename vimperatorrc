@@ -23,7 +23,7 @@ highlight Null color: CornflowerBlue;
 highlight Number color:  #002b36;
 highlight Object color: #2aa198;
 highlight Question color: #b58900;  background: #002b36;  font-size: 12pt;
-highlight StatusLine color: #002b36; background: #002b36; font-weight: normal; font-size: 12pt;
+highlight StatusLine color: #839496; background: #002b36; font-weight: normal; font-size: 12pt;
 highlight String color:  #002b36;
 highlight TabNumber color: #002b36; font-weight: bold; font-size:10pt;
 highlight Tag color: CornflowerBlue;

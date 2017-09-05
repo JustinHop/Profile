@@ -5,8 +5,6 @@ if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
   source "$PWD"/bin/activate
 fi
 
-local _ZSH_ADDON
-
 for _ZSH_ADDON in \
   Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh \
   Profile/zsh/zshrc-oh-my-zsh
@@ -15,6 +13,7 @@ do
     source "$HOME/$_ZSH_ADDON"
   fi
 done
+unset _ZSH_ADDON
 
 export ZSHRC_VERSION="2.2.1"
 export PROFILE_DIR="$HOME/Profile"
@@ -28,7 +27,6 @@ umask 002
 
 [ -e "$HOME/.zshenv" ] && source "$HOME/.zshenv"
 
-local SPACE
 for SPACE in .undo backup .zsh ; do
   [ ! -d "$HOME/$SPACE"  ] && mkdir "$HOME/$SPACE"
 done
@@ -318,7 +316,6 @@ unset CDPATH
 alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
 
 # ViM
-local _VIM
 _VIM=vi
 export VIM_PROFILES="lib base"
 if [[ -x `whence vim` ]]; then
@@ -336,6 +333,8 @@ export VISUAL=$_VIM
 alias vim=$_VIM
 alias vi=$_VIM$VIM_LINUX_TERM
 alias v=$_VIM
+
+unset _VIM
 
 if [[ -x `whence rlwrap` ]]; then
   alias imapfilter='rlwrap imapfilter'

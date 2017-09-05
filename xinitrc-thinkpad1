@@ -77,7 +77,7 @@ echo "Session: setting Xdefaults and Xmodmap"
 
       local _PIDS=($(pgrep xfce4-volumed))
       if [[ "$_PIDS" ]]; then
-            if (( "$(ps -o pmem $_PIDS[1])" > 1 )); then
+            if (( "$(ps -o pmem h $_PIDS[1])" > 1 )); then
                   pkill $_PIDS;
                   { xfce4-volumed; } &
             fi
