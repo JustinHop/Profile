@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys
+import yaml
+import json
+import fileinput
+
+
+yaml.safe_dump(
+    json.load(
+        fileinput.input()),
+    sys.stdout,
+    default_flow_style=False)
