@@ -1,14 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""json2yaml
+
+Usage:
+    json2yaml [FILE]
+
+Arguments:
+    FILE        Input file. Empty for stdin
+"""
 
 import sys
 import yaml
 import json
-import fileinput
+
+from docopt import docopt
+from pprint import pprint
 
 
-yaml.safe_dump(
-    json.load(
-        fileinput.input()),
-    sys.stdout,
-    default_flow_style=False)
+def main():
+    conf = docopt(__doc__)
+
+    if conf['FILE']:
+        f = open(conf['FILE'], "r")
+    else:
+        f = sys.stdin
+
+    print(yaml.safe_dump(
+            json.loads(f.read()),
+            default_flow_style=False))
+
+
+if __name__ == "__main__":
+    main()
