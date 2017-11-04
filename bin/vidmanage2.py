@@ -9,7 +9,7 @@ Usage:
     vidmanage2 [--notify] add LIST FILE...
     vidmanage2 remove FILE
     vidmanage2 verify LIST
-    vidmanage2 show LIST
+    vidmanage2 show LIST...
     vidmanage2 [--notify] showfile FILE...
     vidmanage2 lists
     vidmanage2 purge
@@ -290,7 +290,8 @@ def main():
     elif conf['update']:
         do_update()
     elif conf['show'] and conf['LIST']:
-        show_list(conf['LIST'])
+        for l in conf['LIST']:
+            show_list(l)
     elif conf['showfile'] and conf['FILE']:
         show_file(conf['FILE'])
     elif conf['new'] and conf['LIST']:
@@ -298,7 +299,8 @@ def main():
     elif conf['lists']:
         get_lists()
     elif conf['add'] and conf['LIST'] and conf['FILE']:
-        add_list(conf['LIST'], conf['FILE'])
+        for l in conf['LIST']:
+            add_list(l, conf['FILE'])
     elif conf['remove'] and conf['FILE']:
         add_list(conf['LIST'], conf['FILE'])
 

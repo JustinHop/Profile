@@ -44,6 +44,9 @@ xgamma -gamma .8 &
 { sleep 5s  ; xrandr --output eDP1 --brightness .8              ; } &
 { sleep 5s  ; xrandr --output DP2-2 --brightness .8             ; } &
 { sleep 5s  ; xrandr --output DP2-3 --brightness .8             ; } &
+{ sleep 5s  ; xrandr --output DP2-3 --brightness .8             ; } &
+
+{ sleep 5s  ; ~/Profile/bin/crypto.py                           ; } &
 
 { sleep 90s  ; pidgin                                           ; } &
 { sleep 95s  ; ~/bin/pidgin_fortune                             ; } &

@@ -181,6 +181,23 @@ mytextclock[4] = awful.widget.textclock("%c %Z", .5)
 mytextclock[5] = awful.widget.textclock("!%c UTC", .5)
 mytextclock[6] = awful.widget.textclock("%a %b %d %r %Z", .5)
 
+btcusd = wibox.widget.textbox()
+ltcusd = wibox.widget.textbox()
+ethusd = wibox.widget.textbox()
+xrpusd = wibox.widget.textbox()
+btcusd_tooltip = awful.tooltip({})
+ltcusd_tooltip = awful.tooltip({})
+ethusd_tooltip = awful.tooltip({})
+xrpusd_tooltip = awful.tooltip({})
+btcusd_tooltip:add_to_object(btcusd)
+ltcusd_tooltip:add_to_object(ltcusd)
+ethusd_tooltip:add_to_object(ethusd)
+xrpusd_tooltip:add_to_object(xrpusd)
+btcusd_tooltip:set_markup("Bitcoin Price")
+ltcusd_tooltip:set_markup("Litecoin Price")
+ethusd_tooltip:set_markup("Ethereum Price")
+xrpusd_tooltip:set_markup("Ripple Price")
+
 --local calendar2 = require('calendar2')
 local cal = require('cal')
 count=1
@@ -304,6 +321,14 @@ for s = 1, screen.count() do
   local right_layout = wibox.layout.fixed.horizontal()
   if s == 1 then right_layout:add(rspace[s]) end
   if s == 1 then right_layout:add(wibox.widget.systray()) end
+  if s == 2 then right_layout:add(rspace[s]) end
+  if s == 2 then right_layout:add(btcusd) end
+  if s == 3 then right_layout:add(rspace[s]) end
+  if s == 3 then right_layout:add(ethusd) end
+  if s == 3 then right_layout:add(rspace[s]) end
+  if s == 3 then right_layout:add(ltcusd) end
+  if s == 3 then right_layout:add(rspace[s]) end
+  if s == 3 then right_layout:add(xrpusd) end
   right_layout:add(rspace[s])
   right_layout:add(mytextclock[s])
   right_layout:add(rspace[s])
