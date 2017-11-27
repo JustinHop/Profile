@@ -16,15 +16,15 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 xrandr --output eDP1 --primary &
 xgamma -gamma .8 &
 { compton -D 5 --config ~/.config/compton.conf                  ; } &
-{ sleep 5s ; mpd; sleep 2s;  mpc pause                         ; } &
-{ sleep 2m; ~/go/bin/mpdprxy --port 6600 \
+{ sleep 2s ; mpd; sleep 2s;  mpc pause                         ; } &
+{ sleep 15s; ~/go/bin/mpdprxy --port 6600 \
       --hosts localhost:6601,localhost:6602 \
       --http 6610                                               ; } &
-{ sleep 1m ; source ~/mopidy/bin/activate; mopidy               ; } &
-{ sleep 5m  ; while true ; do mpdfavd        ; sleep 5s ; done  ; } &
-{ sleep 5m  ; while true ; do mpdscribble --no-daemon ;
+{ sleep 1s ; source ~/mopidy/bin/activate; mopidy               ; } &
+{ sleep 30s ; while true ; do mpdfavd        ; sleep 5s ; done  ; } &
+{ sleep 30s ; while true ; do mpdscribble --no-daemon ;
                                                sleep 5s ; done  ; } &
-{ sleep 5m  ; while true ; do ~/bin/popup.py ; sleep 5s ; done  ; } &
+{ sleep 1m  ; while true ; do ~/bin/popup.py ; sleep 5s ; done  ; } &
 
 { conky                                                         ; } &
 { workrave                                                      ; } &

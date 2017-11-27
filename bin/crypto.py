@@ -7,10 +7,6 @@ stamp2 = 'https://www.bitstamp.net/api/v2/ticker/'
 green = '859900'
 red = 'dc322f'
 
-tip = """bitstamp {}
-{}"""
-
-
 import requests
 import subprocess
 import json
@@ -30,12 +26,15 @@ def debug(d):
 
 
 def tooltip(crypto, r):
-    t = """bitstamp {}\n{}""".format(crypto, json.dumps(r, sort_keys=True, indent=4))
+    t = """bitstamp {}\n{}""".format(
+        crypto, json.dumps(
+            r, sort_keys=True, indent=4))
     # cmd = """set -x; echo \"{}_tooltip:set_markup(\'{}\')\" | awesome-client""".format(crypto, t.replace('"', ''))
-    cmd = """echo "{}_tooltip:set_markup('{}')" | awesome-client """.format(crypto, t.replace('"', ''))
+    cmd = """echo "{}_tooltip:set_markup('{}')" | awesome-client """.format(
+        crypto, t.replace('"', ''))
     cmd = ''.join(cmd.splitlines())
     # debug("tooltip({}):cmd:{}".format(crypto, cmd))
-    print(subprocess.check_output(cmd, shell=True ))
+    print(subprocess.check_output(cmd, shell=True))
 
 
 def getcrypt(crypto):
@@ -52,7 +51,6 @@ def getcrypt(crypto):
 
 
 def looper():
-
     for c in sorted(V.keys()):
         try:
             r = getcrypt(c)
@@ -77,7 +75,7 @@ def looper():
 def main():
     while True:
         looper()
-        time.sleep(60)
+        time.sleep(120)
 
 
 if __name__ == "__main__":
