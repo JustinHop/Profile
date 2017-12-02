@@ -5,9 +5,9 @@ start=$(date +%s.%N)
 setopt allexport
 nitrogen --restore &
 
-{           xfsettingsd         --no-daemon                     ; } &
-{ sleep 1s; xfce4-volumed                                       ; } &
-{ sleep 1s; xfce4-power-manager --no-daemon                     ; } &
+{           exec xfsettingsd         --no-daemon               ; } &
+{ sleep 1s; exec xfce4-volumed                                 ; } &
+{ sleep 1s; exec xfce4-power-manager --no-daemon               ; } &
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
@@ -15,45 +15,46 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 xrandr --output eDP1 --primary &
 xgamma -gamma .8 &
-{ compton -D 5 --config ~/.config/compton.conf                  ; } &
-{ sleep 2s ; mpd; sleep 2s;  mpc pause                         ; } &
-{ sleep 15s; ~/go/bin/mpdprxy --port 6600 \
+{ exec compton -D 5 --config ~/.config/compton.conf            ; } &
+{ sleep 1s ; mpd; sleep 2s;  mpc pause                         ; } &
+{ sleep 15s; exec ~/go/bin/mpdprxy --port 6600 \
       --hosts localhost:6601,localhost:6602 \
-      --http 6610                                               ; } &
-{ sleep 1s ; source ~/mopidy/bin/activate; mopidy               ; } &
-{ sleep 30s ; while true ; do mpdfavd        ; sleep 5s ; done  ; } &
+      --http 6610                                              ; } &
+{ sleep 1s ; source ~/mopidy/bin/activate; exec mopidy         ; } &
+{ sleep 30s ; while true ; do mpdfavd        ; sleep 5s ; done ; } &
 { sleep 30s ; while true ; do mpdscribble --no-daemon ;
-                                               sleep 5s ; done  ; } &
-{ sleep 1m  ; while true ; do ~/bin/popup.py ; sleep 5s ; done  ; } &
+                                               sleep 5s ; done ; } &
+{ sleep 1m  ; while true ; do ~/bin/popup.py ; sleep 5s ; done ; } &
 
-{ conky                                                         ; } &
-{ workrave                                                      ; } &
+{ exec conky                                                   ; } &
+{ exec workrave                                                ; } &
 
-{ sleep 5s  ; nitrogen --restore                                ; } &
+{ sleep 5s  ; nitrogen --restore                               ; } &
+{ sleep 5m  ; nitrogen --restore                               ; } &
 
-{ sleep 1s  ; clipit                                            ; } &
-{ sleep 1s  ; solaar                                            ; } &
-{ sleep 1s  ; xbacklight -set 80                                ; } &
-{ sleep 1s  ; nm-applet                                         ; } &
-{ sleep 1s  ; cryptkeeper                                       ; } &
-{ sleep 1s  ; keynav                                            ; } &
-{ sleep 1s  ; pasystray                                         ; } &
-{ sleep 1s  ; fdpowermon                                        ; } &
-{ sleep 1s  ; blueman-applet                                    ; } &
-{ sleep 5s  ; xrandr --output DP1 --brightness .8               ; } &
-{ sleep 5s  ; xrandr --output eDP1 --brightness .8              ; } &
-{ sleep 5s  ; xrandr --output DP2-2 --brightness .8             ; } &
-{ sleep 5s  ; xrandr --output DP2-3 --brightness .8             ; } &
-{ sleep 5s  ; xrandr --output DP2-3 --brightness .8             ; } &
+{ sleep 1s  ; exec clipit                                      ; } &
+{ sleep 1s  ; exec solaar                                      ; } &
+{ sleep 1s  ; xbacklight -set 80                               ; } &
+{ sleep 1s  ; exec nm-applet                                   ; } &
+{ sleep 1s  ; exec cryptkeeper                                 ; } &
+{ sleep 1s  ; exec keynav                                      ; } &
+{ sleep 1s  ; exec pasystray                                   ; } &
+{ sleep 1s  ; exec fdpowermon                                  ; } &
+{ sleep 1s  ; exec blueman-applet                              ; } &
+{ sleep 5s  ; xrandr --output DP1 --brightness .8              ; } &
+{ sleep 5s  ; xrandr --output eDP1 --brightness .8             ; } &
+{ sleep 5s  ; xrandr --output DP2-2 --brightness .8            ; } &
+{ sleep 5s  ; xrandr --output DP2-3 --brightness .8            ; } &
+{ sleep 5s  ; xrandr --output DP2-3 --brightness .8            ; } &
 
-{ sleep 5s  ; ~/Profile/bin/crypto.py                           ; } &
+{ sleep 5s  ; exec ~/Profile/bin/crypto.py                     ; } &
 
-{ sleep 90s  ; pidgin                                           ; } &
-{ sleep 95s  ; ~/bin/pidgin_fortune                             ; } &
-{ sleep 90s  ; claws-mail  2>&1 | fold -w 80 -s                 ; } &
+{ sleep 10s  ; exec pidgin                                     ; } &
+{ sleep 95s  ; exec ~/bin/pidgin_fortune                       ; } &
+{ sleep 10s  ; exec claws-mail  2>&1 | fold -w 80 -s           ; } &
 
-{ sleep 1m  ;
-      /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 \
+{ sleep 30s  ;
+      exec /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 \
             > /dev/null ; } &
 
 echo "Session: setting Xdefaults and Xmodmap"
