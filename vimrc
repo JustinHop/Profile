@@ -45,6 +45,7 @@ if !exists('g:loaded_justin_vimrc')
   let g:go_highlight_types = 1
   let g:go_highlight_operators = 1
   let g:go_highlight_build_constraints = 1
+  let g:pymode_python = 'python3'
 
   let g:terraform_fmt_on_save = 0
 
@@ -393,6 +394,8 @@ if !exists('g:loaded_justin_vimrc')
     au FileType zsh set formatoptions=croq
     au FileType sh set formatoptions-=t
     au FileType spec set formatoptions-=a
+
+    au FileType python setlocal splitbelow
 
     "au FileType perl :call MyPerlSettings()
 

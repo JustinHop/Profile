@@ -106,9 +106,6 @@
 [submodule "python/lastfm-tools"]
 	path = python/lastfm-tools
 	url = https://github.com/hugovk/lastfm-tools.git
-[submodule "scripts/mpd-libnotify"]
-	path = scripts/mpd-libnotify
-	url = https://github.com/JustinHop/mpd-libnotify.git
 [submodule "vim/general/puppet"]
 	path = vim/general/puppet
 	url = git://github.com/rodjek/vim-puppet.git
@@ -142,3 +139,9 @@
 [submodule "config/awesome/vicious"]
 	path = config/awesome/vicious
 	url = https://github.com/Mic92/vicious.git
+[submodule "config/awesome/delightful"]
+	path = config/awesome/delightful
+	url = https://github.com/TheMarex/delightful.git
+[submodule "vim/coding/vim-mustache-handlebars"]
+	path = vim/coding/vim-mustache-handlebars
+	url = https://github.com/mustache/vim-mustache-handlebars.git
