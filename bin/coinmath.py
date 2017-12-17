@@ -54,17 +54,17 @@ def main():
         # Count and Price
         for c in CC:
             for p in PP:
-                print("{:5.10f} coins at ${:8.2f} per coin = total value ${:<20.2f}".format(c, p, c * p))
+                print("{:5.10f} coins at ${:9.6f} per coin = total value ${:<20.6f}".format(c, p, c * p))
     if P and T and not C:
         # Price and Total
         for p in PP:
             for t in TT:
-                print("${} total value at ${} per coin = {} coins".format(t, p, t/p))
+                print("${:<10.6f} total value at ${:8.6f} per coin = {:12f} coins".format(t, p, t/p))
     if C and T and not P:
         # Count and Total
         for c in CC:
             for t in TT:
-                print("{} coins for total value ${} = ${} per coin ".format(c, t, t/c))
+                print("{:10f} coins for total value ${:<10.6f} = ${:9.6f} per coin ".format(c, t, t/c))
 
 
 
