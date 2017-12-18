@@ -685,7 +685,18 @@ function precmd() {
 
 bindkey -v
 
-prompt jclint
+case $USER in
+  (justin)
+    prompt jclint
+    ;;
+  (root)
+    prompt jclint green white red
+    ;;
+  (*)
+    prompt jclint green blue white
+    ;;
+esac
+
 
 #
 #  postexec
