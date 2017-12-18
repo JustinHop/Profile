@@ -7,9 +7,20 @@ How to use it
 cd ~
 git clone https://github.com/JustinHop/Profile.git
 cd Profile
+git submodule init
+git submodule update
 . ./zsh/functions/make_home_dir
 
 and enjoy
 
 Justin Hoppensteadt
 www.justinhoppensteadt.com
+
+
+Notes:
+
+I spent a lot of time breaking my terminals down to 8 colors and assigning them to the solarized pallet and to use the terminal fonts included
+
+Switch vim profiles with the VIM_PROFILES var, which I should update to be : delimited, not space.
+
+Lots of host and user specific stuffs
