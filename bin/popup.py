@@ -1,4 +1,15 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+'''popup.py
+
+Usage: popup.py [options]
+
+Options:
+    -h HOST, --host=HOST    MPD host to connect to [default: localhost]
+    -p PORT, --port=PORT    Port on host to connect to [default: 6600]
+
+'''
+
 import pynotify
 from mpd import MPDClient
 from select import select
@@ -8,9 +19,7 @@ import os.path
 import sys
 import time
 # import pprint
-
-HOST = 'localhost'
-PORT = '6600'
+from docopt import docopt
 
 ICON = '/usr/share/icons/HighContrast/48x48/devices/audio-headphones.png'
 ICON48 = '/usr/share/icons/HighContrast/48x48/devices/audio-headphones.png'
@@ -138,10 +147,10 @@ class MpdWatcher:
         #    print("Failed to connect to MPD")
         while True:
             try:
-                self.client.connect(HOST, PORT)
+                self.client.connect(host, port)
                 break
-            except:
-                print("Failed to connect to MPD")
+            except BaseException as e:
+                print('MpdWatcher failed connecting to %s:%s: %s' % (host, port, e))
                 time.sleep(1)
         self.notify = SongNotify()
 
@@ -167,12 +176,19 @@ class MpdWatcher:
             self.notify.newSong(self.song)
 
 
-def test():
-    client = MPDClient()
-    notify = SongNotify()
+def main():
+    conf = docopt(__doc__)
+    print(conf)
+    while True:
+        try:
+            client = MPDClient()
+            notify = SongNotify()
 
-    watch = MpdWatcher(HOST, PORT)
-    watch.watch()
+            watch = MpdWatcher(conf['--host'], conf['--port'])
+            watch.watch()
+        except BaseException as e:
+            print('main() Failed connecting to %s:%s: %s' % (conf['--host'], conf['--port'], e))
+            time.sleep(1)
 
 if __name__ == '__main__':
-    test()
+    main()

@@ -24,7 +24,8 @@ xgamma -gamma .8 &
 { sleep 30s ; while true ; do mpdfavd        ; sleep 5s ; done ; } &
 { sleep 30s ; while true ; do mpdscribble --no-daemon ;
                                                sleep 5s ; done ; } &
-{ sleep 1m  ; while true ; do ~/bin/popup.py ; sleep 5s ; done ; } &
+{ sleep 30s ; exec ~/bin/popup.py -p 6601                      ; } &
+{ sleep 30s ; exec ~/bin/popup.py -p 6602                      ; } &
 
 { exec conky                                                   ; } &
 { exec workrave                                                ; } &
