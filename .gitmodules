@@ -99,7 +99,7 @@
 	url = https://github.com/Lokaltog/powerline-fonts.git
 [submodule "vim/general/vinegar"]
 	path = vim/general/vinegar
-	url = git://github.com/tpope/vim-vinegar.git
+	url = https://github.com/tpope/vim-vinegar.git
 [submodule "zsh/oh-my-zsh"]
 	path = zsh/oh-my-zsh
 	url = https://github.com/robbyrussell/oh-my-zsh.git
@@ -108,7 +108,7 @@
 	url = https://github.com/hugovk/lastfm-tools.git
 [submodule "vim/general/puppet"]
 	path = vim/general/puppet
-	url = git://github.com/rodjek/vim-puppet.git
+	url = https://github.com/rodjek/vim-puppet.git
 [submodule "vim/coding/tabular"]
 	path = vim/coding/tabular
 	url = https://github.com/vim-scripts/Tabular.git
