@@ -1,6 +1,6 @@
 #  Justin Hoppensteadt <zshy-goodness@justinhoppensteadt.com>
 #  Both kinds of free
-
+#
 if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
   source "$PWD"/bin/activate
 fi
@@ -317,7 +317,9 @@ alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
 
 # ViM
 _VIM=vi
-export VIM_PROFILES="lib base"
+if [[ -n ${VIM_PROFILES} ]]; then
+  export VIM_PROFILES="lib base"
+fi
 if [[ -x `whence vim` ]]; then
   _VIM=`whence vim`
 fi
@@ -541,7 +543,9 @@ if (( $ZSH_MAJOR >= 4 )); then
     proxy  sys  www-data colord bin sys sync games news uucp \
     backup list irc gnats nobody libuuid messagebus usbmux whoopsie \
     kernoops rtkit speech-dispatcher colord avahi hplip saned sshd \
-    gdm debian-tor statd ftp mpdscribble dnsmasq festival glances
+    gdm debian-tor statd ftp mpdscribble dnsmasq festival glances \
+    trader avahi-autoipd
+
 
   #compdef _ssh envssh
   #compdef '_dispatch ssh' essh
@@ -719,6 +723,10 @@ alias -g GP="|grep -P"
 alias -g GGP="|&grep -P"
 alias -g X="|xargs"
 alias -g XX="|&xargs"
+
+if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
+  source "$PWD"/bin/activate
+fi
 
 if [[ -f "$PROFILE_DIR/zshrc.local.post" ]]; then
   source "$PROFILE_DIR/zshrc.local.post"

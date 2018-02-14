@@ -182,18 +182,22 @@ mytextclock[5] = awful.widget.textclock("!%c UTC", .5)
 mytextclock[6] = awful.widget.textclock("%a %b %d %r %Z", .5)
 
 btcusd = wibox.widget.textbox()
+bchusd = wibox.widget.textbox()
 ltcusd = wibox.widget.textbox()
 ethusd = wibox.widget.textbox()
 xrpusd = wibox.widget.textbox()
 btcusd_tooltip = awful.tooltip({})
+bchusd_tooltip = awful.tooltip({})
 ltcusd_tooltip = awful.tooltip({})
 ethusd_tooltip = awful.tooltip({})
 xrpusd_tooltip = awful.tooltip({})
 btcusd_tooltip:add_to_object(btcusd)
+bchusd_tooltip:add_to_object(btcusd)
 ltcusd_tooltip:add_to_object(ltcusd)
 ethusd_tooltip:add_to_object(ethusd)
 xrpusd_tooltip:add_to_object(xrpusd)
 btcusd_tooltip:set_markup("Bitcoin Price")
+bchusd_tooltip:set_markup("BitcoinCash Price")
 ltcusd_tooltip:set_markup("Litecoin Price")
 ethusd_tooltip:set_markup("Ethereum Price")
 xrpusd_tooltip:set_markup("Ripple Price")
@@ -323,6 +327,8 @@ for s = 1, screen.count() do
   if s == 1 then right_layout:add(wibox.widget.systray()) end
   if s == 2 then right_layout:add(rspace[s]) end
   if s == 2 then right_layout:add(btcusd) end
+  if s == 2 then right_layout:add(rspace[s]) end
+  if s == 2 then right_layout:add(bchusd) end
   if s == 3 then right_layout:add(rspace[s]) end
   if s == 3 then right_layout:add(ethusd) end
   if s == 3 then right_layout:add(rspace[s]) end
@@ -447,6 +453,7 @@ globalkeys = awful.util.table.join(
 
   awful.key({                   }, "SunProps",        function () awful.util.spawn("mpc next") end),
   awful.key({                   }, "XF86AudioNext",   function () awful.util.spawn("mpc next") end),
+  awful.key({                   }, "SunFront",        function () awful.util.spawn("popup.py -1") end),
 
   awful.key({                   }, "Undo",            function () awful.util.spawn("mpc prev") end),
   awful.key({                   }, "XF86AudioPrev",   function () awful.util.spawn("mpc prev") end),

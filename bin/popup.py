@@ -7,6 +7,7 @@ Usage: popup.py [options]
 Options:
     -h HOST, --host=HOST    MPD host to connect to [default: localhost]
     -p PORT, --port=PORT    Port on host to connect to [default: 6600]
+    -1                      Oneshot
 
 '''
 
@@ -168,6 +169,9 @@ class MpdWatcher:
             if set(changed).intersection(set(['player'])):
                 self.updateSong(self.client.currentsong())
 
+    def once(self):
+        self.updateSong(self.client.currentsong())
+
     def updateSong(self, song):
         self.song = Song(song)
 
@@ -179,11 +183,17 @@ class MpdWatcher:
 def main():
     conf = docopt(__doc__)
     print(conf)
+
+    if conf['-1']:
+        client = MPDClient()
+        notify = SongNotify()
+        watch = MpdWatcher(conf['--host'], conf['--port'])
+        watch.once()
+        sys.exit()
     while True:
         try:
             client = MPDClient()
             notify = SongNotify()
-
             watch = MpdWatcher(conf['--host'], conf['--port'])
             watch.watch()
         except BaseException as e:

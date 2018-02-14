@@ -134,7 +134,11 @@ def do_display():
          format_si(
              float(get_last('ltcbtc', 'gdax')) *
              float(get_last('btcusd', 'gdax'))),
-         'x', 'x', 'x', 'x', 'x', 'x', 'GDAX', ])
+         get_last('bchusd', 'gdax'),
+         format_si(get_last('bchbtc', 'gdax')) + "B",
+         float(get_last('bchbtc', 'gdax')) *
+         float(get_last('btcusd', 'gdax')),
+         'x', 'x', 'x', 'GDAX', ])
     x.add_row(
         ['Bitstamp', get_last('btcusd', 'bitstamp'),
          get_last('ethusd', 'bitstamp'),

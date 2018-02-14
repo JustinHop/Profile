@@ -24,3 +24,5 @@ I spent a lot of time breaking my terminals down to 8 colors and assigning them 
 Switch vim profiles with the VIM_PROFILES var, which I should update to be : delimited, not space.
 
 Lots of host and user specific stuffs
+
+edit ~/hostinfo for a note in your prompt about what system you are on

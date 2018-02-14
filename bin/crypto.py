@@ -15,6 +15,7 @@ import os
 
 V = {
     'btcusd': 0.0,
+    'bchusd': 0.0,
     'ethusd': 0.0,
     'ltcusd': 0.0,
     'xrpusd': 0.0,

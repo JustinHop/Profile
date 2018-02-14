@@ -3,6 +3,7 @@
 start=$(date +%s.%N)
 
 setopt allexport
+/usr/bin/nvidia-settings --load-config-only || true
 nitrogen --restore &
 
 {           exec xfsettingsd         --no-daemon               ; } &
