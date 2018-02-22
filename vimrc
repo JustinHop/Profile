@@ -357,6 +357,7 @@ if !exists('g:loaded_justin_vimrc')
       au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
       au BufRead,BufNewFile *.pp                                    set filetype=puppet
       au BufRead,BufNewFile *.tf                                    set filetype=terraform
+      au BufRead,BufNewFile *.coffee                                set filetype=coffee
       au BufRead,BufNewFile /etc/nginx/*                            set filetype=nginx
       au BufRead,BufNewFile */syseng-rubix-config/*                 set filetype=spine
       au BufRead,BufNewFile */syseng-rubix-config/*/svn-commit.tmp  set filetype=svn

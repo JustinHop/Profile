@@ -19,6 +19,7 @@ import json
 import os.path
 import sys
 import time
+import signal, os
 # import pprint
 from docopt import docopt
 
@@ -139,7 +140,7 @@ class Song:
 
 class MpdWatcher:
 
-    def __init__(self, host, port):
+    def __init__(self, host, port, once=False):
         self.client = MPDClient()
 
         #try:
@@ -152,6 +153,8 @@ class MpdWatcher:
                 break
             except BaseException as e:
                 print('MpdWatcher failed connecting to %s:%s: %s' % (host, port, e))
+                if once:
+                    sys.exit()
                 time.sleep(1)
         self.notify = SongNotify()
 
@@ -187,8 +190,7 @@ def main():
     if conf['-1']:
         client = MPDClient()
         notify = SongNotify()
-        watch = MpdWatcher(conf['--host'], conf['--port'])
-        watch.once()
+        watch = MpdWatcher(conf['--host'], conf['--port'], once=True)
         sys.exit()
     while True:
         try:
@@ -200,5 +202,20 @@ def main():
             print('main() Failed connecting to %s:%s: %s' % (conf['--host'], conf['--port'], e))
             time.sleep(1)
 
+def handle(signum, frame):
+    print('Exiting')
+    sys.exit()
+
+def hup(signum, frame):
+        client = MPDClient()
+        notify = SongNotify()
+        watch = MpdWatcher(conf['--host'], conf['--port'], once=True)
+        sys.exit()
+
+
+signal.signal(signal.SIGHUP, hup)
+signal.signal(signal.SIGUSR2, hup)
+signal.signal(signal.SIGUSR1, hup)
+signal.signal(signal.SIGTERM, handle)
 if __name__ == '__main__':
     main()

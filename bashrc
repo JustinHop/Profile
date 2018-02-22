@@ -238,3 +238,10 @@ $LIGHT_CYAN)$CYAN-$GRAY-$LIGHT_GRAY "
 PS2="$LIGHT_CYAN-$CYAN-$GRAY-$NO_COLOUR "
 }
 setup_env > /dev/null
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[ -f /home/justin/node_modules/tabtab/.completions/serverless.bash ] && . /home/justin/node_modules/tabtab/.completions/serverless.bash
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[ -f /home/justin/node_modules/tabtab/.completions/sls.bash ] && . /home/justin/node_modules/tabtab/.completions/sls.bash
