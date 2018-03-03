@@ -7,6 +7,7 @@ if pidof -x dispatch ; then
     SOCKS="--proxy-server=socks://localhost:1080"
 fi
 
+cp -v ~/.config/google-chrome/Local\ State.back ~/.config/google-chrome/Local\ State
 #exec  bash -c "if ! optirun $CMD ; then $CMD ; fi"
 #exec  bash -c "if ! primusrun $CMD ; then $CMD ; fi"
 exec  bash -c "if ! $ACCEL $CMD ; then $CMD ; fi"
