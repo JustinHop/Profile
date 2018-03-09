@@ -34,8 +34,11 @@ if !exists('g:loaded_justin_vimrc')
   let g:pymode_trim_whitespaces = 1
   let g:pymode_lint_mccabe_complexity = 14
   "let g:pymode_lint_checkers=['pyflakes', 'pep8']
+  let g:pymode_rope = 1
   let g:pymode_rope_completion = 1
-  let g:pymode_rope_complete_on_dot = 1
+  "let g:pymode_rope_complete_on_dot = 1
+  let g:pymode_rope_completion_bind = '<C-Space>'
+
   let g:pymode_indent = 1
   let g:pymode_folding = 1
 

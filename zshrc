@@ -317,7 +317,12 @@ alias RN="rename '$_=ls $_; s![ #$/]!_!g;'"
 
 # ViM
 _VIM=vi
-export VIM_PROFILES=${VIM_PROFILES:-"lib base"}
+if [[ "$VIM_PROFILES" ]]; then
+  export VIM_PROFILES
+else
+  export VIM_PROFILES=${VIM_PROFILES:-"lib:base"}
+fi
+
 if [[ -x `whence vim` ]]; then
   _VIM=`whence vim`
 fi
