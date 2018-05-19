@@ -49,7 +49,7 @@ xgamma -gamma .8 &
 
 { sleep 5s  ; exec ~/Profile/bin/crypto.py                     ; } &
 
-{ sleep 10s  ; pidgin --debug --debug --debug 2>&1 >> ~/pidgin.log ; } &
+{ sleep 10s  ; pidgin                                          ; } &
 { sleep 95s  ; exec ~/bin/pidgin_fortune                       ; } &
 { sleep 10s  ; exec claws-mail  2>&1 | fold -w 80 -s           ; } &
 

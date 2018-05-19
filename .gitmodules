@@ -148,3 +148,6 @@
 [submodule "vim/python/python-mode"]
 	path = vim/python/python-mode
 	url = https://github.com/python-mode/python-mode.git
+[submodule "colors/numix-solarized-dark-gtk-theme"]
+	path = colors/numix-solarized-dark-gtk-theme
+	url = https://github.com/gsnewmark/numix-solarized-dark-gtk-theme.git

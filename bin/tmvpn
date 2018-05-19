@@ -1,26 +1,26 @@
 #!/bin/bash
 
-#read -p "PASSWORD: " -s VPNPW
 docker rm tmvpn || true
 
 docker run \
-	--rm \
-	--interactive \
-	--tty \
-	-p 127.0.0.1:5000:5000 \
-	-p 127.0.0.1:5001:5001 \
-	-p 127.0.0.1:5006:5006 \
-	-p 127.0.0.1:5007:5007 \
-	-p 127.0.0.1:5008:5008 \
-	-p 127.0.0.1:5009:5009 \
-	-p 127.0.0.1:5010:5010 \
-	-p 127.0.0.1:5011:5011 \
-	-p 127.0.0.1:5053:53 \
-	-p 127.0.0.1:5054:5054 \
-	--name tmvpn \
-	--network=bridge \
-	--cap-add=NET_ADMIN \
-	jhoppensteadt/openconnect:latest
+    --rm \
+    --interactive \
+    --tty \
+    -p 127.0.0.1:5000:5000 \
+    -p 127.0.0.1:5001:5001 \
+    -p 127.0.0.1:5006:5006 \
+    -p 127.0.0.1:5007:5007 \
+    -p 127.0.0.1:5008:5008 \
+    -p 127.0.0.1:5009:5009 \
+    -p 127.0.0.1:5010:5010 \
+    -p 127.0.0.1:5011:5011 \
+    -p 127.0.0.1:5053:53 \
+    -p 127.0.0.1:5054:5054 \
+    -p 127.0.0.1:8888:80 \
+    --name tmvpn \
+    --network=bridge \
+    --cap-add=NET_ADMIN \
+    jhoppensteadt/openconnect:latest
 
 
 #openconnect --dump-http-traffic \

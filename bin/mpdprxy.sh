@@ -7,6 +7,6 @@ while true ; do
     sleep 5s
     curl -v 'http://localhost:6610/?active%5B0%5D=1&default%5B0%5D=1'
     wait $_PID
-    echo FAILED
+    echo $0 FAILED
     sleep 1s;
-done
+done > /dev/null
