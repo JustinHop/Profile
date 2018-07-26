@@ -671,19 +671,19 @@ awful.rules.rules = {
     properties = { floating = true,
       border_width = 0 },
     callback = function (c)
-      awful.titlebar.remove(c, { modkey = modkey })
+      awful.titlebar.hide(c)
     end },
   { rule = { name = "Xephyr" },
     properties = { floating = true,
       border_width = 0 },
     callback = function (c)
-      awful.titlebar.remove(c, { modkey = modkey })
+      awful.titlebar.hide(c)
     end },
   { rule = { name = "Screen Ruler" },
     properties = { floating = true,
       border_width = 0 },
     callback = function (c)
-      awful.titlebar.remove(c, { modkey = modkey })
+      awful.titlebar.hide(c)
     end },
   { rule = { class = "kruler" },
     properties = { floating = true,
@@ -705,22 +705,22 @@ awful.rules.rules = {
   { rule = { class = "Galculator" },
     properties = { floating = true },
     callback = function (c)
-      awful.titlebar.add(c, { modkey = modkey })
+      awful.titlebar.toggle(c)
     end },
   { rule = { class = "sun-applet-PluginMain" },
     properties = { floating = true },
     callback = function (c)
-      awful.titlebar.add(c, { modkey = modkey })
+      awful.titlebar.toggle(c)
     end },
   { rule = { class = "java-lang-Thread" },
     properties = { floating = true },
     callback = function (c)
-      awful.titlebar.add(c, { modkey = modkey })
+      awful.titlebar.toggle(c)
     end },
   { rule = { class = "KeePass2" },
     properties = { floating = true },
     callback = function (c)
-      awful.titlebar.add(c, { modkey = modkey })
+      awful.titlebar.toggle(c)
     end },
   { rule = { name = "plugin-container" },
     properties = { floating = false,

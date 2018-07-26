@@ -1,0 +1,13 @@
+#!/bin/bash
+
+unset N
+unset Nm
+
+for N in $(fib $1) ; do
+    if (( Nm > 0 )); then
+        F=$(echo "$N/$Nm" | bc -l) 
+        echo "$N/$Nm = $F"
+    fi
+    Nm=$N
+done
+
