@@ -560,10 +560,10 @@ clientkeys = awful.util.table.join(
   awful.key({ modkey, "Shift"                             } , "f", function (c) if awful.client.floating.get(c)
     then
       awful.client.floating.delete(c);
-      awful.titlebar.remove(c)
+      awful.titlebar.hide(c)
   else
     awful.client.floating.set(c, true);
-    awful.titlebar.add(c) end
+    awful.titlebar.show(c) end
   end)
 )
 

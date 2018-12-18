@@ -207,10 +207,13 @@ def handle(signum, frame):
     sys.exit()
 
 def hup(signum, frame):
-        client = MPDClient()
-        notify = SongNotify()
-        watch = MpdWatcher(conf['--host'], conf['--port'], once=True)
-        sys.exit()
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
+
+    #client = MPDClient()
+    #notify = SongNotify()
+    #watch = MpdWatcher(conf['--host'], conf['--port'], once=True)
+    #sys.exit()
 
 
 signal.signal(signal.SIGHUP, hup)

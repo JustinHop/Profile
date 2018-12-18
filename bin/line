@@ -1,0 +1,7 @@
+#!/bin/bash
+
+CONFIG=~/.config/line
+
+mkdir $CONFIG || true
+
+chromium-browser --user-app-dir=$CONFIG
