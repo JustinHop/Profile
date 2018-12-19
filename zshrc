@@ -727,6 +727,8 @@ alias -g GGP="|&grep -P"
 alias -g X="|xargs"
 alias -g XX="|&xargs"
 
+alias ppp=playvid
+
 if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
   source "$PWD"/bin/activate
 fi

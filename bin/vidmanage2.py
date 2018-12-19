@@ -73,7 +73,7 @@ def bytes_to_human(b):
                 return("%3.1f %s" % (b, x))
             b /= 1024.0
     else:
-        return(0)
+        return('0 B')
 
 
 def new_list(l):
