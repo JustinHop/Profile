@@ -458,6 +458,9 @@ globalkeys = awful.util.table.join(
 
   awful.key({                   }, "Undo",            function () awful.util.spawn("mpc prev") end),
   awful.key({                   }, "XF86AudioPrev",   function () awful.util.spawn("mpc prev") end),
+
+  awful.key({                   }, "XF86AudioRaiseVolume", function () awful.util.spawn('amixer -D pulse sset Master 5%+') end),
+  awful.key({                   }, "XF86AudioLowerVolume", function () awful.util.spawn('amixer -D pulse sset Master 5%-') end),
   -- Prompts
   -- Status bar control
   awful.key({ modkey }, "b", function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end),
