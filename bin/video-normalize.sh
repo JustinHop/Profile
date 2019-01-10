@@ -37,9 +37,14 @@ ARGS="$ARGS"
 EOV
 }
 
+trap "{ docker kill ffmpeg-$$ || true;
+        docker rm ffmpeg-$$ || true; }" SIGTERM SIGSTOP SIGHUP
+
+
 docker_run () {
     $DRY_RUN docker run -t --rm \
-        --name ffmpeg \
+        --network none \
+        --name ffmpeg-$$ \
         --device /dev/dri:/dev/dri \
         -v "$(pwd)":/mnt \
         -v /tmp:/tmp \
@@ -57,37 +62,42 @@ normal () {
     OUT_WAV=$OUT_WAV
     OUT_VID=$OUT_VID
 EON
-    echo "$(date): Processing $IN"
 
     FFVER="-loglevel +24"
     [ $VERBOSE ] && FFVER="-loglevel +40"
 
-    [ -f "$IN" ] || usage
+    [ -f "$IN" ] || ( echo "$IN Not found" && return )
     BEFORE=$(ls -l "$IN")
     TIME=$(stat --printf '%Y' "$IN")
     [ -f "$OUT_WAV" ] && $DRY_RUN sudo rm "$OUT_WAV"
 
-    if ffprobe -hide_banner "$IN" 2>&1 | grep Normalized_Audio > /dev/null ; then
+    PROBE=$( { ffprobe -hide_banner "$IN"; } 2>&1 )
+    VIDEO_MAP=$(echo "$PROBE" | grep Stream | grep Video | grep -oP '(:?#)[01]:[01](:?\(\w+\):)' | grep -oP '\d:\d')
+
+    if echo $PROBE | grep Normalized_Audio > /dev/null ; then
         echo "$IN Already Normalized"
+
+    elif ! echo $VIDEO_MAP | grep -P '^\d:\d$' > /dev/null ; then
+        echo "$IN could not find Video stream"
     else
 
         eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -c:a pcm_s16le -vn "$OUT_WAV"
         [ -f "$OUT_WAV" ] && $DRY_RUN sudo chown justin:justin "$OUT_WAV"
 
-        eval $DRY_RUN $NORM -- "$OUT_WAV"
+        eval $DRY_RUN $NORM -- "$OUT_WAV" || rm -v "$OUT_WAV"
 
         eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -i "$OUT_WAV" \
             -metadata comment="Normalized_Audio" \
-            -map 0:0 -map 1:0 \
+            -map $VIDEO_MAP -map 1:0 \
             -c:v copy \
             -c:a libfdk_aac \
             -profile:a aac_low \
             -vbr 3 \
-            /mnt/"$OUT_VID"
+            /mnt/"$OUT_VID" || return
 
         $DRY_RUN sudo chown justin:justin "$OUT_WAV" "$OUT_VID"
         $DRY_RUN touch --date=@$TIME "$OUT_VID"
-        $DRY_RUN rm -v "$OUT_WAV"
+        $DRY_RUN rm $VERBOSE "$OUT_WAV"
         [ -f /tmp/_normAAAAAA ] && rm /tmp/_normAAAAAA
 
         INTER=""
@@ -146,6 +156,8 @@ shift $((OPTIND-1))
 
 which $NORM > /dev/null || ( echo "normalize-audio required in \$PATH" ; usage )
 
+COUNT=1
 for A in "$@" ; do
-    normal $A
+    echo "--- $(date): Processing $A [$((COUNT++))/$#]"
+    normal $A || echo "$A failed, continuing"
 done

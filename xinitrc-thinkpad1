@@ -25,6 +25,7 @@ xgamma -gamma .8 &
                                                sleep 5s ; done ; } &
 { sleep 30s ; exec ~/bin/popup.py -p 6601                      ; } &
 { sleep 30s ; exec ~/bin/popup.py -p 6602                      ; } &
+{ sleep 30s ; google-drive-ocamlfuse ~/google                  ; } &
 
 { exec conky                                                   ; } &
 { exec workrave                                                ; } &
