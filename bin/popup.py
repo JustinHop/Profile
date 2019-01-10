@@ -7,6 +7,7 @@ Usage: popup.py [options]
 Options:
     -h HOST, --host=HOST    MPD host to connect to [default: localhost]
     -p PORT, --port=PORT    Port on host to connect to [default: 6600]
+    -v, --verbose           Be loud [default: False]
     -1                      Oneshot
 
 '''
@@ -28,28 +29,30 @@ ICON48 = '/usr/share/icons/HighContrast/48x48/devices/audio-headphones.png'
 ICON32 = '/usr/share/icons/HighContrast/32x32/devices/audio-headphones.png'
 
 class SongNotify:
-
-    def __init__(self):
+    def __init__(self, verbose=False):
+        self.verbose = verbose
         pynotify.init("mpd-notify")
         self.notify = pynotify.Notification("Music Player Daemon",
-                "popup.pl", ICON)
+                "popup.pl", ICON48)
         self.songstring=""
 
     def newSong(self, song):
         song.string = ""
         if not song.icon:
-            song.icon = ICON
+            song.icon = ICON48
         for key in vars(song):
             at = getattr(song, key)
             if key in ["string", "id", "icon"]:
                 continue
             if at:
                 song.string += " ".join([key, ":", str(getattr(song, key)), "\n"])
-                print(["key: ", key])
-                print(["value: ", getattr(song, key)])
+                if self.verbose == True:
+                    print(["key: ", key])
+                    print(["value: ", getattr(song, key)])
 
         if self.songstring == song.string:
-            print("No Update")
+            if self.verbose == True:
+                print("No Update")
             return
 
         if song.title and song.artist:
@@ -63,7 +66,7 @@ class SongNotify:
                 self.notify.update(
                     str(song.name),
                     str(song.title),
-                    ICON32)
+                    ICON48)
 
             else:
                 self.notify.update(
@@ -71,8 +74,9 @@ class SongNotify:
                     str(song.string),
                     song.icon)
 
-        print("['Notification: ', 'show']")
         try:
+            if self.verbose == True:
+                print("['Notification: ', 'show']")
             self.notify.show()
         except glib.GError:
             print("['Notification: ', 'failed']")
@@ -81,7 +85,6 @@ LASTFMAPIKEY = "e5d743dba724b90c0e522ad8ea7b4afc"
 
 
 class Song:
-
     def __init__(self, song_dict):
         for d in ['id', 'album', 'artist', 'title', 'name', 'file']:
             if d in song_dict:
@@ -139,9 +142,9 @@ class Song:
 
 
 class MpdWatcher:
-
-    def __init__(self, host, port, once=False):
+    def __init__(self, host, port, verbose=False, once=False):
         self.client = MPDClient()
+        self.verbose = verbose
 
         #try:
         #    self.client.connect(HOST, PORT)
@@ -156,7 +159,7 @@ class MpdWatcher:
                 if once:
                     sys.exit()
                 time.sleep(1)
-        self.notify = SongNotify()
+        self.notify = SongNotify(verbose=self.verbose)
 
         self.song = None
         self.updateSong(self.client.currentsong())
@@ -167,7 +170,8 @@ class MpdWatcher:
             select([self.client], [], [])
             changed = self.client.fetch_idle()
             for change in changed:
-                print(["Change: ", change])
+                if self.verbose == True:
+                    print(["Change: ", change])
             # if set(changed).intersection(set(['player','playlist'])):
             if set(changed).intersection(set(['player'])):
                 self.updateSong(self.client.currentsong())
@@ -178,25 +182,30 @@ class MpdWatcher:
     def updateSong(self, song):
         self.song = Song(song)
 
-        print(["State: ", self.client.status()['state']])
+        if self.verbose == True:
+            print(["State: ", self.client.status()['state']])
         if self.client.status()['state'] == 'play':
             self.notify.newSong(self.song)
 
 
 def main():
     conf = docopt(__doc__)
-    print(conf)
+    try:
+        if conf['--verbose'] == True:
+            print(conf)
+    except BaseException as e:
+        pass
 
     if conf['-1']:
         client = MPDClient()
         notify = SongNotify()
-        watch = MpdWatcher(conf['--host'], conf['--port'], once=True)
+        watch = MpdWatcher(conf['--host'], conf['--port'], conf['--verbose'], once=True)
         sys.exit()
     while True:
         try:
             client = MPDClient()
-            notify = SongNotify()
-            watch = MpdWatcher(conf['--host'], conf['--port'])
+            notify = SongNotify(conf['--verbose'])
+            watch = MpdWatcher(conf['--host'], conf['--port'], conf['--verbose'])
             watch.watch()
         except BaseException as e:
             print('main() Failed connecting to %s:%s: %s' % (conf['--host'], conf['--port'], e))
@@ -204,7 +213,7 @@ def main():
 
 def handle(signum, frame):
     print('Exiting')
-    sys.exit()
+    sys.exit(0)
 
 def hup(signum, frame):
     python = sys.executable
