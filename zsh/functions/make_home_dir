@@ -1,6 +1,7 @@
 cd ~/Profile
 git submodule init
 git submodule update
+git submodule foreach --recursive git pull origin master
 
 for RCFILE in bashrc \
     gvimrc \
