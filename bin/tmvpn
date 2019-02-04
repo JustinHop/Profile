@@ -6,6 +6,11 @@ docker run \
     --rm \
     --interactive \
     --tty \
+    --name tmvpn \
+    --device=/dev/net/tun \
+    --cap-add=NET_ADMIN \
+    -p 127.0.0.1:3023:3023 \
+    -p 127.0.0.1:3080:3080 \
     -p 127.0.0.1:5000:5000 \
     -p 127.0.0.1:5001:5001 \
     -p 127.0.0.1:5006:5006 \
@@ -17,9 +22,6 @@ docker run \
     -p 127.0.0.1:5053:53 \
     -p 127.0.0.1:5054:5054 \
     -p 127.0.0.1:8888:80 \
-    --name tmvpn \
-    --network=bridge \
-    --cap-add=NET_ADMIN \
     jhoppensteadt/openconnect:latest
 
 
