@@ -729,6 +729,8 @@ alias -g XX="|&xargs"
 
 alias ppp=playvid
 
+alias mytime="TZ=Asia/Bangkok undertime  --no-default-zone Asia/Bangkok UTC US/Pacific"
+
 if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
   source "$PWD"/bin/activate
 fi
@@ -736,5 +738,6 @@ fi
 if [[ -f "$PROFILE_DIR/zshrc.local.post" ]]; then
   source "$PROFILE_DIR/zshrc.local.post"
 fi
+
 
 # vim:syn=zsh:ft=zsh

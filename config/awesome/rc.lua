@@ -14,6 +14,8 @@ local menubar = require("menubar")
 -- Load Debian menu entries
 require("debian.menu")
 
+invert = -1
+
 home_dir = os.getenv("HOME")
 config_dir = awful.util.getdir("config")
 hostname = string.gsub(awful.util.pread("hostname"), "\n", "")
@@ -176,8 +178,10 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 spacer = "┃"
 mytextclock = {}
 mytextclock[1] = awful.widget.textclock("%c %Z", .5)
-mytextclock[2] = awful.widget.textclock("%a %b %d %r %Z", .5)
-mytextclock[3] = awful.widget.textclock("!%c UTC", .5)
+mytextclock[2] = awful.widget.textclock("!%c UTC", .5)
+mytextclock[3] = awful.widget.textclock("%a %b %d %r %Z", .5)
+--os.date( "%c ICT", os.time() + 7 * 60 * 60 )
+--mytextclock[2] = awful.widget.textclock({ "%c ICT", os.time() + 7 * 60 * 60 }, .5)
 mytextclock[4] = awful.widget.textclock("%c %Z", .5)
 mytextclock[5] = awful.widget.textclock("!%c UTC", .5)
 mytextclock[6] = awful.widget.textclock("%a %b %d %r %Z", .5)
@@ -401,9 +405,9 @@ globalkeys = awful.util.table.join(
   awful.key({ "Shift"           }, "F11", awful.tag.viewnext       ),
 
   --awful.key({ modkey,           }, "l",      function () awful.screen.focus_relative( 1) mousemarker() end),
-  awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relative( 1) mousemarker() end),
+  awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relative( 1 * invert) mousemarker() end),
   --awful.key({ modkey,           }, "h",      function () awful.screen.focus_relative( -1) mousemarker() end),
-  awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1) mousemarker() end),
+  awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1 * invert) mousemarker() end),
   awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
 
   awful.key({ modkey,           }, "j",
@@ -543,8 +547,8 @@ clientkeys = awful.util.table.join(
   awful.key({ modkey, "Control"                           } , "m",     function (c) c.minimized = not c.minimized end),
   awful.key({ modkey, "Control"                           } , "Tab",   function () awful.client.swap.byidx(  1) awful.client.focus.byidx( -1)   end),
   awful.key({ modkey, "Shift", "Control"                  } , "Tab", function () awful.client.swap.byidx(  -1) awful.client.focus.byidx( 1)   end),
-  awful.key({ modkey,                                     } , "o", function (c) awful.client.movetoscreen(c,c.screen+1) mousemarker() end),
-  awful.key({ modkey, "Shift"                             } , "o", function (c) awful.client.movetoscreen(c,c.screen-1) mousemarker() end),
+  awful.key({ modkey,                                     } , "o", function (c) awful.client.movetoscreen(c,c.screen+1 * invert) mousemarker() end),
+  awful.key({ modkey, "Shift"                             } , "o", function (c) awful.client.movetoscreen(c,c.screen-1 * invert) mousemarker() end),
   awful.key({ modkey,                                     } , "r", function (c) c:redraw() end),
   -- TODO: Shift+r to redraw all clients in current tag
   --awful.key({ modkey                                    } , "o",     awful.client.movetoscreen),

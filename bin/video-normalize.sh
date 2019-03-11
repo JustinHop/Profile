@@ -68,6 +68,7 @@ EON
 
     [ -f "$IN" ] || ( echo "$IN Not found" && return )
     BEFORE=$(ls -l "$IN")
+    IN_SIZE=$(stat -c '%s' "$IN")
     TIME=$(stat --printf '%Y' "$IN")
     [ -f "$OUT_WAV" ] && $DRY_RUN sudo rm "$OUT_WAV"
 
@@ -100,12 +101,27 @@ EON
         $DRY_RUN rm $VERBOSE "$OUT_WAV"
         [ -f /tmp/_normAAAAAA ] && rm /tmp/_normAAAAAA
 
+        OUT_SIZE=$(stat -c '%s' "$OUT_VID")
+        INOUT=$(echo "$IN_SIZE"/"$OUT_SIZE" | bc -l)
+
+        echo "IN/OUT ratio: $INOUT"
+
         INTER=""
         [ $DEBUG ] && INTER="-i"
-        [ $OVERWRITE ] && $DRY_RUN mv $VERBOSE $INTER -- "$OUT_VID" "$IN" && $DRY_RUN touch --date=@$TIME "$IN"
+
 
         $DRY_RUN echo $BEFORE
         if [ $OVERWRITE ]; then 
+            if [ $( echo "$INOUT \< 0.9" | bc -l ) == 1 ]; then
+                echo "OUTPUT FILE TOO SMALL!"
+            else
+                if [ $( echo "$INOUT \> 1.1" | bc -l ) == 1 ]; then
+                    "OUTPUT FILE TOO BIG!"
+                else
+                    $DRY_RUN mv $VERBOSE $INTER -- "$OUT_VID" "$IN" 
+                    $DRY_RUN touch --date=@$TIME "$IN"
+                fi
+            fi
             $DRY_RUN ls -l "$IN"
         else
             $DRY_RUN ls -l "$OUT_VID"

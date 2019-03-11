@@ -1,4 +1,24 @@
 #$include /etc/inputrc
+
+# Color files by types
+set colored-stats On
+# Append char to indicate type
+set visible-stats On
+# Mark symlinked directories
+set mark-symlinked-directories On
+# Color the common prefix
+set colored-completion-prefix On
+# Color the common prefix in menu-complete
+set menu-complete-display-prefix On
+
+set show-all-if-ambiguous On
+set show-all-if-unmodified On
+
+set completion-ignore-case On
+set completion-prefix-display-length 3
+
+
+
 set keymap vi-insert
 "\e[1~": forward-backward-delete-char
 "\e[H": forward-backward-delete-char

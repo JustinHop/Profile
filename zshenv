@@ -5,6 +5,8 @@
 
 export __ZSHENV__=0.2.7
 
+export TZ=Asia/Bangkok
+
 export HOSTNAME=`hostname`
 export UNAME=`uname`
 
