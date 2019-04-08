@@ -151,3 +151,9 @@
 [submodule "colors/numix-solarized-dark-gtk-theme"]
 	path = colors/numix-solarized-dark-gtk-theme
 	url = https://github.com/gsnewmark/numix-solarized-dark-gtk-theme.git
+[submodule "vim/coding/vim-polyglot"]
+	path = vim/coding/vim-polyglot
+	url = https://github.com/sheerun/vim-polyglot.git
+[submodule "vim/coding/syntastic"]
+	path = vim/coding/syntastic
+	url = https://github.com/vim-syntastic/syntastic.git

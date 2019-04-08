@@ -112,10 +112,10 @@ EON
 
         $DRY_RUN echo $BEFORE
         if [ $OVERWRITE ]; then 
-            if [ $( echo "$INOUT \< 0.9" | bc -l ) == 1 ]; then
+            if [ $( echo "$INOUT"' < 0.9' | bc -l ) -eq 1 ]; then
                 echo "OUTPUT FILE TOO SMALL!"
             else
-                if [ $( echo "$INOUT \> 1.1" | bc -l ) == 1 ]; then
+                if [ $( echo "$INOUT"' > 1.1' | bc -l ) -eq 1 ]; then
                     "OUTPUT FILE TOO BIG!"
                 else
                     $DRY_RUN mv $VERBOSE $INTER -- "$OUT_VID" "$IN" 

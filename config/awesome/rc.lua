@@ -463,6 +463,8 @@ globalkeys = awful.util.table.join(
   awful.key({                   }, "Undo",            function () awful.util.spawn("mpc prev") end),
   awful.key({                   }, "XF86AudioPrev",   function () awful.util.spawn("mpc prev") end),
 
+  awful.key({                   }, "Find",            function () awful.util.spawn("xfce4-find-cursor") end),
+
   -- awful.key({                   }, "XF86AudioRaiseVolume", function () awful.util.spawn('amixer -D pulse sset Master 5%+') end),
   -- awful.key({                   }, "XF86AudioLowerVolume", function () awful.util.spawn('amixer -D pulse sset Master 5%-') end),
   -- Prompts

@@ -357,7 +357,7 @@ if !exists('g:loaded_justin_vimrc')
       au BufNewFile,BufRead /etc/httpd/conf.d/*.conf                set filetype=apache
       au BufNewFile,BufRead /etc/httpd/virtual/*.conf               set filetype=apache
       au BufNewFile,BufRead /etc/event.d/*                          set filetype=upstart
-      au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
+      " au BufRead,BufNewFile *.js                                    set filetype=javascript.jquery
       au BufRead,BufNewFile *.pp                                    set filetype=puppet
       au BufRead,BufNewFile *.tf                                    set filetype=terraform
       au BufRead,BufNewFile *.coffee                                set filetype=coffee
@@ -373,7 +373,9 @@ if !exists('g:loaded_justin_vimrc')
     au BufNewFile,BufRead ~/backup/* let g:DoBackups = 0
     au BufNewFile * call EnableBackupNew()
     au BufRead * call EnableBackupExists()
-    au BufWritePre * execute "silent! normal :%s/↩//g \<CR>"
+    if ! &filetype ==# 'vim'
+      au BufWritePre * execute "silent! normal :%s/↩//g \<CR>"
+    endif
 
     au BufReadPost * silent! call ReadUndo()
     au BufWritePost * silent! call WriteUndo()
