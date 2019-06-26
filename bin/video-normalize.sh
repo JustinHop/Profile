@@ -116,7 +116,7 @@ EON
                 echo "OUTPUT FILE TOO SMALL!"
             else
                 if [ $( echo "$INOUT"' > 1.1' | bc -l ) -eq 1 ]; then
-                    "OUTPUT FILE TOO BIG!"
+                    echo "OUTPUT FILE TOO BIG!"
                 else
                     $DRY_RUN mv $VERBOSE $INTER -- "$OUT_VID" "$IN" 
                     $DRY_RUN touch --date=@$TIME "$IN"

@@ -1,0 +1,8 @@
+#!/bin/bash
+ACCEL=
+SOCKS=
+#CMD="google-chrome --disable-session-crashed-bubble $SOCKS $@" 
+
+#exec  bash -c "if ! optirun $CMD ; then $CMD ; fi"
+#exec  bash -c "if ! primusrun $CMD ; then $CMD ; fi"
+brave-browser --disable-session-crashed-bubble "$@"

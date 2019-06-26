@@ -1,0 +1,12 @@
+#!/bin/bash
+
+docker run \
+    -it --rm \
+    --network=container:tmvpn \
+    -v ~/.config/xen/config:/root/.config \
+    -v ~/.config/xen/local:/root/.local \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -e DISPLAY=$DISPLAY \
+    -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) \
+    -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK \
+    danniel/openxenmanager bash

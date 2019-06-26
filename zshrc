@@ -739,5 +739,6 @@ if [[ -f "$PROFILE_DIR/zshrc.local.post" ]]; then
   source "$PROFILE_DIR/zshrc.local.post"
 fi
 
+alias bkkscreens="xrandr --output eDP-1 --mode 1920x1080 --primary --output DP-2-1 --mode 1920x1080 --rate 60 --right-of eDP-1 --output HDMI-1 --mode 1920x1080 --right-of DP-2-1"
 
 # vim:syn=zsh:ft=zsh

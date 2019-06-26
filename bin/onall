@@ -74,6 +74,7 @@ Getopt::Long::GetOptions(
     'syslist|f=s',
     'suppress|s=s',
     'logpath|o=s',
+    'progress|P',
     'script|e=s',
     'help|h',
     'yes|y',
@@ -266,6 +267,10 @@ sub new_ssh_child
         elsif (exists $opt{logpath})
         {
             print LOGFILE "$_\n";
+            if ( exists ${opt}{progress} )
+            {
+                print $rline;
+            }
         }
         else
         {

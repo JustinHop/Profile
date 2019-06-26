@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -d /tmp/chrome ]; then
+    rm -rf /tmp/chrome
+fi
+
+mkdir /tmp/chrome
+
+exec chromium-browser \
+    --incognito \
+    --user-data-dir=/tmp/chrome \
+    "$@"

@@ -9,6 +9,7 @@ dotransfer() {
     echo $HOST
     echo "$HOST : $(scp $SCP ~/b ${HOST}:)"
     echo "$HOST : $(scp $SCP ~/.screenrc ${HOST}:)"
+    echo "$HOST : $(scp $SCP ~/.tmux.conf ${HOST}:)"
     ssh ${HOST} mkdir .screenlogs
     #echo "$HOST : $(scp /usr/share/terminfo/r/rxvt-unicode-256color ${HOST}:/usr/share/terminfo/r)"
 }
