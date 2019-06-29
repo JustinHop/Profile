@@ -50,6 +50,8 @@ if !exists('g:loaded_justin_vimrc')
   let g:go_highlight_build_constraints = 1
   let g:pymode_python = 'python3'
 
+  let g:syntastic_ignore_extensions = '\c\v^([gx]?z|lzma|bz2|py)$'
+
   let g:terraform_fmt_on_save = 0
 
 
@@ -403,6 +405,7 @@ if !exists('g:loaded_justin_vimrc')
     au FileType spec set formatoptions-=a
 
     au FileType python setlocal splitbelow
+    au FileType python let b:syntastic_skip_checks = 1
 
     "au FileType perl :call MyPerlSettings()
 

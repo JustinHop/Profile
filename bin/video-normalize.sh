@@ -49,7 +49,7 @@ docker_run () {
         -v "$(pwd)":/mnt \
         -v /tmp:/tmp \
         --cpus $CPU \
-        jrottenberg/ffmpeg:vaapi -hide_banner $@
+        jrottenberg/ffmpeg:vaapi -hide_banner -y $@
 }
 
 normal () {
