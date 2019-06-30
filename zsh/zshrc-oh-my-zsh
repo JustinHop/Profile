@@ -58,7 +58,13 @@ plugins=(
     python
     systemadmin
     tmux
-    vim-integration
+    vim-interaction
+    virtualenv
+    rsync
+    nmap
+    man
+    docker
+    docker-compose
     )
 
 # User configuration
