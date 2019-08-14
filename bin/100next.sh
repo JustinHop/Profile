@@ -6,10 +6,10 @@ let "COUNTP=COUNT+1"
 VIDLIST=/tmp/vidlist
 TMP=${VIDLIST}.$$
 
-if [ ! -f $VIDLIST ] || (( $RANDOM % 6 == 0 )); then
+if [ ! -f $VIDLIST ] || (( $RANDOM % 10 == 0 )); then
     echo REGENERATING LIST > /dev/stderr
     sleep 1
-    vidmanage show a b c | rl | rl > $VIDLIST
+    vidmanage show a a a b b c | rl | rl > $VIDLIST
 fi
 
 LINES=$(wc -l $VIDLIST | awk '{ print $1 }')

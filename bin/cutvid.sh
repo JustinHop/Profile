@@ -7,8 +7,6 @@ SAFE=echo
 
 #set -x
 
-# 2019-06-29 21:13 - vidcutter.libs.videoservice - INFO - /usr/bin/ionice -c 3 /usr/bin/ffmpeg -v error -ss 00:05:56.356 -t 00:21:16.043 -i "/mnt/auto/3/share/Video/P/POV.Punx.9.Super.Star.Edition.XXX.1080P.mp4" -c copy -avoid_negative_ts 1 -y "/mnt/auto/3/share/Video/P/POV.Punx.9.Super.Star.Edition.XXX.1080P_EDIT_00.mp4"
-
 
 for CUTFILE in $@ ; do
     if echo $CUTFILE | grep -sqP '\.vcp$' ; then

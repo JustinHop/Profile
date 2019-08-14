@@ -373,6 +373,8 @@ if !exists('g:loaded_justin_vimrc')
 
     let g:DoBackups = 1
     au BufNewFile,BufRead ~/backup/* let g:DoBackups = 0
+    au BufNewFile,BufRead ~/notes/* let g:DoBackups = 0
+    au BufNewFile,BufRead /tmp/* let g:DoBackups = 0
     au BufNewFile * call EnableBackupNew()
     au BufRead * call EnableBackupExists()
     if ! &filetype ==# 'vim'

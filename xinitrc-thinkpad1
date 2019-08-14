@@ -69,9 +69,11 @@ echo "Session: setting Xdefaults and Xmodmap"
          -option \
          -option ctrl:nocaps \
          -option terminate:ctrl_alt_bksp \
-         -option ctrl:menu_rctrl \
          -option keypad:pointerkeys
 
+      #  -option ctrl:menu_rctrl \
+
+      xmodmap -e "keycode 133 = Super_L";
       xmodmap -e "keycode 135 = Super_L";
       xset r rate 350 50;
       xset s 3600

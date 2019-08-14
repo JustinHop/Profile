@@ -18,3 +18,4 @@ scroll_on_keystroke=1
 wrap_switch_tab=1
 new_tabs_adjacent=1
 middle_click_tab=1
+limit_scrollback=1
