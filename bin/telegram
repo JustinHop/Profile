@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mkdir -p ~/.telegram-cli || true
+
+docker run -it --rm \
+    --name=telegram \
+    -v /etc/timezone:/etc/TZ:ro \
+    -v $HOME/Profile/inputrc-alpine:/etc/inputrc:ro \
+    -v $HOME/Profile/inputrc:/home/user/.inputrc:ro \
+    -v $HOME/.telegram-cli:/home/user/.telegram-cli \
+    frankwolf/telegram-cli $@

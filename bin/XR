@@ -1,0 +1,55 @@
+#!/bin/bash
+
+HELP=$(cat <<-EOH
+$0 - xrandr script
+aaa aab aba abb abb abc
+EOH
+)
+
+case "$1" in
+    aaa)
+        xrandr    \
+            --output  eDP1   --primary   --mode  1920x1080  \
+            --output  HDMI-1  --same-as   eDP1    --mode     1920x1080  \
+            --output  DP-2-3  --same-as   eDP1    --mode     1920x1080
+        ;;
+    aa)
+        xrandr    \
+            --output  eDP1   --primary   --mode  1920x1080  \
+            --output  HDMI-1  --same-as   eDP1    --mode     1920x1080  \
+            --output  DP-2-3  --off
+        ;;
+    ab)
+        xrandr    \
+            --output  eDP1   --primary   --mode  1920x1080  \
+            --output  HDMI-1  --right-of  eDP1    --mode     1920x1080  \
+            --output  DP-2-3  --off
+        ;;
+    aab)
+        xrandr    \
+            --output  eDP1   --primary   --mode  1920x1080  \
+            --output  HDMI-1  --same-as   eDP1    --mode     1920x1080  \
+            --output  DP-2-3  --right-of  HDMI-1   --mode     1920x1080
+        ;;
+    aba)
+        xrandr    \
+            --output  eDP1   --primary   --mode  1920x1080  \
+            --output  HDMI-1  --right-of  eDP1    --mode     1920x1080  \
+            --output  DP-2-3  --same-as   eDP1    --mode     1920x1080
+        ;;
+    abb)
+        xrandr    \
+            --output  eDP1   --primary   --mode  1920x1080  \
+            --output  HDMI-1  --right-of  eDP1    --mode     1920x1080  \
+            --output  DP-2-3  --same-as   HDMI-1   --mode     1920x1080
+        ;;
+    abc)
+        xrandr    \
+            --output  eDP1   --primary   --mode  1920x1080  \
+            --output  HDMI-1  --right-of  eDP1    --mode     1920x1080  \
+            --output  DP-2-3  --right-of  HDMI-1   --mode     1920x1080
+        ;;
+    *)
+        echo "$HELP"
+        ;;
+esac

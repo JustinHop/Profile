@@ -11,6 +11,8 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 
+local capi = { timer = timer }
+
 -- Load Debian menu entries
 require("debian.menu")
 
@@ -132,6 +134,9 @@ tags = {}
 for s = 1, screen.count() do
   -- Each screen has its own tag table.
   tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+  -- if s == 2 then
+  --   awful.layout.set(awful.layout.suit.max, tags[s][
+  -- end
 end
 awful.tag.setnmaster(1, tags[1][2])
 --awful.tag.incnmaster(1, tags[1][2])
@@ -465,8 +470,9 @@ globalkeys = awful.util.table.join(
 
   awful.key({                   }, "Find",            function () awful.util.spawn("xfce4-find-cursor") end),
 
-  -- awful.key({                   }, "XF86AudioRaiseVolume", function () awful.util.spawn('amixer -D pulse sset Master 5%+') end),
-  -- awful.key({                   }, "XF86AudioLowerVolume", function () awful.util.spawn('amixer -D pulse sset Master 5%-') end),
+  awful.key({                   }, "XF86AudioRaiseVolume", function () awful.util.spawn('amixer -D pulse sset Master 5%+') end),
+  awful.key({                   }, "XF86AudioLowerVolume", function () awful.util.spawn('amixer -D pulse sset Master 5%-') end),
+  awful.key({                   }, "XF86AudioMute", function () awful.util.spawn('amixer -D pulse sset Master toggle') end),
   -- Prompts
   -- Status bar control
   awful.key({ modkey }, "b", function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end),
@@ -755,6 +761,10 @@ awful.rules.rules = {
 -- }}
 
 -- {{{ Signals
+
+xscreen = capi.timer { timeout = 60 }
+xscreen:connect_signal("timeout", function() awful.util.spawn("echo xscreensaver deactivate") awful.util.spawn("xscreensaver-command -deactivate") end)
+
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c, startup)
   -- Enable sloppy focus
@@ -762,14 +772,21 @@ client.connect_signal("manage", function (c, startup)
     -- naughty.notify{ title = 'Debug Information', text = c.name, icon = c.icon}
     mousemarker()
 
+    if c.fullscreen then
+      xscreen:start()
+      xscreen:emit_signal("timeout")
+    end
+
     if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
       and awful.client.focus.filter(c) then
       client.focus = c
     end
+
   end)
 
   c:connect_signal("mouse::leave", function(c)
     mousemarker()
+    c_status, c_result = pcall(xscreen:stop())
   end)
 
   if not startup then

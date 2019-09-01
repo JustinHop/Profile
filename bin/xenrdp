@@ -1,0 +1,7 @@
+#!/bin/bash
+
+docker run --rm \
+    --network=container:tmvpn \
+    -e RDESKTOP_SERVER=winapps.phx2.winsys.tmcs \
+    -e RDESKTOP_OPTS='-u JustinH -d TECHOPS' \
+    desktopcontainers/rdesktop-nano

@@ -43,6 +43,7 @@ trap "{ docker kill ffmpeg-$$ || true;
 
 docker_run () {
     $DRY_RUN docker run -t --rm \
+        --user 1000:1000 \
         --network none \
         --name ffmpeg-$$ \
         --device /dev/dri:/dev/dri \
