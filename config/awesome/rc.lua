@@ -145,6 +145,13 @@ awful.tag.setmwfact(.8, tags[1][2])
 awful.layout.set(awful.layout.suit.max, tags[1][3])
 awful.layout.set(awful.layout.suit.max, tags[1][7])
 awful.layout.set(awful.layout.suit.max, tags[1][9])
+
+if screen.count() >= 3 then
+  for s = 1, 9 do
+    awful.layout.set(awful.layout.suit.max, tags[2][s])
+  end
+end
+
 -- }}}
 
 -- {{{ Menu
@@ -763,7 +770,7 @@ awful.rules.rules = {
 -- {{{ Signals
 
 xscreen = capi.timer { timeout = 60 }
-xscreen:connect_signal("timeout", function() awful.util.spawn("echo xscreensaver deactivate") awful.util.spawn("xscreensaver-command -deactivate") end)
+xscreen:connect_signal("timeout", function() awful.util.spawn("xscreensaver-command -deactivate") end)
 
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c, startup)
@@ -786,7 +793,7 @@ client.connect_signal("manage", function (c, startup)
 
   c:connect_signal("mouse::leave", function(c)
     mousemarker()
-    c_status, c_result = pcall(xscreen:stop())
+    c_status, c_result = pcall(function() xscreen:stop() end)
   end)
 
   if not startup then
