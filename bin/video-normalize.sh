@@ -56,7 +56,7 @@ docker_run () {
 normal () {
     IN="$1"
     OUT_WAV="${TMPDIR}/${IN%.*}.wav"
-    OUT_VID="${IN%.*}-volnorm.${IN##*.}"
+    OUT_VID="${IN%.*}-volnorm.mkv"
     [ $VERBOSE ] && cat <<EON
     Entered normal($1)
     IN=$IN
@@ -89,7 +89,7 @@ EON
         eval $DRY_RUN $NORM -- "$OUT_WAV" || rm -v "$OUT_WAV"
 
         eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -i "$OUT_WAV" \
-            -metadata comment="Normalized_Audio" \
+            -metadata comment="Normalized_Audio $(date)" \
             -map $VIDEO_MAP -map 1:0 \
             -c:v copy \
             -c:a libfdk_aac \
@@ -178,4 +178,5 @@ COUNT=1
 for A in "$@" ; do
     echo "--- $(date): Processing $A [$((COUNT++))/$#]"
     normal $A || echo "$A failed, continuing"
+    find /tmp -type f -name '*.wav' -exec rm -v {} \;
 done
