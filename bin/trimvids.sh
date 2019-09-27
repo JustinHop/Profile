@@ -9,6 +9,7 @@ if [ $* ]; then
     echo dry run
 fi
 
+vidmanage update
 vidmanage lists
 BEFORE=$(df -h | grep /mnt/auto | while read LINE ; do echo $(echo $LINE| awk 'NF{NF-=1};1'); done )
 

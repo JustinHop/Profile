@@ -522,6 +522,9 @@ EOF
       		Fping all hosts prior to attempting an
 		ssh connection.
 
+    -P, --progress
+                Also print line output if using -o.
+
     -s, --suppress
       		Supress hostnames and line numbers from being
 		prepended to result data.
