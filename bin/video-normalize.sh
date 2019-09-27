@@ -90,6 +90,7 @@ EON
 
         eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -i "$OUT_WAV" \
             -metadata comment="Normalized_Audio $(date)" \
+            -metadata JHOP=modified \
             -map $VIDEO_MAP -map 1:0 \
             -c:v copy \
             -c:a libfdk_aac \

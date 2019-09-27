@@ -8,7 +8,7 @@ SAFE=echo
 #set -x
 
 COPY="-c copy"
-NORM='-vcodec copy -acodec aac -af \"aresample=async=1:first_pts=0\" -af dynaudnorm -metadata comment=\"Normalized_Audio ffmpeg dynaudnorm $(date)\" -fflags +genpts'
+NORM='-vcodec copy -acodec aac -af "aresample=async=1:first_pts=0" -af dynaudnorm -metadata comment="Normalized_Audio ffmpeg dynaudnorm $(date)" -fflags +genpts'
 
 for CUTFILE in $@ ; do
     if echo $CUTFILE | grep -sqP '\.vcp$' ; then
@@ -19,9 +19,13 @@ for CUTFILE in $@ ; do
                 break
             fi
         done
+
+        BITRATE=$(ffprobe -hide_banner "$VIDEO" 2>&1 | grep Video: | grep -oP '\d+ kb\/s' | awk '{ print $1 }')
+        ABITRATE=$(ffprobe -hide_banner "$VIDEO" 2>&1 | grep Audio: | grep -oP '\d+ kb\/s' | awk '{ print $1 }')
+
         if [ -f "$VIDEO" ] && [ -f "$CUTFILE" ]; then
             IFS=$'\n'
-            if ffprobe "$VIDEO" | grep -sq "Normalized" ; then
+            if ffprobe -hide_banner "$VIDEO" 2>&1 | grep -sq "Normalized_Audio" ; then
                 OPTS="$COPY"
             else
                 OPTS="$NORM"
@@ -36,7 +40,16 @@ for CUTFILE in $@ ; do
                 VIDEOOUT="${VIDEO%.*}_EDIT_$(printf '%02d' ${COUNT}).mkv"
 
                 #echo nice ionice -c 3 ffmpeg -hide_banner -v info -ss $TONE -to $TTWO -i "$VIDEO" -c copy -avoid_negative_ts 1 -y "$VIDEOOUT"
-                $SAFE nice ionice -c 3 ffmpeg -hide_banner -v info -ss \"$TONE\" -t \"$TDUR\" -i \"$VIDEO\" "$OPTS" -avoid_negative_ts 1 -y \"$VIDEOOUT\" || echo exited $!
+                $SAFE nice ionice -c 3 ffmpeg -hide_banner -v info -ss \"$TONE\" -t \"$TDUR\" -i \"$VIDEO\" \
+                    -metadata cut_start=\"$TONE\" \
+                    -metadata cut_end=\"$TTWO\" \
+                    -metadata parent_file=\"$VIDEO\" \
+                    -metadata JHOP=modified \
+                    -metadata videobitrate=\"Video:\ $BITRATE\ kb\/s\" \
+                    -metadata audiobitrate=\"Audio:\ $ANEWRATE\ kb\/s\" \
+                    "$OPTS" \
+                    -avoid_negative_ts 1 \
+                    -y \"$VIDEOOUT\" || echo exited $!
 
                 let "COUNT = $COUNT + 1"
 

@@ -111,6 +111,7 @@ for FILE in $@ ; do
                 -v /tmp:/tmp
                 jrottenberg/ffmpeg:vaapi -hide_banner -y
                     -i "$FILE"
+                    -metadata JHOP=modified
                     -metadata audiobitrate=\"Audio:\ $ANEWRATE\ kb\/s\"
                     -metadata videobitrate=\"Video:\ $BITRATE\ kb\/s\"
                     -metadata normal=Normalized_Audio_MPVdynaudnorm
@@ -134,7 +135,7 @@ for FILE in $@ ; do
         elif [ "$ENC" == "x264" ]; then
             CMD='$DRYRUN ionice -c 3 nice mpv $FILE -o $FILE_OUT -of mkv \
                 $NORMFILTER \
-                --oset-metadata=${NORMCOMMENT}command=\"${COMMAND}\",encoded=\"$(date)\",$ENCODER,$MPVCMDS,input_size=$OLDSIZE,FILE=$FILE,FILE_OUT=$FILE_OUT,ANEWRATE=$ANEWRATE,NEWRATE=$NEWRATE,NORMFILTER=$NORMFILTER \
+                --oset-metadata=${NORMCOMMENT}command=\"${COMMAND}\",encoded=\"$(date)\",$ENCODER,$MPVCMDS,input_size=$OLDSIZE,FILE=$FILE,FILE_OUT=$FILE_OUT,ANEWRATE=$ANEWRATE,NEWRATE=$NEWRATE,NORMFILTER=$NORMFILTER,JHOP=Modified \
                 $VIDEO_SYNC --oac=libfdk_aac \
                 --oacopts-add="b=${ANEWRATE},afterburner=1,vbr=4" \
                 --ovc=libx264 \
@@ -144,7 +145,7 @@ for FILE in $@ ; do
                 --hwdec=vaapi
                 --vo=h264_cuvid
                 $NORMFILTER $VIDEO_SYNC --oac=libfdk_aac
-                --oset-metadata=${NORMCOMMENT}command=\"${COMMAND}\",encoded=\"$(date)\",$ENCODER,$MPVCMDS,input_size=$OLDSIZE,FILE=$FILE,FILE_OUT=$FILE_OUT,ANEWRATE=$ANEWRATE,NEWRATE=$NEWRATE,NORMFILTER=$NORMFILTER
+                --oset-metadata=${NORMCOMMENT}command=\"${COMMAND}\",encoded=\"$(date)\",$ENCODER,$MPVCMDS,input_size=$OLDSIZE,FILE=$FILE,FILE_OUT=$FILE_OUT,ANEWRATE=$ANEWRATE,NEWRATE=$NEWRATE,NORMFILTER=$NORMFILTER,JHOP=Modified
                 --oacopts-add="b=${ANEWRATE},afterburner=1,vbr=4"
                 --video-sync=display-resample
                 --ovc=h264_nvenc
@@ -153,7 +154,7 @@ for FILE in $@ ; do
             CMD='$DRYRUN ionice -c 3 nice mpv $FILE -o $FILE_OUT -of mkv
                 --hwdec=vaapi
                 --vo=h264_cuvid $NORMFILTER
-                --oset-metadata=${NORMCOMMENT}command=\"${COMMAND}\",encoded=\"$(date)\",$ENCODER,$MPVCMDS,input_size=$OLDSIZE,FILE=$FILE,FILE_OUT=$FILE_OUT,ANEWRATE=$ANEWRATE,NEWRATE=$NEWRATE,NORMFILTER=$NORMFILTER
+                --oset-metadata=${NORMCOMMENT}command=\"${COMMAND}\",encoded=\"$(date)\",$ENCODER,$MPVCMDS,input_size=$OLDSIZE,FILE=$FILE,FILE_OUT=$FILE_OUT,ANEWRATE=$ANEWRATE,NEWRATE=$NEWRATE,NORMFILTER=$NORMFILTER,JHOP=Modified
                 $VIDEO_SYNC --oac=libfdk_aac
                 --oacopts-add="b=${ANEWRATE},afterburner=1,vbr=4"
                 --video-sync=display-resample
