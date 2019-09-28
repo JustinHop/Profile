@@ -157,3 +157,9 @@
 [submodule "vim/coding/syntastic"]
 	path = vim/coding/syntastic
 	url = https://github.com/vim-syntastic/syntastic.git
+[submodule "config/mpv/mpv-playlistmanager"]
+	path = config/mpv/mpv-playlistmanager
+	url = https://github.com/jonniek/mpv-playlistmanager.git
+[submodule "config/mpv/mpv-scripts"]
+	path = config/mpv/mpv-scripts
+	url = https://github.com/jonniek/mpv-scripts.git

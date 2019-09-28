@@ -5,7 +5,7 @@ IFS=$'\n\t'
 SAFE=""
 SAFE=echo
 
-#set -x
+set -x
 
 COPY="-c copy"
 NORM='-vcodec copy -acodec aac -af "aresample=async=1:first_pts=0" -af dynaudnorm -metadata comment="Normalized_Audio ffmpeg dynaudnorm $(date)" -fflags +genpts'
@@ -20,8 +20,8 @@ for CUTFILE in $@ ; do
             fi
         done
 
-        BITRATE=$(ffprobe -hide_banner "$VIDEO" 2>&1 | grep Video: | grep -oP '\d+ kb\/s' | awk '{ print $1 }')
-        ABITRATE=$(ffprobe -hide_banner "$VIDEO" 2>&1 | grep Audio: | grep -oP '\d+ kb\/s' | awk '{ print $1 }')
+        BITRATE=$(ffprobe -hide_banner "$VIDEO" 2>&1 | grep Video: | grep -oP '\d+ kb\/s' | awk '{ print $1 }' || true)
+        ABITRATE=$(ffprobe -hide_banner "$VIDEO" 2>&1 | grep Audio: | grep -oP '\d+ kb\/s' | awk '{ print $1 }' || true)
 
         if [ -f "$VIDEO" ] && [ -f "$CUTFILE" ]; then
             IFS=$'\n'
@@ -39,14 +39,21 @@ for CUTFILE in $@ ; do
 
                 VIDEOOUT="${VIDEO%.*}_EDIT_$(printf '%02d' ${COUNT}).mkv"
 
+                VBR=""
+                ABR=""
+                if [ "$BITRATE" ] ; then
+                    VBR="-metadata videobitrate=\"Video:\ $BITRATE\ kb\/s\" "
+                fi
+                if [ "$ABITRATE" ] ; then
+                    ABR="-metadata audiobitrate=\"Audio:\ $ABITRATE\ kb\/s\" "
+                fi
+
                 #echo nice ionice -c 3 ffmpeg -hide_banner -v info -ss $TONE -to $TTWO -i "$VIDEO" -c copy -avoid_negative_ts 1 -y "$VIDEOOUT"
                 $SAFE nice ionice -c 3 ffmpeg -hide_banner -v info -ss \"$TONE\" -t \"$TDUR\" -i \"$VIDEO\" \
                     -metadata cut_start=\"$TONE\" \
                     -metadata cut_end=\"$TTWO\" \
                     -metadata parent_file=\"$VIDEO\" \
-                    -metadata JHOP=modified \
-                    -metadata videobitrate=\"Video:\ $BITRATE\ kb\/s\" \
-                    -metadata audiobitrate=\"Audio:\ $ANEWRATE\ kb\/s\" \
+                    -metadata JHOP=modified $VBR  $ABR \
                     "$OPTS" \
                     -avoid_negative_ts 1 \
                     -y \"$VIDEOOUT\" || echo exited $!
