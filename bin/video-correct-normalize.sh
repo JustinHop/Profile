@@ -50,13 +50,14 @@ docker_run () {
         -v "$(pwd)":/mnt \
         -v /tmp:/tmp \
         --cpus $CPU \
-        jrottenberg/ffmpeg:vaapi -hide_banner -y $@
+        jrottenberg/ffmpeg:vaapi -hide_banner -v info $@
 }
 
 normal () {
     IN="$1"
     OUT_WAV="${TMPDIR}/${IN%.*}.wav"
-    OUT_VID="${IN%.*}-volnorm.mkv"
+    #OUT_VID="${IN%.*}-volnorm.ts"
+    OUT_VID="${IN%.*}-volnorm.${IN##*.}"
     [ $VERBOSE ] && cat <<EON
     Entered normal($1)
     IN=$IN
@@ -79,28 +80,43 @@ EON
     if echo $PROBE | grep Normalized_Audio > /dev/null ; then
         echo "$IN Already Normalized"
 
-    elif ! echo $VIDEO_MAP | grep -P '^\d:\d$' > /dev/null ; then
-        echo "$IN could not find Video stream"
+    #elif ! echo $VIDEO_MAP | grep -P '^\d:\d$' > /dev/null ; then
+    #    echo "$IN could not find Video stream"
     else
 
-        eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -c:a pcm_s16le -vn "$OUT_WAV"
-        [ -f "$OUT_WAV" ] && $DRY_RUN sudo chown justin:justin "$OUT_WAV"
+        #eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -c:a pcm_s16le -vn "$OUT_WAV"
+        #[ -f "$OUT_WAV" ] && $DRY_RUN sudo chown justin:justin "$OUT_WAV"
 
-        eval $DRY_RUN $NORM -- "$OUT_WAV" || rm -v "$OUT_WAV"
+        #eval $DRY_RUN $NORM -- "$OUT_WAV" || rm -v "$OUT_WAV"
 
-        eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -i "$OUT_WAV" \
-            -metadata comment="Normalized_Audio $(date)" \
-            -metadata JHOP=modified \
-            -map $VIDEO_MAP -map 1:0 \
+#        eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -i "$OUT_WAV" \
+#            -metadata comment="Normalized_Audio" \
+#            -map $VIDEO_MAP -map 1:0 \
+#            -c:v copy \
+#            -c:a libfdk_aac \
+#            -profile:a aac_low \
+#            -vbr 3 \
+#            /mnt/"$OUT_VID" || return
+
+        eval $DRY_RUN docker_run \
+            -y -stats -benchmark \
+            -use_wallclock_as_timestamps 1 \
+            -ss 00:22:00 \
+            -i /mnt/"$IN" \
+            -metadata comment="Normalized_Audio" \
             -c:v copy \
             -c:a libfdk_aac \
+            -fflags +igndts+discardcorrupt \
             -profile:a aac_low \
+            -filter:a dynaudnorm \
+            -bsf:v h264_mp4toannexb \
             -vbr 3 \
+            -force_key_frames \"'expr:gte(t,n_forced*5)'\" \
             /mnt/"$OUT_VID" || return
 
-        $DRY_RUN sudo chown justin:justin "$OUT_WAV" "$OUT_VID"
-        $DRY_RUN touch --date=@$TIME "$OUT_VID"
-        $DRY_RUN rm $VERBOSE "$OUT_WAV"
+        #$DRY_RUN sudo chown justin:justin "$OUT_WAV" "$OUT_VID"
+        #$DRY_RUN touch --date=@$TIME "$OUT_VID"
+        #$DRY_RUN rm $VERBOSE "$OUT_WAV"
         [ -f /tmp/_normAAAAAA ] && rm /tmp/_normAAAAAA
 
         OUT_SIZE=$(stat -c '%s' "$OUT_VID")
@@ -112,23 +128,23 @@ EON
         [ $DEBUG ] && INTER="-i"
 
 
-        $DRY_RUN echo $BEFORE
-        if [ $OVERWRITE ]; then 
-            if [ $( echo "$INOUT"' < 0.9' | bc -l ) -eq 1 ]; then
-                echo "OUTPUT FILE TOO SMALL!"
-            else
-                if [ $( echo "$INOUT"' > 1.1' | bc -l ) -eq 1 ]; then
-                    echo "OUTPUT FILE TOO BIG!"
-                    $DRY_RUN ls -l "$OUT_VID"
-                else
-                    $DRY_RUN mv $VERBOSE $INTER -- "$OUT_VID" "$IN" 
-                    $DRY_RUN touch --date=@$TIME "$IN"
-                fi
-            fi
-            $DRY_RUN ls -l "$IN"
-        else
-            $DRY_RUN ls -l "$OUT_VID"
-        fi
+#        $DRY_RUN echo $BEFORE
+#        if [ $OVERWRITE ]; then 
+#            if [ $( echo "$INOUT"' < 0.9' | bc -l ) -eq 1 ]; then
+#                echo "OUTPUT FILE TOO SMALL!"
+#            else
+#                if [ $( echo "$INOUT"' > 1.1' | bc -l ) -eq 1 ]; then
+#                    echo "OUTPUT FILE TOO BIG!"
+#                    $DRY_RUN ls -l "$OUT_VID"
+#                else
+#                    $DRY_RUN mv $VERBOSE $INTER -- "$OUT_VID" "$IN" 
+#                    $DRY_RUN touch --date=@$TIME "$IN"
+#                fi
+#            fi
+#            $DRY_RUN ls -l "$IN"
+#        else
+#            $DRY_RUN ls -l "$OUT_VID"
+#        fi
 
     fi
 
@@ -179,5 +195,6 @@ COUNT=1
 for A in "$@" ; do
     echo "--- $(date): Processing $A [$((COUNT++))/$#]"
     normal $A || echo "$A failed, continuing"
-    find /tmp -maxdepth 1 -type f -name '*.wav' -exec rm -v {} \;
 done
+#[mp4 @ 0x563203c91a40] Delay between the first packet and last packet in the muxing queue is 10007801 > 10000000: forcing output
+
