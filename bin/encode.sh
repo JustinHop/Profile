@@ -13,6 +13,7 @@ MPV_ARGS=""
 COMMAND=$(echo "$0 $*" | xargs)
 NORMAL=""
 NORMAL_WRITE=""
+SHA="$(sha256sum $0 | awk '{ print $1 }')"
 
 HELP="$0 - video encoder
 Usage: $0 [options] FILE...
@@ -73,8 +74,25 @@ set -x
 for FILE in $@ ; do
     if [ -f "$FILE" ]; then
         TYPE="${FILE##*.}"
+        BITRATE=$(mediainfo --Inform='General;%BitRate%' "$FILE")
         VBITRATE=$(mediainfo --Inform='Video;%BitRate%' "$FILE")
         ABITRATE=$(mediainfo --Inform='Audio;%BitRate%' "$FILE")
+        if [ -z "$VBITRATE" ]; then
+            if echo $TYPE | grep -qs mkv ; then
+                mkvpropedit --add-track-statistics-tags "$FILE"
+                VBITRATE=$(mediainfo --Inform='Video;%FromStats_BitRate%' "$FILE")
+                ABITRATE=$(mediainfo --Inform='Audio;%FromStats_BitRate%' "$FILE")
+            else
+                if [ -z "$ABITRATE" ]; then
+                    VBITRATE=$(mediainfo --Inform='General;%BitRate%' "$FILE")
+                    ABITRATE=128000
+                else
+                    if [ -n "$BITRATE" ]; then
+                        VBITRATE=$(echo "$BITRATE - $ABITRATE" | bc -l)
+                    fi
+                fi
+            fi
+        fi
         NEWRATE=$(echo "$VBITRATE*$VRATIO" | bc -l | numfmt --to=iec)
         ANEWRATE=$(echo "$ABITRATE*$ARATIO" | bc -l | numfmt --to=iec)
         FILE_OUT="${FILE%.*}-$ENC-$NEWRATE-$ANEWRATE.mkv"
@@ -104,7 +122,7 @@ for FILE in $@ ; do
         done
         META="${NORMCOMMENT}command=\"${COMMAND}\",reencoded=\"$(date)\",$ENCODER,"
         META="${META}ORIGINAL_SIZE=$OLDSIZE,ORIGINAL_FILE=$FILE,FILE=$FILE_OUT,TARGET_AUDIO_BITRATE=$ANEWRATE,TARGET_VIDEO_BITRATE=$NEWRATE,NORMFILTER=x${NORMFILTER:-none},JHOP=Modified,"
-        META="${META}VIDEO_RATIO=$VRATIO,AUDIO_RATIO=$ARATIO,ORIGINAL_VIDEO_BITRATE=$VBITRATE,ORIGINAL_AUDIO_BITRATE=$ABITRATE,"
+        META="${META}VIDEO_RATIO=$VRATIO,AUDIO_RATIO=$ARATIO,ORIGINAL_VIDEO_BITRATE=$VBITRATE,ORIGINAL_AUDIO_BITRATE=$ABITRATE,ENCODE_SCRIPT_SHA256=$SHA"
         VIDEO_SYNC=
         if [ ! -z "$NORMAL" ]; then
             FILE_OUT="${FILE%.*}-norm.mkv"
@@ -186,6 +204,7 @@ for FILE in $@ ; do
         #if (eval $CMD || VIDEO_SYNC="--video-sync=display-resample" eval $CMD ) ; then
         if eval "${RUNCMD}"  ; then
             if [ -f "$FILE_OUT" ]; then
+                mkvpropedit -v --add-track-statistics-tags "$FILE_OUT"
                 NEWSIZE=$(stat -c '%s' "$FILE_OUT")
                 TIME=$(stat --printf '%Y' "$FILE")
                 if [ ! -z "$NORMAL_WRITE" ]; then

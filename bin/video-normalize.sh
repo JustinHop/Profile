@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 set -euo pipefail
 #IFS=$'\n\t'
 
@@ -60,9 +60,9 @@ normal () {
     [ $VERBOSE ] && cat <<EON
     Entered normal($1)
     IN=$IN
-    OUT_WAV=$OUT_WAV
     OUT_VID=$OUT_VID
 EON
+    # OUT_WAV=$OUT_WAV
 
     FFVER="-loglevel +24"
     [ $VERBOSE ] && FFVER="-loglevel +40"
@@ -71,7 +71,7 @@ EON
     BEFORE=$(ls -l "$IN")
     IN_SIZE=$(stat -c '%s' "$IN")
     TIME=$(stat --printf '%Y' "$IN")
-    [ -f "$OUT_WAV" ] && $DRY_RUN sudo rm "$OUT_WAV"
+    # [ -f "$OUT_WAV" ] && $DRY_RUN sudo rm "$OUT_WAV"
 
     PROBE=$( { ffprobe -hide_banner "$IN"; } 2>&1 )
     VIDEO_MAP=$(echo "$PROBE" | grep Stream | grep Video | grep -oP '(:?#)[01]:[01](:?\(\w+\):)' | grep -oP '\d:\d')
@@ -83,24 +83,28 @@ EON
         echo "$IN could not find Video stream"
     else
 
-        eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -c:a pcm_s16le -vn "$OUT_WAV"
-        [ -f "$OUT_WAV" ] && $DRY_RUN sudo chown justin:justin "$OUT_WAV"
+        # eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -c:a pcm_s16le -vn "$OUT_WAV"
+        # [ -f "$OUT_WAV" ] && $DRY_RUN sudo chown justin:justin "$OUT_WAV"
 
-        eval $DRY_RUN $NORM -- "$OUT_WAV" || rm -v "$OUT_WAV"
+        # eval $DRY_RUN $NORM -- "$OUT_WAV" || rm -v "$OUT_WAV"
 
-        eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -i "$OUT_WAV" \
-            -metadata comment="Normalized_Audio $(date)" \
+        # eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -i "$OUT_WAV" \
+            # -map $VIDEO_MAP -map 1:0 \
+        eval docker_run $FFVER -i /mnt/"$IN" \
+            -metadata comment="'Normalized_Audio+ffmpeg+dynaud-$(date)'" \
             -metadata JHOP=modified \
-            -map $VIDEO_MAP -map 1:0 \
             -c:v copy \
             -c:a libfdk_aac \
             -profile:a aac_low \
-            -vbr 3 \
+            -af dynaudnorm \
+            -vbr 4 \
             /mnt/"$OUT_VID" || return
 
-        $DRY_RUN sudo chown justin:justin "$OUT_WAV" "$OUT_VID"
+        mkvpropedit -v --add-track-statistics-tags "$OUT_VID" || true
+        # $DRY_RUN sudo chown justin:justin "$OUT_WAV" "$OUT_VID"
+        $DRY_RUN sudo chown justin:justin "$OUT_VID"
         $DRY_RUN touch --date=@$TIME "$OUT_VID"
-        $DRY_RUN rm $VERBOSE "$OUT_WAV"
+        # $DRY_RUN rm $VERBOSE "$OUT_WAV"
         [ -f /tmp/_normAAAAAA ] && rm /tmp/_normAAAAAA
 
         OUT_SIZE=$(stat -c '%s' "$OUT_VID")
@@ -154,6 +158,7 @@ while getopts "c:dnfvh" OPT; do
             ;;
         v)
             VERBOSE="-v"
+            set -x
             ;;
         *)
             show_vars

@@ -49,6 +49,7 @@ for VIDEO in $@ ; do
             if [ -n "$AUD" ]; then
                 echo -n "\t$A"
             fi
+            echo
         fi
     fi
 done

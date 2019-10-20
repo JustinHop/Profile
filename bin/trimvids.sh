@@ -3,6 +3,8 @@ DEV=""
 set -euo pipefail
 IFS=$'\n\t'
 
+set -x
+
 SAFE=""
 if [ $* ]; then
     SAFE=echo
@@ -11,6 +13,14 @@ fi
 
 vidmanage update
 vidmanage lists
+
+DELETES=$(vidmanage show delete | wc -l)
+
+if [ $DELETES = 0 ]; then
+    echo ALREADY DONE
+    exit 1
+fi
+
 BEFORE=$(df -h | grep /mnt/auto | while read LINE ; do echo $(echo $LINE| awk 'NF{NF-=1};1'); done )
 
 for M in 1 2 3 4 ; do
@@ -23,8 +33,10 @@ done
 vidmanage show delete | xargs du -chs
 
 for V in $(vidmanage show delete) ; do
-    if [ -f $V ]; then
-        $SAFE rm -v $DEV $V
+    if [ -n "$V" ] ; then
+        if [ -f $V ]; then
+            $SAFE rm -v $DEV $V
+        fi
     fi
 done
 

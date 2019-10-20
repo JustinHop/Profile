@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/bin/conky -c ~/Profile/conky-$(hostname -s).conf 2>&1 | grep -v statfs64
+/usr/bin/conky "$@" -c ~/Profile/conky-$(hostname -s).conf 2>&1 | grep -v statfs64

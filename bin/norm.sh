@@ -14,5 +14,5 @@ done
 
 
 echo > /tmp/emptyfile
-find /tmp -maxdepth 1 -name '*.wav' -type f -exec rm -v {} \;
-find -L /mnt/auto/1/share/Video -type f -name '-volnorm.mp4' -exec cp -v /tmp/emptyfile {} \;
+#find /tmp -maxdepth 1 -name '*.wav' -type f -exec rm -v {} \;
+#find -L /mnt/auto/1/share/Video -type f -name '-volnorm.mp4' -exec cp -v /tmp/emptyfile {} \;

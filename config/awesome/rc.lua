@@ -676,6 +676,7 @@ awful.rules.rules = {
       floating = true,
       sticky = true,
       ontop = false,
+      screen = 1,
       focusable = false } },
   { rule = { role = "pop-up" },
     properties = { floating = true } },
