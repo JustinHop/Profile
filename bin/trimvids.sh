@@ -3,11 +3,11 @@ DEV=""
 set -euo pipefail
 IFS=$'\n\t'
 
-set -x
+#set -x
 
-SAFE=""
+SAFE="echo"
 if [ $* ]; then
-    SAFE=echo
+    SAFE=""
     echo dry run
 fi
 
@@ -16,21 +16,21 @@ vidmanage lists
 
 DELETES=$(vidmanage show delete | wc -l)
 
-if [ $DELETES = 0 ]; then
+if (( $DELETES == 0 )); then
     echo ALREADY DONE
     exit 1
 fi
 
 BEFORE=$(df -h | grep /mnt/auto | while read LINE ; do echo $(echo $LINE| awk 'NF{NF-=1};1'); done )
 
-for M in 1 2 3 4 ; do
+for M in 1 2 3 4 5 ; do
     if [ ! -d /mnt/auto/$M/share/Video ]; then
         echo no /mnt/auto/$M/share/Video 
         exit 1
     fi
 done
 
-vidmanage show delete | xargs du -chs
+vidmanage show delete | xargs -r du -chs
 
 for V in $(vidmanage show delete) ; do
     if [ -n "$V" ] ; then

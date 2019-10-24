@@ -27,10 +27,11 @@ Usage: $0 [options] FILE...
 -N      Only normalize audio
 -v      Output video bitrate ratio. Default 0.9
 -W      Normalize audio and overwrite input file
+-F      Fixed bitrate size not ratio
 "
 
 
-while getopts "a:v:he:nm:7NW" option; do
+while getopts "a:v:he:nm:7NWF" option; do
     case "${option}"
         in
         h)  echo "$HELP"
@@ -74,26 +75,44 @@ set -x
 for FILE in $@ ; do
     if [ -f "$FILE" ]; then
         TYPE="${FILE##*.}"
-        BITRATE=$(mediainfo --Inform='General;%BitRate%' "$FILE")
-        VBITRATE=$(mediainfo --Inform='Video;%BitRate%' "$FILE")
-        ABITRATE=$(mediainfo --Inform='Audio;%BitRate%' "$FILE")
-        if [ -z "$VBITRATE" ]; then
+        ABITRATE=$(echo $(mediainfo --Inform='Audio;%BitRate%' "$FILE") $(mediainfo --Inform='Audio;%FromStats_BitRate%' "$FILE") 0 | awk '{ print $1 }')
+        VBITRATE=$(echo $(mediainfo --Inform='Video;%BitRate%' "$FILE") $(mediainfo --Inform='Video;%FromStats_BitRate%' "$FILE") 0 | awk '{ print $1 }')
+        BITRATE=$(echo $(mediainfo --Inform='General;%BitRate%' "$FILE") $(mediainfo --Inform='General;%OverallBitRate%' "$FILE") 0 | awk '{ print $1 }')
+        WIDTH=$(mediainfo --Inform='Video;%Width%' "$FILE")
+        HEIGHT=$(mediainfo --Inform='Video;%Height%' "$FILE")
+
+        HWDEC=" --hwdec=vaapi --vo=h264_cuvid "
+        if (( $WIDTH > 1920 )) || (( $HEIGHT > 1080 )) ; then
+            # HWDEC=""
+            if [ -z "$SCALE" ]; then
+                SCALE="-vf-add=scale:w=1920:h=1080"
+            fi
+        elif (( $WIDTH = 1440 )) && (( $HEIGHT = 1080 )) ; then
+            if [ -z "$SCALE" ]; then
+                SCALE="-vf-add=scale:w=1440:h=1080"
+            fi
+        fi
+
+        if (( "$VBITRATE" = 0 )); then
             if echo $TYPE | grep -qs mkv ; then
                 mkvpropedit --add-track-statistics-tags "$FILE"
                 VBITRATE=$(mediainfo --Inform='Video;%FromStats_BitRate%' "$FILE")
                 ABITRATE=$(mediainfo --Inform='Audio;%FromStats_BitRate%' "$FILE")
             else
-                if [ -z "$ABITRATE" ]; then
-                    VBITRATE=$(mediainfo --Inform='General;%BitRate%' "$FILE")
+                if (( $ABITRATE = 0 )); then
+                    VBITRATE=$BITRATE
                     ABITRATE=128000
                 else
-                    if [ -n "$BITRATE" ]; then
+                    if (( $VBITRATE = 0 )); then
                         VBITRATE=$(echo "$BITRATE - $ABITRATE" | bc -l)
                     fi
                 fi
             fi
         fi
+
         NEWRATE=$(echo "$VBITRATE*$VRATIO" | bc -l | numfmt --to=iec)
+        MAXNEWRATE=$(echo "$VBITRATE*$VRATIO*1.5" | bc -l | numfmt --to=iec)
+        MINNEWRATE=$(echo "$VBITRATE*$VRATIO*0.25" | bc -l | numfmt --to=iec)
         ANEWRATE=$(echo "$ABITRATE*$ARATIO" | bc -l | numfmt --to=iec)
         FILE_OUT="${FILE%.*}-$ENC-$NEWRATE-$ANEWRATE.mkv"
         OLDSIZE=$(stat -c '%s' "$FILE")
@@ -122,7 +141,7 @@ for FILE in $@ ; do
         done
         META="${NORMCOMMENT}command=\"${COMMAND}\",reencoded=\"$(date)\",$ENCODER,"
         META="${META}ORIGINAL_SIZE=$OLDSIZE,ORIGINAL_FILE=$FILE,FILE=$FILE_OUT,TARGET_AUDIO_BITRATE=$ANEWRATE,TARGET_VIDEO_BITRATE=$NEWRATE,NORMFILTER=x${NORMFILTER:-none},JHOP=Modified,"
-        META="${META}VIDEO_RATIO=$VRATIO,AUDIO_RATIO=$ARATIO,ORIGINAL_VIDEO_BITRATE=$VBITRATE,ORIGINAL_AUDIO_BITRATE=$ABITRATE,ENCODE_SCRIPT_SHA256=$SHA"
+        META="${META}VIDEO_RATIO=$VRATIO,AUDIO_RATIO=$ARATIO,ORIGINAL_VIDEO_BITRATE=$VBITRATE,ORIGINAL_AUDIO_BITRATE=$ABITRATE,ENCODE_SCRIPT_SHA256=$SHA,"
         VIDEO_SYNC=
         if [ ! -z "$NORMAL" ]; then
             FILE_OUT="${FILE%.*}-norm.mkv"
@@ -140,6 +159,7 @@ for FILE in $@ ; do
                     -metadata audiobitrate="Audio:\ $ANEWRATE\/s" \
                     -metadata videobitrate="Video:\ $VBITRATE\/s" \
                     -metadata normal=Normalized_Audio_MPVdynaudnorm \
+                    -metadata comment=Normalized_Audio_MPVdynaudnorm \
                     -metadata command=\"${COMMAND}\" \
                     -metadata encoded=\"$(date)\" \
                     -metadata input_size=$OLDSIZE \
@@ -158,31 +178,27 @@ for FILE in $@ ; do
                 --input $FILE \
                 --output $FILE_OUT'
         elif [[ "$ENC" == "x264" ]]; then
-            RUNCMD='$DRYRUN ionice -c 3 nice mpv --msg-level=all=v $FILE -o $FILE_OUT -of mkv $NORMFILTER \
+            RUNCMD='$DRYRUN ionice -c 3 nice mpv --msg-level=all=v '" $FILE "' -o '" $FILE_OUT "' -of mkv '" $NORMFILTER "' \
                 $VIDEO_SYNC --oac=libfdk_aac \
                 --oacopts-add="b=${ANEWRATE},afterburner=1,vbr=4" \
                 --ovc=libx264 \
                 --ovcopts-add=preset=slow,crf=22,psy=1 $SCALE $MPV_ARGS --oset-metadata="${META}"'
         elif [[ "$ENC" == "nv" ]]; then
-            RUNCMD='$DRYRUN ionice -c 3 nice mpv --msg-level=all=v $FILE -o $FILE_OUT -of mkv \
-                --hwdec=vaapi \
-                --vo=h264_cuvid \
-                $NORMFILTER $VIDEO_SYNC --oac=libfdk_aac \
-                --oacopts-add="b=${ANEWRATE},afterburner=1,vbr=4" \
+            RUNCMD='$DRYRUN ionice -c 3 nice mpv --msg-level=all=v '" $FILE  "' -o  '" $FILE_OUT  "' \
+                -of mkv '" $HWDEC $NORMFILTER $VIDEO_SYNC $SCALE $MPV_ARGS "' --oac=libfdk_aac \
+                --oacopts-add="b='${ANEWRATE}',afterburner=1,vbr=4" \
                 --video-sync=display-resample \
                 --ovc=h264_nvenc \
-                --ovcopts-add="b=${NEWRATE},preset=fast,cq=0,profile=main,level=auto,rc=vbr_hq,maxrate=10M,minrate=2M" \
-                $SCALE $MPV_ARGS --oset-metadata="${META}"'
+                --ovcopts-add="b='${NEWRATE}',preset=fast,cq=0,profile=main,level=auto,rc=vbr_hq,maxrate='${MAXNEWRATE}',minrate='${MINNEWRATE}'" \
+                --oset-metadata="${META}"'
         elif [[ "$ENC" == "vaapi" ]]; then
-            RUNCMD='$DRYRUN ionice -c 3 nice mpv --msg-level=all=v $FILE -o $FILE_OUT -of mkv \
-                --hwdec=vaapi \
-                --vo=h264_cuvid $NORMFILTER \
-                $VIDEO_SYNC --oac=libfdk_aac \
-                --oacopts-add="b=${ANEWRATE},afterburner=1,vbr=4" \
+            RUNCMD='$DRYRUN ionice -c 3 nice mpv --msg-level=all=v $FILE -o $FILE_OUT \
+                -of mkv '" $HWDEC $NORMFILTER $VIDEO_SYNC $SCALE $MPV_ARGS "' --oac=libfdk_aac \
+                --oacopts-add="b='${ANEWRATE}',afterburner=1,vbr=4" \
                 --video-sync=display-resample \
                 --ovc=h264_vaapi \
-                --ovcopts-add=b=${NEWRATE},quality=23,qp=23,global_quality=23 \
-                $SCALE $MPV_ARGS --oset-metadata="${META}"'
+                --ovcopts-add=b='${NEWRATE}',quality=23,qp=23,global_quality=23 \
+                --oset-metadata="${META}"'
         fi
         MPVCMDS=""
         MCOUNT=00
@@ -204,7 +220,7 @@ for FILE in $@ ; do
         #if (eval $CMD || VIDEO_SYNC="--video-sync=display-resample" eval $CMD ) ; then
         if eval "${RUNCMD}"  ; then
             if [ -f "$FILE_OUT" ]; then
-                mkvpropedit -v --add-track-statistics-tags "$FILE_OUT"
+                $DRYRUN mkvpropedit -v --add-track-statistics-tags "$FILE_OUT"
                 NEWSIZE=$(stat -c '%s' "$FILE_OUT")
                 TIME=$(stat --printf '%Y' "$FILE")
                 if [ ! -z "$NORMAL_WRITE" ]; then

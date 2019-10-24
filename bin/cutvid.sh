@@ -42,10 +42,10 @@ for CUTFILE in $@ ; do
                 VBR=""
                 ABR=""
                 if [ "$BITRATE" ] ; then
-                    VBR="-metadata videobitrate=\"Video:\ $BITRATE\ kb\/s\" "
+                    VBR="-metadata videobitrate=\"Video: $BITRATE kb/s\" "
                 fi
                 if [ "$ABITRATE" ] ; then
-                    ABR="-metadata audiobitrate=\"Audio:\ $ABITRATE\ kb\/s\" "
+                    ABR="-metadata audiobitrate=\"Audio: $ABITRATE kb/s\" "
                 fi
 
                 #echo nice ionice -c 3 ffmpeg -hide_banner -v info -ss $TONE -to $TTWO -i "$VIDEO" -c copy -avoid_negative_ts 1 -y "$VIDEOOUT"
@@ -57,6 +57,7 @@ for CUTFILE in $@ ; do
                     "$OPTS" \
                     -avoid_negative_ts 1 \
                     -y \"$VIDEOOUT\" || echo exited $!
+                $SAFE mkvpropedit -v --add-track-statistics-tags "$VIDEOOUT"
 
                 let "COUNT = $COUNT + 1"
 
