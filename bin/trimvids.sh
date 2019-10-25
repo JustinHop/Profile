@@ -8,6 +8,7 @@ IFS=$'\n\t'
 SAFE="echo"
 if [ $* ]; then
     SAFE=""
+else
     echo dry run
 fi
 
@@ -18,7 +19,7 @@ DELETES=$(vidmanage show delete | wc -l)
 
 if (( $DELETES == 0 )); then
     echo ALREADY DONE
-    exit 1
+    exit
 fi
 
 BEFORE=$(df -h | grep /mnt/auto | while read LINE ; do echo $(echo $LINE| awk 'NF{NF-=1};1'); done )

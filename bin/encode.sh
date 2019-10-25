@@ -9,6 +9,7 @@ VRATIO="0.9"
 ARATIO="0.9"
 ENC="nv"
 SCALE=""
+RESIZETO720=""
 MPV_ARGS=""
 COMMAND=$(echo "$0 $*" | xargs)
 NORMAL=""
@@ -48,6 +49,7 @@ while getopts "a:v:he:nm:7NWF" option; do
         v)  VRATIO="$OPTARG"
         ;;
         7)  SCALE="-vf-add=scale:w=1280:h=720"
+            RESIZETO720=1
         ;;
         N)  NORMAL=1
         ;;
@@ -81,19 +83,35 @@ for FILE in $@ ; do
         WIDTH=$(mediainfo --Inform='Video;%Width%' "$FILE")
         HEIGHT=$(mediainfo --Inform='Video;%Height%' "$FILE")
 
+        NEWRATE=$(echo "$VBITRATE*$VRATIO" | bc -l | numfmt --to=iec)
+        MAXNEWRATE=$(echo "$VBITRATE*$VRATIO*1.5" | bc -l | numfmt --to=iec)
+        MINNEWRATE=$(echo "$VBITRATE*$VRATIO*0.25" | bc -l | numfmt --to=iec)
+        ANEWRATE=$(echo "$ABITRATE*$ARATIO" | bc -l | numfmt --to=iec)
+        FILE_OUT="${FILE%.*}-$ENC-$NEWRATE-$ANEWRATE.mkv"
+
+        if [ "$RESIZETO720" ]; then
+            FILE_OUT=${FILE_OUT:gs/1080/720/}
+        fi
+
+        OLDSIZE=$(stat -c '%s' "$FILE")
         HWDEC=" --hwdec=vaapi --vo=h264_cuvid "
-        if (( $WIDTH > 1920 )) || (( $HEIGHT > 1080 )) ; then
-            # HWDEC=""
+
+        if (( $WIDTH = 4096 )) && (( $HEIGHT = 2160 )) ; then
             if [ -z "$SCALE" ]; then
                 SCALE="-vf-add=scale:w=1920:h=1080"
+                FILE_OUT=${FILE_OUT:gs/2160/1080/}
             fi
-        elif (( $WIDTH = 1440 )) && (( $HEIGHT = 1080 )) ; then
+        elif (( $WIDTH != 1920 )) && (( $HEIGHT = 1080 )) ; then
             if [ -z "$SCALE" ]; then
-                SCALE="-vf-add=scale:w=1440:h=1080"
+                SCALE="-vf-add=scale:w=$WIDTH:h=1080"
+            fi
+        elif (( $WIDTH = 1440 )) ; then
+            if [ -z "$SCALE" ]; then
+                SCALE="-vf-add=scale:w=1440:h=$HEIGHT"
             fi
         fi
 
-        if (( "$VBITRATE" = 0 )); then
+        if (( $VBITRATE = 0 )); then
             if echo $TYPE | grep -qs mkv ; then
                 mkvpropedit --add-track-statistics-tags "$FILE"
                 VBITRATE=$(mediainfo --Inform='Video;%FromStats_BitRate%' "$FILE")
@@ -110,16 +128,10 @@ for FILE in $@ ; do
             fi
         fi
 
-        NEWRATE=$(echo "$VBITRATE*$VRATIO" | bc -l | numfmt --to=iec)
-        MAXNEWRATE=$(echo "$VBITRATE*$VRATIO*1.5" | bc -l | numfmt --to=iec)
-        MINNEWRATE=$(echo "$VBITRATE*$VRATIO*0.25" | bc -l | numfmt --to=iec)
-        ANEWRATE=$(echo "$ABITRATE*$ARATIO" | bc -l | numfmt --to=iec)
-        FILE_OUT="${FILE%.*}-$ENC-$NEWRATE-$ANEWRATE.mkv"
-        OLDSIZE=$(stat -c '%s' "$FILE")
         RUNCMD=echo
         NORMFILTER="--af=dynaudnorm"
         NORMCOMMENT="comment=Normalized_Audio_MPVdynaudnorm,"
-        if ffprobe -hide_banner "$FILE" 2>&1 | grep -sq Normalized_Audio ; then
+        if mediainfo -f "$FILE" | tee /dev/stderr | grep -sq Normalized_Audio ; then
             echo "Already Normalized Audio"
             if [ ! -z "$NORMAL" ]; then
                 continue
