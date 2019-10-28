@@ -15,6 +15,7 @@ COMMAND=$(echo "$0 $*" | xargs)
 NORMAL=""
 NORMAL_WRITE=""
 SHA="$(sha256sum $0 | awk '{ print $1 }')"
+MPVVERBOSE=""
 
 HELP="$0 - video encoder
 Usage: $0 [options] FILE...
@@ -58,6 +59,7 @@ while getopts "a:v:he:nm:7NWFD" option; do
             NORMAL_WRITE=1
         ;;
         D)  set -x
+            MPVVERBOSE="--msg-level=all=v"
         ;;
     esac
 done
@@ -99,32 +101,32 @@ for FILE in $@ ; do
         OLDSIZE=$(stat -c '%s' "$FILE")
         HWDEC=" --hwdec=vaapi --vo=h264_cuvid "
 
-        if (( $WIDTH = 4096 )) && (( $HEIGHT = 2160 )) ; then
+        if (( $WIDTH == 4096 )) && (( $HEIGHT == 2160 )) ; then
             if [ -z "$SCALE" ]; then
                 SCALE="-vf-add=scale:w=1920:h=1080"
                 FILE_OUT=${FILE_OUT:gs/2160/1080/}
             fi
-        elif (( $WIDTH != 1920 )) && (( $HEIGHT = 1080 )) ; then
+        elif (( $WIDTH != 1920 )) && (( $HEIGHT == 1080 )) ; then
             if [ -z "$SCALE" ]; then
                 SCALE="-vf-add=scale:w=$WIDTH:h=1080"
             fi
-        elif (( $WIDTH = 1440 )) ; then
+        elif (( $WIDTH == 1440 )) ; then
             if [ -z "$SCALE" ]; then
                 SCALE="-vf-add=scale:w=1440:h=$HEIGHT"
             fi
         fi
 
-        if (( $VBITRATE = 0 )); then
+        if (( $VBITRATE == 0 )); then
             if echo $TYPE | grep -qs mkv ; then
                 mkvpropedit --add-track-statistics-tags "$FILE"
                 VBITRATE=$(mediainfo --Inform='Video;%FromStats_BitRate%' "$FILE")
                 ABITRATE=$(mediainfo --Inform='Audio;%FromStats_BitRate%' "$FILE")
             else
-                if (( $ABITRATE = 0 )); then
+                if (( $ABITRATE == 0 )); then
                     VBITRATE=$BITRATE
                     ABITRATE=128000
                 else
-                    if (( $VBITRATE = 0 )); then
+                    if (( $VBITRATE == 0 )); then
                         VBITRATE=$(echo "$BITRATE - $ABITRATE" | bc -l)
                     fi
                 fi
@@ -134,7 +136,7 @@ for FILE in $@ ; do
         RUNCMD=echo
         NORMFILTER="--af=dynaudnorm"
         NORMCOMMENT="comment=Normalized_Audio_MPVdynaudnorm,"
-        if mediainfo -f "$FILE" | tee /dev/stderr | grep -sq Normalized_Audio ; then
+        if mediainfo -f "$FILE" | grep -sq Normalized_Audio ; then
             echo "Already Normalized Audio"
             if [ ! -z "$NORMAL" ]; then
                 continue
@@ -143,6 +145,9 @@ for FILE in $@ ; do
             NORMCOMMENT=""
         else
             echo "Normalizing Audio"
+        fi
+        if [ ! -z "$MPVVERBOSE" ] ; then
+            mediainfo "$FILE"
         fi
         ENCODER=
         ECOUNT=00
@@ -193,13 +198,13 @@ for FILE in $@ ; do
                 --input $FILE \
                 --output $FILE_OUT'
         elif [[ "$ENC" == "x264" ]]; then
-            RUNCMD='$DRYRUN ionice -c 3 nice mpv --msg-level=all=v '" $FILE "' -o '" $FILE_OUT "' -of mkv '" $NORMFILTER "' \
+            RUNCMD='$DRYRUN ionice -c 3 nice mpv '" $MPVVERBOSE $FILE "' -o '" $FILE_OUT "' -of mkv '" $NORMFILTER "' \
                 $VIDEO_SYNC --oac=libfdk_aac \
                 --oacopts-add="b=${ANEWRATE},afterburner=1,vbr=4" \
                 --ovc=libx264 \
                 --ovcopts-add=preset=slow,crf=22,psy=1 $SCALE $MPV_ARGS --oset-metadata="${META}"'
         elif [[ "$ENC" == "nv" ]]; then
-            RUNCMD='$DRYRUN ionice -c 3 nice mpv --msg-level=all=v '" $FILE  "' -o  '" $FILE_OUT  "' \
+            RUNCMD='$DRYRUN ionice -c 3 nice mpv '" $MPVVERBOSE $FILE  "' -o  '" $FILE_OUT  "' \
                 -of mkv '" $HWDEC $NORMFILTER $VIDEO_SYNC $SCALE $MPV_ARGS "' --oac=libfdk_aac \
                 --oacopts-add="b='${ANEWRATE}',afterburner=1,vbr=4" \
                 --video-sync=display-resample \
@@ -207,7 +212,7 @@ for FILE in $@ ; do
                 --ovcopts-add="b='${NEWRATE}',preset=fast,cq=0,profile=main,level=auto,rc=vbr_hq,maxrate='${MAXNEWRATE}',minrate='${MINNEWRATE}'" \
                 --oset-metadata="${META}"'
         elif [[ "$ENC" == "vaapi" ]]; then
-            RUNCMD='$DRYRUN ionice -c 3 nice mpv --msg-level=all=v $FILE -o $FILE_OUT \
+            RUNCMD='$DRYRUN ionice -c 3 nice mpv '" $MPVVERBOSE $FILE  "' -o  '" $FILE_OUT  "' \
                 -of mkv '" $HWDEC $NORMFILTER $VIDEO_SYNC $SCALE $MPV_ARGS "' --oac=libfdk_aac \
                 --oacopts-add="b='${ANEWRATE}',afterburner=1,vbr=4" \
                 --video-sync=display-resample \
@@ -228,7 +233,11 @@ for FILE in $@ ; do
         META=${META}${MPVCMDS}
         if eval "${RUNCMD}"  ; then
             if [ -f "$FILE_OUT" ]; then
-                $DRYRUN mkvpropedit -v --add-track-statistics-tags "$FILE_OUT"
+                if $DRYRUN mkvpropedit -v --add-track-statistics-tags "$FILE_OUT" ; then
+                    echo "Prop set worked"
+                else
+                    echo "Prop set failed"
+                fi
                 NEWSIZE=$(stat -c '%s' "$FILE_OUT")
                 TIME=$(stat --printf '%Y' "$FILE")
                 if [ ! -z "$NORMAL_WRITE" ]; then
