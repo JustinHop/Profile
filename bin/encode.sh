@@ -21,18 +21,19 @@ Usage: $0 [options] FILE...
 
 -7      Scale to 720p
 -a      Output audio bitrate ratio. Default 0.9
+-D      Debug
 -e      Encoding type, [hand,x264,nv,vaapi] nv is default
+-F      Fixed bitrate size not ratio
 -h      Help
 -m      Extra args to mpv, if mpv encoder is selected
 -n      Dry run
 -N      Only normalize audio
 -v      Output video bitrate ratio. Default 0.9
 -W      Normalize audio and overwrite input file
--F      Fixed bitrate size not ratio
 "
 
 
-while getopts "a:v:he:nm:7NWF" option; do
+while getopts "a:v:he:nm:7NWFD" option; do
     case "${option}"
         in
         h)  echo "$HELP"
@@ -56,6 +57,8 @@ while getopts "a:v:he:nm:7NWF" option; do
         W)  NORMAL=1
             NORMAL_WRITE=1
         ;;
+        D)  set -x
+        ;;
     esac
 done
 
@@ -72,7 +75,7 @@ docker_run () {
         jrottenberg/ffmpeg:vaapi -hide_banner -y $@
 }
 
-set -x
+#set -x
 
 for FILE in $@ ; do
     if [ -f "$FILE" ]; then
@@ -218,18 +221,11 @@ for FILE in $@ ; do
             if [ ! -z "$MPVCMDS" ]; then
                 MPVCMDS="${MPVCMDS},"
             fi
-            #MPVCMDS="${MPVCMDS}MPVCMD$MCOUNT=\"$(echo $(echo $LINE | tr -d "\'" | tr -d "\""))\""
-            #MCOUNT=$(echo "$MCOUNT + 1" | bc)
-            #MCOUNT=$(printf '%0*d\n' 2 $MCOUNT)
-            #ENCODER="${ENCODER}ENCODER$ECOUNT=\"$LINE\""
             MPVCMDS=${MPVCMDS}MPVCMD$MCOUNT="\"$(echo ${${${LINE//\"}//\'}//\\} | sed 's/,/\\,/g')\""
             MCOUNT=$(echo "$MCOUNT + 1" | bc)
             MCOUNT=$(printf '%0*d\n' 2 $MCOUNT)
         done
         META=${META}${MPVCMDS}
-        #echo "MPV COMMANDS = $MPVCMDS"
-        #CMD=$(echo "$CMD" | perl -pe 's/MPVCMDS/'$MPVCMDS'/')
-        #if (eval $CMD || VIDEO_SYNC="--video-sync=display-resample" eval $CMD ) ; then
         if eval "${RUNCMD}"  ; then
             if [ -f "$FILE_OUT" ]; then
                 $DRYRUN mkvpropedit -v --add-track-statistics-tags "$FILE_OUT"
