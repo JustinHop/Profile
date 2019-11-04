@@ -96,6 +96,9 @@ for FILE in $@ ; do
 
         if [ "$RESIZETO720" ]; then
             FILE_OUT=${FILE_OUT:gs/1080/720/}
+            if  ! echo $FILE_OUT | grep -sq 720 ; then
+                FILE_OUT=$(echo $FILE_OUT | perl -pe 's/\.mkv$/-720p\.mkv/')
+            fi
         fi
 
         OLDSIZE=$(stat -c '%s' "$FILE")

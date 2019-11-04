@@ -1,0 +1,7 @@
+--add-metadata
+--embed-subs
+--embed-thumbnail
+--no-call-home
+--console-title
+--geo-bypass
+--format=bestvideo+bestaudio,bestaudio[ext=m4a]
