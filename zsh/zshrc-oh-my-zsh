@@ -47,24 +47,24 @@ HIST_STAMPS=yyyy-mm-dd
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-    aws
-    colored-man-pages
-    colorize
-    git
-    gnu-utils
-    jsontools
-    mosh
-    pip
-    python
-    systemadmin
-    tmux
-    vim-interaction
-    virtualenv
-    rsync
-    nmap
-    man
-    docker
-    docker-compose
+    #aws
+    #colored-man-pages
+    #colorize
+    #git
+    #gnu-utils
+    #jsontools
+    #mosh
+    #pip
+    #python
+    #systemadmin
+    #tmux
+    #vim-interaction
+    #virtualenv
+    #rsync
+    #nmap
+    #man
+    #docker
+    #docker-compose
     )
 
 # User configuration

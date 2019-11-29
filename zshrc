@@ -7,7 +7,10 @@ fi
 
 for _ZSH_ADDON in \
   Profile/zsh/syntax-highlighting/zsh-syntax-highlighting.plugin.zsh \
-  Profile/zsh/zshrc-oh-my-zsh
+  Profile/zsh/oh-my-zsh/lib/termsupport.zsh \
+  Profile/zsh/oh-my-zsh/lib/history.zsh \
+  Profile/zsh/oh-my-zsh/lib/key-bindings.zsh \
+  #Profile/zsh/zshrc-oh-my-zsh
 do
   if [ -f "$HOME/$_ZSH_ADDON" ]; then
     source "$HOME/$_ZSH_ADDON"

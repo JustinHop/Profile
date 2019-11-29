@@ -27,7 +27,8 @@ def main():
 
     print(yaml.safe_dump(
             json.loads(f.read()),
-            default_flow_style=False))
+            default_flow_style=False,
+            width=1000))
 
 
 if __name__ == "__main__":

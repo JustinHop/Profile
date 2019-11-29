@@ -5,6 +5,8 @@ export TZ=Asia/Bangkok
 
 start=$(date +%s.%N)
 
+sudo modprobe nvidia
+
 /usr/bin/nvidia-settings --load-config-only || true
 nitrogen --restore &
 
@@ -18,7 +20,8 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 
 xrandr --output eDP1 --primary &
 xgamma -gamma .8 &
-{ exec compton -D 5 --config /dev/null                         ; } &
+#{ exec compton --backend glx --config /dev/null                         ; } &
+{ exec xcompmgr -C -n                                          ; } &
 { sleep 1s ; mpd; sleep 2s;  mpc pause                         ; } &
 { sleep 5s; while true ; do ~/Profile/bin/mpdprxy.sh ; sleep 5s; done  ; } &
 { sleep 1m ;          ~/mopidy/daemon.sh                          ; } &

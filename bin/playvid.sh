@@ -1,5 +1,8 @@
 #!/bin/bash
 
-~/bin/100next.sh | xargs mpv --audio-device='pulse/alsa_output.pci-0000_00_1b.0.analog-stereo' "$@"
+#export LIBVA_DRIVER_NAME=vdpau
+#export VDPAU_DRIVER=nvidia
+
+~/bin/100next.sh |rl | xargs mpv  --profile=x --msg-level=all=info $*
 
 clear
