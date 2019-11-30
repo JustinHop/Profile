@@ -168,7 +168,7 @@
 	url = https://github.com/Argon-/mpv-stats.git
 [submodule "config/mpv/blue-sky-r"]
 	path = config/mpv/blue-sky-r
-	url = https://github.com/blue-sky-r/mpv.git
+	url = https://github.com/JustinHop/mpv.git
 [submodule "config/mpv/mpv-reload"]
 	path = config/mpv/mpv-reload
 	url = https://github.com/4e6/mpv-reload.git
