@@ -19,16 +19,28 @@ MPV_SCRIPTS="${PL}:${YTDL}:${YTQ}:${RE}"
 
 if [ -z $1 ]; then
     #ARG=$(cat $(find ~/tube -name '15*playlist.m3u' | sort | tail -n 1) | grep -vP '^#' | awk '!seen[$0]++' | xargs -I{} echo -n \"{}\"\  )
-    ARG=$(find ~/tube -name '15*playlist.m3u' | sort | tail -n 1)
+    ARG=$(find ~/tube -name '15*playlist.m3u' -size +0 | sort | tail -n 1)
+    if [ -f "$ARG" ]; then
+        sed -i 's/%/[percent]/g' "$ARG"
+    fi
 fi
 
-IFS=$' ' read -r -a ARRAY <<< ${ARG}
+for A in $* ; do
+    if [ -f "$A" ]; then
+        EXT="${filename##*.}"
+        if [ "$EXT" == "m3u" ]; then
+            sed -i 's/%/[percent]/g' "$ARG"
+        fi
+    fi
+done
+
+# IFS=$' ' read -r -a ARRAY <<< ${ARG}
 
 eval exec -a youtube-player mpv \
+    --force-window=immediate \
     --keep-open=yes \
     --input-ipc-server=/tmp/mpvsocket \
-    --msg-level=all=info \
-    --msg-module \
+    --msg-level=all=info,ytdl_hook=debug,ytdl_hook_mask=debug,ffmpeg=v \
     --hwdec=nvdec-copy \
     --audio-device='pulse/bluez_sink.30_21_C6_A8_94_2E.a2dp_sink' \
     --term-osd-bar \

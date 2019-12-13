@@ -91,12 +91,12 @@ EON
         # eval $DRY_RUN docker_run $FFVER -i /mnt/"$IN" -i "$OUT_WAV" \
             # -map $VIDEO_MAP -map 1:0 \
         eval docker_run $FFVER -i /mnt/"$IN" \
-            -metadata comment="'Normalized_Audio+ffmpeg+dynaud-$(date)'" \
+            -metadata comment="'Normalized_Audio+ffmpeg+loudnorm-$(date)'" \
             -metadata JHOP=modified \
             -c:v copy \
             -c:a libfdk_aac \
             -profile:a aac_low \
-            -af dynaudnorm \
+            -af loudnorm \
             -vbr 4 \
             /mnt/"$OUT_VID" || return
 

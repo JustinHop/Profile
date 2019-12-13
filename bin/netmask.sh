@@ -1,4 +1,4 @@
-#!/bin/bash --
+#!/bin/zsh --
 # Convert CIDR netmask to decimal x.x.x.x format and vice versa.
 
 function cidr2oct () {
