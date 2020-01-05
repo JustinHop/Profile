@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 setopt allexport
-export TZ=Asia/Bangkok
+#export TZ=Asia/Bangkok
 
 start=$(date +%s.%N)
 
@@ -12,6 +12,12 @@ nitrogen --restore &
 
 {           exec xfsettingsd         --no-daemon               ; } &
 #{ sleep 1s; exec xfce4-volumed                                 ; } &
+{ sleep 5s;
+      ulimit -v 1500000;
+      while true; do
+            xfce4-volumed --no-daemon
+            sleep 1m
+      done                                                     ; } &
 { sleep 1s; exec xfce4-power-manager --no-daemon               ; } &
 
 cat ~/.xsession-errors > ~/.xsession-errors-1
@@ -28,11 +34,11 @@ xgamma -gamma .8 &
 { sleep 30s ; while true ; do mpdfavd        ; sleep 5s ; done ; } &
 { sleep 30s ; while true ; do mpdscribble --no-daemon ;
                                                sleep 5s ; done ; } &
-{ sleep 30s ; exec ~/bin/popup.py -p 6601                      ; } &
-{ sleep 30s ; exec ~/bin/popup.py -p 6602                      ; } &
+{ sleep 60s ; exec ~/bin/popup.py -p 6601                      ; } &
+{ sleep 60s ; exec ~/bin/popup.py -p 6602                      ; } &
 #{ sleep 30s ; google-drive-ocamlfuse ~/google                  ; } &
 
-{ exec conky                                                   ; } &
+{ sleep 1m; exec conky                                         ; } &
 { exec workrave                                                ; } &
 { sleep 30s; exec ~/src/taralli/taralli_w                      ; } &
 
@@ -69,6 +75,7 @@ xgamma -gamma .8 &
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
 [ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
+
 { while true ; do
       setxkbmap \
          -option \
@@ -83,20 +90,12 @@ echo "Session: setting Xdefaults and Xmodmap"
       xset r rate 350 50;
       xset s 3600
 
-      let GAP_Y=$(xrandr --current | grep primary | awk '{ print $4 }' | tr + ' ' | awk '{ print $3 }')+40
-      sed "s/^gap_y.*/gap_y $GAP_Y/" < ~/Profile/conky-thinkpad1.conf > ~/tmp/conky-thinkpad1.conf
+      # let GAP_Y=$(xrandr --current | grep primary | awk '{ print $4 }' | tr + ' ' | awk '{ print $3 }')+40
+      # sed "s/^gap_y.*/gap_y $GAP_Y/" < ~/Profile/conky-thinkpad1.conf > ~/tmp/conky-thinkpad1.conf
 
-      if ! diff ~/Profile/conky-thinkpad1.conf ~/tmp/conky-thinkpad1.conf ; then
-            mv -v ~/tmp/conky-thinkpad1.conf ~/Profile/conky-thinkpad1.conf
-      fi
-
-#      _PIDS=($(pgrep xfce4-volumed))
-#      if [[ "$_PIDS" ]]; then
-#            if (( 0"$(ps -o pmem h $_PIDS[1])" > 1 )); then
-#                  pkill $_PIDS;
-#                  { xfce4-volumed; } &
-#            fi
-#      fi
+      # if ! diff ~/Profile/conky-thinkpad1.conf ~/tmp/conky-thinkpad1.conf ; then
+      #       mv -v ~/tmp/conky-thinkpad1.conf ~/Profile/conky-thinkpad1.conf
+      # fi
 
       sleep 10s;
 
