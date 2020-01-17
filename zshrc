@@ -155,6 +155,11 @@ esac
 
 export PATH
 
+if [ -f /.dockerenv ]; then
+    BKT=('<<' '>>' '<[' ']>' '-{' '}-')
+    TYCOLOR=green
+fi
+
 #
 # TERMINAL SETTINGS AND KEYBINDINGS
 #

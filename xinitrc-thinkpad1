@@ -63,7 +63,7 @@ xgamma -gamma .8 &
 
 { sleep 15s  ; exec ~/Profile/bin/crypto.py                    ; } &
 
-{ sleep 5m   ; ~/src/youtube-subs2recentplaylist/cron.sh       ; } &
+#{ sleep 5m   ; ~/src/youtube-subs2recentplaylist/cron.sh       ; } &
 { sleep 60s  ; pidgin                                          ; } &
 { sleep 95s  ; exec ~/bin/pidgin_fortune                       ; } &
 { sleep 10s  ; exec claws-mail  2>&1 | fold -w 80 -s           ; } &

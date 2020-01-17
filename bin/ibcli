@@ -2,4 +2,7 @@
 
 exec docker run -it --rm \
     --network=container:tmvpn \
-    889199535989.dkr.ecr.us-east-1.amazonaws.com/techops/ibcli:latest $@
+    -v ~/.ibcli_history:/.ibcli_history:rw \
+    --user 1000:1000 \
+    jhoppensteadt/ibcli:latest $@
+    # 889199535989.dkr.ecr.us-east-1.amazonaws.com/techops/ibcli:latest $@
