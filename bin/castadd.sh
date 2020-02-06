@@ -12,7 +12,9 @@ IFS=$'\t\n'
 
 fixtoyoutube() {
     #echo $1 | tee /dev/stderr | sed -e 's/invidio.us/youtube.com/' -e 's/hooktube.com/youtube.com/' | tee /dev/stderr
-    echo $1 | sed -e 's/invidio.us/youtube.com/' -e 's/hooktube.com/youtube.com/'
+    local URL=$(echo $1 | sed -e 's/invidio.us/youtube.com/' -e 's/hooktube.com/youtube.com/')
+    notify-send --app-name=youtube CATT "attempting to cast $URL" &
+    echo "$URL"
 }
 
 WAIT=""

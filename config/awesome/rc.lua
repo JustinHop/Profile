@@ -467,6 +467,7 @@ globalkeys = awful.util.table.join(
 
   awful.key({                   }, "XF86Open",    function () awful.util.spawn("castcast") end),
   awful.key({                   }, "XF86Paste",    function () awful.util.spawn("castadd") end),
+  awful.key({                   }, "XF86Tools",    function () awful.util.spawn("castadd") end),
   awful.key({                   }, "XF86Cut",    function () awful.util.spawn("catt skip") end),
 
   awful.key({                   }, "Redo",            function () awful.util.spawn("mpc toggle") end),
