@@ -5,10 +5,12 @@ set -x
 
 ARG=""
 
-export LIBVA_DRIVER_NAME=nvidia
-export VDPAU_DRIVER=nvidia
+#export LIBVA_DRIVER_NAME=nvidia
+#export VDPAU_DRIVER=nvidia
 
-SDIR="/home/justin/.config/mpv"
+export DISPLAY=:0.0
+
+SDIR="/home/pi/.config/mpv"
 PL="$SDIR/mpv-playlistmanager/playlistmanager.lua:$SDIR/mpv-playlistmanager/titleresolver.lua"
 APP="$SDIR/mpv-scripts/appendURL.lua"
 YTDL="$SDIR/blue-sky-r/scripts/ytdl_hook_mask.lua"
@@ -41,7 +43,6 @@ eval exec -a youtube-player mpv \
     --keep-open=yes \
     --input-ipc-server=/tmp/mpvsocket \
     --msg-level=all=info,ytdl_hook=debug,ytdl_hook_mask=debug,ffmpeg=v \
-    --hwdec=nvdec-copy \
     --term-osd-bar \
     --scripts="$MPV_SCRIPTS" \
     "$@" $ARG

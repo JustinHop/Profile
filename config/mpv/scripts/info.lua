@@ -56,7 +56,7 @@ end
         -- mp.get_property_osd("[${playlist-pos-1}/${playlist-count}] ${media-title}\n ${file-size} ${video-format}@${video-bitrate} ${width}x${height} ${clock}\n ${audio-codec-name} ${video-codec-name} via ${hwdec}")
         -- mp.get_property_osd("[${playlist-pos-1}/${playlist-count}] ${filename}\n ${media-title}\n ${file-size} ${video-format}@${video-bitrate} ${width}x${height} ${clock}\n ${audio-codec-name} ${video-codec-name} via ${hwdec}")
 
-mp.commandv("load-script", "/home/justin/Profile/config/mpv/mpv-scripts/appendURL.lua")
+mp.commandv("load-script", "/home/pi/Profile/config/mpv/mpv-scripts/appendURL.lua")
 
 mp.register_script_message("show_info", show_info)
 --mp.register_script_message("show_meta", show_meta)
