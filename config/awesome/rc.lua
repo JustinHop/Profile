@@ -467,9 +467,29 @@ globalkeys = awful.util.table.join(
 
   awful.key({                   }, "XF86Open",    function () awful.util.spawn("castcast") end),
   awful.key({                   }, "XF86Paste",    function () awful.util.spawn("castadd") end),
-  awful.key({                   }, "XF86Tools",    function () awful.util.spawn("castadd") end),
   awful.key({                   }, "XF86Cut",    function () awful.util.spawn("catt skip") end),
 
+
+  -- ErgoDox EZ Mode 2
+  -- z XF86Launch7
+  awful.key({                   }, "XF86Launch7",    function () awful.util.spawn("castcast") end),
+  -- x XF86Launch6
+  awful.key({                   }, "XF86Launch6",    function () awful.util.spawn("catt skip") end),
+  -- v XF86Tools
+  awful.key({                   }, "XF86Tools",    function () awful.util.spawn("castadd") end),
+  -- b XF86Launch5
+  awful.key({                   }, "XF86Launch5",    function () awful.util.spawn("casttoggle") end),
+  -- a XF86AudioMicMute
+  -- s
+  -- d XF86Launch9
+  -- f XF86Launch8
+
+  -- 5 XF86TouchpadOn
+  awful.key({                   }, "XF86TouchpadOn",    function () awful.util.spawn("catt volumeup 5") end),
+  -- t XF86TouchpadToggle
+  awful.key({                   }, "XF86TouchpadToggle",    function () awful.util.spawn("catt volumedown 5") end),
+
+  -- Sun Type 6
   awful.key({                   }, "Redo",            function () awful.util.spawn("mpc toggle") end),
   awful.key({                   }, "XF86AudioPlay",   function () awful.util.spawn("mpc toggle") end),
   awful.key({                   }, "XF86AudioPause",  function () awful.util.spawn("mpc toggle") end),
@@ -483,6 +503,7 @@ globalkeys = awful.util.table.join(
 
   awful.key({                   }, "Find",            function () awful.util.spawn("xfce4-find-cursor") end),
 
+  -- Standard
   awful.key({                   }, "XF86AudioRaiseVolume", function () awful.util.spawn('amixer -D pulse sset Master 5%+') end),
   awful.key({                   }, "XF86AudioLowerVolume", function () awful.util.spawn('amixer -D pulse sset Master 5%-') end),
   awful.key({                   }, "XF86AudioMute", function () awful.util.spawn('amixer -D pulse sset Master toggle') end),

@@ -78,6 +78,8 @@ xgamma -gamma .8 &
       exec /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 \
             > /dev/null ; } &
 
+{ sleep 1m; ~/Profile/bin/castlongpause.sh  ;  } &
+
 echo "Session: setting Xdefaults and Xmodmap"
 [ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
 [ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1

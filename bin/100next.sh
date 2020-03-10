@@ -9,7 +9,7 @@ TMP=${VIDLIST}.$$
 if [ ! -f $VIDLIST ] || (( $RANDOM % 10 == 0 )); then
     echo REGENERATING LIST > /dev/stderr
     sleep 1
-    vidmanage show a a a a a b b b b c c | rl | rl > $VIDLIST
+    vidmanage show a a a b b c | rl | rl > $VIDLIST
 fi
 
 LINES=$(wc -l $VIDLIST | awk '{ print $1 }')
