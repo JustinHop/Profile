@@ -79,6 +79,8 @@ case $UNAME in
     [[ -a /etc/redhat-release ]] && export DISTRO=redhat
     [[ -a /etc/slackware-version ]] && export DISTRO=slackware
     [[ -a /etc/gentoo-release ]] && export DISTRO=gentoo
+    [[ -a /etc/debian_version ]] && export DISTRO=debian
+    
 
     if tty | grep pts >& /dev/null ; then
       if whence fgconsole >& /dev/null ; then
@@ -112,6 +114,11 @@ case $UNAME in
             #   unicode_start default8x9
           fi
         fi
+        ;;
+
+      (debian)
+        DISTRO_VER=$(cat /etc/debian_version)
+        TYCOLOR=blue
         ;;
 
       (slackware)
@@ -566,6 +573,7 @@ if (( $ZSH_MAJOR >= 4 )); then
 
   ### Mine
   CH(){
+    local hostfile
     for hostfile in /etc/hosts $PROFILE_DIR/hosts /cygdrive/c/WINDOWS/system32/drivers/etc/hosts ; do
       if [ -f $hostfile ]; then
         etchosts+=( $(sed -r 's/(^(\w|\.)+|^.*#.*)//' < $hostfile) )

@@ -4,5 +4,5 @@
 --no-call-home
 --console-title
 --geo-bypass
---format="bestvideo[ext=mp4][width<=1920]+bestaudio/bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"
+--format="22/bestvideo[ext=mp4][width<=1920]+bestaudio/bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"
 --yes-playlist

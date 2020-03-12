@@ -8,7 +8,8 @@ ARG=""
 #export LIBVA_DRIVER_NAME=nvidia
 #export VDPAU_DRIVER=nvidia
 
-export DISPLAY=:0.0
+#export DISPLAY=:0.0
+unset DISPLAY
 
 SDIR="/home/pi/.config/mpv"
 PL="$SDIR/mpv-playlistmanager/playlistmanager.lua:$SDIR/mpv-playlistmanager/titleresolver.lua"
@@ -39,11 +40,12 @@ done
 # IFS=$' ' read -r -a ARRAY <<< ${ARG}
 
 eval exec -a youtube-player mpv \
-    --force-window=immediate \
-    --keep-open=yes \
     --input-ipc-server=/tmp/mpvsocket \
-    --msg-level=all=info,ytdl_hook=debug,ytdl_hook_mask=debug,ffmpeg=v \
+    --msg-level=all=debug \
     --term-osd-bar \
     --scripts="$MPV_SCRIPTS" \
-    "$@" $ARG
+    $@ $ARG | sudo tee /dev/stderr | logger
     #--audio-device='pulse/bluez_sink.30_21_C6_A8_94_2E.a2dp_sink' \
+    #--msg-level=all=info,ytdl_hook=debug,ytdl_hook_mask=debug,ffmpeg=v \
+    #--force-window=immediate \
+    #--keep-open=yes \

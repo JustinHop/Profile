@@ -4,7 +4,7 @@
 
 theme = {}
 
-theme.font          = "Droid Sans Mono for Powerline 10"
+theme.font          = "Droid Sans Mono for Powerline 16"
 
 theme.colors = {}
 theme.colors.base3 = "#002b36ff"

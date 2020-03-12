@@ -5,8 +5,7 @@ setopt allexport
 
 start=$(date +%s.%N)
 
-sudo modprobe nvidia
-
+xrandr --output HDMI-1 --mode 1920x1080
 #/usr/bin/nvidia-settings --load-config-only || true
 nitrogen --restore &
 
@@ -61,6 +60,7 @@ echo "New Session on $HOSTNAME" | figlet -w 1000
 #{ sleep 5s  ; xrandr --output DP-2-1 --brightness .8 ; } &
 #{ sleep 5s  ; xrandr --output DP-2-2 --brightness .8 ; } &
 #{ sleep 5s  ; xrandr --output DP-2-3 --brightness .8 ; } &
+
 
 #{ sleep 15s ; exec ~/Profile/bin/crypto.py           ; } &
 #{ sleep 15s ; exec ~/Profile/bin/btspeaker.sh        ; } &
@@ -123,4 +123,4 @@ echo "###################################################"
 echo "Session began in $duration seconds"
 echo "###################################################"
 
-exec bash -c 'while true ; do awesome; sleep 1s; done;'
+exec ssh-agent bash -c 'while true ; do awesome; sleep 1s; done;'

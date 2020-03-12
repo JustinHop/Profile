@@ -1,6 +1,12 @@
 #!/bin/bash
 
-#sudo borg init --encryption=repokey-blake2 /mnt/auto/4/backup
+set -euo pipefail
+
+set -x
+
+DIR=/mnt/auto/h1/backup/borg
+
+sudo borg init --encryption=repokey-blake2 $DIR
 
 sudo nice ionice -c 3 borg create \
     --verbose \
@@ -15,13 +21,19 @@ sudo nice ionice -c 3 borg create \
     --exclude '/home/*/.cache/*' \
     --exclude '/home/*/.thumbnails/*' \
     --exclude '/home/*/Music/*' \
+    --exclude '/home/*/Videos/*' \
     --exclude '/home/*/mopidy/data/*' \
     --exclude '/home/*/android/*' \
     --exclude '/home/*/tmp/*' \
     --exclude '/home/*/.tmp/*' \
-    /mnt/auto/4/backup::'{hostname}-{now}' \
+    --exclude '/home/*/.git/*' \
+    $DIR::'{hostname}-{now}' \
+    /root \
     /etc \
-    /home/justin
+    /home \
+    /boot \
+    /opt \
+    /usr/local
 
 sudo nice ionice -c 3 borg prune \
     --save-space \
@@ -32,4 +44,4 @@ sudo nice ionice -c 3 borg prune \
     --keep-daily 7 \
     --keep-weekly 4 \
     --keep-monthly 6 \
-    /mnt/auto/4/backup
+    $DIR
