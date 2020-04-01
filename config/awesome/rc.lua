@@ -1,3 +1,7 @@
+-- If LuaRocks is installed, make sure that packages installed through it are
+-- found (e.g. lgi). If LuaRocks is not installed, do nothing.
+pcall(require, "luarocks.loader")
+
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -10,11 +14,16 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
+local hotkeys_popup = require("awful.hotkeys_popup")
+-- Enable hotkeys help widget for VIM and other apps
+-- when client with a matching name is opened:
+require("awful.hotkeys_popup.keys")
 
 local capi = { timer = timer }
 
 -- Load Debian menu entries
 require("debian.menu")
+local has_fdo, freedesktop = pcall(require, "freedesktop")
 
 invert = -1
 
@@ -162,6 +171,7 @@ end
 
 -- Create a laucher widget and a main menu
 myawesomemenu = {
+  { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
   { "manual", terminal .. " -e man awesome" },
   { "edit config", editor_cmd .. " " .. awesome.conffile },
   { "restart", awesome.restart },
@@ -181,8 +191,12 @@ mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesom
 -- Launcher
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
   menu = mymainmenu })
+-- Menubar configuration
+menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
+-- Keyboard map indicator and switcher
+mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibox
 -- Create a textclock widget
@@ -464,7 +478,6 @@ globalkeys = awful.util.table.join(
   awful.key({                   }, "XF86HomePage",    function () awful.util.spawn("mpc stop") end),
   awful.key({                   }, "Cancel",          function () awful.util.spawn("mpc stop") end),
 
-
   awful.key({                   }, "XF86Open",    function () awful.util.spawn("castcast") end),
   awful.key({                   }, "XF86Paste",    function () awful.util.spawn("castadd") end),
   awful.key({                   }, "XF86Tools",    function () awful.util.spawn("castadd") end),
@@ -490,51 +503,20 @@ globalkeys = awful.util.table.join(
   -- Status bar control
   awful.key({ modkey }, "b", function () mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible end),
 
-  --[[
-  awful.key({ modkey }, "p", function ()
-  if not mywibox[mouse.screen].visible then
-  mywibox[mouse.screen].visible = true
-  end
-  awful.prompt.run({ prompt = setFg("white", "Run: ") },
-  mypromptbox[mouse.screen],
-  awful.util.spawn, awful.completion.bash,
-  awful.util.getdir("cache") .. "/history")
-  end),
-
-  awful.key({ modkey, "Shift" }, "p", function ()
-  if not mywibox[mouse.screen].visible then
-  mywibox[mouse.screen].visible = true
-  end
-  awful.prompt.run({ prompt = setFg("white", "Run Lua code: ") },
-  mypromptbox[mouse.screen],
-  awful.util.eval, awful.prompt.bash,
-  awful.util.getdir("cache") .. "/history_eval")
-  end),
-  ]]--
-
   -- Prompt
-  awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+  awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+    {description = "run prompt", group = "launcher"}),
 
   awful.key({ modkey }, "x",
     function ()
-      awful.prompt.run({ prompt = "Run Lua code: " },
-        mypromptbox[mouse.screen].widget,
-        awful.util.eval, nil,
-        awful.util.getdir("cache") .. "/history_eval")
-    end),
-  --[[ Debuggers
-  awful.key({ modkey, "Control" }, "d", function ()
-  if settings.debug then
-  settings.debug = false
-  for s = 1, screen.count() do mydebugbox[s].text = nil end
-  naughty.notify({ title = "Debug" , text = "debug mode turned " .. colored_off })
-  else
-  settings.debug = true
-  for s = 1, screen.count() do mydebugbox[s].text = setFg("red", " D E B U G ") end
-  naughty.notify({ title = "Debug" , text = "debug mode turned " .. colored_on })
-  end
-  end),
-  ]]--
+      awful.prompt.run {
+        prompt       = "Run Lua code: ",
+        textbox      = awful.screen.focused().mypromptbox.widget,
+        exe_callback = awful.util.eval,
+        history_path = awful.util.get_cache_dir() .. "/history_eval"
+      }
+    end,
+    {description = "lua execute prompt", group = "awesome"}),
   awful.key({ modkey, "Control" }, "i", show_client_infos or nil),
   awful.key({ modkey, "Shift" }, "i", function ()
     local s = mouse.screen
