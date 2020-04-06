@@ -1,7 +1,10 @@
 #!/bin/zsh
 
+mv ~/.xsession-errors > ~/.xsession-errors-1
+echo > ~/.xsession-errors
+
 setopt allexport
-#export TZ=Asia/Bangkok
+export TZ=Asia/Bangkok
 
 start=$(date +%s.%N)
 
@@ -20,8 +23,6 @@ nitrogen --restore &
       done                                                     ; } &
 { sleep 1s; exec xfce4-power-manager --no-daemon               ; } &
 
-cat ~/.xsession-errors > ~/.xsession-errors-1
-echo > ~/.xsession-errors
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
 xrandr --output eDP1 --primary &
@@ -29,6 +30,7 @@ xgamma -gamma .8 &
 #{ exec compton --backend glx --config /dev/null                         ; } &
 { exec xcompmgr -C -n                                          ; } &
 { sleep 1s  ; mpd; sleep 2s;  mpc pause                        ; } &
+{ sleep 3m  ; exec ~/Profile/bin/revpn.sh                      ; } &
 #{ sleep 5s  ; while true ; do ~/Profile/bin/mpdprxy.sh ;
 #                                               sleep 5s; done  ; } &
 #{ sleep 1m  ;   ~/mopidy/daemon.sh                        ; } &
