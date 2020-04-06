@@ -7,10 +7,10 @@ fi
 cp -rv ~/.config/clean-brave-config /tmp/brave
 
 exec brave-browser \
-    --incognito \
     --user-data-dir=/tmp/brave \
-    --proxy-server=socks://localhost:9050 \
     "$@"
     # --proxy-server=http://localhost:8118 \
+    #--incognito \
+    #--proxy-server=socks://localhost:9050 \
 
 rm -rfv /tmp/brave

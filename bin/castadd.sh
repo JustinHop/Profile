@@ -10,7 +10,7 @@ fixtoyoutube() {
     local URL=$(echo $1 | sed -e 's/invidio.us/youtube.com/' -e 's/hooktube.com/youtube.com/')
     for U in $(echo "$URL" | grep -oP 'https?:\S+'); do
         sleep 1s
-        notify-send --app-name=youtube CATT "attempting to cast $U" &
+        # notify-send --app-name=youtube CATT "attempting to cast $U" &
         echo "$U"
     done
 }

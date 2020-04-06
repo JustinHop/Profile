@@ -19,6 +19,11 @@ sudo nice ionice -c 3 borg create \
     --exclude '/home/*/android/*' \
     --exclude '/home/*/tmp/*' \
     --exclude '/home/*/.tmp/*' \
+    --exclude '/home/*/*.iso' \
+    --exclude '/home/*/*.img' \
+    --exclude '/home/*/*.rpm' \
+    --exclude '/home/*/.git/*' \
+    --exclude '/home/*/.svn/*' \
     /mnt/auto/4/backup::'{hostname}-{now}' \
     /etc \
     /home/justin
