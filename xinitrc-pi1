@@ -116,6 +116,7 @@ end=$(date +%s.%N)
 let "duration = end - start"
 
 xhost +local:
+xhost +thinkpad1.local
 
 sleep 1s
 

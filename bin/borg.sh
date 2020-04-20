@@ -6,7 +6,7 @@ set -x
 
 DIR=/mnt/auto/h1/backup/borg
 
-sudo borg init --encryption=repokey-blake2 $DIR
+sudo borg init --encryption=repokey-blake2 $DIR || true
 
 sudo nice ionice -c 3 borg create \
     --verbose \

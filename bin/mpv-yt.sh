@@ -8,10 +8,10 @@ ARG=""
 #export LIBVA_DRIVER_NAME=nvidia
 #export VDPAU_DRIVER=nvidia
 
-#export DISPLAY=:0.0
-unset DISPLAY
+export DISPLAY=:0.0
+#unset DISPLAY
 
-SDIR="/home/pi/.config/mpv"
+SDIR="$HOME/.config/mpv"
 PL="$SDIR/mpv-playlistmanager/playlistmanager.lua:$SDIR/mpv-playlistmanager/titleresolver.lua"
 APP="$SDIR/mpv-scripts/appendURL.lua"
 YTDL="$SDIR/blue-sky-r/scripts/ytdl_hook_mask.lua"
@@ -39,13 +39,19 @@ done
 
 # IFS=$' ' read -r -a ARRAY <<< ${ARG}
 
-eval exec -a youtube-player mpv \
-    --input-ipc-server=/tmp/mpvsocket \
-    --msg-level=all=debug \
+eval exec echo -a youtube-player mpv \
+    --force-window=immediate \
+    --keep-open=yes \
+    --idle \
+    --input-ipc-server=/tmp/mpv.socket \
     --term-osd-bar \
+    --input-terminal \
     --scripts="$MPV_SCRIPTS" \
-    $@ $ARG | sudo tee /dev/stderr | logger
+    $@ $ARG
+    #$@ $ARG  | sudo tee /dev/stderr | logger
     #--audio-device='pulse/bluez_sink.30_21_C6_A8_94_2E.a2dp_sink' \
+    #--msg-level=all=debug \
+    #--force-window=immediate \
     #--msg-level=all=info,ytdl_hook=debug,ytdl_hook_mask=debug,ffmpeg=v \
     #--force-window=immediate \
     #--keep-open=yes \
