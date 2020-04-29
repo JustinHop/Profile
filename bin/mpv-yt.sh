@@ -38,11 +38,12 @@ done
 
 eval exec -a youtube-player mpv \
     --force-window=immediate \
+    --idle \
     --keep-open=yes \
-    --input-ipc-server=/tmp/mpvsocket \
+    --input-ipc-server=/tmp/mpv.socket \
     --msg-level=all=info,ytdl_hook=debug,ytdl_hook_mask=debug,ffmpeg=v \
     --hwdec=nvdec-copy \
     --term-osd-bar \
     --scripts="$MPV_SCRIPTS" \
-    "$@" $ARG
+    $* $ARG
     #--audio-device='pulse/bluez_sink.30_21_C6_A8_94_2E.a2dp_sink' \

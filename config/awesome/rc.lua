@@ -472,16 +472,22 @@ globalkeys = awful.util.table.join(
 
   -- ErgoDox EZ Mode 2
   -- z XF86Launch7
-  awful.key({                   }, "XF86Launch7",    function () awful.util.spawn("castcast") end),
+  -- awful.key({                   }, "XF86Launch7",    function () awful.util.spawn("castcast") end),
+  --
   -- x XF86Launch6
-  awful.key({                   }, "XF86Launch6",    function () awful.util.spawn("catt skip") end),
+  -- awful.key({                   }, "XF86Launch6",    function () awful.util.spawn("catt skip") end),
+  --
   -- v XF86Tools
-  awful.key({                   }, "XF86Tools",    function () awful.util.spawn("castadd") end),
+  awful.key({                   }, "XF86Tools",    function () awful.util.spawn("mpvappend") end),
+  -- awful.key({                   }, "XF86Tools",    function () awful.util.spawn("castadd") end),
+
   -- b XF86Launch5
-  awful.key({                   }, "XF86Launch5",    function () awful.util.spawn("casttoggle") end),
+  -- awful.key({                   }, "XF86Launch5",    function () awful.util.spawn("casttoggle") end),
   -- a XF86AudioMicMute
+  --
   -- s
   -- d XF86Launch9
+  --
   -- f XF86Launch8
 
   -- 5 XF86TouchpadOn

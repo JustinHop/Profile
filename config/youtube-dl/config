@@ -1,9 +1,11 @@
 --add-metadata
 --embed-subs
 --embed-thumbnail
+--sub-format="srt/ass/best"
+--sub-lang="en,th"
 --no-call-home
 --console-title
 --geo-bypass
 --format="bestvideo[ext=mp4][width<=1920]+bestaudio/bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"
 --flat-playlist
---no-playlist
+--yes-playlist
