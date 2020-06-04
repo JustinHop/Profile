@@ -472,16 +472,20 @@ globalkeys = awful.util.table.join(
 
   -- ErgoDox EZ Mode 2
   -- z XF86Launch7
+  awful.key({                   }, "XF86Launch7",    function () awful.util.spawn("6m prev") end),
   -- awful.key({                   }, "XF86Launch7",    function () awful.util.spawn("castcast") end),
   --
   -- x XF86Launch6
+  awful.key({                   }, "XF86Launch6",    function () awful.util.spawn("6m next") end),
   -- awful.key({                   }, "XF86Launch6",    function () awful.util.spawn("catt skip") end),
   --
   -- v XF86Tools
-  awful.key({                   }, "XF86Tools",    function () awful.util.spawn("mpvappend") end),
+  awful.key({                   }, "XF86Tools",    function () awful.util.spawn("6m add") end),
+  -- awful.key({                   }, "XF86Tools",    function () awful.util.spawn("mpvappend") end),
   -- awful.key({                   }, "XF86Tools",    function () awful.util.spawn("castadd") end),
 
   -- b XF86Launch5
+  awful.key({                   }, "XF86Launch5",    function () awful.util.spawn("6m toggle") end),
   -- awful.key({                   }, "XF86Launch5",    function () awful.util.spawn("casttoggle") end),
   -- a XF86AudioMicMute
   --
@@ -491,21 +495,30 @@ globalkeys = awful.util.table.join(
   -- f XF86Launch8
 
   -- 5 XF86TouchpadOn
-  awful.key({                   }, "XF86TouchpadOn",    function () awful.util.spawn("catt volumeup 5") end),
+  awful.key({                   }, "XF86TouchpadOn",    function () awful.util.spawn("6m volup") end),
+  -- awful.key({                   }, "XF86TouchpadOn",    function () awful.util.spawn("catt volumeup 5") end),
   -- t XF86TouchpadToggle
-  awful.key({                   }, "XF86TouchpadToggle",    function () awful.util.spawn("catt volumedown 5") end),
+  awful.key({                   }, "XF86TouchpadToggle",    function () awful.util.spawn("6m voldown") end),
+  -- awful.key({                   }, "XF86TouchpadToggle",    function () awful.util.spawn("catt volumedown 5") end),
 
   -- Sun Type 6
-  awful.key({                   }, "Redo",            function () awful.util.spawn("mpc toggle") end),
-  awful.key({                   }, "XF86AudioPlay",   function () awful.util.spawn("mpc toggle") end),
-  awful.key({                   }, "XF86AudioPause",  function () awful.util.spawn("mpc toggle") end),
+  awful.key({                   }, "Redo",            function () awful.util.spawn("6m toggle") end),
+  awful.key({                   }, "XF86AudioPlay",   function () awful.util.spawn("6m toggle") end),
+  awful.key({                   }, "XF86AudioPause",  function () awful.util.spawn("6m toggle") end),
+  -- awful.key({                   }, "Redo",            function () awful.util.spawn("mpc toggle") end),
+  -- awful.key({                   }, "XF86AudioPlay",   function () awful.util.spawn("mpc toggle") end),
+  -- awful.key({                   }, "XF86AudioPause",  function () awful.util.spawn("mpc toggle") end),
 
-  awful.key({                   }, "SunProps",        function () awful.util.spawn("mpc next") end),
-  awful.key({                   }, "XF86AudioNext",   function () awful.util.spawn("mpc next") end),
+  awful.key({                   }, "SunProps",        function () awful.util.spawn("6m next") end),
+  awful.key({                   }, "XF86AudioNext",   function () awful.util.spawn("6m next") end),
+  -- awful.key({                   }, "SunProps",        function () awful.util.spawn("mpc next") end),
+  -- awful.key({                   }, "XF86AudioNext",   function () awful.util.spawn("mpc next") end),
   awful.key({                   }, "SunFront",        function () awful.util.spawn("popup.py -1") end),
 
-  awful.key({                   }, "Undo",            function () awful.util.spawn("mpc prev") end),
-  awful.key({                   }, "XF86AudioPrev",   function () awful.util.spawn("mpc prev") end),
+  awful.key({                   }, "Undo",            function () awful.util.spawn("6m prev") end),
+  awful.key({                   }, "XF86AudioPrev",   function () awful.util.spawn("6m prev") end),
+  -- awful.key({                   }, "Undo",            function () awful.util.spawn("mpc prev") end),
+  -- awful.key({                   }, "XF86AudioPrev",   function () awful.util.spawn("mpc prev") end),
 
   awful.key({                   }, "Find",            function () awful.util.spawn("xfce4-find-cursor") end),
 
