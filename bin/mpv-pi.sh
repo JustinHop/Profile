@@ -7,7 +7,13 @@ set -x
 
 case $1 in
     add)
-        xclip -o | grep -P '^https?://' | xargs -tr -n1 -I{} echo loadfile {} append-play | ssh pi socat - /tmp/mpv.socket
+        xclip -o | grep -P '^https?://' | sed \
+            -e 's!https://www\.youtu\.be\.com!https://www.youtube.com!' \
+            -e 's!https://www\.youtu\.be/!https://www.youtube.com/watch?v=!' \
+            -e 's!https://youtu\.be/!https://www.youtube.com/watch?v=!' \
+            -e 's!https://youtube\.com!https://www.youtube.com!' \
+            -e 's!https://m\.youtube\.com!https://www.youtube.com!' | \
+            xargs -tr -n1 -I{} echo loadfile {} append-play | ssh pi socat - /tmp/mpv.socket
         ;;
     next)
         echo "playlist_next" | ssh pi socat - /tmp/mpv.socket

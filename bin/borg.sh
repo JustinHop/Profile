@@ -1,6 +1,8 @@
 #!/bin/bash
 
-#sudo borg init --encryption=repokey-blake2 /mnt/auto/4/backup
+DIR=/mnt/auto/backup
+
+echo sudo borg init --encryption=repokey-blake2 $DIR
 
 sudo nice ionice -c 3 borg create \
     --verbose \
@@ -24,7 +26,7 @@ sudo nice ionice -c 3 borg create \
     --exclude '/home/*/*.rpm' \
     --exclude '/home/*/.git/*' \
     --exclude '/home/*/.svn/*' \
-    /mnt/auto/4/backup::'{hostname}-{now}' \
+    ${DIR}::'{hostname}-{now}' \
     /etc \
     /home/justin
 
@@ -37,4 +39,4 @@ sudo nice ionice -c 3 borg prune \
     --keep-daily 7 \
     --keep-weekly 4 \
     --keep-monthly 6 \
-    /mnt/auto/4/backup
+    ${DIR}

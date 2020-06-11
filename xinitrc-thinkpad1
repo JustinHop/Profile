@@ -49,7 +49,9 @@ xgamma -gamma .8 &
 { sleep 5s  ; xscreensaver -nosplash       ; } &
 { while true ; do sleep 5m  ; nitrogen --restore ; done       ; } &
 
-{ sleep 1s  ; exec clipit                            ; } &
+{ sleep 1s  ; exec copyq                             ; } &
+{ sleep 5s  ; exec autocutsel -s PRIMARY             ; } &
+{ sleep 5s  ; exec autocutsel -s CLIPBOARD           ; } &
 { sleep 1s  ; exec solaar                            ; } &
 { sleep 1s  ; xbacklight -set 80                     ; } &
 { sleep 1s  ; exec nm-applet                         ; } &
