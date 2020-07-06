@@ -95,8 +95,9 @@ settings.icon.chrome = os.getenv("HOME") .. "/.config/awesome/icons/google-chrom
 -- This is used later as the default terminal and editor to run.
 -- terminal = "gnome-terminal"
 terminal = "roxterm"
-lock_session = "gnome-screensaver-command -l"
-take_screenshot = "gnome-screenshot -i"
+-- lock_session = "gnome-screensaver-command -l"
+lock_session = "xscreensaver-command -l"
+take_screenshot = "scrot -e 'mv -v $f ~/Pictures/screenshots/'"
 session_ender = "session_ender.sh"
 -- terminal = "terminator"
 editor = os.getenv("EDITOR") or "editor"
@@ -384,7 +385,7 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
   awful.key({                   }, "XF86ScreenSaver", function () awful.util.spawn(lock_session) end),
-  awful.key({                   }, "Print",           function () awful.util.spawn("scrot -e 'mv -v $f ~/Pictures/screenshots/'") end),
+  awful.key({                   }, "Print",           function () awful.util.spawn(take_screenshot) end),
   awful.key({ modkey            }, "d",               awful.tag.viewnext       ),
   awful.key({ modkey,           }, "Escape",          awful.tag.history.restore),
   awful.key({ modkey            }, "c",               function () destroyall()  end     ),
@@ -403,6 +404,8 @@ globalkeys = awful.util.table.join(
 
   awful.key({ modkey, "Control" }, "j",      function () awful.client.swap.byidx(  1)    end),
   awful.key({ modkey, "Control" }, "k",      function () awful.client.swap.byidx( -1)    end),
+
+  awful.key({ "Shift", "Control" }, "v",      function () awful.util.spawn("/usr/libexec/gpaste/gpaste-ui")    end),
 
   awful.key({ modkey,           }, "w", function () mymainmenu:show({keygrabber=true}) end),
 

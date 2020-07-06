@@ -27,6 +27,8 @@ cd $TORRENT
 
 du -chs $TORRENT
 
+find /mnt/auto/1/share/torrent -type f -name abc.xyz.mp4 -exec echo $SAFE rm -v {} \;
+
 fileloop () {
     for FILE in * ; do
         if echo "$FILE" | grep -vsqP '^_UNPACK' ; then

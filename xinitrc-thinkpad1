@@ -13,7 +13,7 @@ sudo modprobe nvidia
 /usr/bin/nvidia-settings --load-config-only || true
 nitrogen --restore &
 
-{           exec xfsettingsd         --no-daemon               ; } &
+{ while true ; do xfsettingsd --no-daemon ; sleep 10s; done     ; } &
 #{ sleep 1s; exec xfce4-volumed                                 ; } &
 { sleep 5s;
       ulimit -v 1500000;
@@ -41,7 +41,7 @@ xgamma -gamma .8 &
 #{ sleep 60s ; exec ~/bin/popup.py -p 6602                      ; } &
 #{ sleep 30s ; google-drive-ocamlfuse ~/google                  ; } &
 
-{ sleep 1m  ; exec conky                   ; } &
+{ sleep 1m  ; exec conky > /dev/null       ; } &
 { sleep 10s ; exec workrave                ; } &
 { sleep 30s ; exec ~/src/taralli/taralli_w ; } &
 
@@ -49,9 +49,10 @@ xgamma -gamma .8 &
 { sleep 5s  ; xscreensaver -nosplash       ; } &
 { while true ; do sleep 5m  ; nitrogen --restore ; done       ; } &
 
-{ sleep 1s  ; exec copyq                             ; } &
-{ sleep 5s  ; exec autocutsel -s PRIMARY             ; } &
-{ sleep 5s  ; exec autocutsel -s CLIPBOARD           ; } &
+{ sleep 1s  ; exec /usr/libexec/gpaste/gpaste-daemon ; } &
+{ sleep 10s  ; exec /usr/lib/gpaste/gpaste/gpaste-applet ; } &
+#{ sleep 5s  ; exec autocutsel -s PRIMARY             ; } &
+#{ sleep 5s  ; exec autocutsel -s CLIPBOARD           ; } &
 { sleep 1s  ; exec solaar                            ; } &
 { sleep 1s  ; xbacklight -set 80                     ; } &
 { sleep 1s  ; exec nm-applet                         ; } &
@@ -73,7 +74,7 @@ xgamma -gamma .8 &
 
 #{ sleep 5m   ; ~/src/youtube-subs2recentplaylist/cron.sh       ; } &
 { sleep 60s  ; pidgin                                          ; } &
-{ sleep 95s  ; exec ~/bin/pidgin_fortune                       ; } &
+#{ sleep 95s  ; exec ~/bin/pidgin_fortune                       ; } &
 { sleep 10s  ; exec claws-mail  2>&1 | fold -w 80 -s           ; } &
 
 { sleep 10s  ; cd ~/src/noisy ; exec ./run.sh ;                } &

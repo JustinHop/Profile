@@ -2,7 +2,7 @@
 
 cd /mnt/auto/1/share/Video
 
-for i in $(find -L -type d | rl) ; do
+for i in $(find -L -type d | grep -v 'eaDir' | rl) ; do
     if [ -d $i ]; then
         pushd $i
         pwd;pwd;pwd;pwd;

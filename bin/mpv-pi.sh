@@ -4,6 +4,11 @@ set -euo pipefail
 IFS='\t\n'
 
 set -x
+SSHFILE="/tmp/ssh-agent-env-$(whoami)"
+
+if [[ -f  "$SSHFILE" ]]; then
+    source "$SSHFILE"
+fi
 
 case $1 in
     add)
