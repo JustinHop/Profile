@@ -16,6 +16,14 @@ local capi = { timer = timer }
 -- Load Debian menu entries
 require("debian.menu")
 
+stylusid = "21"
+
+stylusscreen1 = "eDP-1"
+stylusscreen2 = "DP-2-2"
+stylusscreen3 = "DP-2-1"
+
+
+dostylus = 0
 invert = -1
 
 home_dir = os.getenv("HOME")
@@ -238,7 +246,8 @@ mywibox = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
-mymousebox = {}
+mymousebox_right = {}
+mymousebox_left = {}
 mydebugbox = {}
 mymsgbox = {}
 mytaglist.buttons = awful.util.table.join(
@@ -295,10 +304,51 @@ mytasklist.buttons =  awful.util.table.join(
   awful.button({ }, 15, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
 )
 
+function stylusnextscreen()
+  local s = mouse.screen
+  if s == 1 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+  end
+  if s == 3 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+  end
+  if s == 2 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+  end
+  awful.screen.focus_relative( 1 * invert )
+  mousemarker()
+end
+
+function stylusprevscreen()
+  local s = mouse.screen
+  if s == 1 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+  end
+  if s == 3 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+  end
+  if s == 2 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+  end
+  awful.screen.focus_relative( -1 * invert )
+  mousemarker()
+end
+
 for s = 1, screen.count() do
   -- My mouse indicator
-  mymousebox[s] = wibox.widget.textbox()
-  mymousebox[s]:set_text("-")
+  mymousebox_right[s] = wibox.widget.textbox()
+  mymousebox_right[s]:set_text("-")
+  mymousebox_right[s]:buttons(awful.util.table.join(
+    awful.button({ }, 1, stylusnextscreen ),
+    awful.button({ }, 3, stylusprevscreen )
+  ))
+
+  mymousebox_left[s] = wibox.widget.textbox()
+  mymousebox_left[s]:set_text("-")
+  mymousebox_left[s]:buttons(awful.util.table.join(
+    awful.button({ }, 1, stylusprevscreen),
+    awful.button({ }, 3, stylusnextscreen)
+  ))
 
   lspace[s] = wibox.widget.textbox()
   lspace[s]:set_markup([[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]])
@@ -331,7 +381,7 @@ for s = 1, screen.count() do
   -- Widgets that are aligned to the left
   local left_layout = wibox.layout.fixed.horizontal()
   left_layout:add(lspace[s])
-  if screen.count() > 1 then left_layout:add(mymousebox[s]) end
+  if screen.count() > 1 then left_layout:add(mymousebox_left[s]) end
   if screen.count() > 1 then left_layout:add(lspace[s]) end
   left_layout:add(mylauncher)
   left_layout:add(lspace[s])
@@ -358,7 +408,7 @@ for s = 1, screen.count() do
   right_layout:add(rspace[s])
   right_layout:add(mylayoutbox[s])
   right_layout:add(rspace[s])
-  if screen.count() > 1 then right_layout:add(mymousebox[s]) end
+  if screen.count() > 1 then right_layout:add(mymousebox_right[s]) end
   if screen.count() > 1 then right_layout:add(rspace[s]) end
 
   -- Now bring it all together (with the tasklist in the middle)
@@ -420,10 +470,26 @@ globalkeys = awful.util.table.join(
   awful.key({ "Shift"           }, "F11", awful.tag.viewnext       ),
 
   --awful.key({ modkey,           }, "l",      function () awful.screen.focus_relative( 1) mousemarker() end),
-  awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relative( 1 * invert) mousemarker() end),
+  awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relative( 1 * invert)
+                                                mousemarker()
+                                                if dostylus == 1 then
+                                                  awful.util.spawn("stylustoscreen " .. mouse.screen)
+                                                end
+                                             end),
   --awful.key({ modkey,           }, "h",      function () awful.screen.focus_relative( -1) mousemarker() end),
-  awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1 * invert) mousemarker() end),
-  awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
+  awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1 * invert)
+                                                mousemarker()
+                                                if dostylus == 1 then
+                                                  awful.util.spawn("stylustoscreen " .. mouse.screen)
+                                                end
+                                             end),
+
+  awful.key({ modkey,           }, "u", function () awful.client.urgent.jumpto()
+                                                mousemarker()
+                                                if dostylus == 1 then
+                                                  awful.util.spawn("stylustoscreen " .. mouse.screen)
+                                                end
+                                             end),
 
   awful.key({ modkey,           }, "j",
     function ()
@@ -611,8 +677,18 @@ clientkeys = awful.util.table.join(
   awful.key({ modkey, "Control"                           } , "m",     function (c) c.minimized = not c.minimized end),
   awful.key({ modkey, "Control"                           } , "Tab",   function () awful.client.swap.byidx(  1) awful.client.focus.byidx( -1)   end),
   awful.key({ modkey, "Shift", "Control"                  } , "Tab", function () awful.client.swap.byidx(  -1) awful.client.focus.byidx( 1)   end),
-  awful.key({ modkey,                                     } , "o", function (c) awful.client.movetoscreen(c,c.screen+1 * invert) mousemarker() end),
-  awful.key({ modkey, "Shift"                             } , "o", function (c) awful.client.movetoscreen(c,c.screen-1 * invert) mousemarker() end),
+  awful.key({ modkey,                                     } , "o", function (c) awful.client.movetoscreen(c,c.screen+1 * invert)
+                                                                      mousemarker()
+                                                                      if dostylus == 1 then
+                                                                        awful.util.spawn("stylustoscreen " .. mouse.screen)
+                                                                      end
+                                                                   end),
+  awful.key({ modkey, "Shift"                             } , "o", function (c) awful.client.movetoscreen(c,c.screen-1 * invert)
+                                                                      mousemarker()
+                                                                      if dostylus == 1 then
+                                                                        awful.util.spawn("stylustoscreen " .. mouse.screen)
+                                                                      end
+                                                                   end),
   awful.key({ modkey,                                     } , "r", function (c) c:redraw() end),
   -- TODO: Shift+r to redraw all clients in current tag
   --awful.key({ modkey                                    } , "o",     awful.client.movetoscreen),
@@ -775,6 +851,8 @@ awful.rules.rules = {
     properties = { tag = tags[1][3] } },
   { rule_any = { class = {"Mail", "Thunderbird", "Claws-mail"} },
     properties = { tag = tags[1][3] } },
+  { rule_any = { class = { "krita", "Krita" } },
+    properties = { tag = tags[3][7] } },
   { rule = { class = "zoom" },
     properties = { tag = tags[1][9] } },
   { rule = { class = "Galculator" },
@@ -921,4 +999,4 @@ client.connect_signal("unfocus", function(c)
   clear_tag_icon()
 end)
 -- }}}
--- vim: set sw=4 ft=lua tw=4 et 
+-- vim: set sw=4 ft=lua tw=4 et

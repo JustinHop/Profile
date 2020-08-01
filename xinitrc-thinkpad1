@@ -10,6 +10,8 @@ start=$(date +%s.%N)
 
 sudo modprobe nvidia
 
+{ echo level full-speed | sudo tee /proc/acpi/ibm/fan           ; } &
+
 /usr/bin/nvidia-settings --load-config-only || true
 nitrogen --restore &
 

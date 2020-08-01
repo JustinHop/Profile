@@ -1,0 +1,3 @@
+#!/bin/bash
+vidmanage show a | rl -c 500 | xargs mpv --profile=x
+clear
