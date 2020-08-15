@@ -52,18 +52,18 @@ preloop() {
 fileloop () {
     for FILE in * ; do
         if echo "$FILE" | grep -vsqP '^_UNPACK' ; then
-            FILENAME=$(echo $(basename "$FILE") | perl -pe 's/\.1\.mp4/.mp4/' | perl -pe 's/_?\.?mp4.*$/.mp4/i' )
+            FILENAME=$(echo $(basename "$FILE") |  perl -pe 's/_?\.?mp4.*$/.mp4/i' )
             SIZE=$(du -s "$FILE" | tee /dev/stderr | awk '{ print $1 }')
             if [ "$SIZE" -gt "$MINSIZE" ]; then
                 if [ -d "$FILE" ]; then
                     cd "$FILE"
-                    find -type f -size +100M -exec $SAFE namenorm {} \;
+                    find -type f -size +400M -exec $SAFE namenorm {} \;
                     cd -
                 fi
-                if (( $(find "$FILE" -type f -size +100M | wc -l) >= 2 )); then
+                if (( $(find "$FILE" -type f -size +400M | wc -l) >= 2 )); then
                     FILENAME=""
                 fi
-                find "$FILE" -type f -size +100M -exec $SAFE mv -v --backup=numbered {} $NEW/$FILENAME \;
+                find "$FILE" -type f -size +400M -exec $SAFE mv -v --backup=numbered {} $NEW/$FILENAME \;
                 cd $NEW
                 $SAFE namenorm "$FILENAME"
                 cd -

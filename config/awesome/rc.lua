@@ -16,12 +16,17 @@ local capi = { timer = timer }
 -- Load Debian menu entries
 require("debian.menu")
 
-stylusid = "21"
+stylusid = '"Wacom Intuos Pro M Pen stylus"'
+eraserid = '"Wacom Intuos Pro M Pen eraser"'
 
-stylusscreen1 = "eDP-1"
-stylusscreen2 = "DP-2-2"
-stylusscreen3 = "DP-2-1"
+-- stylusscreen1 = "eDP-1"
+-- stylusscreen2 = "DP-2-2"
+-- stylusscreen3 = "DP-2-1"
 
+-- Nvidia
+stylusscreen1 = "HEAD-0"
+stylusscreen2 = "HEAD-2"
+stylusscreen3 = "HEAD-1"
 
 dostylus = 0
 invert = -1
@@ -308,12 +313,15 @@ function stylusnextscreen()
   local s = mouse.screen
   if s == 1 then
     awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
   end
   if s == 3 then
     awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
   end
   if s == 2 then
     awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
   end
   awful.screen.focus_relative( 1 * invert )
   mousemarker()
@@ -323,12 +331,15 @@ function stylusprevscreen()
   local s = mouse.screen
   if s == 1 then
     awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
   end
   if s == 3 then
     awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
   end
   if s == 2 then
     awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
   end
   awful.screen.focus_relative( -1 * invert )
   mousemarker()
@@ -852,7 +863,7 @@ awful.rules.rules = {
   { rule_any = { class = {"Mail", "Thunderbird", "Claws-mail"} },
     properties = { tag = tags[1][3] } },
   { rule_any = { class = { "krita", "Krita" } },
-    properties = { tag = tags[3][7] } },
+    properties = { tag = tags[screen.count()][7] } },
   { rule = { class = "zoom" },
     properties = { tag = tags[1][9] } },
   { rule = { class = "Galculator" },

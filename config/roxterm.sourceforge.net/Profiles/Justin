@@ -1,6 +1,6 @@
 [roxterm profile]
 colour_scheme=solarized-dark
-font=Liberation Mono for Powerline 11
+font=Liberation Mono for Powerline 14
 show_resize_grip=0
 audible_bell=0
 term=rxvt-256color
