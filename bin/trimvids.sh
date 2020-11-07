@@ -38,6 +38,10 @@ for V in $(vidmanage show delete) ; do
     if [ -n "$V" ] ; then
         if [ -f $V ]; then
             $SAFE rm -v $DEV $V
+            VCP="${V%.*}.vcp"
+            if [ -f "$VCP" ]; then
+                $SAFE rm -v "$VCP"
+            fi
         fi
     fi
 done
