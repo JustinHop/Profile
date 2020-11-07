@@ -10,6 +10,7 @@ start=$(date +%s.%N)
 
 sudo modprobe nvidia
 
+
 { echo level full-speed | sudo tee /proc/acpi/ibm/fan           ; } &
 
 /usr/bin/nvidia-settings --load-config-only || true
@@ -24,6 +25,7 @@ nitrogen --restore &
             sleep 1m
       done                                                     ; } &
 { sleep 1s; exec xfce4-power-manager --no-daemon               ; } &
+{ sleep 2s; exec pulseaudio                                    ; } &
 
 echo "New Session on $HOSTNAME" | figlet -w 1000
 
@@ -44,7 +46,7 @@ xgamma -gamma .8 &
 #{ sleep 30s ; google-drive-ocamlfuse ~/google                  ; } &
 
 { sleep 1m  ; exec conky > /dev/null       ; } &
-{ sleep 10s ; exec workrave                ; } &
+#{ sleep 10s ; exec workrave                ; } &
 { sleep 30s ; exec ~/src/taralli/taralli_w ; } &
 
 { sleep 5s  ; nitrogen --restore           ; } &
@@ -71,13 +73,15 @@ xgamma -gamma .8 &
 
 { sleep 9s  ; exec ~/src/6m/6m.py tray               ; } &
 
+{ sleep 15s ; sudo systemctl restart bluetooth.service  ; } &
+
 { sleep 15s ; exec ~/Profile/bin/crypto.py           ; } &
 { sleep 15s ; exec ~/Profile/bin/btspeaker.sh        ; } &
 
 #{ sleep 5m   ; ~/src/youtube-subs2recentplaylist/cron.sh       ; } &
-{ sleep 60s  ; pidgin                                          ; } &
+# { sleep 60s  ; pidgin                                          ; } &
 #{ sleep 95s  ; exec ~/bin/pidgin_fortune                       ; } &
-{ sleep 10s  ; exec claws-mail  2>&1 | fold -w 80 -s           ; } &
+# { sleep 10s  ; exec claws-mail  2>&1 | fold -w 80 -s           ; } &
 
 { sleep 10s  ; cd ~/src/noisy ; exec ./run.sh ;                } &
 

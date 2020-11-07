@@ -2,7 +2,7 @@
 
 cd /mnt/auto/1/share/Video
 
-for i in $(find -L -type d | grep -v 'eaDir' | rl) ; do
+for i in $(find -L -type d | grep -v 'eaDir' | grep -v 'new' | rl) ; do
     if [ -d $i ]; then
         pushd $i
         pwd;pwd;pwd;pwd;
@@ -12,7 +12,6 @@ for i in $(find -L -type d | grep -v 'eaDir' | rl) ; do
     fi
 done
 
-
-echo > /tmp/emptyfile
+#echo > /tmp/emptyfile
 #find /tmp -maxdepth 1 -name '*.wav' -type f -exec rm -v {} \;
 #find -L /mnt/auto/1/share/Video -type f -name '-volnorm.mp4' -exec cp -v /tmp/emptyfile {} \;

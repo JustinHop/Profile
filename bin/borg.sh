@@ -38,5 +38,5 @@ sudo nice ionice -c 3 borg prune \
     --show-rc \
     --keep-daily 7 \
     --keep-weekly 4 \
-    --keep-monthly 6 \
+    --keep-monthly 12 \
     ${DIR}

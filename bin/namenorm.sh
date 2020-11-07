@@ -13,6 +13,8 @@ done
 shift $((OPTIND-1))
 
 rename -v $DRY -- 's/^(\.\/|\.*_+)+//;
+           s/^_?unpack?//i;
+           s/^_?failed_?//i;
            s/^nzb_?//;
            s/(mp4-?)?(ktr-?)?xpost$/.mp4/i;
            s/_mp4$/.mp4/gi;

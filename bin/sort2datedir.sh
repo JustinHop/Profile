@@ -22,8 +22,10 @@ handledir() {
                         DATESTRING=$FULLDATESTRING
                     fi
 
+                    DATESTRING=$(echo $DATESTRING|sed 's!-!/!g')
+
                     if [[ ! -d $DATESTRING ]]; then
-                        $SAFE mkdir $DATESTRING
+                        $SAFE mkdir -p $DATESTRING
                     fi
 
                     $SAFE mv -v "$FI" "$DATESTRING"

@@ -23,7 +23,8 @@ BASE=/mnt/auto/1/share/Video
 cd $BASE
 
 cd new
-$SAFE namenorm *
+#$SAFE namenorm *
+find . -maxdepth 1 -type f -print0 | xargs -n 16 -0 $SAFE namenorm
 
 if [ -z "$(ls -A /mnt/auto/1/share/Video/new)" ]; then
     echo ALREADY DONE
@@ -42,17 +43,21 @@ else
                         ls -lsh $FILE
                         if [ -d ../$LETTER/$LETTER2 ]; then
                             if [ -f ../$LETTER/$LETTER2/$FILE ]; then
-                                $SAFE rm -v $FILE
+                                if $SAFE cmp "../$LETTER/$LETTER2/$FILE" "$FILE" ; then
+                                    $SAFE rm -v $FILE
+                                else
+                                    $SAFE nice ionice -c 3 mv -v --backup=numbered "$FILE"  "../$LETTER/$LETTER2"
+                                fi
                             else
-                                $SAFE nice ionice -c 3 mv -vi $FILE ../$LETTER/$LETTER2
-                                $SAFE vidmanage add $LIST $BASE/$LETTER/$LETTER2/$FILE
+                                $SAFE nice ionice -c 3 mv -v --backup=numbered "$FILE"  "../$LETTER/$LETTER2"
+                                $SAFE vidmanage add "$LIST" "$BASE/$LETTER/$LETTER2/$FILE/"
                             fi
                         else
                             if [ -f ../$LETTER/$FILE ]; then
                                 $SAFE rm -v $FILE
                             else
-                                $SAFE nice ionice -c 3 mv -vi $FILE ../$LETTER/
-                                $SAFE vidmanage add $LIST $BASE/$LETTER/$FILE
+                                $SAFE nice ionice -c 3 mv -v --backup=numbered "$FILE" "../$LETTER/"
+                                $SAFE vidmanage add "$LIST" "$BASE/$LETTER/$FILE"
                             fi
                         fi
                     fi

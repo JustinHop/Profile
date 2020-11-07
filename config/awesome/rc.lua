@@ -536,6 +536,10 @@ globalkeys = awful.util.table.join(
   awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incncol( 1)         end),
   awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incncol(-1)         end),
 
+  awful.key({ modkey, "Control", "Alt" }, "space", function ()
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput next")
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput next")
+  end),
   awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
   awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 

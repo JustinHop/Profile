@@ -30,12 +30,19 @@ du -chs $TORRENT
 
 #find /mnt/auto/1/share/torrent -type f -name abc.xyz.mp4 -exec echo $SAFE rm -v {} \;
 
+$SAFE sudo chown -R justin:justin $TORRENT
+#$SAFE sudo chmod -R go+w $TORRENT
+
 preloop() {
     cd $TORRENT
+    $SAFE namenorm *(-/)
+    find $TORRENT -type f -name '*nzb' -exec $SAFE mv -v {} /mnt/auto/1/share/nzb/ \;
+    find $TORRENT -type f -name '*jpg' -exec $SAFE rm -v {} \;
     for DDD in *(-/) ; do
         pushd "$DDD"
+        find -type f -exec $SAFE chmod -x {} \;
         DDDD="$(echo $DDD | sed -e 's!/!_!g;s![\[\]]!!g')"
-        for LINE in $(find . -type f -name 'abc.xyz*' -size +400M); do
+        for LINE in $(find . -type f -name 'abc.xyz*' -size +400M | grep -v UNPACK); do
             echo LINE=$LINE
             LINE=$(echo $LINE | perl -pe 's!^\./!!; ')
             CMD="mv -v --backup=numbered $LINE \"$DDDD-$LINE\""
@@ -43,7 +50,9 @@ preloop() {
             eval $SAFE $CMD
         done
         for MFILE in $(find -type f -size +400M | grep -vP '(\.r\d+|\.rar)$'); do
-            mediainfo "$MFILE" > /dev/null && echo mediainfo ok "$MFILE" || $SAFE echo rm -rv "$MFILE"
+            if [ "$SAFE" ]; then
+                mediainfo "$MFILE" > /dev/null && echo mediainfo ok "$MFILE" || $SAFE echo rm -rv "$MFILE"
+            fi
         done
         popd
     done
@@ -51,7 +60,7 @@ preloop() {
 
 fileloop () {
     for FILE in * ; do
-        if echo "$FILE" | grep -vsqP '^_UNPACK' ; then
+        if echo "$FILE" | grep -vsqP 'UNPACK' ; then
             FILENAME=$(echo $(basename "$FILE") |  perl -pe 's/_?\.?mp4.*$/.mp4/i' )
             SIZE=$(du -s "$FILE" | tee /dev/stderr | awk '{ print $1 }')
             if [ "$SIZE" -gt "$MINSIZE" ]; then

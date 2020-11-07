@@ -26,6 +26,8 @@ EOU
     exit 1
 }
 
+CONTAINER="jrottenberg/ffmpeg:vaapi"
+
 show_vars () {
     cat <<EOV
 DEBUG=$DEBUG
@@ -50,7 +52,7 @@ docker_run () {
         -v "$(pwd)":/mnt \
         -v /tmp:/tmp \
         --cpus $CPU \
-        jrottenberg/ffmpeg:vaapi -hide_banner -y $@
+        $CONTAINER -hide_banner -y $@
 }
 
 normal () {
@@ -175,6 +177,7 @@ if ! [ $DEBUG ]; then
     fi
 fi
 
+$DRY_RUN docker pull $CONTAINER
 
 shift $((OPTIND-1))
 

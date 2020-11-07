@@ -8,7 +8,7 @@ SAFE=echo
 set -x
 
 COPY="-c copy"
-NORM='-vcodec copy -acodec aac -af "aresample=async=1:first_pts=0" -af dynaudnorm -metadata comment="Normalized_Audio ffmpeg dynaudnorm $(date)" -fflags +genpts'
+NORM='-vcodec copy -acodec aac -af "aresample=async=1:first_pts=0,dynaudnorm" -metadata comment="Normalized_Audio ffmpeg dynaudnorm $(date)" -fflags +genpts'
 
 for CUTFILE in $@ ; do
     if echo $CUTFILE | grep -sqP '\.vcp$' ; then

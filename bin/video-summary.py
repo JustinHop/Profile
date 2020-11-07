@@ -7,6 +7,7 @@ Options:
     -h --human      Human readable sizes
     -D --debug      Debug output
     -t --title      Display output title
+    -s --sep=foo    Field seperator [Default: " "]
 '''
 
 from docopt import docopt
@@ -146,9 +147,9 @@ def display(info):
     if conf['--title'] and info['General_Filename'] == conf['FILE'][0]:
         for attr in ATTR:
             t.append(attr[0])
-        print(" ".join(t))
+        print(conf['--sep'].join(t))
 
-    print(" ".join(i))
+    print(conf['--sep'].join(i))
 
 
 def main():

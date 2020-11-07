@@ -277,9 +277,9 @@ fi
 
 if [[ $GNU_COREUTILS -eq 1 ]]; then
 
-  NOR=" --color=auto --hide-control-chars --classify "
+  NOR=" --color=auto --hide-control-chars --classify --hide='@eaDir' "
 
-  alias  l="$LS --color=always -C -F "
+  alias  l="$LS --color=always --hide='@eaDir' -C -F "
   alias  l.="$LS $NOR -d .* "
   alias  ll.="$LS $NOR -dl .* "
   alias  lh.="$LS $NOR -dsh .* "
