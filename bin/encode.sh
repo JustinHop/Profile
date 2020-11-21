@@ -208,26 +208,26 @@ for FILE in $@ ; do
                     --input $FILE \
                     --output $FILE_OUT'
             elif [[ "$ENC" == "x264" ]]; then
-                RUNCMD='$DRYRUN ionice -c 3 nice mpv '" $MPVVERBOSE $FILE "' -o '" $FILE_OUT "' -of mkv '" $NORMFILTER "' \
+                RUNCMD='$DRYRUN ionice -c 3 nice mpv '" $MPVVERBOSE $FILE "' --o '" $FILE_OUT "' --of mkv '" $NORMFILTER "' \
                     $VIDEO_SYNC --oac=libfdk_aac \
-                    --oacopts-add="b=${ANEWRATE},afterburner=1,vbr=4" \
+                    --oacopts="b=${ANEWRATE},afterburner=1,vbr=4" \
                     --ovc=libx264 \
-                    --ovcopts-add=preset=slow,crf=22,psy=1 $SCALE $MPV_ARGS --oset-metadata="${META}"'
+                    --ovcopts=preset=slow,crf=22,psy=1 $SCALE $MPV_ARGS --oset-metadata="${META}"'
             elif [[ "$ENC" == "nv" ]]; then
-                RUNCMD='$DRYRUN ionice -c 3 nice mpv '" $MPVVERBOSE $FILE  "' -o  '" $FILE_OUT  "' \
-                    -of mkv '" $HWDEC $NORMFILTER $VIDEO_SYNC $SCALE $MPV_ARGS "' --oac=libfdk_aac \
-                    --oacopts-add="b='${ANEWRATE}',afterburner=1,vbr=4" \
+                RUNCMD='$DRYRUN ionice -c 3 nice mpv '" $MPVVERBOSE $FILE  "' --o  '" $FILE_OUT  "' \
+                    --of mkv '" $HWDEC $NORMFILTER $VIDEO_SYNC $SCALE $MPV_ARGS "' --oac=libfdk_aac \
+                    --oacopts="b='${ANEWRATE}',afterburner=1,vbr=4" \
                     --video-sync=display-resample \
                     --ovc=h264_nvenc \
-                    --ovcopts-add="b='${NEWRATE}',preset=fast,cq=0,profile=main,level=auto,rc=vbr_hq,maxrate='${MAXNEWRATE}',minrate='${MINNEWRATE}'" \
+                    --ovcopts="b='${NEWRATE}',preset=fast,cq=0,profile=main,level=auto,rc=vbr_hq,maxrate='${MAXNEWRATE}',minrate='${MINNEWRATE}'" \
                     --oset-metadata="${META}"'
             elif [[ "$ENC" == "vaapi" ]]; then
-                RUNCMD='$DRYRUN ionice -c 3 nice mpv '" $MPVVERBOSE $FILE  "' -o  '" $FILE_OUT  "' \
-                    -of mkv '" $HWDEC $NORMFILTER $VIDEO_SYNC $SCALE $MPV_ARGS "' --oac=libfdk_aac \
-                    --oacopts-add="b='${ANEWRATE}',afterburner=1,vbr=4" \
+                RUNCMD='$DRYRUN ionice -c 3 nice mpv '" $MPVVERBOSE $FILE  "' --o  '" $FILE_OUT  "' \
+                    --of mkv '" $HWDEC $NORMFILTER $VIDEO_SYNC $SCALE $MPV_ARGS "' --oac=libfdk_aac \
+                    --oacopts="b='${ANEWRATE}',afterburner=1,vbr=4" \
                     --video-sync=display-resample \
                     --ovc=h264_vaapi \
-                    --ovcopts-add=b='${NEWRATE}',quality=23,qp=23,global_quality=23 \
+                    --ovcopts=b='${NEWRATE}',quality=23,qp=23,global_quality=23 \
                     --oset-metadata="${META}"'
             fi
             MPVCMDS=""

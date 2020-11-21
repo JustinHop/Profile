@@ -25,6 +25,13 @@ local function refresh_vars()
   mediatitle = mp.get_property("mediatitle")
 end
 
+
+local function show_info_lite()
+    refresh_vars()
+    mp.command('show_text "[${playlist-pos-1}/${playlist-count}] ${media-title}\n\n ${file-size} ${filtered-metadata}"')
+end
+
+
 local function show_info()
     refresh_vars()
     if filename == title then
@@ -59,6 +66,9 @@ end
 mp.commandv("load-script", "/home/justin/Profile/config/mpv/mpv-scripts/appendURL.lua")
 
 mp.register_script_message("show_info", show_info)
+mp.register_script_message("show_info_lite", show_info_lite)
 --mp.register_script_message("show_meta", show_meta)
-mp.register_event("playback-restart", show_info_for_streams)
+mp.register_event("playback-restart", show_info_lite)
+mp.register_event("start-file", show_info)
+mp.register_event("file-loaded", show_info)
 mp.add_key_binding("i", "show_info", show_info)

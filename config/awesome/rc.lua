@@ -309,6 +309,23 @@ mytasklist.buttons =  awful.util.table.join(
   awful.button({ }, 15, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
 )
 
+function stylusthisscreen()
+  local s = mouse.screen
+  if s == 1 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+  end
+  if s == 3 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+  end
+  if s == 2 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+  end
+  mousemarker()
+end
+
 function stylusnextscreen()
   local s = mouse.screen
   if s == 1 then
@@ -345,20 +362,33 @@ function stylusprevscreen()
   mousemarker()
 end
 
+function stylusdesktop()
+  awful.util.spawn("xsetwacom --set ".. stylusid .. " MapToOutput desktop")
+  awful.util.spawn("xsetwacom --set ".. eraserid .. " MapToOutput desktop")
+end
+
 for s = 1, screen.count() do
   -- My mouse indicator
   mymousebox_right[s] = wibox.widget.textbox()
   mymousebox_right[s]:set_text("-")
   mymousebox_right[s]:buttons(awful.util.table.join(
     awful.button({ }, 1, stylusnextscreen ),
-    awful.button({ }, 3, stylusprevscreen )
+    awful.button({"Control"}, 1, stylusdesktop ),
+    awful.button({"Shift"}, 1, stylusthisscreen ),
+    awful.button({ }, 3, stylusprevscreen ),
+    awful.button({"Control"}, 3, stylusdesktop ),
+    awful.button({"Shift"}, 3, stylusthisscreen )
   ))
 
   mymousebox_left[s] = wibox.widget.textbox()
   mymousebox_left[s]:set_text("-")
   mymousebox_left[s]:buttons(awful.util.table.join(
     awful.button({ }, 1, stylusprevscreen),
-    awful.button({ }, 3, stylusnextscreen)
+    awful.button({"Control"}, 1, stylusdesktop ),
+    awful.button({"Shift"}, 1, stylusthisscreen ),
+    awful.button({ }, 3, stylusnextscreen),
+    awful.button({"Control"}, 3, stylusdesktop ),
+    awful.button({"Shift"}, 3, stylusthisscreen )
   ))
 
   lspace[s] = wibox.widget.textbox()
