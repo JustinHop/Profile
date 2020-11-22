@@ -339,6 +339,9 @@ if [[ -x ~/bin/vim ]]; then
   _VIM=~/bin/vim
 fi
 
+if [[ -x `whence nvim` ]]; then
+  _VIM=`whence nvim`
+fi
 _VIM="$_VIM -p "
 
 export EDITOR=$_VIM
