@@ -11,5 +11,5 @@ while true ; do
             nmcli connection up $UUID
         fi
     fi
-    sleep 1m
+    sleep 30s
 done

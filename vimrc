@@ -175,10 +175,12 @@ if !exists('g:loaded_justin_vimrc')
     colorscheme default
   endif
 
-  if $VIM_MOUSE
-    ttymouse=$VIM_MOUSE
-  else
-    set ttymouse=xterm2
+  if !has('nvim')
+    if $VIM_MOUSE
+      ttymouse=$VIM_MOUSE
+    else
+      set ttymouse=xterm2
+    endif
   endif
 
   function! MyPerlSettings()
