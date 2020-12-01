@@ -1,0 +1,10 @@
+[Unit]
+Description=Crypto.py Script
+After=awesome.service
+
+[Service]
+ExecStartPre=/bin/sleep 30
+ExecStart=%h/Profile/bin/crypto.py
+
+[Install]
+WantedBy=hopsession.target

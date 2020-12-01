@@ -1,0 +1,16 @@
+[Unit]
+Description=Flexget Daemon
+After=network.target
+
+[Service]
+Type=simple
+User=flexget
+Group=users
+UMask=0002
+WorkingDirectory=/home/flexget
+Environment=VIRTUAL_ENV="/home/flexget/flexget"
+Environment=PATH="$VIRTUAL_ENV/bin:$PATH"
+ExecStart=/home/flexget/flexget/bin/python /home/flexget/flexget/bin/flexget --loglevel debug daemon start
+ExecStop=/home/flexget/flexget/bin/python /home/flexget/flexget/bin/flexget daemon stop
+ExecReload=/home/flexget/flexget/bin/python /home/flexget/flexget/bin/flexget --loglevel debug daemon reload
+PrivateTmp=true

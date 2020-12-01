@@ -1,0 +1,10 @@
+[Unit]
+Description=Cleandocker Script
+Requires=awesome.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/Profile/bin/cleandocker.sh
+
+[Install]
+WantedBy=hopsession.target

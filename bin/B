@@ -5,4 +5,13 @@ SOCKS=
 
 #exec  bash -c "if ! optirun $CMD ; then $CMD ; fi"
 #exec  bash -c "if ! primusrun $CMD ; then $CMD ; fi"
-brave-browser --disable-session-crashed-bubble "$@"
+
+xhost +
+
+if docker ps | grep brave ; then
+    docker exec brave brave-browser
+else
+    exec ~/src/brave-docker/run.sh --disable-session-crashed-bubble $*
+fi
+
+#brave-browser --disable-session-crashed-bubble "$@"

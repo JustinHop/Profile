@@ -1,0 +1,12 @@
+[Unit]
+Description=Screen Wrapper
+Requires=awesome.service
+BindsTo=graphical-session.target
+
+[Service]
+ExecStartPre=sleep 5s
+ExecStart=%h/src/taralli/taralli_w
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

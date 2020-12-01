@@ -1,0 +1,8 @@
+[Unit]
+Description=Shortcut Manager
+WantedBy=awesome.service
+BindsTo=graphical-session.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/keynav

@@ -1,0 +1,11 @@
+[Unit]
+Description=6M
+Wants= awesome.service
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sleep 24
+ExecStart=%h/src/6m/6m.py tray
+
+[Install]
+WantedBy=hopsession.target

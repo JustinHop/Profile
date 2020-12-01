@@ -1,0 +1,8 @@
+[Unit]
+Description=XScreenSaver
+
+[Service]
+ExecStart=xscreensaver -nosplash
+
+[Install]
+WantedBy=graphical-session.target

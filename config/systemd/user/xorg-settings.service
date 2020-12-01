@@ -1,0 +1,11 @@
+[Unit]
+Description=Manual X Settings
+BindsTo=graphical-session.target
+
+[Service]
+#BusName=org.xfce.Xfconf
+Type=forking
+ExecStart=%h/Profile/bin/xorg-settings.sh
+
+[Install]
+WantedBy=hopsession.target

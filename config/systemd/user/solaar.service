@@ -1,0 +1,11 @@
+[Unit]
+Description=Logitech Device Manager
+Requires=xfsettingsd.service
+After=awesome.service
+
+[Service]
+Type=idle
+TimeStartSec=5
+ExecStart=/usr/bin/solaar
+Restart=always
+RestartSec=5

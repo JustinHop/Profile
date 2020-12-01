@@ -1,0 +1,10 @@
+[Unit]
+Description=Noisy Script
+After=awesome.service
+
+[Service]
+WorkingDirectory=%h/src/noisy
+ExecStart=%h/src/noisy/run.sh
+
+[Install]
+WantedBy=hopsession.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Revpn Script
+After=awesome.service
+
+[Service]
+ExecStart=%h/Profile/bin/revpn.sh
+
+[Install]
+WantedBy=hopsession.target

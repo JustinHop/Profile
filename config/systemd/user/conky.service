@@ -1,0 +1,10 @@
+[Unit]
+Description=Desktop Stats Display for X
+Requires=awesome.service
+
+[Service]
+ExecStartPre=/bin/sleep 5
+ExecStart=%h/Profile/bin/conky
+
+[Install]
+WantedBy=hopsession.target

@@ -1,0 +1,6 @@
+[Unit]
+Description=Hop Session
+
+[Install]
+#Alias=default.target
+WantedBy=graphical-session.target

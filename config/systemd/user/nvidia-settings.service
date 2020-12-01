@@ -1,0 +1,10 @@
+[Unit]
+Description=Nvidia Script
+After=awesome.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/nvidia-settings --load-config
+
+[Install]
+WantedBy=hopsession.target

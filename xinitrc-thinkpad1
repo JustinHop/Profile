@@ -5,6 +5,10 @@ echo > ~/.xsession-errors
 
 setopt allexport
 export TZ=Asia/Bangkok
+#export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/dbus/user_bus_socket"
+#export XDG_RUNTIME_DIR=/run/user/1000
+#sudo mkdir $XDG_RUNTIME_DIR || true
+#sudo chown justin:justin $XDG_RUNTIME_DIR
 
 start=$(date +%s.%N)
 
@@ -25,7 +29,9 @@ nitrogen --restore &
             sleep 1m
       done                                                     ; } &
 { sleep 1s; exec xfce4-power-manager --no-daemon               ; } &
-{ sleep 2s; exec pulseaudio                                    ; } &
+if ! pgrep -u $(whoami) pulseaudio ; then
+      { sleep 5s; exec pulseaudio                                    ; } &
+fi
 
 echo "New Session on $HOSTNAME" | figlet -w 1000
 

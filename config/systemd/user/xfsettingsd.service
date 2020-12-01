@@ -1,0 +1,10 @@
+[Unit]
+Description=X Settings Manager for XFCE
+BindsTo=graphical-session.target
+
+[Service]
+#BusName=org.xfce.Xfconf
+ExecStart=/usr/bin/xfsettingsd --no-daemon
+
+[Install]
+WantedBy=hopsession.target

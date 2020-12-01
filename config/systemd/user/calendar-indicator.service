@@ -1,0 +1,13 @@
+[Unit]
+Description=Tray Calendar
+After=awesome.service
+
+[Service]
+Type=simple
+TimeStartSec=10
+ExecStart=/opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=hopsession.target
