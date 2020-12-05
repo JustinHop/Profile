@@ -11,4 +11,4 @@ ExecStartPre=sleep 30s
 ExecStart=/usr/bin/nitrogen --restore
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

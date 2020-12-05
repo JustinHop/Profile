@@ -969,7 +969,7 @@ client.connect_signal("manage", function (c, startup)
 
   c:connect_signal("mouse::leave", function(c)
     mousemarker()
-    c_status, c_result = pcall(function() xscreen:stop() end)
+    local c_status, c_result = pcall(function() xscreen:stop() end)
   end)
 
   if not startup then

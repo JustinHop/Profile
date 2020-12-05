@@ -8,4 +8,4 @@ Type=idle
 ExecStart=/usr/libexec/gpaste/gpaste-daemon
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

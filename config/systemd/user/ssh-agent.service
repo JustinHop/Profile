@@ -1,9 +1,15 @@
 [Unit]
-Description=SSH key agent
+Description=OpenSSH Agent
+Documentation=man:ssh-agent(1)
+Before=awesome.service
+BindsTo=graphical-session.target
+#Requires=ssh-agent.socket
 
 [Service]
-Environment=SSH_AUTH_SOCK=%t/ssh-agent.socket
-ExecStart=/usr/bin/ssh-agent -D -a $SSH_AUTH_SOCK
+Environment=SSH_AUTH_SOCK=%t/ssh-auth-socket
+ExecStart=/usr/bin/ssh-agent -a %t/ssh-auth-socket -D
+ExecStartPost=-/bin/systemctl --user set-environment SSH_AUTH_SOCK=%t/ssh-auth-socket
+#ExecStopPost=/usr/lib/openssh/agent-launch stop
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

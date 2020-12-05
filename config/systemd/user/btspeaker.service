@@ -8,4 +8,4 @@ ExecStartPre=/usr/bin/sudo systemctl restart bluetooth.service
 ExecStart=%h/Profile/bin/btspeaker.sh
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

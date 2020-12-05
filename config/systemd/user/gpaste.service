@@ -9,4 +9,4 @@ Type=idle
 ExecStart=/usr/lib/gpaste/gpaste/gpaste-applet
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

@@ -7,8 +7,15 @@ set -x
 SSHFILE="/tmp/ssh-agent-env-$(whoami)"
 
 if [[ -f  "$SSHFILE" ]]; then
-    source "$SSHFILE"
+    #source "$SSHFILE"
+    true
 fi
+
+if [[ -S "$XDG_RUNTIME_DIR/ssh-auth-socket" ]]; then
+    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-auth-socket
+fi
+
+env
 
 case $1 in
     add)

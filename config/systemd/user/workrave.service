@@ -10,4 +10,4 @@ Restart=always
 RestartSec=5
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

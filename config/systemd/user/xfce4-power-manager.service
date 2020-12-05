@@ -7,4 +7,4 @@ ExecStartPre=sleep 4s
 ExecStart=/usr/bin/xfce4-power-manager
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

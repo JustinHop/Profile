@@ -6,4 +6,4 @@ After=awesome.service
 ExecStart=%h/Profile/bin/revpn.sh
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

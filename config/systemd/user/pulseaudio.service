@@ -33,4 +33,4 @@ UMask=0077
 
 [Install]
 Also=pulseaudio.socket
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

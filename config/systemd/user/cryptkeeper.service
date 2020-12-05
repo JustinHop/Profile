@@ -8,4 +8,4 @@ Type=idle
 ExecStart=/usr/bin/cryptkeeper
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

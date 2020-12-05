@@ -7,4 +7,4 @@ Type=oneshot
 ExecStart=/usr/bin/nvidia-settings --load-config
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

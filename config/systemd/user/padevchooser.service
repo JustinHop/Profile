@@ -7,4 +7,4 @@ BindsTo=graphical-session.target
 ExecStart=/usr/bin/padevchooser
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target

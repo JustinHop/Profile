@@ -3,9 +3,8 @@ Description=6M
 Wants= awesome.service
 
 [Service]
-Type=simple
-ExecStartPre=/bin/sleep 24
+Environment=SSH_AUTH_SOCK=%t/ssh-auth-socket
 ExecStart=%h/src/6m/6m.py tray
 
 [Install]
-WantedBy=hopsession.target
+WantedBy=graphical-session.target
