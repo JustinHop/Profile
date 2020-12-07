@@ -1,9 +1,9 @@
 [Unit]
 Description=Set the background
 After=awesome.service
+After=xfsettingsd.service
 
 [Service]
-Type=oneshot
 ExecStartPre=/usr/bin/nitrogen --restore
 ExecStartPre=sleep 5s
 ExecStartPre=/usr/bin/nitrogen --restore

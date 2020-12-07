@@ -1,6 +1,7 @@
 [Unit]
 Description=Revpn Script
 After=awesome.service
+PartOf=graphical-session.target
 
 [Service]
 ExecStart=%h/Profile/bin/revpn.sh

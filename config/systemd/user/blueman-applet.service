@@ -1,7 +1,6 @@
 [Unit]
 Description=Bluetooth Manager
-Wants=awesome.service
-BindsTo=graphical-session.target
+After=awesome.service
 
 [Service]
 ExecStart=/usr/bin/blueman-applet

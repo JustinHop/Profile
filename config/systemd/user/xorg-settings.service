@@ -1,9 +1,9 @@
 [Unit]
 Description=Manual X Settings
-BindsTo=graphical-session.target
+PartOf=graphical-session.target
+After=awesome.service
 
 [Service]
-#BusName=org.xfce.Xfconf
 Type=forking
 ExecStart=%h/Profile/bin/xorg-settings.sh
 

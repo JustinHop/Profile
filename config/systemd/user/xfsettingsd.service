@@ -1,6 +1,6 @@
 [Unit]
 Description=X Settings Manager for XFCE
-BindsTo=graphical-session.target
+PartOf=graphical-session.target
 
 [Service]
 #BusName=org.xfce.Xfconf

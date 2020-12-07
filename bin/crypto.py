@@ -36,7 +36,7 @@ def tooltip(crypto, r):
         crypto, t.replace('"', ''))
     cmd = ''.join(cmd.splitlines())
     # debug("tooltip({}):cmd:{}".format(crypto, cmd))
-    print(subprocess.check_output(cmd, shell=True))
+    debug(subprocess.check_output(cmd, shell=True))
 
 
 def getcrypt(crypto):
@@ -62,7 +62,7 @@ def looper():
                 color = green
             else:
                 color = red
-            print("{} {} {}".format(c, color, last))
+            debug("{} {} {}".format(c, color, last))
             cmd = """echo "{}:set_markup('<span color=\\\"#{}\\\">{:.2f}</span>')" | awesome-client""".format(
                 c, color, last)
             debug("looper():{}:cmd:{}".format(c, cmd))

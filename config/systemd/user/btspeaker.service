@@ -1,6 +1,7 @@
 [Unit]
 Description=Bluetooth Scripts
-Requires=awesome.service
+After=awesome.service
+PartOf=graphical-session.target
 
 [Service]
 ExecStartPre=/bin/sleep 14

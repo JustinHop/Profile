@@ -1,6 +1,7 @@
 [Unit]
 Description=Cleandocker Script
-Requires=awesome.service
+After=awesome.service
+Requires=docker.service
 
 [Service]
 Type=oneshot

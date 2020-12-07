@@ -1,6 +1,6 @@
 [Unit]
 Description=6M
-Wants= awesome.service
+After=awesome.service
 
 [Service]
 Environment=SSH_AUTH_SOCK=%t/ssh-auth-socket

@@ -1,7 +1,6 @@
 [Unit]
 Description=Power Manager Applet
-Wants= awesome.service
-BindsTo=graphical-session.target
+After=awesome.service
 
 [Service]
 ExecStart=/usr/bin/fdpowermon

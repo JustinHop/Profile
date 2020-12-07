@@ -1,7 +1,8 @@
 [Unit]
 Description=PulseAudio Tray Manager
-Requires=awesome.service pulseaudio.service
-BindsTo=graphical-session.target
+After=awesome.service
+Requires=pulseaudio.service
+PartOf=graphical-session.target
 
 [Service]
 ExecStart=/usr/bin/pasystray

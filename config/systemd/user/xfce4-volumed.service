@@ -1,10 +1,12 @@
 [Unit]
 Description=Volume Manager for XFCE and X
-Wants=awesome.service xfsettingsd.service
-BindsTo=graphical-session.target
+After=awesome.service
+Requires=xfsettingsd.service
+PartOf=graphical-session.target
+#StandardOutput=null
+#StandardError=null
 
 [Service]
-Type=idle
 ExecStart=/usr/bin/xfce4-volumed --no-daemon
 MemoryMax=50M
 

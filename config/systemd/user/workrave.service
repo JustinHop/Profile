@@ -1,13 +1,9 @@
 [Unit]
 Description=Time Manager
-Requires=awesome.service
+After=awesome.service
 
 [Service]
-Type=idle
-ExecStartPre=sleep 2s
 ExecStart=/usr/bin/workrave
-Restart=always
-RestartSec=5
 
 [Install]
 WantedBy=graphical-session.target

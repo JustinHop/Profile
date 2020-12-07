@@ -1,6 +1,8 @@
 #!/bin/bash
 
-systemctl --user inherit-environment || true
+set -x
+
+echo RUNNING $0 $1
 
 XINIT_FILE="$HOME/Profile/xinitrc-$(hostname -s)"
 if [ "$XDG_SESSION_DESKTOP" ]; then

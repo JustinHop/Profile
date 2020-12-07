@@ -5,6 +5,3 @@ After=awesome.service
 [Service]
 WorkingDirectory=%h/src/noisy
 ExecStart=%h/src/noisy/run.sh
-
-[Install]
-WantedBy=graphical-session.target

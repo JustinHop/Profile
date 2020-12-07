@@ -1,6 +1,7 @@
 [Unit]
 Description=Compton X Composition Manager
 After=awesome.service
+PartOf=graphical-session.target
 
 [Service]
 #ExecStart=/usr/bin/compton -D 5 --config %h/.config/compton.conf

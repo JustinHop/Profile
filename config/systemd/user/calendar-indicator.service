@@ -8,6 +8,3 @@ TimeStartSec=10
 ExecStart=/opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator
 Restart=always
 RestartSec=5
-
-[Install]
-WantedBy=graphical-session.target
