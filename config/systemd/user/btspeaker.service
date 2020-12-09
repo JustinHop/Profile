@@ -4,8 +4,8 @@ After=awesome.service
 PartOf=graphical-session.target
 
 [Service]
-ExecStartPre=/bin/sleep 14
-ExecStartPre=/usr/bin/sudo systemctl restart bluetooth.service
+ExecStartPre=-/bin/sleep 14
+ExecStartPre=-/usr/bin/sudo systemctl restart bluetooth.service
 ExecStart=%h/Profile/bin/btspeaker.sh
 
 [Install]

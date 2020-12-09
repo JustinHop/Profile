@@ -1,9 +1,9 @@
 [Unit]
 Description=Revpn Script
 After=awesome.service
-PartOf=graphical-session.target
 
 [Service]
+ExecStartPre=sleep 5s
 ExecStart=%h/Profile/bin/revpn.sh
 
 [Install]

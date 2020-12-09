@@ -3,7 +3,7 @@ Description=6M
 After=awesome.service
 
 [Service]
-Environment=SSH_AUTH_SOCK=%t/ssh-auth-socket
+ExecStartPre=sleep 5s
 ExecStart=%h/src/6m/6m.py tray
 
 [Install]

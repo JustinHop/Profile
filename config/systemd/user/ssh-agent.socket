@@ -1,6 +1,0 @@
-[Unit]
-Description=ssh-agent socket
-
-[Socket]
-ListenStream=%t/ssh-auth-socket
-ExecStartPost=-/bin/systemctl --user set-environment SSH_AUTH_SOCK=%t/ssh-auth-socket

@@ -15,7 +15,6 @@ Description=Sound Service
 # After=pulseaudio.socket is not needed, as it is already implicit in the
 # socket-service relationship, see systemd.socket(5).
 ConditionUser=!root
-PartOf=graphical-session.target
 After=awesome.service
 After=nitrogen.service
 
@@ -23,12 +22,12 @@ After=nitrogen.service
 ExecStartPre=sleep 5s
 ExecStartPre=-/usr/bin/pulseaudio --kill
 ExecStart=/usr/bin/pulseaudio --daemonize=no --log-target=journal
-#LockPersonality=yes
-#MemoryDenyWriteExecute=yes
-#NoNewPrivileges=yes
-#Restart=on-failure
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+Restart=on-failure
 #RestrictNamespaces=yes
-#SystemCallArchitectures=native
+SystemCallArchitectures=native
 #SystemCallFilter=@system-service
 # Note that notify will only work if --daemonize=no
 #Type=notify
