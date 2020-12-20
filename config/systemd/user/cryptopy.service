@@ -1,6 +1,7 @@
 [Unit]
 Description=Crypto.py Script
 After=awesome.service
+Wants=awesome.service
 
 [Service]
 #ExecStartPre=/bin/sleep 30

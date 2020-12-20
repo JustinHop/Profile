@@ -6,7 +6,7 @@ set -euo pipefail
 set -x
 
 SAFE="echo"
-#SAFE=""
+SAFE=""
 
 handledir() {
     if (( $# >= 1 )); then
@@ -28,7 +28,7 @@ handledir() {
                         $SAFE mkdir -p $DATESTRING
                     fi
 
-                    $SAFE mv -v "$FI" "$DATESTRING"
+                    $SAFE mv -v --backup=numbered "$FI" "$DATESTRING"
                 fi
             fi
         done

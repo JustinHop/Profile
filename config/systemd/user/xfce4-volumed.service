@@ -1,13 +1,15 @@
 [Unit]
 Description=Volume Manager for XFCE and X
-After=awesome.service
-Requires=xfsettingsd.service
-PartOf=graphical-session.target
+Wants=awesome.service
+Wants=xfsettingsd.service
+Wants=pulseaudio.service
+After=pulseaudio.service
 #StandardOutput=null
 #StandardError=null
 
 [Service]
-ExecStart=/usr/bin/xfce4-volumed --no-daemon
+ExecStart=/bin/bash -c "/usr/bin/xfce4-volumed --no-daemon > /dev/null 2>&1"
+Restart=always
 MemoryMax=50M
 
 [Install]

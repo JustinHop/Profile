@@ -815,12 +815,14 @@ clientbuttons = awful.util.table.join(
   awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
   awful.button({ modkey }, 1, awful.mouse.client.move),
   awful.button({ modkey }, 3, awful.mouse.client.resize),
-  awful.button({ }, 6, function (c) awful.util.spawn("xdotool key ctrl+shift+Tab") end),
-  awful.button({ }, 7, function (c) awful.util.spawn("xdotool key ctrl+Tab") end),
+  -- awful.button({ }, 6, function (c) awful.util.spawn("xdotool key ctrl+shift+Tab") end),
+  -- awful.button({ }, 7, function (c) awful.util.spawn("xdotool key ctrl+Tab") end),
   awful.button({ }, 13, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
   awful.button({ }, 10, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
   awful.button({ }, 14, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
-  awful.button({ }, 15, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
+  awful.button({ }, 15, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end),
+  awful.button({ }, 19, function (c) awful.util.spawn("xdotool key ctrl+shift+Tab") end),
+  awful.button({ }, 20, function (c) awful.util.spawn("xdotool key ctrl+Tab") end)
 )
 
 -- Set keys
@@ -896,6 +898,8 @@ awful.rules.rules = {
     properties = { tag = tags[1][3] } },
   { rule_any = { class = {"Mail", "Thunderbird", "Claws-mail"} },
     properties = { tag = tags[1][3] } },
+  { rule_any = { class = { "inkscape", "Inkscape" } },
+    properties = { tag = tags[screen.count()][7] } },
   { rule_any = { class = { "krita", "Krita" } },
     properties = { tag = tags[screen.count()][7] } },
   { rule = { class = "zoom" },
