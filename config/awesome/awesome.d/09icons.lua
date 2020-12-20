@@ -32,6 +32,7 @@ function set_tag_icon_client(c)
     if client.focus and c.screen == mouse.screen and client.focus.class then
         cicon = false
         if client.focus.class then
+            config_dir = string.format("%s/.config/awesome/", os.getenv("HOME") )
             cicon = config_dir .. "/icons/" .. string.lower(client.focus.class) .. ".png"
         end
         if io.open(cicon, "r") then
