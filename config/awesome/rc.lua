@@ -23,7 +23,17 @@ local capi = { timer = timer }
 local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
 
+stylusid = '"Wacom Intuos Pro M Pen stylus"'
+eraserid = '"Wacom Intuos Pro M Pen eraser"'
+
+-- Nvidia
+stylusscreen1 = "HEAD-0"
+stylusscreen2 = "HEAD-2"
+stylusscreen3 = "HEAD-1"
+
+dostylus = 0
 invert = -1
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -124,6 +134,47 @@ awful.layout.layouts = {
 }
 -- }}}
 
+
+function stylusnextscreen()
+  local s = mouse.screen
+  if s == 1 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+  end
+  if s == 3 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+  end
+  if s == 2 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+  end
+  awful.screen.focus_relative( 1 * invert )
+  mousemarker()
+end
+
+function stylusprevscreen()
+  local s = mouse.screen
+  if s == 1 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+  end
+  if s == 3 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+  end
+  if s == 2 then
+    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+  end
+  awful.screen.focus_relative( -1 * invert )
+  mousemarker()
+end
+
+function stylusdesktop()
+  awful.util.spawn("xsetwacom --set ".. stylusid .. " MapToOutput desktop")
+  awful.util.spawn("xsetwacom --set ".. eraserid .. " MapToOutput desktop")
+end
 -- {{{ Menu
 -- Create a launcher widget and a main menu
 myawesomemenu = {
@@ -261,18 +312,6 @@ awful.screen.connect_for_each_screen(function(s)
     s.xrpusd = wibox.widget.textbox()
     s.xrpusd:set_markup("xrp")
 
-    --[[
-    s.textclock:setup({format = "%c %Z")
-    s.textclock = wibox.widget.textclock()
-    if s == 0 then
-      s.textclock = wibox.widget.textclock()
-    elseif s == 1 then
-      s.textclock = wibox.widget.textclock( "!%c UTC", 1 )
-    elseif s == 2 then
-      s.textclock = wibox.widget.textclock( "%a %b %d %r %Z", 1 )
-    end
-    ]]--
-    -- cal.register(s.textclock)
     -- Each screen has its own tag table.
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
@@ -306,7 +345,6 @@ awful.screen.connect_for_each_screen(function(s)
     -- My mouse indicator
     s.mousebox_right = wibox.widget.textbox()
     s.mousebox_right:set_markup_silently("-")
-    --[[
     s.mousebox_right:buttons(awful.util.table.join(
       awful.button({ }, 1, stylusnextscreen ),
       awful.button({"Control"}, 1, stylusdesktop ),
@@ -315,11 +353,9 @@ awful.screen.connect_for_each_screen(function(s)
       awful.button({"Control"}, 3, stylusdesktop ),
       awful.button({"Shift"}, 3, stylusthisscreen )
     ))
-    ]]--
 
     s.mousebox_left = wibox.widget.textbox()
     s.mousebox_left:set_markup_silently("-")
-    --[[
     s.mousebox_left:buttons(awful.util.table.join(
       awful.button({ }, 1, stylusprevscreen),
       awful.button({"Control"}, 1, stylusdesktop ),
@@ -328,7 +364,6 @@ awful.screen.connect_for_each_screen(function(s)
       awful.button({"Control"}, 3, stylusdesktop ),
       awful.button({"Shift"}, 3, stylusthisscreen )
     ))
-    ]]--
 
     s.lspace = wibox.widget.textbox()
     s.lspace:set_markup([[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]])
@@ -360,7 +395,7 @@ awful.screen.connect_for_each_screen(function(s)
             s.xrpusd,
             {
               layout = awful.widget.only_on_screen,
-              screen = "0", -- Only display on primary screen
+              screen = "primary", -- Only display on primary screen
               {
                 format = "%c %Z",
                 refresh = 0.5,
@@ -432,17 +467,11 @@ globalkeys = gears.table.join(
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relative( 1 * invert)
                                                 mousemarker()
-                                                if dostylus == 1 then
-                                                  awful.util.spawn("stylustoscreen " .. mouse.screen)
-                                                end
                                              end,
               {description = "view next screen", group = "awesome"}),
 
     awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1 * invert)
                                                 mousemarker()
-                                                if dostylus == 1 then
-                                                  awful.util.spawn("stylustoscreen " .. mouse.screen)
-                                                end
                                              end,
               {description = "view previous tag", group = "tag"}),
 
@@ -814,6 +843,7 @@ client.connect_signal("manage", function (c)
         -- Prevent clients from being unreachable after screen count changes.
         awful.placement.no_offscreen(c)
     end
+    mousemarker()
 end)
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
@@ -859,14 +889,17 @@ end)
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
     c:emit_signal("request::activate", "mouse_enter", {raise = false})
+    mousemarker()
 end)
 
 client.connect_signal("focus", function(c) 
     c.border_color = beautiful.border_focus 
     set_tag_icon_client(c)
+    mousemarker()
 end)
 client.connect_signal("unfocus", function(c) 
     c.border_color = beautiful.border_normal 
     clear_tag_icon()
+    mousemarker()
 end)
 -- }}}
