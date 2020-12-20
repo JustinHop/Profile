@@ -23,8 +23,8 @@ V = {
 
 
 def debug(d):
-    # print("DEBUG:", d)
-    pass
+    print("DEBUG:", d)
+    # pass
 
 
 def tooltip(crypto, r):
@@ -51,8 +51,44 @@ def getcrypt(crypto):
         b = []
         b['last'] = 0.0
 
+def looplooper(data):
+    cmd = ''' echo "
+    local awful = require('awful')
+    local screen_loop = 1
+    awful.screen.connect_for_each_screen(function(s)
+        if screen_loop == 3 then
+          s.btcusd:set_markup('<span color=\\\"#{}\\\"><b> {} </b></span>')
+          s.ethusd:set_markup('<span color=\\\"#{}\\\"><b> {} </b></span>')
+          s.bchusd:set_markup('<span color=\\\"#{}\\\"><b> {} </b></span>')
+          s.ltcusd:set_markup('')
+          s.xrpusd:set_markup('')
+          screen_loop = 1
+        elseif screen_loop == 2 then
+          s.btcusd:set_markup('')
+          s.ethusd:set_markup('')
+          s.bchusd:set_markup('')
+          s.ltcusd:set_markup('<span color=\\\"#{}\\\"><b> {} </b></span>')
+          s.xrpusd:set_markup('<span color=\\\"#{}\\\"><b> {} </b></span>')
+        else
+          s.btcusd:set_markup('')
+          s.ethusd:set_markup('')
+          s.bchusd:set_markup('')
+          s.ltcusd:set_markup('')
+          s.xrpusd:set_markup('')
+        end
+    screen_loop = screen_loop + 1
+    end) " | awesome-client
+    '''.format(
+        data['btcusd']['color'], data['btcusd']['last'],
+        data['ethusd']['color'], data['ethusd']['last'],
+        data['bchusd']['color'], data['bchusd']['last'],
+        data['ltcusd']['color'], data['ltcusd']['last'],
+        data['xrpusd']['color'], data['xrpusd']['last'])
+    subprocess.run(cmd, shell=True)
+
 
 def looper():
+    data = {}
     for c in sorted(V.keys()):
         try:
             r = getcrypt(c)
@@ -63,15 +99,16 @@ def looper():
             else:
                 color = red
             debug("{} {} {}".format(c, color, last))
-            cmd = """echo "{}:set_markup('<span color=\\\"#{}\\\">{:.2f}</span>')" | awesome-client""".format(
-                c, color, last)
-            debug("looper():{}:cmd:{}".format(c, cmd))
-            subprocess.run(cmd, shell=True)
-            tooltip(c, r)
+            data[c] = { "color": color, "last": last, "name": c }
+            #debug("looper():{}:cmd:{}".format(c, cmd))
+            #subprocess.run(cmd, shell=True)
+            #tooltip(c, r)
             V[c] = last
         except BaseException as e:
             # debug("looper():{}:Exception:{}".format(c, e))
             pass
+    debug(data)
+    looplooper(data)
 
 
 def main():

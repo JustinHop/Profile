@@ -30,22 +30,35 @@ local menubar = require("menubar")
 
 function set_tag_icon_client(c)
     if client.focus and c.screen == mouse.screen and client.focus.class then
+        local t = client.focus and client.focus.first_tag or nil
         cicon = false
         if client.focus.class then
             config_dir = string.format("%s/.config/awesome/", os.getenv("HOME") )
             cicon = config_dir .. "/icons/" .. string.lower(client.focus.class) .. ".png"
         end
         if io.open(cicon, "r") then
-            awful.tag.seticon(cicon)
+            if t then
+                t.icon = cicon
+            end
         else
-            awful.tag.seticon()
+            if t then
+                t.icon = nil
+            end
         end
     else
-        awful.tag.seticon()
+        if t then
+            t.icon = nil
+        end
     end
 end
 
 function clear_tag_icon()
-    pcall(function () awful.tag.seticon() end)
+    -- pcall(function () awful.tag.seticon() end)
+    pcall(function () 
+        local t = client.focus and client.focus.first_tag or nil
+        if t then
+            t.icon = nil
+        end
+    end)
 end
 -- vim: set sw=4 ft=lua tw=4 et 

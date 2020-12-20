@@ -23,6 +23,7 @@ local capi = { timer = timer }
 local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
 
+invert = -1
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -53,6 +54,7 @@ end
 -- beautiful.init(gears.filesystem.get_themes_dir() .. "justin/theme.lua")
 -- theme_path = "/themes/justin/theme.lua"
 chosen_theme = "upgrade"
+-- chosen_theme = "gtk"
 beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), chosen_theme))
 -- beautiful.init(gears.filesystem.get_themes_dir() .. "gtk/theme.lua")
 --local calendar2 = require('calendar2')
@@ -164,7 +166,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- {{{ Wibar
 -- Create a textclock widget
 spacer = "┃"
-btcusd = wibox.widget.textbox()
+btcusd = wibox.widget.textbox("btcusd")
 bchusd = wibox.widget.textbox()
 ltcusd = wibox.widget.textbox()
 ethusd = wibox.widget.textbox()
@@ -243,9 +245,21 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
+local screen_loop = 1
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
+
+    s.btcusd = wibox.widget.textbox()
+    s.btcusd:set_markup("btc")
+    s.bchusd = wibox.widget.textbox()
+    s.bchusd:set_markup("bch")
+    s.ethusd = wibox.widget.textbox()
+    s.ethusd:set_markup("eth")
+    s.ltcusd = wibox.widget.textbox()
+    s.ltcusd:set_markup("ltc")
+    s.xrpusd = wibox.widget.textbox()
+    s.xrpusd:set_markup("xrp")
 
     --[[
     s.textclock:setup({format = "%c %Z")
@@ -337,11 +351,16 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
+            screen_loop == 1 and mykeyboardlayout,
             wibox.widget.systray(),
+            s.btcusd,
+            s.ethusd,
+            s.bchusd,
+            s.ltcusd,
+            s.xrpusd,
             {
               layout = awful.widget.only_on_screen,
-              screen = "primary", -- Only display on primary screen
+              screen = "0", -- Only display on primary screen
               {
                 format = "%c %Z",
                 refresh = 0.5,
@@ -352,7 +371,7 @@ awful.screen.connect_for_each_screen(function(s)
               layout = awful.widget.only_on_screen,
               screen = 2,
               {
-                format = "!%c UTC",
+                format = "%c UTC",
                 refresh = 0.5,
                 widget = wibox.widget.textclock
               }
@@ -370,6 +389,28 @@ awful.screen.connect_for_each_screen(function(s)
             s.mousebox_right,
         },
     }
+    if screen_loop == 3 then
+      s.btcusd:set_markup("<span background='#002B36' color='#839496'><b> btc </b></span>")
+      s.ethusd:set_markup("<span background='#002B36' color='#839496'><b> eth </b></span>")
+      s.bchusd:set_markup("<span background='#002B36' color='#839496'><b> bch </b></span>")
+      s.ltcusd:set_markup("")
+      s.xrpusd:set_markup("")
+      screen_loop = 1
+    elseif screen_loop == 2 then
+      s.btcusd:set_markup("")
+      s.ethusd:set_markup("")
+      s.bchusd:set_markup("")
+      s.ltcusd:set_markup("<span background='#002B36' color='#839496'><b> ltc </b></span>")
+      s.xrpusd:set_markup("<span background='#002B36' color='#839496'><b> xrp </b></span>")
+    else
+      s.btcusd:set_markup("")
+      s.ethusd:set_markup("")
+      s.bchusd:set_markup("")
+      s.ltcusd:set_markup("")
+      s.xrpusd:set_markup("")
+    end
+    screen_loop = screen_loop + 1
+
 end)
 -- }}}
 
@@ -383,12 +424,34 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
+    awful.key({                   }, "XF86ScreenSaver", function () awful.util.spawn(lock_session) end,
+              {description = "Lock desktop session", group =  "awesome"}),
+    awful.key({                   }, "Print",           function () awful.util.spawn(take_screenshot) end,
+              {description = "Lock desktop session", group =  "awesome"}),
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
-    awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
-              {description = "view previous", group = "tag"}),
-    awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
-              {description = "view next", group = "tag"}),
+    awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relative( 1 * invert)
+                                                mousemarker()
+                                                if dostylus == 1 then
+                                                  awful.util.spawn("stylustoscreen " .. mouse.screen)
+                                                end
+                                             end,
+              {description = "view next screen", group = "awesome"}),
+
+    awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1 * invert)
+                                                mousemarker()
+                                                if dostylus == 1 then
+                                                  awful.util.spawn("stylustoscreen " .. mouse.screen)
+                                                end
+                                             end,
+              {description = "view previous tag", group = "tag"}),
+
+    awful.key({ modkey,           }, "Up",  awful.tag.viewnext,
+              {description = "view next tag", group = "tag"}),
+
+    awful.key({ modkey,           }, "Down",   awful.tag.viewprev,
+              {description = "view previous screen", group = "awesome"}),
+
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
 
@@ -686,19 +749,16 @@ awful.rules.rules = {
   { rule = { class = "Kruler" },
     properties = { floating = true,
       border_width = 0 } },
-  { rule = { class = "scudcloud" },
-    properties = { floating = false,
-      tag = tags[1][2] } },
   { rule = { class = "Pidgin" },
-    properties = { tag = tags[1][2] } },
+    properties = { screen = 1, tag = "2" } },
   { rule = { class = "Claws-mail" },
-    properties = { tag = tags[1][3] } },
+    properties = { screen = 1, tag = "3" } },
   { rule_any = { class = {"Mail", "Thunderbird", "Claws-mail"} },
-    properties = { tag = tags[1][3] } },
+    properties = { screen = 1, tag = "3" } },
   { rule_any = { class = { "krita", "Krita" } },
-    properties = { tag = tags[screen.count()][7] } },
+    properties = { screen = 3, tag = "7" } },
   { rule = { class = "zoom" },
-    properties = { tag = tags[1][9] } },
+    properties = { screen = 1, tag = "9" } },
   { rule = { class = "Galculator" },
     properties = { floating = true },
     callback = function (c)
@@ -801,6 +861,12 @@ client.connect_signal("mouse::enter", function(c)
     c:emit_signal("request::activate", "mouse_enter", {raise = false})
 end)
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.connect_signal("focus", function(c) 
+    c.border_color = beautiful.border_focus 
+    set_tag_icon_client(c)
+end)
+client.connect_signal("unfocus", function(c) 
+    c.border_color = beautiful.border_normal 
+    clear_tag_icon()
+end)
 -- }}}
