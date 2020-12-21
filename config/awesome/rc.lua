@@ -134,46 +134,54 @@ awful.layout.layouts = {
 }
 -- }}}
 
+function stylusthisscreen()
+  if awful.screen.focused() == screen[1] then
+    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+  elseif awful.screen.focused() == screen[3] then
+    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+  elseif awful.screen.focused() == screen[2] then
+    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+  end
+  mousemarker()
+end
+
 
 function stylusnextscreen()
-  local s = mouse.screen
-  if s == 1 then
-    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
-    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
-  end
-  if s == 3 then
-    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
-    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
-  end
-  if s == 2 then
-    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
-    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+  if awful.screen.focused() == screen[1] then
+    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+  elseif awful.screen.focused() == screen[3] then
+    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+  elseif awful.screen.focused() == screen[2] then
+    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
   end
   awful.screen.focus_relative( 1 * invert )
   mousemarker()
 end
 
 function stylusprevscreen()
-  local s = mouse.screen
-  if s == 1 then
-    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
-    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
-  end
-  if s == 3 then
-    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
-    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
-  end
-  if s == 2 then
-    awful.util.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
-    awful.util.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+  if awful.screen.focused() == screen[1] then
+    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+  elseif awful.screen.focused() == screen[3] then
+    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+  elseif awful.screen.focused() == screen[2] then
+    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
   end
   awful.screen.focus_relative( -1 * invert )
   mousemarker()
 end
 
 function stylusdesktop()
-  awful.util.spawn("xsetwacom --set ".. stylusid .. " MapToOutput desktop")
-  awful.util.spawn("xsetwacom --set ".. eraserid .. " MapToOutput desktop")
+  awful.spawn("xsetwacom --set ".. stylusid .. " MapToOutput desktop")
+  awful.spawn("xsetwacom --set ".. eraserid .. " MapToOutput desktop")
 end
 -- {{{ Menu
 -- Create a launcher widget and a main menu
@@ -345,24 +353,24 @@ awful.screen.connect_for_each_screen(function(s)
     -- My mouse indicator
     s.mousebox_right = wibox.widget.textbox()
     s.mousebox_right:set_markup_silently("-")
-    s.mousebox_right:buttons(awful.util.table.join(
-      awful.button({ }, 1, stylusnextscreen ),
-      awful.button({"Control"}, 1, stylusdesktop ),
-      awful.button({"Shift"}, 1, stylusthisscreen ),
-      awful.button({ }, 3, stylusprevscreen ),
-      awful.button({"Control"}, 3, stylusdesktop ),
-      awful.button({"Shift"}, 3, stylusthisscreen )
+    s.mousebox_right:buttons(gears.table.join(
+      awful.button({ }, 1, function () stylusnextscreen() end),
+      awful.button({"Control"}, 1, function () stylusdesktop() end),
+      awful.button({"Shift"}, 1, function () stylusthisscreen() end),
+      awful.button({ }, 3, function () stylusprevscreen() end),
+      awful.button({"Control"}, 3, function () stylusdesktop() end),
+      awful.button({"Shift"}, 3, function () stylusthisscreen() end)
     ))
 
     s.mousebox_left = wibox.widget.textbox()
     s.mousebox_left:set_markup_silently("-")
-    s.mousebox_left:buttons(awful.util.table.join(
-      awful.button({ }, 1, stylusprevscreen),
-      awful.button({"Control"}, 1, stylusdesktop ),
-      awful.button({"Shift"}, 1, stylusthisscreen ),
-      awful.button({ }, 3, stylusnextscreen),
-      awful.button({"Control"}, 3, stylusdesktop ),
-      awful.button({"Shift"}, 3, stylusthisscreen )
+    s.mousebox_left:buttons(gears.table.join(
+      awful.button({ }, 1, function () stylusprevscreen() end),
+      awful.button({"Control"}, 1, function () stylusdesktop() end),
+      awful.button({"Shift"}, 1, function () stylusthisscreen() end),
+      awful.button({ }, 3, function () stylusnextscreen() end),
+      awful.button({"Control"}, 3, function () stylusdesktop() end),
+      awful.button({"Shift"}, 3, function () stylusthisscreen() end)
     ))
 
     s.lspace = wibox.widget.textbox()
@@ -408,6 +416,7 @@ awful.screen.connect_for_each_screen(function(s)
               {
                 format = "%c UTC",
                 refresh = 0.5,
+                timezone = "Z",
                 widget = wibox.widget.textclock
               }
             },

@@ -13,7 +13,8 @@ local local_themes_path = string.format("%s/.config/awesome/themes/", os.getenv(
 
 local theme = {}
 
-theme.font          = "Droid Sans Mono for Powerline 10"
+-- theme.font          = "Droid Sans Mono for Powerline 10"
+theme.font          = "Liberation Mono for Powerline Regular 10"
 
 theme.colors = {}
 theme.colors.base3 = "#002b36ff"
