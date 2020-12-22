@@ -5,7 +5,7 @@ After=nitrogen.service
 Requires=xfsettingsd.service
 
 [Service]
-#ExecStartPre=/bin/sleep 5
+ExecStartPre=/bin/sleep 5
 ExecStart=%h/Profile/bin/conky
 
 [Install]

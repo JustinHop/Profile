@@ -23,8 +23,8 @@ V = {
 
 
 def debug(d):
-    print("DEBUG:", d)
-    # pass
+    # print("DEBUG:", d)
+    pass
 
 
 def tooltip(crypto, r):
