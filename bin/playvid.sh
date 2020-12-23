@@ -1,9 +1,5 @@
 #!/bin/bash
-
-#export LIBVA_DRIVER_NAME=vdpau
-#export VDPAU_DRIVER=nvidia
-
-{ sleep 2s; xdotool type ff ; } &
-~/bin/100next.sh 500 |rl | xargs mpv  --profile=x $*
-
+set -x
+#{ sleep 2s ; xdotool type ff ; } &
+vidmanage show a a a b b c |rl -c 500 | xargs mpv  --profile=x $@
 clear

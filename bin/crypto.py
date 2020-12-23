@@ -57,9 +57,9 @@ def looplooper(data):
     local screen_loop = 1
     awful.screen.connect_for_each_screen(function(s)
         if screen_loop == 3 then
-          s.btcusd:set_markup('<span color=\\\"#{}\\\"><b> {} </b></span>')
-          s.ethusd:set_markup('<span color=\\\"#{}\\\"><b> {} </b></span>')
-          s.bchusd:set_markup('<span color=\\\"#{}\\\"><b> {} </b></span>')
+          s.btcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+          s.ethusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+          s.bchusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
           s.ltcusd:set_markup('')
           s.xrpusd:set_markup('')
           screen_loop = 1
@@ -67,8 +67,8 @@ def looplooper(data):
           s.btcusd:set_markup('')
           s.ethusd:set_markup('')
           s.bchusd:set_markup('')
-          s.ltcusd:set_markup('<span color=\\\"#{}\\\"><b> {} </b></span>')
-          s.xrpusd:set_markup('<span color=\\\"#{}\\\"><b> {} </b></span>')
+          s.ltcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+          s.xrpusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
         else
           s.btcusd:set_markup('')
           s.ethusd:set_markup('')

@@ -1,3 +1,4 @@
+-- vim: softtabstop=4 sw=4 tw=4 et ft=lua 
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
@@ -19,10 +20,14 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+local icon_finder = require("icon_finder")
 local capi = { timer = timer }
 -- Load Debian menu entries
 local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
+
+--local xproperties = require("xproperties")
+local volume_widget = require("awesome-wm-widgets.volume-widget.volume")
 
 stylusid = '"Wacom Intuos Pro M Pen stylus"'
 eraserid = '"Wacom Intuos Pro M Pen eraser"'
@@ -38,13 +43,38 @@ invert = -1
 lock_session = "xscreensaver-command -l"
 take_screenshot = "scrot -e 'mv -v $f ~/Pictures/screenshots/'"
 
+-- Define global folders
+awesome_paths = {}
+-- config_dir is used for local theme customizations and shortcut search
+-- (launchbar module)
+awesome_paths.config_dir = gears.filesystem.get_configuration_dir()
+-- system_dir is used for themes
+awesome_paths.system_dir = "/usr/share/awesome/"
+-- home_dir is used to locate the maildir, start dropbox
+awesome_paths.home_dir = os.getenv("HOME")
+-- Icon paths
+awesome_paths.icon_dir = "/usr/share/icons/oxygen/base/32x32/"
+awesome_paths.iconapps_dir = { awesome_paths.icon_dir,
+    "/usr/share/icons/gnome/32x32/devices",
+    "/usr/share/icons/oxygen/base/32x32/status",
+    "/usr/share/icons/hicolor/32x32/",
+    "/usr/share/icons/gnome/32x32/",
+    "/usr/share/icons/Tango/32x32/",
+"/usr/share/pixmaps/" }
+
+naughty.config.icon_dirs = awesome_paths.iconapps_dir
+
+-- {{ Icon finder
+myiconfinder = icon_finder.new(awesome_paths.iconapps_dir)
+-- }}
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
-  naughty.notify({ preset = naughty.config.presets.normal,
-    title = "Oops, there were errors during startup!",
-    text = awesome.startup_errors })
+    naughty.notify({ preset = naughty.config.presets.normal,
+        title = "Oops, there were errors during startup!",
+        text = awesome.startup_errors })
 end
 
 -- Handle runtime errors after startup
@@ -70,32 +100,46 @@ end
 chosen_theme = "upgrade"
 -- chosen_theme = "gtk"
 beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), chosen_theme))
+awesome.set_preferred_icon_size(32)
 -- beautiful.init(gears.filesystem.get_themes_dir() .. "gtk/theme.lua")
 
 -- {{{ Load the functions in awesome.d
 function import(file)
-  -- local ret = awful.util.checkfile( awful.util.getdir("config") .. file ".lua" );
-  local ret = awful.util.checkfile(file);
-  if type(ret) == "string" then
-    io.stderr:write(ret, "\n")
-    return true
-  else
-    --io.stderr:write("Returned type: ", type(ret), "\n")
-    pcall(ret)
-    --require(file)
-  end
+    -- local ret = awful.util.checkfile( awful.util.getdir("config") .. file ".lua" );
+    local ret = awful.util.checkfile(file);
+    if type(ret) == "string" then
+        io.stderr:write(ret, "\n")
+        return true
+    else
+        --io.stderr:write("Returned type: ", type(ret), "\n")
+        pcall(ret)
+        --require(file)
+    end
 end
 
 for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/*.lua"):lines() do
-  if string.find(file,"%.lua$") then
-    io.stderr:write("Importing ", file, "\n")
-    import(file)
-  end
+    if string.find(file,"%.lua$") then
+        io.stderr:write("Importing ", file, "\n")
+        import(file)
+    end
 end
---
+
+local function send_string_to_client(s, c)
+    local old_c = client.focus
+    client.focus = c
+    for i=1, #s do
+        local char = s:sub(i,i)
+        gears.debug.dump("Sending")
+        gears.debug.dump(char)
+        root.fake_input('key_press'  , char)
+        root.fake_input('key_release', char)
+    end
+    client.focus = old_c
+end
+
 function clienttagmouseupdate()
     mousemarker()
-    clear_tag_icon()
+    clear_all_tag_icon()
     set_tag_icon_client()
 end
 
@@ -145,53 +189,53 @@ awful.layout.layouts = {
 -- }}}
 
 function stylusthisscreen()
-  if awful.screen.focused() == screen[1] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
-  elseif awful.screen.focused() == screen[3] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
-  elseif awful.screen.focused() == screen[2] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
-  end
-  mousemarker()
+    if awful.screen.focused() == screen[1] then
+        awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+        awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+    elseif awful.screen.focused() == screen[3] then
+        awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+        awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+    elseif awful.screen.focused() == screen[2] then
+        awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+        awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+    end
+    mousemarker()
 end
 
 
 function stylusnextscreen()
-  if awful.screen.focused() == screen[1] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
-  elseif awful.screen.focused() == screen[3] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
-  elseif awful.screen.focused() == screen[2] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
-  end
-  awful.screen.focus_relative( 1 * invert )
-  mousemarker()
+    if awful.screen.focused() == screen[1] then
+        awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+        awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+    elseif awful.screen.focused() == screen[3] then
+        awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+        awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+    elseif awful.screen.focused() == screen[2] then
+        awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+        awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+    end
+    awful.screen.focus_relative( 1 * invert )
+    mousemarker()
 end
 
 function stylusprevscreen()
-  if awful.screen.focused() == screen[1] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
-  elseif awful.screen.focused() == screen[3] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
-  elseif awful.screen.focused() == screen[2] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
-  end
-  awful.screen.focus_relative( -1 * invert )
-  mousemarker()
+    if awful.screen.focused() == screen[1] then
+        awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+        awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+    elseif awful.screen.focused() == screen[3] then
+        awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+        awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+    elseif awful.screen.focused() == screen[2] then
+        awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+        awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+    end
+    awful.screen.focus_relative( -1 * invert )
+    mousemarker()
 end
 
 function stylusdesktop()
-  awful.spawn("xsetwacom --set ".. stylusid .. " MapToOutput desktop")
-  awful.spawn("xsetwacom --set ".. eraserid .. " MapToOutput desktop")
+    awful.spawn("xsetwacom --set ".. stylusid .. " MapToOutput desktop")
+    awful.spawn("xsetwacom --set ".. eraserid .. " MapToOutput desktop")
 end
 -- {{{ Menu
 -- Create a launcher widget and a main menu
@@ -366,8 +410,26 @@ awful.screen.connect_for_each_screen(function(s)
     -- Each screen has its own tag table.
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
+    if screen_loop == 1 then
+        awful.layout.set(awful.layout.layouts[2],
+            awful.tag.find_by_name(screen[screen_loop], "1"))
+        awful.layout.set(awful.layout.layouts[2],
+            awful.tag.find_by_name(screen[screen_loop], "6"))
+        awful.layout.set(awful.layout.layouts[2],
+            awful.tag.find_by_name(screen[screen_loop], "9"))
+    elseif screen_loop == 2 then
+        awful.layout.set(awful.layout.layouts[2],
+            awful.tag.find_by_name(screen[screen_loop], "1"))
+        awful.layout.set(awful.layout.layouts[2],
+            awful.tag.find_by_name(screen[screen_loop], "7"))
+    elseif screen_loop == 3 then
+        awful.layout.set(awful.layout.layouts[2],
+            awful.tag.find_by_name(screen[screen_loop], "1"))
+    end
+
+
     -- Create a promptbox for each screen
-    s.mypromptbox = awful.widget.prompt()
+    s.mypromptbox = awful.widget.prompt({ with_shell = true } )
     -- Create an imagebox widget which will contain an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox(s)
@@ -397,23 +459,23 @@ awful.screen.connect_for_each_screen(function(s)
     s.mousebox_right = wibox.widget.textbox()
     s.mousebox_right:set_markup_silently("-")
     s.mousebox_right:buttons(gears.table.join(
-      awful.button({ }, 1, function () stylusnextscreen() end),
-      awful.button({"Control"}, 1, function () stylusdesktop() end),
-      awful.button({"Shift"}, 1, function () stylusthisscreen() end),
-      awful.button({ }, 3, function () stylusprevscreen() end),
-      awful.button({"Control"}, 3, function () stylusdesktop() end),
-      awful.button({"Shift"}, 3, function () stylusthisscreen() end)
+        awful.button({ }, 1, function () stylusnextscreen() end),
+        awful.button({"Control"}, 1, function () stylusdesktop() end),
+        awful.button({"Shift"}, 1, function () stylusthisscreen() end),
+        awful.button({ }, 3, function () stylusprevscreen() end),
+        awful.button({"Control"}, 3, function () stylusdesktop() end),
+        awful.button({"Shift"}, 3, function () stylusthisscreen() end)
     ))
 
     s.mousebox_left = wibox.widget.textbox()
     s.mousebox_left:set_markup_silently("-")
     s.mousebox_left:buttons(gears.table.join(
-      awful.button({ }, 1, function () stylusprevscreen() end),
-      awful.button({"Control"}, 1, function () stylusdesktop() end),
-      awful.button({"Shift"}, 1, function () stylusthisscreen() end),
-      awful.button({ }, 3, function () stylusnextscreen() end),
-      awful.button({"Control"}, 3, function () stylusdesktop() end),
-      awful.button({"Shift"}, 3, function () stylusthisscreen() end)
+        awful.button({ }, 1, function () stylusprevscreen() end),
+        awful.button({"Control"}, 1, function () stylusdesktop() end),
+        awful.button({"Shift"}, 1, function () stylusthisscreen() end),
+        awful.button({ }, 3, function () stylusnextscreen() end),
+        awful.button({"Control"}, 3, function () stylusdesktop() end),
+        awful.button({"Shift"}, 3, function () stylusthisscreen() end)
     ))
 
     s.lspace = wibox.widget.textbox()
@@ -430,8 +492,8 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             s.mousebox_left,
-            s.lspace,
-            mylauncher,
+            -- s.lspace,
+            -- mylauncher,
             s.lspace,
             s.mytaglist,
             s.lspace,
@@ -442,6 +504,7 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             screen_loop == 1 and mykeyboardlayout,
             wibox.widget.systray(),
+            screen_loop == 1 and volume_widget({display_notification = true}),
             s.btcusd,
             s.ethusd,
             s.bchusd,
@@ -456,40 +519,50 @@ awful.screen.connect_for_each_screen(function(s)
         },
     }
     if screen_loop == 3 then
-      s.btcusd:set_markup("<span background='#002B36' color='#839496'><b> btc </b></span>")
-      s.ethusd:set_markup("<span background='#002B36' color='#839496'><b> eth </b></span>")
-      s.bchusd:set_markup("<span background='#002B36' color='#839496'><b> bch </b></span>")
-      s.ltcusd:set_markup("")
-      s.xrpusd:set_markup("")
-      screen_loop = 1
+        s.btcusd:set_markup("<span background='#002B36' color='#839496'> btc </span>")
+        s.ethusd:set_markup("<span background='#002B36' color='#839496'> eth </span>")
+        s.bchusd:set_markup("<span background='#002B36' color='#839496'> bch </span>")
+        s.ltcusd:set_markup("")
+        s.xrpusd:set_markup("")
+        screen_loop = 1
     elseif screen_loop == 2 then
-      s.btcusd:set_markup("")
-      s.ethusd:set_markup("")
-      s.bchusd:set_markup("")
-      s.ltcusd:set_markup("<span background='#002B36' color='#839496'><b> ltc </b></span>")
-      s.xrpusd:set_markup("<span background='#002B36' color='#839496'><b> xrp </b></span>")
+        s.btcusd:set_markup("")
+        s.ethusd:set_markup("")
+        s.bchusd:set_markup("")
+        s.ltcusd:set_markup("<span background='#002B36' color='#839496'> ltc </span>")
+        s.xrpusd:set_markup("<span background='#002B36' color='#839496'> xrp </span>")
     else
-      s.btcusd:set_markup("")
-      s.ethusd:set_markup("")
-      s.bchusd:set_markup("")
-      s.ltcusd:set_markup("")
-      s.xrpusd:set_markup("")
+        s.btcusd:set_markup("")
+        s.ethusd:set_markup("")
+        s.bchusd:set_markup("")
+        s.ltcusd:set_markup("")
+        s.xrpusd:set_markup("")
     end
     screen_loop = screen_loop + 1
-
 end)
 -- }}}
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ },  3, function () mymainmenu:toggle() end),
+    awful.button({ },  4, awful.tag.viewnext),
+    awful.button({ },  5, awful.tag.viewprev),
+    awful.button({ }, 13, awful.tag.viewnext),
+    awful.button({ }, 10, awful.tag.viewprev),
+    awful.button({ }, 14, awful.tag.viewprev),
+    awful.button({ }, 15, awful.tag.viewprev)
 ))
 -- }}}
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
+    awful.key( {}, 'XF86AudioRaiseVolume', volume_widget.raise,
+        {description = 'volume up', group = 'hotkeys'}),
+    awful.key( {}, 'XF86AudioLowerVolume', volume_widget.lower,
+        {description = 'volume down', group = 'hotkeys'}),
+    awful.key( {}, 'XF86AudioMute', volume_widget.toggle,
+        {description = 'toggle mute', group = 'hotkeys'}),
+    awful.key({ "Shift", "Control"}, "v",    function () awful.spawn("gpaste-client ui") end),
     -- ErgoDox EZ Mode 2
     -- z XF86Launch7
     awful.key({                   }, "XF86Launch7",    function () awful.spawn("6m prev") end),
@@ -504,71 +577,55 @@ globalkeys = gears.table.join(
     -- t XF86TouchpadToggle
     awful.key({                   }, "XF86TouchpadToggle",    function () awful.spawn("6m voldown") end),
     awful.key({                   }, "Pause", function () awful.spawn(lock_session) end,
-              {description = "Lock desktop session", group =  "awesome"}),
+        {description = "Lock desktop session", group =  "awesome"}),
     awful.key({                   }, "XF86ScreenSaver", function () awful.spawn(lock_session) end,
-              {description = "Lock desktop session", group =  "awesome"}),
+        {description = "Lock desktop session", group =  "awesome"}),
     awful.key({                   }, "Print",           function () awful.spawn(take_screenshot) end,
-              {description = "Lock desktop session", group =  "awesome"}),
+        {description = "Lock desktop session", group =  "awesome"}),
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
-              {description="show help", group="awesome"}),
+        {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relative( 1 * invert)
-                                                mousemarker()
-                                                clear_tag_icon()
-                                                set_tag_icon_client(client.focus)
-                                             end,
-              {description = "view next screen", group = "awesome"}),
-
+        clienttagmouseupdate()
+    end,
+        {description = "view next screen", group = "awesome"}),
     awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1 * invert)
-                                                mousemarker()
-                                                clear_tag_icon()
-                                                set_tag_icon_client(client.focus)
-                                             end,
-              {description = "view previous tag", group = "tag"}),
-
+        clienttagmouseupdate()
+    end,
+        {description = "view previous tag", group = "tag"}),
     awful.key({ modkey,           }, "Up",  function () awful.tag.viewnext()
-                                              mousemarker()
-                                              clear_tag_icon()
-                                              set_tag_icon_client(client.focus)
-                                            end,
-              {description = "view next tag", group = "tag"}),
-
-    awful.key({ modkey,           }, "Down",   function ()
-                                              awful.tag.viewprev()
-                                              mousemarker()
-                                              clear_tag_icon()
-                                              set_tag_icon_client(client.focus)
-                                            end,
-              {description = "view previous screen", group = "awesome"}),
-
+        clienttagmouseupdate()
+    end,
+        {description = "view next tag", group = "tag"}),
+    awful.key({ modkey,           }, "Down",   function () awful.tag.viewprev()
+        clienttagmouseupdate()
+    end,
+        {description = "view previous screen", group = "awesome"}),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
-              {description = "go back", group = "tag"}),
-
+        {description = "go back", group = "tag"}),
     awful.key({ modkey,           }, "j",
-        function ()
-            awful.client.focus.byidx( 1)
+        function () awful.client.focus.byidx( 1)
+            clienttagmouseupdate()
         end,
-        {description = "focus next by index", group = "client"}
-    ),
+        {description = "focus next by index", group = "client"}),
     awful.key({ modkey,           }, "k",
-        function ()
-            awful.client.focus.byidx(-1)
+        function () awful.client.focus.byidx(-1)
+            clienttagmouseupdate()
         end,
         {description = "focus previous by index", group = "client"}
-    ),
+        ),
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
-
+        {description = "show main menu", group = "awesome"}),
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
-              {description = "swap with next client by index", group = "client"}),
+        {description = "swap with next client by index", group = "client"}),
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
-              {description = "swap with previous client by index", group = "client"}),
+        {description = "swap with previous client by index", group = "client"}),
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
-              {description = "focus the next screen", group = "screen"}),
+        {description = "focus the next screen", group = "screen"}),
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
-              {description = "focus the previous screen", group = "screen"}),
+        {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
-              {description = "jump to urgent client", group = "client"}),
+        {description = "jump to urgent client", group = "client"}),
     awful.key({ modkey,           }, "Tab",
         function ()
             awful.client.focus.history.previous()
@@ -577,61 +634,56 @@ globalkeys = gears.table.join(
             end
         end,
         {description = "go back", group = "client"}),
-
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
-              {description = "open a terminal", group = "launcher"}),
+        {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
-              {description = "reload awesome", group = "awesome"}),
+        {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
-
+        {description = "quit awesome", group = "awesome"}),
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
-              {description = "increase master width factor", group = "layout"}),
+        {description = "increase master width factor", group = "layout"}),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)          end,
-              {description = "decrease master width factor", group = "layout"}),
+        {description = "decrease master width factor", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
-              {description = "increase the number of master clients", group = "layout"}),
+        {description = "increase the number of master clients", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
-              {description = "decrease the number of master clients", group = "layout"}),
+        {description = "decrease the number of master clients", group = "layout"}),
     awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
-              {description = "increase the number of columns", group = "layout"}),
+        {description = "increase the number of columns", group = "layout"}),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
-              {description = "decrease the number of columns", group = "layout"}),
+        {description = "decrease the number of columns", group = "layout"}),
     awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
-              {description = "select next", group = "layout"}),
+        {description = "select next", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
-              {description = "select previous", group = "layout"}),
-
+        {description = "select previous", group = "layout"}),
     awful.key({ modkey, "Control" }, "n",
-              function ()
-                  local c = awful.client.restore()
-                  -- Focus restored client
-                  if c then
-                    c:emit_signal(
-                        "request::activate", "key.unminimize", {raise = true}
+        function ()
+            local c = awful.client.restore()
+            -- Focus restored client
+            if c then
+                c:emit_signal(
+                    "request::activate", "key.unminimize", {raise = true}
                     )
-                  end
-              end,
-              {description = "restore minimized", group = "client"}),
-
+            end
+        end,
+        {description = "restore minimized", group = "client"}),
     -- Prompt
     awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"}),
-
+        {description = "run prompt", group = "launcher"}),
     awful.key({ modkey }, "x",
-              function ()
-                  awful.prompt.run {
-                    prompt       = "Run Lua code: ",
-                    textbox      = awful.screen.focused().mypromptbox.widget,
-                    exe_callback = awful.util.eval,
-                    history_path = awful.util.get_cache_dir() .. "/history_eval"
-                  }
-              end,
-              {description = "lua execute prompt", group = "awesome"}),
+        function ()
+            awful.prompt.run {
+                prompt       = "Run Lua code: ",
+                textbox      = awful.screen.focused().mypromptbox.widget,
+                exe_callback = awful.util.eval,
+                history_path = awful.util.get_cache_dir() .. "/history_eval"
+            }
+        end,
+        {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
+        {description = "show the menubar", group = "launcher"})
 )
 
 clientkeys = gears.table.join(
@@ -651,11 +703,17 @@ clientkeys = gears.table.join(
               {description = "toggle floating", group = "client"}),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
-    awful.key({ modkey,           }, "o",      function (c) c:move_to_screen(c.screen.index+1 * invert)               end,
+    awful.key({ modkey,           }, "o",      function (c)
+        c:move_to_screen(c.screen.index+1 * invert)
+    end,
               {description = "move to screen", group = "client"}),
-    awful.key({ modkey,  "Shift"  }, "o",      function (c) c:move_to_screen(c.screen.index-1 * invert)               end,
+    awful.key({ modkey,  "Shift"  }, "o",      function (c)
+        c:move_to_screen(c.screen.index-1 * invert)
+    end,
               {description = "move to prev screen", group = "client"}),
-    awful.key({ modkey, "Control" }, "t",      function (c)   awful.titlebar.toggle(c)       end,
+    awful.key({ modkey, "Control" }, "t",      function (c)
+        awful.titlebar.toggle(c)
+    end,
               {description = "toggle titlebar", group = "client"}),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
@@ -809,52 +867,28 @@ awful.rules.rules = {
   },
   -- Floating clients.
   { rule_any = {
-      instance = {
-        "DTA",  -- Firefox addon DownThemAll.
-        "copyq",  -- Includes session name in class.
-        "pinentry",
-      },
-      class = {
-        "Arandr",
-        "Blueman-manager",
-        "Gpick",
-        "Kruler",
-        "MessageWin",  -- kalarm.
-        "Sxiv",
-        "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
-        "Wpa_gui",
-        "veromix",
-      "xtightvncviewer"},
-      -- Note that the name property shown in xprop might be set slightly after creation of the client
-      -- and the name shown there might not match defined rules here.
-      name = {
-        "Event Tester",  -- xev.
-      },
-      role = {
-        "AlarmWindow",  -- Thunderbird's calendar.
-        "ConfigManager",  -- Thunderbird's about:config.
-        "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
-      }
+      instance = { "DTA", "copyq", "pinentry", },
+      class = { "Arandr", "Blueman-manager", "Gpick", "Kruler", "MessageWin",
+        "Sxiv", "Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer"},
+      name = { "Event Tester", },
+      role = { "AlarmWindow", "ConfigManager", "pop-up", }
   }, properties = { floating = true }},
   -- Add titlebars to normal clients and dialogs
-  { rule_any = {type = { "dialog" }
-    }, properties = { titlebars_enabled = true }
-  },
-  { rule = { role = "pop-up" },
-  properties = { floating = true } },
-  { rule = { class = "Nagstamon" },
-    properties = { floating = true,
-  border_width = 0 } },
-  { rule = { class = "copyq" },
-    properties = { floating = true,
-  border_width = 0 } },
-  { rule = { class = "MPlayer" },
-    properties = { floating = true,
-  border_width = 0 } },
-  { rule = { class = "pinentry" },
-  properties = { floating = true } },
-  { rule = { class = "gimp" },
-  properties = { floating = true } },
+  { rule_any = { { type = { "dialog" } },
+    }, properties = { titlebars_enabled = true }, },
+  --[[{ rule_any = { { type = { "normal" } },
+    }, properties = { titlebars_enabled = true, },
+    callback = function (c) awful.titlebar.hide(c) end },]]--
+  { rule_any = { { type = { "normal" } },
+    }, properties = { titlebars_enabled = false, }, },
+  { rule_any = { { type = { "dialog" } }, { class = { "gtk-theme-config" } },
+    }, properties = { titlebars_enabled = true, floating = true },
+    callback = function (c) awful.titlebar.show(c) end },
+  { rule = { class = "Nagstamon" }, properties = { floating = true, border_width = 0 } },
+  { rule = { class = "copyq" }, properties = { floating = true, border_width = 0 } },
+  { rule = { class = "MPlayer" }, properties = { floating = true, border_width = 0 } },
+  { rule = { class = "pinentry" }, properties = { floating = true } },
+  { rule = { class = "gimp" }, properties = { floating = true } },
   { rule = { name = "bubble" },
     properties = { floating = true,
     border_width = 0 },
@@ -875,16 +909,11 @@ awful.rules.rules = {
   border_width = 0 } },
   { rule = { class = "Pidgin" },
   properties = { screen = 1, tag = "2" } },
-  { rule = { class = "Claws-mail" },
-  properties = { screen = 1, tag = "3" } },
-  { rule_any = { class = {"Mail", "Thunderbird", "Claws-mail"} },
-  properties = { screen = 1, tag = "3" } },
-  { rule_any = { class = { "krita", "Krita" } },
-  properties = { screen = 3, tag = "7" } },
-  { rule = { class = "zoom" },
-  properties = { screen = 1, tag = "9" } },
-  { rule = { class = "Galculator" },
-    properties = { floating = true },
+  { rule = { class = "Claws-mail" }, properties = { screen = 1, tag = "3" } },
+  { rule_any = { class = {"Mail", "Thunderbird", "Claws-mail"} }, properties = { screen = 1, tag = "3" } },
+  { rule_any = { class = { "krita", "Krita" } }, properties = { screen = 3, tag = "7" } },
+  { rule = { class = "zoom" }, properties = { screen = 1, tag = "9" } },
+  { rule = { class = "Galculator" }, properties = { floating = true },
     callback = function (c) awful.titlebar.toggle(c) end },
   { rule = { class = "sun-applet-PluginMain" },
     properties = { floating = true },
@@ -893,18 +922,14 @@ awful.rules.rules = {
     properties = { floating = true },
     callback = function (c) awful.titlebar.toggle(c) end },
   { rule = { class = "mpv" },
-    properties = { floating = false,
-      maximized_vertical = true,
-      maximized_horizontal = true,
-      fullscreen = true,
-    border_width = 0 },
-    callback = function (c)
-      awful.titlebar.remove(c, { modkey = modkey })
-      --mywibox[mouse.screen].visible = false
-      --c:connect_signal("unmanage", function ()
-      --    mywibox[mouse.screen].visible = true
-      --end)
-    end },
+    properties = { 
+        titlebars_enabled = false,
+        maximized = true,
+        honor_workarea = false,
+        honor_padding = false,
+        fullscreen = true,
+        border_width = 0 },
+    callback = function (c) awful.titlebar.toggle(c) end },
   { rule = { class = "KeePass2" },
     properties = { floating = true },
     callback = function (c) awful.titlebar.toggle(c) end },
@@ -916,10 +941,6 @@ awful.rules.rules = {
     border_width = 0 },
     callback = function (c)
       awful.titlebar.remove(c, { modkey = modkey })
-      --mywibox[mouse.screen].visible = false
-      --c:connect_signal("unmanage", function ()
-      --    mywibox[mouse.screen].visible = true
-      --end)
     end },
   { rule = { name = "File Operation Progress" },
     properties = { floating = true,
@@ -945,8 +966,7 @@ client.connect_signal("manage", function (c)
             -- awful.spawn("xdotool mousemove 100 100")
             -- awful.screen.focus(screen.primary)
     end
-    clear_tag_icon()
-    mousemarker()
+    clienttagmouseupdate()
 end)
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
@@ -997,6 +1017,9 @@ end)
 
 client.connect_signal("focus", function(c)
     c.border_color = beautiful.border_focus
+    -- gears.debug.dump("Client Focused")
+    -- gears.debug.dump(c)
+    -- gears.debug.dump(c:get_xproperty())
     clienttagmouseupdate()
 end)
 client.connect_signal("tagged", function(c)
@@ -1004,7 +1027,6 @@ client.connect_signal("tagged", function(c)
     clienttagmouseupdate()
 end)
 client.connect_signal("untagged", function(c)
-    c.border_color = beautiful.border_normal
     clienttagmouseupdate()
 end)
 client.connect_signal("unfocus", function(c)
@@ -1016,6 +1038,13 @@ client.connect_signal("request::unmanage", function(c)
     c.border_color = beautiful.border_normal
     clienttagmouseupdate()
 end)
+
+client.connect_signal("property::type", function(c)
+    gears.debug.dump("Property::type signal")
+    gears.debug.dump(c.type)
+    gears.debug.dump(c)
+end)
+
 
 function initialplacement()
     awful.spawn("xdotool mousemove 50 0")
@@ -1031,9 +1060,6 @@ function initialplacement()
       end
     end)
 end
--- awful.spawn("xdotool mousemove 100 100")
--- awful.screen.focus(screen.primary)
--- awful.client.focus(mouse.object_under_pointer())
 if awesome.startup then
     initialplacement()
     gears.timer {
@@ -1044,4 +1070,3 @@ if awesome.startup then
     }
 end
 -- }}}
--- vim: softtabstop=4 sw=4 ft=lua tw=4 et

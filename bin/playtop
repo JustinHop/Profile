@@ -1,4 +1,5 @@
 #!/bin/bash
-{ sleep 2s ; xdotool type ff ; } &
+set -x
+#{ sleep 2s ; xdotool type ff ; } &
 vidmanage show a | rl -c 500 | xargs mpv --profile=x $@
 clear

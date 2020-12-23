@@ -1,3 +1,4 @@
+-- vim: softtabstop=4 sw=4 tw=4 et ft=lua 
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
@@ -14,6 +15,9 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 -- local ruled = require("ruled")
 
+awful.titlebar.show(client.focus)
+
+--[[
 local si = awful.screen.focused().index
 gears.debug.dump("si")
 gears.debug.dump(si)
@@ -29,3 +33,8 @@ awful.tag.add("7", {
     index = 7,
     screen = awful.screen.focused(),
     layout = awful.layout.suit.floating }):view_only()
+    ]]--
+
+
+--gears.debug.dump(gears.filesystem.get_awesome_icon_dir())
+
