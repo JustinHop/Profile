@@ -3,19 +3,11 @@
 set -euo pipefail
 IFS='\t\n'
 
-set -x
-SSHFILE="/tmp/ssh-agent-env-$(whoami)"
+#set -x
 
-if [[ -f  "$SSHFILE" ]]; then
-    #source "$SSHFILE"
-    true
-fi
+SOCKET=/run/user/1000/mpv.socket
 
-if [[ -S "$XDG_RUNTIME_DIR/ssh-auth-socket" ]]; then
-    export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-auth-socket
-fi
-
-env
+#env
 
 case $1 in
     add)
@@ -25,31 +17,31 @@ case $1 in
             -e 's!https://youtu\.be/!https://www.youtube.com/watch?v=!' \
             -e 's!https://youtube\.com!https://www.youtube.com!' \
             -e 's!https://m\.youtube\.com!https://www.youtube.com!' | \
-            xargs -tr -n1 -I{} echo loadfile {} append-play | ssh pi socat - /tmp/mpv.socket
+            xargs -tr -n1 -I{} echo loadfile {} append-play | ssh pi socat - /run/user/1000/mpv.socket
         ;;
     next)
-        echo "playlist_next" | ssh pi socat - /tmp/mpv.socket
+        echo "playlist_next" | ssh pi socat - /run/user/1000/mpv.socket
         ;;
     play)
-        echo "cycle pause" | ssh pi socat - /tmp/mpv.socket
+        echo "cycle pause" | ssh pi socat - /run/user/1000/mpv.socket
         ;;
     prev)
-        echo "playlist_prev" | ssh pi socat - /tmp/mpv.socket
+        echo "playlist_prev" | ssh pi socat - /run/user/1000/mpv.socket
         ;;
     status)
-        echo "script-binding info/show_info" | ssh pi socat - /tmp/mpv.socket
+        echo "script-binding info/show_info" | ssh pi socat - /run/user/1000/mpv.socket
         ;;
     stop)
-        echo "cycle pause" | ssh pi socat - /tmp/mpv.socket
+        echo "cycle pause" | ssh pi socat - /run/user/1000/mpv.socket
         ;;
     toggle)
-        echo "cycle pause" | ssh pi socat - /tmp/mpv.socket
+        echo "cycle pause" | ssh pi socat - /run/user/1000/mpv.socket
         ;;
     voldown)
-        echo "add volume -5" | ssh pi socat - /tmp/mpv.socket
+        echo "add volume -5" | ssh pi socat - /run/user/1000/mpv.socket
         ;;
     volup)
-        echo "add volume 5" | ssh pi socat - /tmp/mpv.socket
+        echo "add volume 5" | ssh pi socat - /run/user/1000/mpv.socket
         ;;
     *)
         ;;

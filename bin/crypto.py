@@ -21,6 +21,7 @@ V = {
     'xrpusd': 0.0,
 }
 
+AWESOME_CLIENT = "/usr/local/bin/awesome-client"
 
 def debug(d):
     # print("DEBUG:", d)
@@ -32,8 +33,8 @@ def tooltip(crypto, r):
         crypto, json.dumps(
             r, sort_keys=True, indent=4))
     # cmd = """set -x; echo \"{}_tooltip:set_markup(\'{}\')\" | awesome-client""".format(crypto, t.replace('"', ''))
-    cmd = """echo "{}_tooltip:set_markup('{}')" | awesome-client """.format(
-        crypto, t.replace('"', ''))
+    cmd = """echo "{}_tooltip:set_markup('{}')" | {} """.format(
+        crypto, t.replace('"', ''), AWESOME_CLIENT)
     cmd = ''.join(cmd.splitlines())
     # debug("tooltip({}):cmd:{}".format(crypto, cmd))
     debug(subprocess.check_output(cmd, shell=True))
@@ -77,13 +78,15 @@ def looplooper(data):
           s.xrpusd:set_markup('')
         end
     screen_loop = screen_loop + 1
-    end) " | awesome-client
+    end) " | {}
     '''.format(
         data['btcusd']['color'], data['btcusd']['last'],
         data['ethusd']['color'], data['ethusd']['last'],
         data['bchusd']['color'], data['bchusd']['last'],
         data['ltcusd']['color'], data['ltcusd']['last'],
-        data['xrpusd']['color'], data['xrpusd']['last'])
+        data['xrpusd']['color'], data['xrpusd']['last'],
+        AWESOME_CLIENT
+    )
     subprocess.run(cmd, shell=True)
 
 

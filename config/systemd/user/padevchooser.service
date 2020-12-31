@@ -1,6 +1,6 @@
 [Unit]
 Description=PulseAudio Manager
-Requires=awesome.service
+Wants=awesome.service
 After=awesome.service
 Requires=pulseaudio.service
 After=pulseaudio.service

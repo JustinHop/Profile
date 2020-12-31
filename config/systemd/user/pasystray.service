@@ -4,10 +4,10 @@ Wants=awesome.service
 After=awesome.service
 Wants=pulseaudio.service
 After=pulseaudio.service
-PartOf=graphical-session.target
 
 [Service]
 ExecStart=/usr/bin/pasystray
+Restart=always
 
 [Install]
 WantedBy=graphical-session.target

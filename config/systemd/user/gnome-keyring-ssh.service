@@ -18,6 +18,7 @@ ExecStopPost=/bin/sh -ec 'if [ "${SSH_AGENT_LAUNCHER}" = gnome-keyring ]; then \
         dbus-update-activation-environment --systemd  SSH_AUTH_SOCK=; \
         initctl unset-env --global SSH_AUTH_SOCK || true; \
     fi'
+#Restart=always
 
 [Install]
 WantedBy=graphical-session.target
