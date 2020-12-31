@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cat ~/Profile/config/awesome/test.lua | awesome-client
+cat ~/Profile/config/awesome/test.lua | /usr/local/bin/awesome-client

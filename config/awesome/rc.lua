@@ -28,6 +28,8 @@ local capi = { timer = timer }
 local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
 
+local util = require("util")
+
 --local xproperties = require("xproperties")
 local volume_widget = require("awesome-wm-widgets.volume-widget.volume")
 
@@ -1025,18 +1027,20 @@ end)
 
 
 function initialplacement()
-    awful.spawn("xdotool mousemove 50 0")
-    awful.spawn("xdotool mousemove 50 50")
-    gears.protected_call(function ()
-      awful.screen.focus(1)
-      awful.tag.find_by_name(awful.screen.focused(), "1"):view_only()
-      local clients = awful.tag.find_by_name(awful.screen.focused(), "1"):clients()
-      for i, c in ipairs(clients) do
-        if i == 1 then
-          c:jump_to()
-        end
+  local cachedir = gears.filesystem.get_cache_dir()
+  local awesome_tags_fname = cachedir .. "awesome-tags"
+  awful.spawn("xdotool mousemove 50 0")
+  awful.spawn("xdotool mousemove 50 50")
+  gears.protected_call(function ()
+    awful.screen.focus(1)
+    awful.tag.find_by_name(awful.screen.focused(), "1"):view_only()
+    local clients = awful.tag.find_by_name(awful.screen.focused(), "1"):clients()
+    for i, c in ipairs(clients) do
+      if i == 1 then
+        c:jump_to()
       end
-    end)
+    end
+  end)
 end
 if awesome.startup then
     initialplacement()
@@ -1069,3 +1073,45 @@ client.connect_signal("untagged", function(c)
     clienttagmouseupdate()
 end)
 
+client.connect_signal("request::manage", function (c, context, hints)
+  local cachedir = gears.filesystem.get_cache_dir()
+  local awesome_tags_fname = cachedir .. "awesome-tags"
+  local awesome_autostart_once_fname = cachedir .. "awesome-autostart-once-" .. os.getenv("XDG_SESSION_ID")
+  local awesome_client_tags_fname = cachedir .. "awesome-client-tags-" .. os.getenv("XDG_SESSION_ID")
+
+  local d = { c = c, context = context, hints = hints }
+  --[[
+  gears.debug.dump("c")
+  gears.debug.dump(c)
+  gears.debug.dump("context")
+  gears.debug.dump(context)
+  gears.debug.dump("hints")
+  gears.debug.dump(hints)
+  ]]--
+
+  if context == "startup" then
+    for s in screen do
+      local client_id = c.pid .. '-' .. c.window
+
+      local fname = awesome_client_tags_fname .. '/' .. s.index .. '/' .. client_id
+      local f = io.open(fname, 'r')
+
+      if f then
+        local tags = {}
+        for tag in io.lines(fname) do
+          tags = gears.table.join(tags, {util.tag.name2tag(tag, s.index)})
+        end
+        -- remove the file after using it to reduce clutter
+        os.remove(fname)
+
+        if #tags>0 then
+          c:tags(tags)
+        else
+          -- c.screen = awful.tag.getscreen(tags[1])
+        end
+        awful.placement.no_overlap(c)
+        awful.placement.no_offscreen(c)
+      end
+    end
+  end
+end)

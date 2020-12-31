@@ -49,8 +49,8 @@ util.tag = {}
 function util.tag.rel_move(tag, rel_idx)
     if tag then 
         local scr = awful.tag.getscreen(tag)
-        local tag_idx = awful.tag.getidx(tag)
-        local tags = awful.tag.gettags(scr)
+        local tag_idx = tag.index
+        local tags = scr.tags
         local target = awful.util.cycle(#tags, tag_idx + rel_idx)
         awful.tag.move(target, tag)
         awful.tag.viewonly(tag)
@@ -65,7 +65,7 @@ function util.tag.name2tags(name, scr)
     local ret = {}
     local a, b = scr or 1, scr or capi.screen.count()
     for s = a, b do
-        for _, t in ipairs(awful.tag.gettags(s)) do
+        for _, t in ipairs(screen[s].tags) do
             if name == t.name then
                 table.insert(ret, t)
             end
