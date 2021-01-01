@@ -19,13 +19,15 @@ local awful = require("awful")
 
 function mousemarker() 
     awful.screen.connect_for_each_screen(function(s)
+        local nosel = "🞎"
+        local yessel = "🞖"
         if s == mouse.screen then
             -- mymousebox[s]:set_markup("<span background='#002B36' color='#839496'><b> ■ </b></span>")
-            s.mousebox_right:set_markup("<span background='#859900' color='#839496'><b> ■ </b></span>")
-            s.mousebox_left:set_markup("<span background='#859900' color='#839496'><b> ■ </b></span>")
+            s.mousebox_right:set_markup("<span background='#859900' color='#839496'><b> " .. yessel .. " </b></span>")
+            s.mousebox_left:set_markup("<span background='#859900' color='#839496'><b> " .. yessel .. " </b></span>")
         else
-            s.mousebox_right:set_markup("<span background='#002B36' color='#839496'><b> □ </b></span>")
-            s.mousebox_left:set_markup("<span background='#002B36' color='#839496'><b> □ </b></span>")
+            s.mousebox_right:set_markup("<span background='#002B36' color='#839496'><b> " .. nosel .. " </b></span>")
+            s.mousebox_left:set_markup("<span background='#002B36' color='#839496'><b> " .. nosel .. " </b></span>")
         end
     end)
 end

@@ -317,14 +317,16 @@ clock[1] = wibox.widget.textclock("%c %Z", .5)
 clock[2] = wibox.widget.textclock("%c UTC", .5, "UTC")
 clock[3] = wibox.widget.textclock("%a %b %d %r %Z", .5)
 
-local screen_loop = 1
 -- awful.screen.connect_for_each_screen(function(s)
 screen.connect_signal("request::desktop_decoration", function(s)
     -- Wallpaper
     -- set_wallpaper(s)
 
-    calendar[screen_loop] = awful.widget.calendar_popup.month({ screen = screen_loop})
-    calendar[screen_loop]:attach(clock[screen_loop], "tr")
+    calendar[s.index] = awful.widget.calendar_popup.month({ screen = s.index})
+    calendar[s.index]:attach(clock[s.index], "tr")
+    calendar[s.index]:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+    calendar[s.index]:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+
 
     s.btcusd = wibox.widget.textbox()
     s.btcusd:set_markup("btc")
@@ -340,26 +342,28 @@ screen.connect_signal("request::desktop_decoration", function(s)
     -- Each screen has its own tag table.
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
-    if screen_loop == 1 then
+    if s.index == 1 then
         awful.layout.set(awful.layout.layouts[2],
-            awful.tag.find_by_name(screen[screen_loop], "1"))
+            awful.tag.find_by_name(screen[s.index], "1"))
         awful.layout.set(awful.layout.layouts[2],
-            awful.tag.find_by_name(screen[screen_loop], "6"))
+            awful.tag.find_by_name(screen[s.index], "6"))
         awful.layout.set(awful.layout.layouts[2],
-            awful.tag.find_by_name(screen[screen_loop], "9"))
-    elseif screen_loop == 2 then
+            awful.tag.find_by_name(screen[s.index], "9"))
+    elseif s.index == 2 then
         awful.layout.set(awful.layout.layouts[2],
-            awful.tag.find_by_name(screen[screen_loop], "1"))
+            awful.tag.find_by_name(screen[s.index], "1"))
         awful.layout.set(awful.layout.layouts[2],
-            awful.tag.find_by_name(screen[screen_loop], "7"))
-    elseif screen_loop == 3 then
+            awful.tag.find_by_name(screen[s.index], "7"))
+    elseif s.index == 3 then
         awful.layout.set(awful.layout.layouts[2],
-            awful.tag.find_by_name(screen[screen_loop], "1"))
+            awful.tag.find_by_name(screen[s.index], "1"))
     end
 
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt({ with_shell = true } )
+    s.mypromptbox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+    s.mypromptbox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
     -- Create an imagebox widget which will contain an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox {
@@ -375,6 +379,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
             end),
         }
     }
+    s.mylayoutbox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+    s.mylayoutbox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
     -- Create a taglist widget
     s.mytaglist = awful.widget.taglist {
@@ -384,22 +390,24 @@ screen.connect_signal("request::desktop_decoration", function(s)
             awful.button({ }, 1, function(t) t:view_only()
             end),
             awful.button({ modkey }, 1, function(t)
-                                            if client.focus then
-                                                client.focus:move_to_tag(t)
-                                            end
-                                        end),
+                if client.focus then
+                    client.focus:move_to_tag(t)
+                end
+            end),
             awful.button({ }, 3, awful.tag.viewtoggle),
             awful.button({ modkey }, 3, function(t)
-                                            if client.focus then
-                                                client.focus:toggle_tag(t)
-                                            end
-                                        end),
+                if client.focus then
+                    client.focus:toggle_tag(t)
+                end
+            end),
             awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen)
             end),
             awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen)
             end),
         }
     }
+    s.mytaglist:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+    s.mytaglist:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
     -- Create a tasklist widget
     s.mytasklist = awful.widget.tasklist {
@@ -417,32 +425,40 @@ screen.connect_signal("request::desktop_decoration", function(s)
             end),
         }
     }
+    s.mytasklist:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+    s.mytasklist:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
+    s.mywibox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+    s.mywibox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
     -- My mouse indicator
     s.mousebox_right = wibox.widget.textbox()
     s.mousebox_right:set_markup_silently("-")
     s.mousebox_right:buttons(gears.table.join(
-        awful.button({ }, 1, function () stylusnextscreen() end),
-        awful.button({"Control"}, 1, function () stylusdesktop() end),
-        awful.button({"Shift"}, 1, function () stylusthisscreen() end),
-        awful.button({ }, 3, function () stylusprevscreen() end),
-        awful.button({"Control"}, 3, function () stylusdesktop() end),
-        awful.button({"Shift"}, 3, function () stylusthisscreen() end)
-    ))
+            awful.button({ }, 1, function () stylusnextscreen() end),
+            awful.button({"Control"}, 1, function () stylusdesktop() end),
+            awful.button({"Shift"}, 1, function () stylusthisscreen() end),
+            awful.button({ }, 3, function () stylusprevscreen() end),
+            awful.button({"Control"}, 3, function () stylusdesktop() end),
+            awful.button({"Shift"}, 3, function () stylusthisscreen() end)
+        ))
+    s.mousebox_right:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+    s.mousebox_right:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
     s.mousebox_left = wibox.widget.textbox()
     s.mousebox_left:set_markup_silently("-")
     s.mousebox_left:buttons(gears.table.join(
-        awful.button({ }, 1, function () stylusprevscreen() end),
-        awful.button({"Control"}, 1, function () stylusdesktop() end),
-        awful.button({"Shift"}, 1, function () stylusthisscreen() end),
-        awful.button({ }, 3, function () stylusnextscreen() end),
-        awful.button({"Control"}, 3, function () stylusdesktop() end),
-        awful.button({"Shift"}, 3, function () stylusthisscreen() end)
-    ))
+            awful.button({ }, 1, function () stylusprevscreen() end),
+            awful.button({"Control"}, 1, function () stylusdesktop() end),
+            awful.button({"Shift"}, 1, function () stylusthisscreen() end),
+            awful.button({ }, 3, function () stylusnextscreen() end),
+            awful.button({"Control"}, 3, function () stylusdesktop() end),
+            awful.button({"Shift"}, 3, function () stylusthisscreen() end)
+        ))
+    s.mousebox_left:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+    s.mousebox_left:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
     s.lspace = wibox.widget.textbox()
     s.lspace:set_markup([[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]])
@@ -468,30 +484,29 @@ screen.connect_signal("request::desktop_decoration", function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            screen_loop == 1 and mykeyboardlayout,
+            s.index == 1 and mykeyboardlayout,
             wibox.widget.systray(),
-            screen_loop == 1 and volume_widget({display_notification = true}),
+            s.index == 1 and volume_widget({display_notification = true}),
             s.btcusd,
             s.ethusd,
             s.bchusd,
             s.ltcusd,
             s.xrpusd,
             s.rspace,
-            clock[screen_loop],
+            clock[s.index],
             s.rspace,
             s.mylayoutbox,
             s.rspace,
             s.mousebox_right,
         },
     }
-    if screen_loop == 3 then
+    if s.index == 3 then
         s.btcusd:set_markup("<span background='#002B36' color='#839496'> btc </span>")
         s.ethusd:set_markup("<span background='#002B36' color='#839496'> eth </span>")
         s.bchusd:set_markup("<span background='#002B36' color='#839496'> bch </span>")
         s.ltcusd:set_markup("")
         s.xrpusd:set_markup("")
-        screen_loop = 1
-    elseif screen_loop == 2 then
+    elseif s.index == 2 then
         s.btcusd:set_markup("")
         s.ethusd:set_markup("")
         s.bchusd:set_markup("")
@@ -504,143 +519,143 @@ screen.connect_signal("request::desktop_decoration", function(s)
         s.ltcusd:set_markup("")
         s.xrpusd:set_markup("")
     end
-    screen_loop = screen_loop + 1
 end)
 -- }}}
 
 -- {{{ Mouse bindings
 awful.mouse.append_global_mousebindings({
-    awful.button({ },  3, function () mymainmenu:toggle() end),
-    awful.button({ },  4, function () awful.tag.viewnext()
+        awful.button({ },  3, function () mymainmenu:toggle() end),
+        awful.button({ },  4, function () awful.tag.viewnext()
         end),
-    awful.button({ },  5, function () awful.tag.viewprev()
+        awful.button({ },  5, function () awful.tag.viewprev()
         end),
-    awful.button({ }, 13, function () awful.tag.viewnext()
+        awful.button({ }, 13, function () awful.tag.viewnext()
         end),
-    awful.button({ }, 10, function () awful.tag.viewprev()
+        awful.button({ }, 10, function () awful.tag.viewprev()
         end),
-    awful.button({ }, 14, function () awful.tag.viewprev()
+        awful.button({ }, 14, function () awful.tag.viewprev()
         end),
-    awful.button({ }, 15, function () awful.tag.viewprev()
+        awful.button({ }, 15, function () awful.tag.viewprev()
         end),
-})
+    })
 -- }}}
 
 -- {{{ Key bindings
 
 -- General Awesome keys
 awful.keyboard.append_global_keybindings({
-    awful.key( {}, 'XF86AudioRaiseVolume', volume_widget.raise,
-        {description = 'volume up', group = 'hotkeys'}),
-    awful.key( {}, 'XF86AudioLowerVolume', volume_widget.lower,
-        {description = 'volume down', group = 'hotkeys'}),
-    awful.key( {}, 'XF86AudioMute', volume_widget.toggle,
-        {description = 'toggle mute', group = 'hotkeys'}),
-    awful.key({ "Shift", "Control"}, "v",    function () awful.spawn("gpaste-client ui") end),
-    -- ErgoDox EZ Mode 2
-    -- z XF86Launch7
-    awful.key({                   }, "XF86Launch7",    function () awful.spawn("6m prev") end),
-    -- x XF86Launch6
-    awful.key({                   }, "XF86Launch6",    function () awful.spawn("6m next") end),
-    -- v XF86Tools
-    awful.key({                   }, "XF86Tools",    function () awful.spawn("6m add") end),
-    -- b XF86Launch5
-    awful.key({                   }, "XF86Launch5",    function () awful.spawn("6m toggle") end),
-    -- 5 XF86TouchpadOn
-    awful.key({                   }, "XF86TouchpadOn",    function () awful.spawn("6m volup") end),
-    -- t XF86TouchpadToggle
-    awful.key({                   }, "XF86TouchpadToggle",    function () awful.spawn("6m voldown") end),
-    awful.key({                   }, "Pause", function () awful.spawn(lock_session) end,
-        {description = "Lock desktop session", group =  "awesome"}),
-    awful.key({                   }, "XF86ScreenSaver", function () awful.spawn(lock_session) end,
-        {description = "Lock desktop session", group =  "awesome"}),
-    awful.key({                   }, "Print",           function () awful.spawn(take_screenshot) end,
-        {description = "Lock desktop session", group =  "awesome"}),
-    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
-              {description="show help", group="awesome"}),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
-              {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
-    awful.key({ modkey }, "x",
-              function ()
-                  awful.prompt.run {
+        awful.key( {}, 'XF86AudioRaiseVolume', volume_widget.raise,
+            {description = 'volume up', group = 'hotkeys'}),
+        awful.key( {}, 'XF86AudioLowerVolume', volume_widget.lower,
+            {description = 'volume down', group = 'hotkeys'}),
+        awful.key( {}, 'XF86AudioMute', volume_widget.toggle,
+            {description = 'toggle mute', group = 'hotkeys'}),
+        awful.key({ "Shift", "Control"}, "v",    function () awful.spawn("gpaste-client ui") end),
+        -- ErgoDox EZ Mode 2
+        -- z XF86Launch7
+        awful.key({                   }, "XF86Launch7",    function () awful.spawn("6m prev") end),
+        -- x XF86Launch6
+        awful.key({                   }, "XF86Launch6",    function () awful.spawn("6m next") end),
+        -- v XF86Tools
+        awful.key({                   }, "XF86Tools",    function () awful.spawn("6m add") end),
+        -- b XF86Launch5
+        awful.key({                   }, "XF86Launch5",    function () awful.spawn("6m toggle") end),
+        -- 5 XF86TouchpadOn
+        awful.key({                   }, "XF86TouchpadOn",    function () awful.spawn("6m volup") end),
+        -- t XF86TouchpadToggle
+        awful.key({                   }, "XF86TouchpadToggle",    function () awful.spawn("6m voldown") end),
+        awful.key({                   }, "Pause", function () awful.spawn(lock_session) end,
+            {description = "Lock desktop session", group =  "awesome"}),
+        awful.key({                   }, "XF86ScreenSaver", function () awful.spawn(lock_session) end,
+            {description = "Lock desktop session", group =  "awesome"}),
+        awful.key({                   }, "Print",           function () awful.spawn(take_screenshot) end,
+            {description = "Lock desktop session", group =  "awesome"}),
+        awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
+            {description="show help", group="awesome"}),
+        awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
+            {description = "show main menu", group = "awesome"}),
+        awful.key({ modkey, "Control" }, "r", awesome.restart,
+            {description = "reload awesome", group = "awesome"}),
+        awful.key({ modkey, "Shift"   }, "q", awesome.quit,
+            {description = "quit awesome", group = "awesome"}),
+        awful.key({ modkey }, "x",
+            function ()
+                awful.prompt.run {
                     prompt       = "Run Lua code: ",
                     textbox      = awful.screen.focused().mypromptbox.widget,
                     exe_callback = awful.util.eval,
                     history_path = awful.util.get_cache_dir() .. "/history_eval"
-                  }
-              end,
-              {description = "lua execute prompt", group = "awesome"}),
-    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
-              {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"}),
-    awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"}),
-})
+                }
+            end,
+            {description = "lua execute prompt", group = "awesome"}),
+        awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
+            {description = "open a terminal", group = "launcher"}),
+        awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
+            {description = "run prompt", group = "launcher"}),
+        awful.key({ modkey }, "p", function() menubar.show() end,
+            {description = "show the menubar", group = "launcher"}),
+    })
 
 -- Tags related keybindings
 awful.keyboard.append_global_keybindings({
-    awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relative( 1 * invert)
-    end,
-        {description = "view next screen", group = "awesome"}),
-    awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1 * invert)
-    end,
-        {description = "view previous tag", group = "tag"}),
-    awful.key({ modkey,           }, "Up",  function () awful.tag.viewnext()
-    end,
-        {description = "view next tag", group = "tag"}),
-    awful.key({ modkey,           }, "Down",   function () awful.tag.viewprev()
-    end,
-        {description = "view previous screen", group = "awesome"}),
-    awful.key({ modkey,           }, "Escape", function () awful.tag.history.restore()
-    end,
-        {description = "go back", group = "tag"}),
-})
+        awful.key({ modkey,           }, "Right",  function () awful.screen.focus_relative( 1 * invert); clienttagmouseupdate() end,
+            {description = "view next screen", group = "awesome"}),
+        awful.key({ modkey,           }, "Left",   function () awful.screen.focus_relative( -1 * invert); clienttagmouseupdate() end,
+            {description = "view previous tag", group = "tag"}),
+        awful.key({ modkey,           }, "Up",  function () awful.tag.viewnext(); clienttagmouseupdate() end,
+            {description = "view next tag", group = "tag"}),
+        awful.key({ modkey,           }, "Down",   function () awful.tag.viewprev(); clienttagmouseupdate() end,
+            {description = "view previous screen", group = "awesome"}),
+        awful.key({ modkey,           }, "Escape", function () awful.tag.history.restore(); clienttagmouseupdate() end,
+            {description = "go back", group = "tag"}),
+    })
 
 -- Focus related keybindings
 awful.keyboard.append_global_keybindings({
-    awful.key({ modkey,           }, "j",
-        function ()
-            awful.client.focus.byidx( 1)
-        end,
-        {description = "focus next by index", group = "client"}
-        ),
-    awful.key({ modkey,           }, "k",
-        function ()
-            awful.client.focus.byidx(-1)
-        end,
-        {description = "focus previous by index", group = "client"}
-    ),
-    awful.key({ modkey,           }, "Tab",
-        function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
-        end,
-        {description = "go back", group = "client"}),
-    awful.key({ modkey, "Control" }, "j", function ()
-        awful.screen.focus_relative( 1 * invert)
-    end,
-              {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "k", function ()
-        awful.screen.focus_relative(-1 * invert)
-    end,
-              {description = "focus the previous screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "n",
-              function ()
-                  local c = awful.client.restore()
-                  -- Focus restored client
-                  if c then
+        awful.key({ modkey,           }, "j",
+            function ()
+                awful.client.focus.byidx( 1)
+                clienttagmouseupdate()
+            end,
+            {description = "focus next by index", group = "client"}),
+        awful.key({ modkey,           }, "k",
+            function ()
+                awful.client.focus.byidx(-1)
+                clienttagmouseupdate()
+            end,
+            {description = "focus previous by index", group = "client"}),
+        awful.key({ modkey,           }, "Tab",
+            function ()
+                awful.client.focus.history.previous()
+                if client.focus then
+                    client.focus:raise()
+                end
+                clienttagmouseupdate()
+            end,
+            {description = "go back", group = "client"}),
+        awful.key({ modkey, "Control" }, "j",
+            function ()
+                awful.screen.focus_relative( 1 * invert)
+                clienttagmouseupdate()
+            end,
+            {description = "focus the next screen", group = "screen"}),
+        awful.key({ modkey, "Control" }, "k",
+            function ()
+                awful.screen.focus_relative(-1 * invert)
+                clienttagmouseupdate()
+            end,
+            {description = "focus the previous screen", group = "screen"}),
+        awful.key({ modkey, "Control" }, "n",
+            function ()
+                local c = awful.client.restore()
+                -- Focus restored client
+                if c then
                     c:activate { raise = true, context = "key.unminimize" }
-                  end
-              end,
-              {description = "restore minimized", group = "client"}),
-})
+                end
+                clienttagmouseupdate()
+            end,
+            {description = "restore minimized", group = "client"}),
+    })
 
 -- Layout related keybindings
 awful.keyboard.append_global_keybindings({

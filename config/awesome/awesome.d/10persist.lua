@@ -35,10 +35,10 @@ awesome.connect_signal("exit", function (restart)
       local f = io.open(awesome_tags_fname .. "." .. s.index, "w+")
       if f then
         local tags = s.selected_tags
-        gears.debug.dump({ tags = tostring(tags) })
+        -- gears.debug.dump({ tags = tostring(tags) })
         for _, tag in ipairs(tags) do
-          gears.debug.dump("tag")
-          gears.debug.dump({ tag = tag, screen = s.index, name = tag.name })
+          -- gears.debug.dump("tag")
+          -- gears.debug.dump({ tag = tag, screen = s.index, name = tag.name })
           f:write(tag.name .. "\n")
         end
         f:close()

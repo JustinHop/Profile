@@ -6,7 +6,7 @@ pcall(require, "luarocks.loader")
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
-require("awful.autofocus")
+--require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
 -- Theme handling library
@@ -16,6 +16,8 @@ local naughty = require("naughty")
 -- local ruled = require("ruled")
 local inspect = require("inspect")
 
+
+local capi = { mouse = mouse, client = client, screen = screen }
 
 -- awful.titlebar.show(client.focus)
 
@@ -58,18 +60,20 @@ local cstats = { "above", "below", "border_color", "border_width", "callback", "
     "new_tag", "ontop", "opacity", "pid", "placement", "requests_no_titlebar", "role", "screen", "shape", "shape_bounding",
     "shape_clip", "shape_input", "size_hints", "size_hints_honor", "skip_taskbar", "startup_id", "sticky", "switch_to_tags", "tag",
     "tags", "titlebars_enabled", "transient_for", "type", "urgent", "valid", "width", "window", "x", "y" }
-gears.protected_call.call(function () 
+gears.protected_call(function () 
     local c = mouse.object_under_pointer()
     local details = {}
     gears.debug.dump(c)
-    for i, prop in ipairs(cstats) do
-        details[prop] = c[prop]
-        -- gears.debug.dump(prop)
-        -- gears.debug.dump(c[prop])
-        -- print(inspect(getmetatable(c[prop])))
+    if c then
+        for i, prop in pairs(cstats) do
+            details[prop] = c[prop]
+            -- gears.debug.dump(prop)
+            -- gears.debug.dump(c[prop])
+            -- print(inspect(getmetatable(c[prop])))
+        end
+        gears.debug.dump(details)
     end
-    gears.debug.dump(details)
-    for key in gears.table.keys(c) do
+    -- for key in gears.table.keys(c) do
         -- gears.debug.dump("i")
         -- gears.debug.dump(i)
         -- gears.debug.dump("key")
@@ -78,5 +82,5 @@ gears.protected_call.call(function ()
         -- gears.debug.dump(c[i])
         -- gears.debug.dump("c[key]")
         -- gears.debug.dump(c[key])
-    end
+    -- end
 end)
