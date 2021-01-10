@@ -19,6 +19,15 @@ case $1 in
             -e 's!https://m\.youtube\.com!https://www.youtube.com!' | \
             xargs -tr -n1 -I{} echo loadfile {} append-play | ssh pi socat - /run/user/1000/mpv.socket
         ;;
+    add_next)
+        xclip -o | grep -P '^https?://' | sed \
+            -e 's!https://www\.youtu\.be\.com!https://www.youtube.com!' \
+            -e 's!https://www\.youtu\.be/!https://www.youtube.com/watch?v=!' \
+            -e 's!https://youtu\.be/!https://www.youtube.com/watch?v=!' \
+            -e 's!https://youtube\.com!https://www.youtube.com!' \
+            -e 's!https://m\.youtube\.com!https://www.youtube.com!' | \
+            xargs -tr -n1 -I{} echo script-message-to info play_next {} | ssh pi socat - /run/user/1000/mpv.socket
+        ;;
     next)
         echo "playlist_next" | ssh pi socat - /run/user/1000/mpv.socket
         ;;

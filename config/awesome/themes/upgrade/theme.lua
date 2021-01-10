@@ -68,6 +68,85 @@ theme.border_marked = theme.bg_urgent
 -- Example:
 --theme.taglist_bg_focus = "#ff0000"
 
+--[[
+theme.calendar_markup_year = 
+theme.calendar_markup_month = 
+theme.calendar_markup_yearheader = 
+theme.calendar_markup_header = 
+theme.calendar_markup_weekday = 
+theme.calendar_markup_weeknumber = 
+theme.calendar_markup_normal = 
+theme.calendar_markup_focus = 
+]]--
+theme.calendar_fg_color_year = theme.fg_normal
+theme.calendar_fg_color_month =  theme.fg_normal
+theme.calendar_fg_color_yearheader =  theme.fg_normal
+theme.calendar_fg_color_header =  theme.fg_normal
+theme.calendar_fg_color_weekday =  theme.fg_normal
+theme.calendar_fg_color_weeknumber =  theme.fg_normal
+theme.calendar_fg_color_normal =  theme.fg_normal
+theme.calendar_fg_color_focus =  theme.fg_normal
+
+theme.calendar_bg_color_year =  theme.bg_normal
+theme.calendar_bg_color_month =  theme.bg_normal
+theme.calendar_bg_color_yearheader =  theme.bg_normal
+theme.calendar_bg_color_header =  theme.bg_normal
+theme.calendar_bg_color_weekday =  theme.bg_normal
+theme.calendar_bg_color_weeknumber =  theme.bg_normal
+theme.calendar_bg_color_normal =  theme.bg_normal
+theme.calendar_bg_color_focus =  theme.bg_normal
+--[[
+theme.calendar_shape_year = 
+theme.calendar_shape_month = 
+theme.calendar_shape_yearheader = 
+theme.calendar_shape_header = 
+theme.calendar_shape_weekday = 
+theme.calendar_shape_weeknumber = 
+theme.calendar_shape_normal = 
+theme.calendar_shape_focus = 
+]]--
+
+theme.calendar_padding_year = 3
+theme.calendar_padding_month = 3
+theme.calendar_padding_yearheader = 3
+theme.calendar_padding_header = 3
+theme.calendar_padding_weekday = 3
+theme.calendar_padding_weeknumber = 3
+theme.calendar_padding_normal = 3
+theme.calendar_padding_focus = 3
+
+--[[
+theme.calendar_border_width_year = 
+theme.calendar_border_width_month = 
+theme.calendar_border_width_yearheader = 
+theme.calendar_border_width_header = 
+theme.calendar_border_width_weekday = 
+theme.calendar_border_width_weeknumber = 
+theme.calendar_border_width_normal = 
+theme.calendar_border_width_focus = 
+]]--
+
+theme.calendar_border_color_year = theme.border_normal
+theme.calendar_border_color_month = theme.colors.blue
+theme.calendar_border_color_yearheader = theme.border_normal
+theme.calendar_border_color_header = theme.border_normal
+theme.calendar_border_color_weekday = theme.border_normal
+theme.calendar_border_color_weeknumber = theme.border_normal
+theme.calendar_border_color_normal = theme.border_normal
+theme.calendar_border_color_focus = theme.border_normal
+
+--[[
+theme.calendar_opacity_year = 
+theme.calendar_opacity_month = 
+theme.calendar_opacity_yearheader = 
+theme.calendar_opacity_header = 
+theme.calendar_opacity_weekday = 
+theme.calendar_opacity_weeknumber = 
+theme.calendar_opacity_normal = 
+theme.calendar_opacity_focus = 
+]]--
+
+
 -- Generate taglist squares:
 local taglist_square_size = dpi(4)
 theme.taglist_squares_sel = theme_assets.taglist_squares_sel(
@@ -149,7 +228,7 @@ theme.awesome_icon = theme_assets.awesome_icon(
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
-theme.icon_theme = nil
+theme.icon_theme = "Arc"
 
 return theme
 

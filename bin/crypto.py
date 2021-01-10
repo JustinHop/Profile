@@ -53,41 +53,32 @@ def getcrypt(crypto):
         b['last'] = 0.0
 
 def looplooper(data):
-    cmd = ''' echo "
-    local awful = require('awful')
-    local screen_loop = 1
-    awful.screen.connect_for_each_screen(function(s)
-        if screen_loop == 3 then
-          s.btcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-          s.ethusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-          s.bchusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-          s.ltcusd:set_markup('')
-          s.xrpusd:set_markup('')
-          screen_loop = 1
-        elseif screen_loop == 2 then
-          s.btcusd:set_markup('')
-          s.ethusd:set_markup('')
-          s.bchusd:set_markup('')
-          s.ltcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-          s.xrpusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-        else
-          s.btcusd:set_markup('')
-          s.ethusd:set_markup('')
-          s.bchusd:set_markup('')
-          s.ltcusd:set_markup('')
-          s.xrpusd:set_markup('')
-        end
-    screen_loop = screen_loop + 1
-    end) " | {}
-    '''.format(
-        data['btcusd']['color'], data['btcusd']['last'],
-        data['ethusd']['color'], data['ethusd']['last'],
-        data['bchusd']['color'], data['bchusd']['last'],
-        data['ltcusd']['color'], data['ltcusd']['last'],
-        data['xrpusd']['color'], data['xrpusd']['last'],
-        AWESOME_CLIENT
-    )
-    subprocess.run(cmd, shell=True)
+    try:
+        cmd = ''' echo "
+        local awful = require('awful')
+        local screen_loop = 1
+        awful.screen.connect_for_each_screen(function(s)
+            if s.index == 3 then
+            s.btcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+            s.ethusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+            s.bchusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+            s.index = 1
+            elseif screen_loop == 2 then
+            s.ltcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+            s.xrpusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+            end
+        end) " | {}
+        '''.format(
+            data['btcusd']['color'], data['btcusd']['last'],
+            data['ethusd']['color'], data['ethusd']['last'],
+            data['bchusd']['color'], data['bchusd']['last'],
+            data['ltcusd']['color'], data['ltcusd']['last'],
+            data['xrpusd']['color'], data['xrpusd']['last'],
+            AWESOME_CLIENT
+        )
+        subprocess.run(cmd, shell=True)
+    except KeyError as x:
+        print(x)
 
 
 def looper():
@@ -110,14 +101,17 @@ def looper():
         except BaseException as e:
             # debug("looper():{}:Exception:{}".format(c, e))
             pass
-    debug(data)
-    looplooper(data)
+    try:
+        debug(data)
+        looplooper(data)
+    except BaseException as x:
+        print(x)
 
 
 def main():
     while True:
         looper()
-        time.sleep(120)
+        time.sleep(180)
 
 
 if __name__ == "__main__":
