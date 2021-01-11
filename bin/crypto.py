@@ -44,11 +44,11 @@ def getcrypt(crypto):
     # debug("getcrypt({})".format(crypto))
     try:
         r = requests.get("{}{}".format(stamp2,  crypto))
-        # debug("getcrypt({}): response: {}".format(crypto, r.status_code))
+        debug("getcrypt({}): response: {}".format(crypto, r.status_code))
         b = json.loads(r.text)
         return(b)
     except BaseException as e:
-        # debug("getcrypt({}): error: {}".format(crypto, e))
+        debug("getcrypt({}): error: {}".format(crypto, e))
         b = []
         b['last'] = 0.0
 
@@ -56,14 +56,12 @@ def looplooper(data):
     try:
         cmd = ''' echo "
         local awful = require('awful')
-        local screen_loop = 1
         awful.screen.connect_for_each_screen(function(s)
             if s.index == 3 then
             s.btcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
             s.ethusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
             s.bchusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-            s.index = 1
-            elseif screen_loop == 2 then
+            elseif s.index == 2 then
             s.ltcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
             s.xrpusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
             end
@@ -76,6 +74,7 @@ def looplooper(data):
             data['xrpusd']['color'], data['xrpusd']['last'],
             AWESOME_CLIENT
         )
+        debug("looplooper(command): " + cmd)
         subprocess.run(cmd, shell=True)
     except KeyError as x:
         print(x)
@@ -99,7 +98,7 @@ def looper():
             #tooltip(c, r)
             V[c] = last
         except BaseException as e:
-            # debug("looper():{}:Exception:{}".format(c, e))
+            debug("looper():{}:Exception:{}".format(c, e))
             pass
     try:
         debug(data)
