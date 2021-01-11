@@ -28,6 +28,8 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 
+local cairo = require("lgi").cairo
+
 function file_exists(name)
     -- gears.debug.dump(name)
     local ret = gears.protected_call(function()
@@ -51,9 +53,10 @@ function set_tag_icon_client()
             if class then
                 config_dir = string.format("%s/.config/awesome/", os.getenv("HOME") )
                 cicon_test = config_dir .. "icons/" .. string.lower(class) .. ".png"
-                if gears.filesystem.file_readable(tostring(cicon_test)) then
-                    cicon = cicon_test
+                if not gears.filesystem.file_readable(tostring(cicon_test)) then
+                    gears.surface(client.focus:get_icon(1)):write_to_png(tostring(cicon_test))
                 end
+                cicon = cicon_test
             end
             if cicon == nil or not gears.filesystem.file_readable(tostring(cicon)) then
                 cicon = awful.util.geticonpath(class, { "svg", "png", "gif" }, awesome_paths.iconapps_dir)
@@ -67,8 +70,14 @@ function set_tag_icon_client()
                     t.icon = cicon
                 end
             elseif client.focus.icon ~= nil then
+                local i = gears.surface(client.focus.icon)
+                local img = cairo.ImageSurface.create(cairo.Format.ARGB32, i:get_width(), i:get_height())
+                local cr  = cairo.Context(img)
+                cr:set_source_surface(i, 0, 0)
+                cr:paint()
                 if t then
-                    t.icon = client.focus.icon
+                    -- t.icon = client.focus.icon
+                    t.icon = cr
                 end
             end
         end

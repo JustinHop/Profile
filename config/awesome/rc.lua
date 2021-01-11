@@ -387,7 +387,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- Create a taglist widget
   s.mytaglist = awful.widget.taglist {
     screen  = s,
-    filter  = awful.widget.taglist.filter.all,
+    -- filter  = awful.widget.taglist.filter.all,
+    filter  = awful.widget.taglist.filter.noempty,
     buttons = {
       awful.button({ }, 1, function(t) t:view_only() end),
       awful.button({ modkey }, 1, function(t)
@@ -905,7 +906,10 @@ ruled.client.connect_signal("request::rules", function()
     properties = { titlebars_enabled = false, maximized = true, honor_workarea = false,
       honor_padding = false, fullscreen = true, border_width = 0,
       placement = awful.placement.skip_fullscreen },
-    callback = function (c) awful.titlebar.hide(c) end,
+    callback = function (c) 
+      awful.titlebar.hide(c)
+      c.fullscreen = true
+    end,
   }
   -- Add titlebars to dialogs
   ruled.client.append_rule {
