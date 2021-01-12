@@ -21,7 +21,6 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
-local icon_finder = require("icon_finder")
 local capi = { timer = timer }
 -- Load Debian menu entries
 local debian = require("debian.menu")
@@ -31,6 +30,14 @@ local util = require("util")
 
 --local xproperties = require("xproperties")
 local volume_widget = require("awesome-wm-widgets.volume-widget.volume")
+
+local client_stats = { "above", "below", "border_color", "border_width", "callback", "class", "client_shape_bounding", "client_shape_clip", "content",
+  "dockable", "first_tag", "floating", "focus", "focusable", "fullscreen", "height", "hidden", "honor_padding",
+  "honor_workarea", "icon", "icon_name", "icon_sizes", "immobilized", "immobilized", "instance", "is_fixed", "leader_window",
+  "machine", "marked", "maximized", "maximized_horizontal", "maximized_vertical", "minimized", "modal", "motif_wm_hints", "name",
+  "new_tag", "ontop", "opacity", "pid", "placement", "requests_no_titlebar", "role", "screen", "shape", "shape_bounding",
+  "shape_clip", "shape_input", "size_hints", "size_hints_honor", "skip_taskbar", "startup_id", "sticky", "switch_to_tags", "tag",
+  "tags", "titlebars_enabled", "transient_for", "type", "urgent", "valid", "width", "window", "x", "y" }
 
 stylusid = '"Wacom Intuos Pro M Pen stylus"'
 eraserid = '"Wacom Intuos Pro M Pen eraser"'
@@ -66,10 +73,6 @@ awesome_paths.iconapps_dir = { awesome_paths.icon_dir,
   "/usr/share/pixmaps/" }
 
 naughty.config.icon_dirs = awesome_paths.iconapps_dir
-
--- {{ Icon finder
-myiconfinder = icon_finder.new(awesome_paths.iconapps_dir)
--- }}
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -134,21 +137,6 @@ function clienttagmouseupdate()
 end
 
 -- }}}
-
-
-settings = {}
-settings.debug = 1
-settings.opacity_focused = .9
-settings.opacity_unfocused = .8
-settings.mouse_marker_not = "[-]"
-settings.spacer = "~"
-settings.synergylocal=1;
-settings.icon = {}
-settings.icon.termit = os.getenv("HOME") .. "/.config/awesome/icons/GNOME-Terminal-Radioactive.png"
-settings.icon.chrome = os.getenv("HOME") .. "/.config/awesome/icons/google-chrome.png"
---settings.mouse_marker_yes = "<span bgcolor=" .. [["]] .. yellow .. [[">[★]</span>]]
---settings.mouse_marker_no = "[☆]"
---settings.mouse_marker_synergy = "<span bgcolor=" .. [["]] .. light_green .. [[">[╳]</span>]]
 
 -- This is used later as the default terminal and editor to run.
 -- terminal = "x-terminal-emulator"
@@ -895,7 +883,7 @@ ruled.client.connect_signal("request::rules", function()
   ruled.client.append_rule {
     id       = "video",
     rule_any = {
-      instance = { "youtube-player", "mpv" },
+      instance = { "youtube-player", "mpv", "gl" },
       class    = {
         "mpv", "mplayer", "gmplayer", "xine", "ffmpeg",
       },
@@ -903,18 +891,12 @@ ruled.client.connect_signal("request::rules", function()
         "mpv",  -- xev.
       },
     },
-    properties = { titlebars_enabled = false, maximized = true, honor_workarea = false,
-      honor_padding = false, fullscreen = true, border_width = 0,
-      placement = awful.placement.skip_fullscreen },
-    callback = function (c) 
-      awful.titlebar.hide(c)
-      c.fullscreen = true
-    end,
+    properties = { tiled = false, border_width = 0, fullscreen = true },
   }
   -- Add titlebars to dialogs
   ruled.client.append_rule {
     id         = "titlebars",
-    rule_any   = { type = { "dialog" } },
+    rule_any   = { type = { "dialog" }, class = { "workrave", "Workrave" } },
     properties = { floating = true, titlebars_enabled = true }
   }
   ruled.client.append_rule {
