@@ -21,6 +21,21 @@ local capi = { mouse = mouse, client = client, screen = screen }
 
 -- awful.titlebar.show(client.focus)
 
+gears.protected_call(function ()
+    for s in screen do
+        gears.debug.dump("s.mywibox:get_children_by_id(\"clock\")[1].timezone")
+        gears.debug.dump(s.mywibox:get_children_by_id("clock")[1].timezone)
+        --[[
+        if s.index == 1 then
+            -- s.mywibox.clock.timezone = "America/Los_Angeles"
+            gears.debug.dump("s.mywibox:get_children_by_id(\"clock\")[1].get_timezone()")
+            gears.debug.dump(s.mywibox:get_children_by_id("clock")[1].get_timezone())
+            -- s.mywibox:get_children_by_id("clock")[1].timezone = "America/Los_Angeles"
+        end
+        ]]--
+    end
+end)
+
 --[[
 local si = awful.screen.focused().index
 gears.debug.dump("si")
@@ -53,6 +68,15 @@ local cstats = { "above", "below", "border_color", "border_width", "callback", "
     "tags", "titlebars_enabled", "transient_for", "type", "urgent", "valid", "width", "window", "x", "y" }
     ]]--
 
+--[[
+screen.connect_signal("mouse::enter", function (w)
+    gears.debug.dump("screen signal mouse::enter " .. tostring(w))
+    -- gears.debug.dump(w)
+    clienttagmouseupdate()
+end)
+]]--
+
+--[[
 local cstats = { "above", "below", "border_color", "border_width", "callback", "class", "client_shape_bounding", "client_shape_clip", "content",
     "dockable", "first_tag", "floating", "focus", "focusable", "fullscreen", "height", "hidden", "honor_padding",
     "honor_workarea", "icon", "icon_name", "icon_sizes", "immobilized", "immobilized", "instance", "is_fixed", "leader_window",
@@ -61,26 +85,38 @@ local cstats = { "above", "below", "border_color", "border_width", "callback", "
     "shape_clip", "shape_input", "size_hints", "size_hints_honor", "skip_taskbar", "startup_id", "sticky", "switch_to_tags", "tag",
     "tags", "titlebars_enabled", "transient_for", "type", "urgent", "valid", "width", "window", "x", "y" }
 gears.protected_call(function () 
-    local c = mouse.object_under_pointer()
-    local details = {}
-    gears.debug.dump(c)
-    if c then
-        for i, prop in pairs(cstats) do
-            details[prop] = c[prop]
-            -- gears.debug.dump(prop)
-            -- gears.debug.dump(c[prop])
-            -- print(inspect(getmetatable(c[prop])))
-        end
-        gears.debug.dump(details)
+    if false then
+    gears.debug.dump("root.wallpaper()")
+    gears.debug.dump(root.wallpaper())
+    gears.debug.dump("drawable.instances()")
+    gears.debug.dump(drawable.instances())
+    gears.debug.dump("root.drawins()")
+    gears.debug.dump(root.drawins())
+    for count in gears.table.iterate(root.drawins(), function(item) return true end) do
+        gears.debug.dump(count)
     end
-    -- for key in gears.table.keys(c) do
-        -- gears.debug.dump("i")
-        -- gears.debug.dump(i)
-        -- gears.debug.dump("key")
-        -- gears.debug.dump(key)
-        -- gears.debug.dump("c[i]")
-        -- gears.debug.dump(c[i])
-        -- gears.debug.dump("c[key]")
-        -- gears.debug.dump(c[key])
-    -- end
+        local c = mouse.object_under_pointer()
+        local details = {}
+        gears.debug.dump(c)
+        if c then
+            for i, prop in pairs(cstats) do
+                details[prop] = c[prop]
+                -- gears.debug.dump(prop)
+                -- gears.debug.dump(c[prop])
+                -- print(inspect(getmetatable(c[prop])))
+            end
+            gears.debug.dump(details)
+        end
+        -- for key in gears.table.keys(c) do
+            -- gears.debug.dump("i")
+            -- gears.debug.dump(i)
+            -- gears.debug.dump("key")
+            -- gears.debug.dump(key)
+            -- gears.debug.dump("c[i]")
+            -- gears.debug.dump(c[i])
+            -- gears.debug.dump("c[key]")
+            -- gears.debug.dump(c[key])
+        -- end
+    end
 end)
+]]--

@@ -298,40 +298,52 @@ screen.connect_signal("request::wallpaper", function(s)
 end)
 
 
+--[[
 local clock = {}
-local calendar = {}
 clock[1] = wibox.widget.textclock("%c %Z", .5)
 clock[2] = wibox.widget.textclock("%c UTC", .5, "UTC")
 clock[3] = wibox.widget.textclock("%a %b %d %r %Z", .5)
+]]--
 
+clockformat = {}
+clockformat[1] = '%c %Z'
+clockformat[2] = '%c UTC'
+clockformat[3] = '%a %b %d %r %Z'
+
+local wiboxes = {}
+
+local timezones = {}
+timezones[1] = 'Asia/Bangkok'
+timezones[2] = 'America/Los_Angeles'
+timezones[3] = 'America/Chicago'
+timezones[4] = 'UTC'
+
+tzidx = 1
 -- awful.screen.connect_for_each_screen(function(s)
 screen.connect_signal("request::desktop_decoration", function(s)
   -- Wallpaper
   -- set_wallpaper(s)
 
-  calendar[s.index] = awful.widget.calendar_popup.month({ screen = s.index,
-    style_year = { border_color = beautiful.bg_normal },
-    style_month = { border_color = beautiful.bg_normal },
-    style_header = { border_color = beautiful.bg_normal },
-    style_weekday = { border_color = beautiful.bg_normal },
-    style_normal = { border_color = beautiful.bg_normal },
-    style_focus = { border_color = beautiful.bg_focus, bg_color = beautiful.bg_normal },
-  })
-  calendar[s.index]:attach(clock[s.index], "tr")
-  calendar[s.index]:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  calendar[s.index]:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+  --[[
+  local cargs ={ format = clockformat[s.index], timezone = "UTC", refresh = 0.5 }
+  gears.debug.dump("cargs")
+  gears.debug.dump(cargs)
 
+  local clock = wibox.widget.textclock
+  if s.index ~= 2 then
+    -- local cargs ={ format = function () return clockformat[s.index] end, timezone = function () return timezones[tzidx] end, refresh = 0.5 }
+    cargs ={ format = clockformat[s.index], timezone = timezones[tzidx], refresh = 0.5 }
+    gears.debug.dump("cargs")
+    gears.debug.dump(cargs)
+  end
 
-  s.btcusd = wibox.widget.textbox()
-  s.btcusd:set_markup("btc")
-  s.bchusd = wibox.widget.textbox()
-  s.bchusd:set_markup("bch")
-  s.ethusd = wibox.widget.textbox()
-  s.ethusd:set_markup("eth")
-  s.ltcusd = wibox.widget.textbox()
-  s.ltcusd:set_markup("ltc")
-  s.xrpusd = wibox.widget.textbox()
-  s.xrpusd:set_markup("xrp")
+  local clockstack = wibox.widget {
+
+    top_only = true,
+    layout = wibox.layout.stack
+  }
+
+  ]]--
 
   -- Each screen has its own tag table.
   awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.suit.tile)
@@ -348,16 +360,26 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.tag.find_by_name(screen[s.index], "1"))
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "7"))
+    s.ltcusd = wibox.widget.textbox()
+    s.ltcusd:set_markup("ltc")
+    s.xrpusd = wibox.widget.textbox()
+    s.xrpusd:set_markup("xrp")
   elseif s.index == 3 then
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "1"))
+    s.btcusd = wibox.widget.textbox()
+    s.btcusd:set_markup("btc")
+    s.bchusd = wibox.widget.textbox()
+    s.bchusd:set_markup("bch")
+    s.ethusd = wibox.widget.textbox()
+    s.ethusd:set_markup("eth")
   end
 
 
   -- Create a promptbox for each screen
   s.mypromptbox = awful.widget.prompt({ with_shell = true } )
-  s.mypromptbox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  s.mypromptbox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+  -- s.mypromptbox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+  -- s.mypromptbox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
   -- Create an imagebox widget which will contain an icon indicating which layout we're using.
   -- We need one layoutbox per screen.
   s.mylayoutbox = awful.widget.layoutbox {
@@ -369,8 +391,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.button({ }, 5, function () awful.layout.inc( 1) end),
     }
   }
-  s.mylayoutbox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  s.mylayoutbox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+  -- s.mylayoutbox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+  -- s.mylayoutbox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
   -- Create a taglist widget
   s.mytaglist = awful.widget.taglist {
@@ -394,8 +416,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end),
     }
   }
-  s.mytaglist:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  s.mytaglist:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+  -- s.mytaglist:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+  -- s.mytaglist:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
   -- Create a tasklist widget
   s.mytasklist = awful.widget.tasklist {
@@ -410,13 +432,158 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.button({ }, 5, function() awful.client.focus.byidx( 1) end),
     }
   }
-  s.mytasklist:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  s.mytasklist:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+  -- s.mytasklist:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+  -- s.mytasklist:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
   -- Create the wibox
   s.mywibox = awful.wibar({ position = "top", screen = s })
-  s.mywibox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  s.mywibox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+
+  local tw = {
+    text = 'TEXT',
+    widget = wibox.widget.textbox
+  }
+  local cw = {
+    bg = beautiful.bg_urgent,
+    point = { x = 0, y = 0 },
+    forced_width = 1280,
+    forced_height = 720,
+    widget = wibox.widget.imagebox
+  }
+
+  s.lbox = wibox { 
+    y = 30,
+    width = 1920 / 2,
+    height = 1920 - 30,
+    screen = s,
+    bg = beautiful.bg_urgent,
+    fg = beautiful.fg_normal,
+    ontop = false,
+    visible = true,
+    opacity = 0,
+    type = "desktop",
+    input_passthrough = false,
+    widget = wibox.widget.imagebox(nil, false)
+  }
+  local geo = s.lbox:geometry()
+  geo.y = 30
+  s.lbox:geometry(geo)
+  -- gears.debug.dump(s.lbox:geometry())
+  -- s.lbox:connect_signal("mouse::enter", function() gears.debug.dump("lbox mouse::enter") ; clienttagmouseupdate() end)
+  -- s.lbox:connect_signal("mouse::exit", function() gears.debug.dump("lbox mouse::exit") ;clienttagmouseupdate() end)
+
+
+  s.rbox = wibox { 
+    x = 0,
+    y = 30,
+    width = 1920 / 2,
+    height = 1920 - 30,
+    screen = s,
+    bg = beautiful.colors.blue,
+    fg = beautiful.fg_normal,
+    ontop = false,
+    visible = true,
+    opacity = 0,
+    type = "desktop",
+    input_passthrough = false,
+    widget = wibox.widget.imagebox(nil, false)
+  }
+  geo = s.rbox:geometry()
+  geo.y = 30
+  geo.x = geo.x + 1910
+  s.rbox:geometry(geo)
+  -- gears.debug.dump(s.rbox:geometry())
+  -- s.rbox:connect_signal("mouse::enter", function() gears.debug.dump("rbox mouse::enter") ; clienttagmouseupdate() end)
+  -- s.rbox:connect_signal("mouse::exit", function() gears.debug.dump("rbox mouse::exit") ;clienttagmouseupdate() end)
+
+
+  --[[
+  s.bgbox:setup  {
+    {
+      tw,
+      widget = wibox.container.background
+    },
+  }
+
+
+  ]]--
+  --[[
+  local sidebarargs = {screen = s, border_width = 0,stretch = true, input_passthrough = false, opacity = 0, ontop = false, width = 8, height = 1080, type = "desktop" }
+
+  s.leftwibox = awful.wibar(gears.table.join({position = "left"}, sidebarargs))
+  s.leftwibox:connect_signal("mouse::enter", function() gears.debug.dump("leftwibox mouse::enter") ; clienttagmouseupdate() end)
+  s.leftwibox:connect_signal("mouse::exit", function() gears.debug.dump("leftwibox mouse::exit") ;clienttagmouseupdate() end)
+  s.rightwibox = awful.wibar(gears.table.join({position = "right"}, sidebarargs ))
+  s.rightwibox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+  s.rightwibox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+  -- s.mywibox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+  -- s.mywibox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+  --
+  local forced_width_val = 256
+  s.leftwiboxtext = wibox.widget({ text = "leftwiboxtext", forced_width = forced_width_val })
+  s.leftwiboxtext:connect_signal("mouse::enter", function() gears.debug.dump("leftwiboxtext mouse::enter") ; clienttagmouseupdate() end)
+  s.leftwiboxtext:connect_signal("mouse::exit", function() gears.debug.dump("leftwiboxtext mouse::exit") ;clienttagmouseupdate() end)
+
+  s.leftwiboxtext2 = wibox.widget({ text = "leftwiboxtext", forced_width = forced_width_val })
+  s.leftwiboxtext2:connect_signal("mouse::enter", function() gears.debug.dump("leftwiboxtext2 mouse::enter") ; clienttagmouseupdate() end)
+  s.leftwiboxtext2:connect_signal("mouse::exit", function() gears.debug.dump("leftwiboxtext2 mouse::exit") ;clienttagmouseupdate() end)
+
+  s.rightwiboxtext = wibox.widget({ text = "rightwiboxtext", forced_width = forced_width_val })
+  s.rightwiboxtext:connect_signal("mouse::enter", function() gears.debug.dump("rightwiboxtext2 mouse::enter") ; clienttagmouseupdate() end)
+  s.rightwiboxtext:connect_signal("mouse::exit", function() gears.debug.dump("rightwiboxtext2 mouse::exit") ;clienttagmouseupdate() end)
+
+  s.rightwiboxtext2 = wibox.widget({ text = "rightwiboxtext", forced_width = forced_width_val })
+  s.rightwiboxtext2:connect_signal("mouse::enter", function() gears.debug.dump("rightwiboxtext2 mouse::enter") ; clienttagmouseupdate() end)
+  s.rightwiboxtext2:connect_signal("mouse::exit", function() gears.debug.dump("rightwiboxtext2 mouse::exit") ;clienttagmouseupdate() end)
+
+  s.leftwibox:setup {
+    layout = wibox.layout.align.vertical,
+    { -- Left widgets
+      {
+        s.leftwiboxtext,
+        direction = "east",
+        widget = wibox.container.rotate
+      },
+      layout = wibox.layout.fixed.vertical,
+    },
+    wibox.widget.textbox("middle"),
+    {
+      layout = wibox.layout.fixed.vertical,
+      {
+        {
+          s.leftwiboxtext2,
+          layout = wibox.layout.fixed.horizontal,
+        },
+        direction = "east",
+        widget = wibox.container.rotate
+      }
+    },
+  }
+
+
+  s.rightwibox:setup {
+    layout = wibox.layout.align.vertical,
+    { -- Left widgets
+      {
+        s.rightwiboxtext,
+        direction = "west",
+        widget = wibox.container.rotate
+      },
+      layout = wibox.layout.fixed.vertical,
+    },
+    wibox.widget.textbox("middle"),
+    {
+      layout = wibox.layout.fixed.vertical,
+      {
+        {
+          s.rightwiboxtext2,
+          layout = wibox.layout.fixed.horizontal,
+        },
+        direction = "west",
+        widget = wibox.container.rotate
+      }
+    },
+  }
+  ]]--
 
   -- My mouse indicator
   s.mousebox_right = wibox.widget.textbox()
@@ -429,8 +596,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
     awful.button({"Control"}, 3, function () stylusdesktop() end),
     awful.button({"Shift"}, 3, function () stylusthisscreen() end)
   ))
-  s.mousebox_right:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  s.mousebox_right:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+  -- s.mousebox_right:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+  -- s.mousebox_right:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
   s.mousebox_left = wibox.widget.textbox()
   s.mousebox_left:set_markup_silently("-")
@@ -442,8 +609,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
     awful.button({"Control"}, 3, function () stylusdesktop() end),
     awful.button({"Shift"}, 3, function () stylusthisscreen() end)
   ))
-  s.mousebox_left:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  s.mousebox_left:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+  -- s.mousebox_left:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+  -- s.mousebox_left:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
   s.lspace = wibox.widget.textbox()
   s.lspace:set_markup([[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]])
@@ -478,13 +645,81 @@ screen.connect_signal("request::desktop_decoration", function(s)
       s.index == 2 and s.ltcusd,
       s.index == 2 and s.xrpusd,
       s.rspace,
-      clock[s.index],
+        {
+          {
+            id = "clock",
+            format = "%c %Z",
+            timezone = "Asia/Bangkok",
+            refresh = 0.5,
+            widget = wibox.widget.textclock
+          },
+          screen = 1,
+          widget = awful.widget.only_on_screen,
+        },
+        {
+          {
+            id = "clock",
+            format = "%c %Z",
+            timezone = "UTC",
+            refresh = 0.5,
+            widget = wibox.widget.textclock
+          },
+          screen = 2,
+          widget = awful.widget.only_on_screen,
+        },
+        {
+          {
+            id = "clock",
+            format = '%a %b %d %r %Z',
+            timezone = "Asia/Bangkok",
+            refresh = 0.5,
+            widget = wibox.widget.textclock,
+          },
+          screen = 3,
+          widget = awful.widget.only_on_screen,
+        },
       s.rspace,
       s.mylayoutbox,
       s.rspace,
       s.mousebox_right,
-    },
+    }
   }
+
+   s.cl = s.mywibox:get_children_by_id("clock")[s.index]
+
+  s.calendar = awful.widget.calendar_popup.month({ screen = s.index,
+    style_year = { border_color = beautiful.bg_normal },
+    style_month = { border_color = beautiful.bg_normal },
+    style_header = { border_color = beautiful.bg_normal },
+    style_weekday = { border_color = beautiful.bg_normal },
+    style_normal = { border_color = beautiful.bg_normal },
+    style_focus = { border_color = beautiful.bg_focus, bg_color = beautiful.bg_normal },
+  })
+
+  s.calendar:attach(s.cl, "tr")
+
+  s.cl:buttons(gears.table.join(
+      awful.button({ }, 3, function () 
+        local t = s.cl.timezone
+        if t == "America/Los_Angeles" then
+          s.cl.timezone = "America/Chicago"
+        elseif t == "America/Chicago" then
+          s.cl.timezone = "UTC"
+        elseif t == "UTC" then
+          s.cl.timezone = "Asia/Bangkok"
+        elseif t == "Asia/Bangkok" then
+          s.cl.timezone = "America/Los_Angeles"
+        end
+      end)
+    ))
+
+
+  -- calendar:attach(clock[s.index], "tr")
+  -- calendar[s.index]:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
+  -- calendar[s.index]:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+
+
+
   if s.index == 3 then
     s.btcusd:set_markup("<span background='#002B36' color='#839496'> btc </span>")
     s.ethusd:set_markup("<span background='#002B36' color='#839496'> eth </span>")
@@ -493,12 +728,17 @@ screen.connect_signal("request::desktop_decoration", function(s)
     s.ltcusd:set_markup("<span background='#002B36' color='#839496'> ltc </span>")
     s.xrpusd:set_markup("<span background='#002B36' color='#839496'> xrp </span>")
   end
+
+
+  -- wiboxes[s.index] = awful.wibox({ border_width = 0, ontop = false, opacity = 0, x = 0, y = 0,
+  --                            width = 1920, height = 1080, screen = s, input_passthrough = true })
+
 end)
 -- }}}
 
 -- {{{ Mouse bindings
 awful.mouse.append_global_mousebindings({
-  awful.button({ },  3, function () mymainmenu:toggle() end),
+  -- awful.button({ },  3, function () mymainmenu:toggle() end),
   awful.button({ },  4, function () awful.tag.viewnext() end),
   awful.button({ },  5, function () awful.tag.viewprev() end),
   awful.button({ }, 13, function () awful.tag.viewnext() end),
@@ -537,8 +777,8 @@ awful.keyboard.append_global_keybindings({
     {description = "Lock desktop session", group =  "awesome"}),
   awful.key({ modkey,}, "s",      hotkeys_popup.show_help,
     {description="show help", group="awesome"}),
-  awful.key({ modkey,}, "w", function () mymainmenu:show() end,
-    {description = "show main menu", group = "awesome"}),
+  -- awful.key({ modkey,}, "w", function () mymainmenu:show() end,
+  --   {description = "show main menu", group = "awesome"}),
   awful.key({ modkey, "Control" }, "r", awesome.restart,
     {description = "reload awesome", group = "awesome"}),
   awful.key({ modkey, "Shift"   }, "q", awesome.quit,
@@ -557,8 +797,8 @@ awful.keyboard.append_global_keybindings({
     {description = "open a terminal", group = "launcher"}),
   awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
     {description = "run prompt", group = "launcher"}),
-  awful.key({ modkey }, "p", function() menubar.show() end,
-    {description = "show the menubar", group = "launcher"}),
+  -- awful.key({ modkey }, "p", function() menubar.show() end,
+  --   {description = "show the menubar", group = "launcher"}),
 })
 
 -- Tags related keybindings
@@ -848,7 +1088,11 @@ ruled.client.connect_signal("request::rules", function()
       placement = awful.placement.no_overlap+awful.placement.no_offscreen
     }
   }
-
+  ruled.client.append_rule {
+    id         = "titlebars",
+    rule_any   = { type = { "dialog" }, class = { "workrave", "Workrave" } },
+    properties = { floating = true, titlebars_enabled = true }
+  }
   -- Floating clients.
   ruled.client.append_rule {
     id       = "floating",
@@ -877,8 +1121,11 @@ ruled.client.connect_signal("request::rules", function()
       class    = {
         "screenruler", "kruler", "Kruler", "xscreenruler"
       },
+      name = {
+        "Screen Ruler"
+      }
     },
-    properties = { titlebars_enabled = false, fullscreen = false, border_width = 0 },
+    properties = { titlebars_enabled = false, fullscreen = false, border_width = 0, floating = true, opacity = 0.7 },
   }
   ruled.client.append_rule {
     id       = "video",
@@ -894,11 +1141,6 @@ ruled.client.connect_signal("request::rules", function()
     properties = { tiled = false, border_width = 0, fullscreen = true },
   }
   -- Add titlebars to dialogs
-  ruled.client.append_rule {
-    id         = "titlebars",
-    rule_any   = { type = { "dialog" }, class = { "workrave", "Workrave" } },
-    properties = { floating = true, titlebars_enabled = true }
-  }
   ruled.client.append_rule {
     id         = "krita",
     rule_any   = { class = { "krita", "Krita" } },
@@ -1034,9 +1276,16 @@ if awesome.startup then
   }
 end
 
-
 -- }}}
 
+wibox.connect_signal("mouse::enter", function (notif)
+  -- gears.debug.dump("wibox mouse::enter")
+  clienttagmouseupdate()
+end)
+wibox.connect_signal("mouse::leave", function (notif)
+  -- gears.debug.dump("wibox mouse::leave")
+  clienttagmouseupdate()
+end)
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
   c:activate { context = "mouse_enter", raise = false }
