@@ -23,9 +23,14 @@ local capi = { mouse = mouse, client = client, screen = screen }
 
 gears.protected_call(function ()
     for s in screen do
-        gears.debug.dump("s.mywibox:get_children_by_id(\"clock\")[1].timezone")
-        gears.debug.dump(s.mywibox:get_children_by_id("clock")[1].timezone)
+        gears.debug.dump("s.mywibox:get_children_by_id(\"clock\")[1]:buttons")
+        s.foo = s.mywibox:get_children_by_id("clock")[s.index]:buttons()
+        gears.debug.dump({ " s.foo[2]", s.foo[2]})
+        gears.debug.dump({ " s.foo[3]", s.foo[3]})
         --[[
+        for i, ss in pairs(s.mywibox:get_children_by_id("clock")[1]:buttons()) do
+            gears.debug.dump({ data = {i, ss}, depth = 5})
+        end
         if s.index == 1 then
             -- s.mywibox.clock.timezone = "America/Los_Angeles"
             gears.debug.dump("s.mywibox:get_children_by_id(\"clock\")[1].get_timezone()")

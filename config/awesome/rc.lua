@@ -259,28 +259,6 @@ end)
 -- {{{ Wibar
 -- Create a textclock widget
 spacer = "┃"
-btcusd = wibox.widget.textbox("btcusd")
-bchusd = wibox.widget.textbox()
-ltcusd = wibox.widget.textbox()
-ethusd = wibox.widget.textbox()
-xrpusd = wibox.widget.textbox()
-btcusd_tooltip = awful.tooltip({})
-bchusd_tooltip = awful.tooltip({})
-ltcusd_tooltip = awful.tooltip({})
-ethusd_tooltip = awful.tooltip({})
-xrpusd_tooltip = awful.tooltip({})
-btcusd_tooltip:add_to_object(btcusd)
-bchusd_tooltip:add_to_object(btcusd)
-ltcusd_tooltip:add_to_object(ltcusd)
-ethusd_tooltip:add_to_object(ethusd)
-xrpusd_tooltip:add_to_object(xrpusd)
-btcusd_tooltip:set_markup("Bitcoin Price")
-bchusd_tooltip:set_markup("BitcoinCash Price")
-ltcusd_tooltip:set_markup("Litecoin Price")
-ethusd_tooltip:set_markup("Ethereum Price")
-xrpusd_tooltip:set_markup("Ripple Price")
-
-
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
@@ -297,53 +275,9 @@ screen.connect_signal("request::wallpaper", function(s)
   end
 end)
 
-
---[[
-local clock = {}
-clock[1] = wibox.widget.textclock("%c %Z", .5)
-clock[2] = wibox.widget.textclock("%c UTC", .5, "UTC")
-clock[3] = wibox.widget.textclock("%a %b %d %r %Z", .5)
-]]--
-
-clockformat = {}
-clockformat[1] = '%c %Z'
-clockformat[2] = '%c UTC'
-clockformat[3] = '%a %b %d %r %Z'
-
-local wiboxes = {}
-
-local timezones = {}
-timezones[1] = 'Asia/Bangkok'
-timezones[2] = 'America/Los_Angeles'
-timezones[3] = 'America/Chicago'
-timezones[4] = 'UTC'
-
-tzidx = 1
--- awful.screen.connect_for_each_screen(function(s)
 screen.connect_signal("request::desktop_decoration", function(s)
   -- Wallpaper
   -- set_wallpaper(s)
-
-  --[[
-  local cargs ={ format = clockformat[s.index], timezone = "UTC", refresh = 0.5 }
-  gears.debug.dump("cargs")
-  gears.debug.dump(cargs)
-
-  local clock = wibox.widget.textclock
-  if s.index ~= 2 then
-    -- local cargs ={ format = function () return clockformat[s.index] end, timezone = function () return timezones[tzidx] end, refresh = 0.5 }
-    cargs ={ format = clockformat[s.index], timezone = timezones[tzidx], refresh = 0.5 }
-    gears.debug.dump("cargs")
-    gears.debug.dump(cargs)
-  end
-
-  local clockstack = wibox.widget {
-
-    top_only = true,
-    layout = wibox.layout.stack
-  }
-
-  ]]--
 
   -- Each screen has its own tag table.
   awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.suit.tile)
@@ -375,11 +309,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
     s.ethusd:set_markup("eth")
   end
 
-
   -- Create a promptbox for each screen
   s.mypromptbox = awful.widget.prompt({ with_shell = true } )
-  -- s.mypromptbox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  -- s.mypromptbox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
   -- Create an imagebox widget which will contain an icon indicating which layout we're using.
   -- We need one layoutbox per screen.
   s.mylayoutbox = awful.widget.layoutbox {
@@ -391,8 +322,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.button({ }, 5, function () awful.layout.inc( 1) end),
     }
   }
-  -- s.mylayoutbox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  -- s.mylayoutbox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
   -- Create a taglist widget
   s.mytaglist = awful.widget.taglist {
@@ -416,8 +345,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end),
     }
   }
-  -- s.mytaglist:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  -- s.mytaglist:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
   -- Create a tasklist widget
   s.mytasklist = awful.widget.tasklist {
@@ -432,16 +359,10 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.button({ }, 5, function() awful.client.focus.byidx( 1) end),
     }
   }
-  -- s.mytasklist:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  -- s.mytasklist:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
   -- Create the wibox
   s.mywibox = awful.wibar({ position = "top", screen = s })
 
-  local tw = {
-    text = 'TEXT',
-    widget = wibox.widget.textbox
-  }
   local cw = {
     bg = beautiful.bg_urgent,
     point = { x = 0, y = 0 },
@@ -467,10 +388,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
   local geo = s.lbox:geometry()
   geo.y = 30
   s.lbox:geometry(geo)
-  -- gears.debug.dump(s.lbox:geometry())
-  -- s.lbox:connect_signal("mouse::enter", function() gears.debug.dump("lbox mouse::enter") ; clienttagmouseupdate() end)
-  -- s.lbox:connect_signal("mouse::exit", function() gears.debug.dump("lbox mouse::exit") ;clienttagmouseupdate() end)
-
 
   s.rbox = wibox { 
     x = 0,
@@ -491,99 +408,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
   geo.y = 30
   geo.x = geo.x + 1910
   s.rbox:geometry(geo)
-  -- gears.debug.dump(s.rbox:geometry())
-  -- s.rbox:connect_signal("mouse::enter", function() gears.debug.dump("rbox mouse::enter") ; clienttagmouseupdate() end)
-  -- s.rbox:connect_signal("mouse::exit", function() gears.debug.dump("rbox mouse::exit") ;clienttagmouseupdate() end)
-
-
-  --[[
-  s.bgbox:setup  {
-    {
-      tw,
-      widget = wibox.container.background
-    },
-  }
-
-
-  ]]--
-  --[[
-  local sidebarargs = {screen = s, border_width = 0,stretch = true, input_passthrough = false, opacity = 0, ontop = false, width = 8, height = 1080, type = "desktop" }
-
-  s.leftwibox = awful.wibar(gears.table.join({position = "left"}, sidebarargs))
-  s.leftwibox:connect_signal("mouse::enter", function() gears.debug.dump("leftwibox mouse::enter") ; clienttagmouseupdate() end)
-  s.leftwibox:connect_signal("mouse::exit", function() gears.debug.dump("leftwibox mouse::exit") ;clienttagmouseupdate() end)
-  s.rightwibox = awful.wibar(gears.table.join({position = "right"}, sidebarargs ))
-  s.rightwibox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  s.rightwibox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
-  -- s.mywibox:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  -- s.mywibox:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
-  --
-  local forced_width_val = 256
-  s.leftwiboxtext = wibox.widget({ text = "leftwiboxtext", forced_width = forced_width_val })
-  s.leftwiboxtext:connect_signal("mouse::enter", function() gears.debug.dump("leftwiboxtext mouse::enter") ; clienttagmouseupdate() end)
-  s.leftwiboxtext:connect_signal("mouse::exit", function() gears.debug.dump("leftwiboxtext mouse::exit") ;clienttagmouseupdate() end)
-
-  s.leftwiboxtext2 = wibox.widget({ text = "leftwiboxtext", forced_width = forced_width_val })
-  s.leftwiboxtext2:connect_signal("mouse::enter", function() gears.debug.dump("leftwiboxtext2 mouse::enter") ; clienttagmouseupdate() end)
-  s.leftwiboxtext2:connect_signal("mouse::exit", function() gears.debug.dump("leftwiboxtext2 mouse::exit") ;clienttagmouseupdate() end)
-
-  s.rightwiboxtext = wibox.widget({ text = "rightwiboxtext", forced_width = forced_width_val })
-  s.rightwiboxtext:connect_signal("mouse::enter", function() gears.debug.dump("rightwiboxtext2 mouse::enter") ; clienttagmouseupdate() end)
-  s.rightwiboxtext:connect_signal("mouse::exit", function() gears.debug.dump("rightwiboxtext2 mouse::exit") ;clienttagmouseupdate() end)
-
-  s.rightwiboxtext2 = wibox.widget({ text = "rightwiboxtext", forced_width = forced_width_val })
-  s.rightwiboxtext2:connect_signal("mouse::enter", function() gears.debug.dump("rightwiboxtext2 mouse::enter") ; clienttagmouseupdate() end)
-  s.rightwiboxtext2:connect_signal("mouse::exit", function() gears.debug.dump("rightwiboxtext2 mouse::exit") ;clienttagmouseupdate() end)
-
-  s.leftwibox:setup {
-    layout = wibox.layout.align.vertical,
-    { -- Left widgets
-      {
-        s.leftwiboxtext,
-        direction = "east",
-        widget = wibox.container.rotate
-      },
-      layout = wibox.layout.fixed.vertical,
-    },
-    wibox.widget.textbox("middle"),
-    {
-      layout = wibox.layout.fixed.vertical,
-      {
-        {
-          s.leftwiboxtext2,
-          layout = wibox.layout.fixed.horizontal,
-        },
-        direction = "east",
-        widget = wibox.container.rotate
-      }
-    },
-  }
-
-
-  s.rightwibox:setup {
-    layout = wibox.layout.align.vertical,
-    { -- Left widgets
-      {
-        s.rightwiboxtext,
-        direction = "west",
-        widget = wibox.container.rotate
-      },
-      layout = wibox.layout.fixed.vertical,
-    },
-    wibox.widget.textbox("middle"),
-    {
-      layout = wibox.layout.fixed.vertical,
-      {
-        {
-          s.rightwiboxtext2,
-          layout = wibox.layout.fixed.horizontal,
-        },
-        direction = "west",
-        widget = wibox.container.rotate
-      }
-    },
-  }
-  ]]--
 
   -- My mouse indicator
   s.mousebox_right = wibox.widget.textbox()
@@ -596,8 +420,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
     awful.button({"Control"}, 3, function () stylusdesktop() end),
     awful.button({"Shift"}, 3, function () stylusthisscreen() end)
   ))
-  -- s.mousebox_right:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  -- s.mousebox_right:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
   s.mousebox_left = wibox.widget.textbox()
   s.mousebox_left:set_markup_silently("-")
@@ -609,13 +431,10 @@ screen.connect_signal("request::desktop_decoration", function(s)
     awful.button({"Control"}, 3, function () stylusdesktop() end),
     awful.button({"Shift"}, 3, function () stylusthisscreen() end)
   ))
-  -- s.mousebox_left:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  -- s.mousebox_left:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
 
   s.lspace = wibox.widget.textbox()
   s.lspace:set_markup([[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]])
   s.lspace:set_align('left')
-
   s.rspace = wibox.widget.textbox()
   s.rspace:set_markup([[<span bgcolor="#002b36" color="#839496"><b>]] .. spacer .. [[</b></span>]])
   s.rspace:set_align('right')
@@ -645,48 +464,33 @@ screen.connect_signal("request::desktop_decoration", function(s)
       s.index == 2 and s.ltcusd,
       s.index == 2 and s.xrpusd,
       s.rspace,
-        {
-          {
-            id = "clock",
+        { { id = "clock",
             format = "%c %Z",
             timezone = "Asia/Bangkok",
             refresh = 0.5,
-            widget = wibox.widget.textclock
-          },
+            widget = wibox.widget.textclock },
           screen = 1,
-          widget = awful.widget.only_on_screen,
-        },
-        {
-          {
-            id = "clock",
+          widget = awful.widget.only_on_screen, },
+        { { id = "clock",
             format = "%c %Z",
             timezone = "UTC",
             refresh = 0.5,
-            widget = wibox.widget.textclock
-          },
+            widget = wibox.widget.textclock },
           screen = 2,
-          widget = awful.widget.only_on_screen,
-        },
-        {
-          {
-            id = "clock",
+          widget = awful.widget.only_on_screen, },
+        { { id = "clock",
             format = '%a %b %d %r %Z',
             timezone = "Asia/Bangkok",
             refresh = 0.5,
-            widget = wibox.widget.textclock,
-          },
+            widget = wibox.widget.textclock, },
           screen = 3,
-          widget = awful.widget.only_on_screen,
-        },
+          widget = awful.widget.only_on_screen, },
       s.rspace,
       s.mylayoutbox,
       s.rspace,
-      s.mousebox_right,
-    }
-  }
+      s.mousebox_right, } }
 
-   s.cl = s.mywibox:get_children_by_id("clock")[s.index]
-
+  s.cl = s.mywibox:get_children_by_id("clock")[s.index]
   s.calendar = awful.widget.calendar_popup.month({ screen = s.index,
     style_year = { border_color = beautiful.bg_normal },
     style_month = { border_color = beautiful.bg_normal },
@@ -695,11 +499,10 @@ screen.connect_signal("request::desktop_decoration", function(s)
     style_normal = { border_color = beautiful.bg_normal },
     style_focus = { border_color = beautiful.bg_focus, bg_color = beautiful.bg_normal },
   })
-
   s.calendar:attach(s.cl, "tr")
 
-  s.cl:buttons(gears.table.join(
-      awful.button({ }, 3, function () 
+  s.clb = s.cl:buttons()
+  s.butt = awful.button({mod=nil }, 3, function ()
         local t = s.cl.timezone
         if t == "America/Los_Angeles" then
           s.cl.timezone = "America/Chicago"
@@ -711,14 +514,22 @@ screen.connect_signal("request::desktop_decoration", function(s)
           s.cl.timezone = "America/Los_Angeles"
         end
       end)
-    ))
 
+  --[[
+  gears.debug.dump({"s.clb", s.clb})
+  gears.debug.dump({"s.butt", s.butt})
+  gears.debug.dump({"s.clb[2]", s.clb[2]})
+  gears.debug.dump({"s.clb[3]", s.clb[3]})
+  ]]--
 
-  -- calendar:attach(clock[s.index], "tr")
-  -- calendar[s.index]:connect_signal("mouse::enter", function() clienttagmouseupdate() end)
-  -- calendar[s.index]:connect_signal("mouse::exit", function() clienttagmouseupdate() end)
+  s.clb[3] = s.butt[3]
 
-
+  --[[
+  gears.debug.dump({"s.clb", s.clb})
+  gears.debug.dump({"s.butt", s.butt})
+  gears.debug.dump({"s.clb[2]", s.clb[2]})
+  gears.debug.dump({"s.clb[3]", s.clb[3]})
+  ]]--
 
   if s.index == 3 then
     s.btcusd:set_markup("<span background='#002B36' color='#839496'> btc </span>")
@@ -728,11 +539,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
     s.ltcusd:set_markup("<span background='#002B36' color='#839496'> ltc </span>")
     s.xrpusd:set_markup("<span background='#002B36' color='#839496'> xrp </span>")
   end
-
-
-  -- wiboxes[s.index] = awful.wibox({ border_width = 0, ontop = false, opacity = 0, x = 0, y = 0,
-  --                            width = 1920, height = 1080, screen = s, input_passthrough = true })
-
 end)
 -- }}}
 
