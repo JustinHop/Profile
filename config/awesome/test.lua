@@ -21,13 +21,13 @@ local capi = { mouse = mouse, client = client, screen = screen }
 
 -- awful.titlebar.show(client.focus)
 
+--[[
 gears.protected_call(function ()
     for s in screen do
         gears.debug.dump("s.mywibox:get_children_by_id(\"clock\")[1]:buttons")
         s.foo = s.mywibox:get_children_by_id("clock")[s.index]:buttons()
         gears.debug.dump({ " s.foo[2]", s.foo[2]})
         gears.debug.dump({ " s.foo[3]", s.foo[3]})
-        --[[
         for i, ss in pairs(s.mywibox:get_children_by_id("clock")[1]:buttons()) do
             gears.debug.dump({ data = {i, ss}, depth = 5})
         end
@@ -37,9 +37,10 @@ gears.protected_call(function ()
             gears.debug.dump(s.mywibox:get_children_by_id("clock")[1].get_timezone())
             -- s.mywibox:get_children_by_id("clock")[1].timezone = "America/Los_Angeles"
         end
-        ]]--
+
     end
 end)
+]]--
 
 --[[
 local si = awful.screen.focused().index
@@ -81,7 +82,6 @@ screen.connect_signal("mouse::enter", function (w)
 end)
 ]]--
 
---[[
 local cstats = { "above", "below", "border_color", "border_width", "callback", "class", "client_shape_bounding", "client_shape_clip", "content",
     "dockable", "first_tag", "floating", "focus", "focusable", "fullscreen", "height", "hidden", "honor_padding",
     "honor_workarea", "icon", "icon_name", "icon_sizes", "immobilized", "immobilized", "instance", "is_fixed", "leader_window",
@@ -89,6 +89,16 @@ local cstats = { "above", "below", "border_color", "border_width", "callback", "
     "new_tag", "ontop", "opacity", "pid", "placement", "requests_no_titlebar", "role", "screen", "shape", "shape_bounding",
     "shape_clip", "shape_input", "size_hints", "size_hints_honor", "skip_taskbar", "startup_id", "sticky", "switch_to_tags", "tag",
     "tags", "titlebars_enabled", "transient_for", "type", "urgent", "valid", "width", "window", "x", "y" }
+
+gears.protected_call(function ()
+    local deets = {}
+    for i, prop in pairs(cstats) do
+        deets[prop] = mouse.object_under_pointer()[prop]
+    end
+    gears.debug.dump({"deets", deets})
+end)
+
+--[[
 gears.protected_call(function () 
     if false then
     gears.debug.dump("root.wallpaper()")
@@ -97,6 +107,7 @@ gears.protected_call(function ()
     gears.debug.dump(drawable.instances())
     gears.debug.dump("root.drawins()")
     gears.debug.dump(root.drawins())
+    end
     for count in gears.table.iterate(root.drawins(), function(item) return true end) do
         gears.debug.dump(count)
     end

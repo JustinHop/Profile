@@ -169,7 +169,6 @@ function stylusthisscreen()
   mousemarker()
 end
 
-
 function stylusnextscreen()
   if awful.screen.focused() == screen[1] then
     awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
@@ -218,20 +217,10 @@ local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
 local menu_terminal = { "open terminal", terminal }
 
 if has_fdo then
-  mymainmenu = freedesktop.menu.build({
-    before = { menu_awesome },
-    after =  { menu_terminal }
-  })
+  mymainmenu = freedesktop.menu.build({ before = { menu_awesome }, after =  { menu_terminal } })
 else
-  mymainmenu = awful.menu({
-    items = {
-      menu_awesome,
-      { "Debian", debian.menu.Debian_menu.Debian },
-      menu_terminal,
-    }
-  })
+  mymainmenu = awful.menu({ items = { menu_awesome, { "Debian", debian.menu.Debian_menu.Debian }, menu_terminal, } })
 end
-
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
   menu = mymainmenu })
@@ -371,7 +360,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     widget = wibox.widget.imagebox
   }
 
-  s.lbox = wibox { 
+  s.lbox = wibox {
     y = 30,
     width = 1920 / 2,
     height = 1920 - 30,
@@ -389,7 +378,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
   geo.y = 30
   s.lbox:geometry(geo)
 
-  s.rbox = wibox { 
+  s.rbox = wibox {
     x = 0,
     y = 30,
     width = 1920 / 2,
@@ -455,36 +444,51 @@ screen.connect_signal("request::desktop_decoration", function(s)
     s.mytasklist, -- Middle widget
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
-      s.index == 1 and mykeyboardlayout,
-      wibox.widget.systray(),
-      s.index == 1 and volume_widget({display_notification = true}),
-      s.index == 3 and s.btcusd,
-      s.index == 3 and s.ethusd,
-      s.index == 3 and s.bchusd,
-      s.index == 2 and s.ltcusd,
-      s.index == 2 and s.xrpusd,
-      s.rspace,
-        { { id = "clock",
-            format = "%c %Z",
-            timezone = "Asia/Bangkok",
-            refresh = 0.5,
-            widget = wibox.widget.textclock },
-          screen = 1,
-          widget = awful.widget.only_on_screen, },
-        { { id = "clock",
-            format = "%c %Z",
-            timezone = "UTC",
-            refresh = 0.5,
-            widget = wibox.widget.textclock },
-          screen = 2,
-          widget = awful.widget.only_on_screen, },
-        { { id = "clock",
-            format = '%a %b %d %r %Z',
-            timezone = "Asia/Bangkok",
-            refresh = 0.5,
-            widget = wibox.widget.textclock, },
-          screen = 3,
-          widget = awful.widget.only_on_screen, },
+      { { layout = wibox.layout.fixed.horizontal,
+        s.rspace,
+        mykeyboardlayout,
+        volume_widget({display_notification = true}),
+        wibox.widget.systray(),
+        s.rspace,
+      },
+      screen = 1,
+      widget = awful.widget.only_on_screen },
+      { { layout = wibox.layout.fixed.horizontal,
+        s.rspace,
+        s.btcusd,
+        s.ethusd,
+        s.bchusd,
+        s.rspace, },
+      screen = 3,
+      widget = awful.widget.only_on_screen, },
+      { { layout = wibox.layout.fixed.horizontal,
+        s.rspace,
+        s.ltcusd,
+        s.xrpusd,
+        s.rspace, },
+      screen = 2,
+      widget = awful.widget.only_on_screen, },
+      { { id = "clock",
+        format = "%c %Z",
+        timezone = "Asia/Bangkok",
+        refresh = 0.5,
+        widget = wibox.widget.textclock },
+      screen = 1,
+      widget = awful.widget.only_on_screen, },
+      { { id = "clock",
+        format = "%c %Z",
+        timezone = "UTC",
+        refresh = 0.5,
+        widget = wibox.widget.textclock },
+      screen = 2,
+      widget = awful.widget.only_on_screen, },
+      { { id = "clock",
+        format = '%a %b %d %r %Z',
+        timezone = "Asia/Bangkok",
+        refresh = 0.5,
+        widget = wibox.widget.textclock, },
+      screen = 3,
+      widget = awful.widget.only_on_screen, },
       s.rspace,
       s.mylayoutbox,
       s.rspace,
@@ -503,33 +507,19 @@ screen.connect_signal("request::desktop_decoration", function(s)
 
   s.clb = s.cl:buttons()
   s.butt = awful.button({mod=nil }, 3, function ()
-        local t = s.cl.timezone
-        if t == "America/Los_Angeles" then
-          s.cl.timezone = "America/Chicago"
-        elseif t == "America/Chicago" then
-          s.cl.timezone = "UTC"
-        elseif t == "UTC" then
-          s.cl.timezone = "Asia/Bangkok"
-        elseif t == "Asia/Bangkok" then
-          s.cl.timezone = "America/Los_Angeles"
-        end
-      end)
-
-  --[[
-  gears.debug.dump({"s.clb", s.clb})
-  gears.debug.dump({"s.butt", s.butt})
-  gears.debug.dump({"s.clb[2]", s.clb[2]})
-  gears.debug.dump({"s.clb[3]", s.clb[3]})
-  ]]--
+    local t = s.cl.timezone
+    if t == "America/Los_Angeles" then
+      s.cl.timezone = "America/Chicago"
+    elseif t == "America/Chicago" then
+      s.cl.timezone = "UTC"
+    elseif t == "UTC" then
+      s.cl.timezone = "Asia/Bangkok"
+    elseif t == "Asia/Bangkok" then
+      s.cl.timezone = "America/Los_Angeles"
+    end
+  end)
 
   s.clb[3] = s.butt[3]
-
-  --[[
-  gears.debug.dump({"s.clb", s.clb})
-  gears.debug.dump({"s.butt", s.butt})
-  gears.debug.dump({"s.clb[2]", s.clb[2]})
-  gears.debug.dump({"s.clb[3]", s.clb[3]})
-  ]]--
 
   if s.index == 3 then
     s.btcusd:set_markup("<span background='#002B36' color='#839496'> btc </span>")
@@ -603,8 +593,8 @@ awful.keyboard.append_global_keybindings({
     {description = "open a terminal", group = "launcher"}),
   awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
     {description = "run prompt", group = "launcher"}),
-  -- awful.key({ modkey }, "p", function() menubar.show() end,
-  --   {description = "show the menubar", group = "launcher"}),
+-- awful.key({ modkey }, "p", function() menubar.show() end,
+--   {description = "show the menubar", group = "launcher"}),
 })
 
 -- Tags related keybindings
@@ -904,54 +894,33 @@ ruled.client.connect_signal("request::rules", function()
     id       = "floating",
     rule_any = {
       instance = { "copyq", "pinentry" },
-      class    = {
-        "Arandr", "Blueman-manager", "Gpick", "Sxiv", "galculator",
-        "Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer"
-      },
-      -- Note that the name property shown in xprop might be set slightly after creation of the client
-      -- and the name shown there might not match defined rules here.
-      name    = {
-        "Event Tester",  -- xev.
-      },
-      role    = {
-        "AlarmWindow",    -- Thunderbird's calendar.
-        "ConfigManager",  -- Thunderbird's about:config.
-        "pop-up",         -- e.g. Google Chrome's (detached) Developer Tools.
-      }
-    },
+      class    = { "Arandr", "Blueman-manager", "Gpick", "Sxiv", "galculator", "Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer" },
+      name    = { "Event Tester", },
+      role    = { "AlarmWindow", "ConfigManager", "pop-up", } },
     properties = { titlebars_enabled = true, floating = true }
   }
   ruled.client.append_rule {
     id       = "rawdog",
-    rule_any = {
-      class    = {
-        "screenruler", "kruler", "Kruler", "xscreenruler"
-      },
-      name = {
-        "Screen Ruler"
-      }
-    },
-    properties = { titlebars_enabled = false, fullscreen = false, border_width = 0, floating = true, opacity = 0.7 },
-  }
+    rule_any = { class    = { "screenruler", "kruler", "Kruler", "xscreenruler" }, name = { "Screen Ruler" } },
+    properties = { titlebars_enabled = false, fullscreen = false, border_width = 0, floating = true, opacity = 0.7 }, }
   ruled.client.append_rule {
     id       = "video",
     rule_any = {
-      instance = { "youtube-player", "mpv", "gl" },
-      class    = {
-        "mpv", "mplayer", "gmplayer", "xine", "ffmpeg",
-      },
-      name    = {
-        "mpv",  -- xev.
-      },
-    },
+      instance = { "youtube-player", "mpv" },
+      class    = { "mpv", "mplayer", "gmplayer", "xine", "ffmpeg", },
+      name    = { "mpv", }, },
     properties = { tiled = false, border_width = 0, fullscreen = true },
   }
-  -- Add titlebars to dialogs
   ruled.client.append_rule {
     id         = "krita",
     rule_any   = { class = { "krita", "Krita" } },
     properties = { screen = screen.instances, tag = "7" }
   }
+  --[[ ruled.client.append_rule {
+  id         = "inkscape",
+  rule_any   = { class = { "inkscape", "Inkscape", "org.inkscape.Inkscape" } },
+  properties = { screen = screen.instances, tag = "8", maximized = true }
+  }]]--
   ruled.client.append_rule {
     id         = "pidgin",
     rule_any   = { class = { "pidgin", "Pidgin" } },
@@ -962,12 +931,6 @@ ruled.client.connect_signal("request::rules", function()
     rule_any   = { class = { "zoom", "Zoom" } },
     properties = { screen = 1, tag = "9" }
   }
-
-  -- Set Firefox to always map on the tag named "2" on screen 1.
-  -- ruled.client.append_rule {
-  --     rule       = { class = "Firefox"     },
-  --     properties = { screen = 1, tag = "2" }
-  -- }
 end)
 
 -- }}}
@@ -1013,7 +976,6 @@ client.connect_signal("request::titlebars", function(c)
 end)
 
 -- {{{ Notifications
-
 ruled.notification.connect_signal('request::rules', function()
   -- All notifications will match this rule.
   ruled.notification.append_rule {
@@ -1029,7 +991,6 @@ end)
 naughty.connect_signal("request::display", function(n)
   naughty.layout.box { notification = n }
 end)
-
 
 function initialplacement()
   local cachedir = gears.filesystem.get_cache_dir()
@@ -1081,7 +1042,6 @@ if awesome.startup then
     callback = function () initialplacement() end
   }
 end
-
 -- }}}
 
 wibox.connect_signal("mouse::enter", function (notif)
@@ -1133,6 +1093,9 @@ client.connect_signal("request::manage", function (c, context, hints)
         awful.placement.no_offscreen(c)
       end
     end
+  end
+  if c.floating then
+    awful.titlebar.show(c)
   end
 end)
 -- vim: set ft=lua ts=2 sw=2 tw=2 et :
