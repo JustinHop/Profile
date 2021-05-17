@@ -1,9 +1,9 @@
 [Unit]
 Description=ECryptFS Manager
-After=awesome.service
+#After=awesome.service
 
 [Service]
 ExecStart=/usr/bin/cryptkeeper
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

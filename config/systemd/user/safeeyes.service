@@ -1,9 +1,9 @@
 [Unit]
 Description=Safeeyes Time Manager
-After=awesome.service
+#After=awesome.service
 
 [Service]
 ExecStart=/usr/bin/safeeyes
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

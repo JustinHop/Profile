@@ -1,6 +1,6 @@
 [Unit]
 Description=Tray Calendar
-After=awesome.service
+#After=awesome.service
 
 [Service]
 Type=simple

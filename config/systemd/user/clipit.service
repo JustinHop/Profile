@@ -1,7 +1,7 @@
 [Unit]
 Description=Clipboard Manager
 Wants=xfsettingsd.service 
-After=awesome.service
+#After=awesome.service
 
 [Service]
 Type=idle

@@ -1,7 +1,7 @@
 [Unit]
 Description=PulseAudio Manager
-Wants=awesome.service
-After=awesome.service
+#Wants=awesome.service
+#After=awesome.service
 Requires=pulseaudio.service
 After=pulseaudio.service
 
@@ -10,4 +10,4 @@ ExecStart=/usr/bin/padevchooser
 Restart=always
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

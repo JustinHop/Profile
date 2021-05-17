@@ -1,7 +1,7 @@
 [Unit]
 Description=Logitech Device Manager
 Requires=xfsettingsd.service
-After=awesome.service
+#After=awesome.service
 
 [Service]
 Type=idle

@@ -1,10 +1,10 @@
 [Unit]
 Description=Gnome Clipboard Manager Client
 Wants=gpasted.service
-After=awesome.service
+#After=awesome.service
 
 [Service]
 ExecStart=/usr/lib/gpaste/gpaste/gpaste-applet
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

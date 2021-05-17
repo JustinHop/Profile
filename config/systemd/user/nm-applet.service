@@ -1,10 +1,10 @@
 [Unit]
 Description=Network Manager Applet
-After=awesome.service
-PartOf=graphical-session.target
+#After=awesome.service
+PartOf=desktop.target
 
 [Service]
 ExecStart=/usr/bin/nm-applet
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

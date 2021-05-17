@@ -1,9 +1,6 @@
 [Unit]
 Description=Time Manager
-After=awesome.service
+#After=awesome.service
 
 [Service]
 ExecStart=/usr/bin/workrave
-
-[Install]
-WantedBy=graphical-session.target

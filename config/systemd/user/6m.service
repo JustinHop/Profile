@@ -1,10 +1,10 @@
 [Unit]
 Description=6M
-After=awesome.service
+#After=awesome.service
 
 [Service]
-ExecStartPre=sleep 5s
+#ExecStartPre=sleep 5s
 ExecStart=%h/src/6m/6m.py tray
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

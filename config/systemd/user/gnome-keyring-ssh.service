@@ -3,8 +3,9 @@ Description=Start gnome-keyring as SSH agent
 Before=awesome.service
 
 [Service]
-Type=oneshot
-RemainAfterExit=yes
+Type=dbus
+BusName=org.gnome.keyring
+#RemainAfterExit=yes
 #ExecStart=/bin/sh -ec 'if [ -z "${SSH_AUTH_SOCK}" ] && \
 #    ! grep -s -q X-GNOME-Autostart-enabled=false ~/.config/autostart/gnome-keyring-ssh.desktop /etc/xdg/autostart/gnome-keyring-ssh.desktop; then \
 #        eval $$(/usr/bin/gnome-keyring-daemon --start --components ssh); \

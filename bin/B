@@ -8,7 +8,7 @@ SOCKS=
 
 xhost +
 
-if docker ps | grep -v brave-trader | grep brave ; then
+if docker ps | grep -v brave-trader | grep -v brave-yield  |grep -v brave-eth| grep brave ; then
     docker exec brave brave-browser
 else
     exec ~/src/brave-docker/run.sh --disable-session-crashed-bubble $*

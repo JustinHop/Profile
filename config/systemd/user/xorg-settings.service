@@ -1,12 +1,11 @@
 [Unit]
 Description=Manual X Settings
-PartOf=graphical-session.target
-Wants=awesome.service
-After=awesome.service
+#Wants=awesome.service
+#After=awesome.service
 
 [Service]
 Type=forking
 ExecStart=%h/Profile/bin/xorg-settings.sh
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

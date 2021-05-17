@@ -1,9 +1,9 @@
 [Unit]
 Description=Gnome Clipboard Manager Daemon
-After=awesome.service
+#After=awesome.service
 
 [Service]
 ExecStart=/usr/libexec/gpaste/gpaste-daemon
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

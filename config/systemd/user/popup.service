@@ -1,7 +1,7 @@
 [Unit]
 Description=MPD Notifier
 Requires=mpd.service
-After=awesome.service
+#After=awesome.service
 
 [Service]
 Type=idle

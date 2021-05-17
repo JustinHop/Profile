@@ -1,12 +1,12 @@
 [Unit]
 Description=Compton X Composition Manager
-After=awesome.service
-PartOf=graphical-session.target
+#After=awesome.service
+PartOf=desktop.target
 
 [Service]
-#ExecStart=/usr/bin/compton -D 5 --config %h/.config/compton.conf
+ExecStart=/usr/bin/compton -D 5 --config %h/.config/compton.conf
 #ExecStartPre=/bin/sleep 30
-ExecStart=/usr/bin/xcompmgr -C -n
+#ExecStart=/usr/bin/xcompmgr -C -n
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

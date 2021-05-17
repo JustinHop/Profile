@@ -1,6 +1,6 @@
 [Unit]
 Description=Bluetooth Manager
-After=awesome.service
+#After=awesome.service
 
 [Service]
 ExecStart=/usr/bin/blueman-applet

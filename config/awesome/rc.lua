@@ -118,22 +118,26 @@ for file in io.popen("ls " .. awful.util.getdir("config") .. "/awesome.d/*.lua")
 end
 
 local function send_string_to_client(s, c)
-  local old_c = client.focus
-  client.focus = c
-  for i=1, #s do
-    local char = s:sub(i,i)
-    gears.debug.dump("Sending")
-    gears.debug.dump(char)
-    root.fake_input('key_press'  , char)
-    root.fake_input('key_release', char)
-  end
-  client.focus = old_c
+  gears.protected_call(function()
+    local old_c = client.focus
+    client.focus = c
+    for i=1, #s do
+      local char = s:sub(i,i)
+      gears.debug.dump("Sending")
+      gears.debug.dump(char)
+      root.fake_input('key_press'  , char)
+      root.fake_input('key_release', char)
+    end
+    client.focus = old_c
+  end)
 end
 
 function clienttagmouseupdate()
-  mousemarker()
-  clear_all_tag_icon()
-  set_tag_icon_client()
+  gears.protected_call(function()
+    mousemarker()
+    clear_all_tag_icon()
+    set_tag_icon_client()
+  end)
 end
 
 -- }}}
@@ -156,52 +160,60 @@ altkey = "Mod1"
 -- }}}
 
 function stylusthisscreen()
-  if awful.screen.focused() == screen[1] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
-  elseif awful.screen.focused() == screen[3] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
-  elseif awful.screen.focused() == screen[2] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
-  end
-  mousemarker()
+  gears.protected_call(function()
+    if awful.screen.focused() == screen[1] then
+      awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+      awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+    elseif awful.screen.focused() == screen[3] then
+      awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+      awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+    elseif awful.screen.focused() == screen[2] then
+      awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+      awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+    end
+    mousemarker()
+  end)
 end
 
 function stylusnextscreen()
-  if awful.screen.focused() == screen[1] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
-  elseif awful.screen.focused() == screen[3] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
-  elseif awful.screen.focused() == screen[2] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
-  end
-  awful.screen.focus_relative( 1 * invert )
-  mousemarker()
+  gears.protected_call(function()
+    if awful.screen.focused() == screen[1] then
+      awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+      awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+    elseif awful.screen.focused() == screen[3] then
+      awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+      awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+    elseif awful.screen.focused() == screen[2] then
+      awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+      awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+    end
+    awful.screen.focus_relative( 1 * invert )
+    mousemarker()
+  end)
 end
 
 function stylusprevscreen()
-  if awful.screen.focused() == screen[1] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
-  elseif awful.screen.focused() == screen[3] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
-  elseif awful.screen.focused() == screen[2] then
-    awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
-    awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
-  end
-  awful.screen.focus_relative( -1 * invert )
-  mousemarker()
+  gears.protected_call(function()
+    if awful.screen.focused() == screen[1] then
+      awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen3)
+      awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen3)
+    elseif awful.screen.focused() == screen[3] then
+      awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen1)
+      awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen1)
+    elseif awful.screen.focused() == screen[2] then
+      awful.spawn("xsetwacom --set " .. stylusid .. " MapToOutput " .. stylusscreen2)
+      awful.spawn("xsetwacom --set " .. eraserid .. " MapToOutput " .. stylusscreen2)
+    end
+    awful.screen.focus_relative( -1 * invert )
+    mousemarker()
+  end)
 end
 
 function stylusdesktop()
-  awful.spawn("xsetwacom --set ".. stylusid .. " MapToOutput desktop")
-  awful.spawn("xsetwacom --set ".. eraserid .. " MapToOutput desktop")
+  gears.protected_call(function()
+    awful.spawn("xsetwacom --set ".. stylusid .. " MapToOutput desktop")
+    awful.spawn("xsetwacom --set ".. eraserid .. " MapToOutput desktop")
+  end)
 end
 -- {{{ Menu
 -- Create a launcher widget and a main menu
@@ -278,6 +290,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.tag.find_by_name(screen[s.index], "6"))
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "9"))
+    s.volw = volume_widget({display_notification = true})
   elseif s.index == 2 then
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "1"))
@@ -285,8 +298,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.tag.find_by_name(screen[s.index], "7"))
     s.ltcusd = wibox.widget.textbox()
     s.ltcusd:set_markup("ltc")
-    s.xrpusd = wibox.widget.textbox()
-    s.xrpusd:set_markup("xrp")
+    s.linkusd = wibox.widget.textbox()
+    s.linkusd:set_markup("link")
   elseif s.index == 3 then
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "1"))
@@ -434,8 +447,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
     { -- Left widgets
       layout = wibox.layout.fixed.horizontal,
       s.mousebox_left,
-      -- s.lspace,
-      -- mylauncher,
       s.lspace,
       s.mytaglist,
       s.lspace,
@@ -446,15 +457,13 @@ screen.connect_signal("request::desktop_decoration", function(s)
       layout = wibox.layout.fixed.horizontal,
       { { layout = wibox.layout.fixed.horizontal,
         s.rspace,
-        mykeyboardlayout,
-        volume_widget({display_notification = true}),
+        s.volw, 
         wibox.widget.systray(),
         s.rspace,
       },
       screen = 1,
       widget = awful.widget.only_on_screen },
       { { layout = wibox.layout.fixed.horizontal,
-        s.rspace,
         s.btcusd,
         s.ethusd,
         s.bchusd,
@@ -462,9 +471,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
       screen = 3,
       widget = awful.widget.only_on_screen, },
       { { layout = wibox.layout.fixed.horizontal,
-        s.rspace,
         s.ltcusd,
-        s.xrpusd,
+        s.linkusd,
         s.rspace, },
       screen = 2,
       widget = awful.widget.only_on_screen, },
@@ -527,7 +535,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     s.bchusd:set_markup("<span background='#002B36' color='#839496'> bch </span>")
   elseif s.index == 2 then
     s.ltcusd:set_markup("<span background='#002B36' color='#839496'> ltc </span>")
-    s.xrpusd:set_markup("<span background='#002B36' color='#839496'> xrp </span>")
+    s.linkusd:set_markup("<span background='#002B36' color='#839496'> link </span>")
   end
 end)
 -- }}}
@@ -566,6 +574,8 @@ awful.keyboard.append_global_keybindings({
   -- t XF86TouchpadToggle
   awful.key({}, "XF86TouchpadToggle", function () awful.spawn("6m voldown") end),
   awful.key({}, "Pause", function () awful.spawn(lock_session) end,
+    {description = "Lock desktop session", group =  "awesome"}),
+  awful.key({ modkey, }, "End", function () awful.spawn(lock_session) end,
     {description = "Lock desktop session", group =  "awesome"}),
   awful.key({}, "XF86ScreenSaver", function () awful.spawn(lock_session) end,
     {description = "Lock desktop session", group =  "awesome"}),
@@ -923,7 +933,7 @@ ruled.client.connect_signal("request::rules", function()
   }]]--
   ruled.client.append_rule {
     id         = "pidgin",
-    rule_any   = { class = { "pidgin", "Pidgin" } },
+    rule_any   = { class = { "pidgin", "Pidgin", "signal", "Signal" } },
     properties = { screen = 1, tag = "3" }
   }
   ruled.client.append_rule {
@@ -1064,38 +1074,63 @@ client.connect_signal("tagged", function(c) clienttagmouseupdate() end)
 client.connect_signal("untagged", function(c) clienttagmouseupdate() end)
 
 client.connect_signal("request::manage", function (c, context, hints)
-  local cachedir = gears.filesystem.get_cache_dir()
-  local awesome_tags_fname = cachedir .. "awesome-tags"
-  local awesome_autostart_once_fname = cachedir .. "awesome-autostart-once-" .. os.getenv("XDG_SESSION_ID")
-  local awesome_client_tags_fname = cachedir .. "awesome-client-tags-" .. os.getenv("XDG_SESSION_ID")
+  gears.protected_call(function()
+    local deets = {}
+    for i, prop in pairs(cstats) do
+        deets[prop] = c[prop]
+    end
+    gears.debug.dump({"deets", deets})
+    mouse.object_under_pointer():activate { context = "mouse_enter", raise = false }
+  end)
+end)
 
-  if context == "startup" then
-    for s in screen do
-      local client_id = c.pid .. '-' .. c.window
+client.connect_signal("request::manage", function (c, context, hints)
+  gears.protected_call(function()
+    local cachedir = gears.filesystem.get_cache_dir()
+    local awesome_tags_fname = cachedir .. "awesome-tags"
+    local awesome_autostart_once_fname = cachedir .. "awesome-autostart-once-" .. os.getenv("XDG_SESSION_ID")
+    local awesome_client_tags_fname = cachedir .. "awesome-client-tags-" .. os.getenv("XDG_SESSION_ID")
 
-      local fname = awesome_client_tags_fname .. '/' .. s.index .. '/' .. client_id
-      local f = io.open(fname, 'r')
+    if context == "startup" then
+      for s in screen do
+        local client_id = c.pid .. '-' .. c.window
 
-      if f then
-        local tags = {}
-        for tag in io.lines(fname) do
-          tags = gears.table.join(tags, {util.tag.name2tag(tag, s.index)})
+        local fname = awesome_client_tags_fname .. '/' .. s.index .. '/' .. client_id
+        local f = io.open(fname, 'r')
+
+        if f then
+          local tags = {}
+          for tag in io.lines(fname) do
+            tags = gears.table.join(tags, {util.tag.name2tag(tag, s.index)})
+          end
+          -- remove the file after using it to reduce clutter
+          os.remove(fname)
+
+          if #tags>0 then
+            c:tags(tags)
+          else
+          -- c.screen = awful.tag.getscreen(tags[1])
+          end
+          awful.placement.no_overlap(c)
+          awful.placement.no_offscreen(c)
         end
-        -- remove the file after using it to reduce clutter
-        os.remove(fname)
-
-        if #tags>0 then
-          c:tags(tags)
-        else
-        -- c.screen = awful.tag.getscreen(tags[1])
-        end
-        awful.placement.no_overlap(c)
-        awful.placement.no_offscreen(c)
       end
     end
-  end
-  if c.floating then
-    awful.titlebar.show(c)
-  end
+    if c.floating then
+      awful.titlebar.show(c)
+    end
+  end)
 end)
+
+gears.timer {
+  timeout = 5,
+  autostart = true,
+  single_shot = true,
+  callback = function () 
+    gears.protected_call(function()
+      awful.spawn.with_shell("systemctl --user restart taralli.service")
+      awful.spawn.with_shell("runonce signal-desktop")
+    end)
+  end
+}
 -- vim: set ft=lua ts=2 sw=2 tw=2 et :

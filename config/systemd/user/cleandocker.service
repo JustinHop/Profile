@@ -1,6 +1,6 @@
 [Unit]
 Description=Cleandocker Script
-After=awesome.service
+#After=awesome.service
 Requires=docker.service
 
 [Service]

@@ -1,12 +1,12 @@
 [Unit]
 Description=Screen Wrapper
-After=awesome.service
+#After=awesome.service
 After=xfsettingsd.service
 PartOf=graphical-session.target
 
 [Service]
-ExecStartPre=sleep 5s
+#ExecStartPre=sleep 5s
 ExecStart=%h/src/taralli/taralli_w
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

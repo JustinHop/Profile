@@ -1,6 +1,6 @@
 [Unit]
 Description=Noisy Script
-After=awesome.service
+#After=awesome.service
 
 [Service]
 WorkingDirectory=%h/src/noisy

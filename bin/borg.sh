@@ -26,9 +26,11 @@ sudo nice ionice -c 3 borg create \
     --exclude '/home/*/*.rpm' \
     --exclude '/home/*/.git/*' \
     --exclude '/home/*/.svn/*' \
+    --exclude '/home/wallet/.bitmonero/lmdb/data.mdb' \
+    --exclude '/home/wallet/.*/*db' \
     ${DIR}::'{hostname}-{now}' \
     /etc \
-    /home/justin
+    /home/justin /home/yield /home/trader /home/wallet /home/ethereum
 
 sudo nice ionice -c 3 borg prune \
     --save-space \

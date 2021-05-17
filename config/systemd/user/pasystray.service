@@ -1,7 +1,7 @@
 [Unit]
 Description=PulseAudio Tray Manager
-Wants=awesome.service
-After=awesome.service
+#Wants=awesome.service
+#After=awesome.service
 Wants=pulseaudio.service
 After=pulseaudio.service
 
@@ -10,4 +10,4 @@ ExecStart=/usr/bin/pasystray
 Restart=always
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

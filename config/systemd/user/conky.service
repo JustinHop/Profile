@@ -1,12 +1,12 @@
 [Unit]
 Description=Desktop Stats Display for X
-After=awesome.service
+#After=awesome.service
 After=nitrogen.service
 Requires=xfsettingsd.service
 
 [Service]
-ExecStartPre=/bin/sleep 5
+#ExecStartPre=/bin/sleep 5
 ExecStart=%h/Profile/bin/conky
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

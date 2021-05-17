@@ -1,9 +1,9 @@
 [Unit]
 Description=Power Manager Applet
-After=awesome.service
+#After=awesome.service
 
 [Service]
 ExecStart=/usr/bin/fdpowermon
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

@@ -91,14 +91,22 @@ local cstats = { "above", "below", "border_color", "border_width", "callback", "
     "tags", "titlebars_enabled", "transient_for", "type", "urgent", "valid", "width", "window", "x", "y" }
 
 gears.protected_call(function ()
+    mouse.object_under_pointer().border_width = beautiful.border_width
+end)
+
+--[[
     local deets = {}
     for i, prop in pairs(cstats) do
         deets[prop] = mouse.object_under_pointer()[prop]
     end
-    gears.debug.dump({"deets", deets})
-end)
-
---[[
+    -- gears.debug.dump({"deets", deets})
+   local w = {}
+   for s in screen do
+        -- w = s.mywibox:get_children_by_id("volume")
+        if s.index == 1 then
+            gears.debug.dump({s.index, s.mywibox})
+        end
+    end
 gears.protected_call(function () 
     if false then
     gears.debug.dump("root.wallpaper()")

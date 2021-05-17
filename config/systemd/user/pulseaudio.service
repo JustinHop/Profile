@@ -15,8 +15,8 @@ Description=Sound Service
 # After=pulseaudio.socket is not needed, as it is already implicit in the
 # socket-service relationship, see systemd.socket(5).
 ConditionUser=!root
-Wants=awesome.service
-After=awesome.service
+#Wants=awesome.service
+#After=awesome.service
 After=nitrogen.service
 
 [Service]
@@ -36,4 +36,4 @@ SystemCallArchitectures=native
 #UMask=0077
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

@@ -13,4 +13,4 @@ ExecStartPost=-/bin/systemctl --user set-environment SSH_AUTH_SOCK=%t/ssh-auth-s
 #ExecStopPost=/usr/lib/openssh/agent-launch stop
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

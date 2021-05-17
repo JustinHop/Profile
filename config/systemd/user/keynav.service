@@ -1,6 +1,6 @@
 [Unit]
 Description=Shortcut Manager
-WantedBy=awesome.service
+#WantedBy=awesome.service
 
 [Service]
 ExecStart=/usr/bin/keynav

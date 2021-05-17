@@ -18,7 +18,7 @@ V = {
     'bchusd': 0.0,
     'ethusd': 0.0,
     'ltcusd': 0.0,
-    'xrpusd': 0.0,
+    'linkusd': 0.0,
 }
 
 AWESOME_CLIENT = "/usr/local/bin/awesome-client"
@@ -56,22 +56,25 @@ def looplooper(data):
     try:
         cmd = ''' echo "
         local awful = require('awful')
-        awful.screen.connect_for_each_screen(function(s)
-            if s.index == 3 then
-            s.btcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-            s.ethusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-            s.bchusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-            elseif s.index == 2 then
-            s.ltcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-            s.xrpusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-            end
+        local gears = require('gears')
+        gears.protected_call(function()
+            awful.screen.connect_for_each_screen(function(s)
+                if s.index == 3 then
+                    s.btcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+                    s.ethusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+                    s.bchusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+                elseif s.index == 2 then
+                    s.ltcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+                    s.linkusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+                end
+            end)
         end) " | {}
         '''.format(
             data['btcusd']['color'], data['btcusd']['last'],
             data['ethusd']['color'], data['ethusd']['last'],
             data['bchusd']['color'], data['bchusd']['last'],
             data['ltcusd']['color'], data['ltcusd']['last'],
-            data['xrpusd']['color'], data['xrpusd']['last'],
+            data['linkusd']['color'], data['linkusd']['last'],
             AWESOME_CLIENT
         )
         debug("looplooper(command): " + cmd)

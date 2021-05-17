@@ -1,6 +1,6 @@
 [Unit]
 Description=Default Target
-Wants=graphical-session.target
+#Wants=graphical-session.target
 AllowIsolate=true
 
 [Install]

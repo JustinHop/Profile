@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+if false ; then
 mv ~/.xsession-errors > ~/.xsession-errors-1
 echo > ~/.xsession-errors
 
@@ -145,3 +146,15 @@ echo "Session began in $duration seconds"
 echo "###################################################"
 
 exec bash -c 'while true ; do awesome; sleep 1s; done;'
+else
+      { echo level full-speed | sudo tee /proc/acpi/ibm/fan           ; } &
+
+      /usr/bin/nvidia-settings --load-config-only || true
+      nitrogen --restore &
+
+      #{ while true ; do xfsettingsd --no-daemon ; sleep 10s; done     ; } &
+      systemctl --user start gnome-keyring-ssh.service xfsettingd.service pulseaudio.service
+      systemctl --user start awesome.service
+      systemctl --user start desktop.target
+      cat
+fi

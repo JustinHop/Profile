@@ -1,6 +1,6 @@
 [Unit]
 Description=Set the background
-After=awesome.service
+#After=awesome.service
 After=xfsettingsd.service
 
 [Service]
@@ -11,4 +11,4 @@ ExecStartPre=sleep 30s
 ExecStart=/usr/bin/nitrogen --restore
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

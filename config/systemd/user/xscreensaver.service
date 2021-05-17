@@ -1,7 +1,6 @@
 [Unit]
 Description=XScreenSaver
-PartOf=graphical-session.target
-Before=awesome.service
+#Before=awesome.service
 
 [Service]
 ExecStart=xscreensaver -nosplash

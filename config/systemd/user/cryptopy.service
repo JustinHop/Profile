@@ -1,11 +1,11 @@
 [Unit]
 Description=Crypto.py Script
-After=awesome.service
-Wants=awesome.service
+#After=awesome.service
+#Wants=awesome.service
 
 [Service]
 #ExecStartPre=/bin/sleep 30
 ExecStart=%h/Profile/bin/crypto.py
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target
