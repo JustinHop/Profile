@@ -6,4 +6,4 @@ Description=Bluetooth Manager
 ExecStart=/usr/bin/blueman-applet
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

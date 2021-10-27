@@ -2,8 +2,6 @@
 Description=PulseAudio Tray Manager
 #Wants=awesome.service
 #After=awesome.service
-Wants=pulseaudio.service
-After=pulseaudio.service
 
 [Service]
 ExecStart=/usr/bin/pasystray

@@ -34,6 +34,7 @@ rename -v $DRY -- 's/^(\.\/|\.*_+)+//;
            s/\.?wmv-\w+$/.wmv/i;
            s/\.+/./g;
            s/\.xxx\._edit/_EDIT/i;
+           s/^-\.?//i;
            s/_1_.mp3/.mp3/g;' "$@"
 
 

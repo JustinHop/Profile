@@ -276,6 +276,16 @@ screen.connect_signal("request::wallpaper", function(s)
   end
 end)
 
+
+local geo = screen[1].geometry
+if geo.width > 5000 then
+  local new_width = math.ceil(geo.width/2)
+  local new_width2 = geo.width - new_width
+  screen[1]:fake_resize(geo.x, geo.y, new_width, geo.height)
+  screen.fake_add(geo.x + new_width, geo.y, new_width2, geo.height)
+end
+
+
 screen.connect_signal("request::desktop_decoration", function(s)
   -- Wallpaper
   -- set_wallpaper(s)
@@ -291,6 +301,12 @@ screen.connect_signal("request::desktop_decoration", function(s)
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "9"))
     s.volw = volume_widget({display_notification = true})
+    s.btcusd = wibox.widget.textbox()
+    s.btcusd:set_markup("btc")
+    s.bchusd = wibox.widget.textbox()
+    s.bchusd:set_markup("bch")
+    s.ethusd = wibox.widget.textbox()
+    s.ethusd:set_markup("eth")
   elseif s.index == 2 then
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "1"))
@@ -303,12 +319,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
   elseif s.index == 3 then
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "1"))
-    s.btcusd = wibox.widget.textbox()
-    s.btcusd:set_markup("btc")
-    s.bchusd = wibox.widget.textbox()
-    s.bchusd:set_markup("bch")
-    s.ethusd = wibox.widget.textbox()
-    s.ethusd:set_markup("eth")
   end
 
   -- Create a promptbox for each screen
@@ -381,7 +391,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     bg = beautiful.bg_urgent,
     fg = beautiful.fg_normal,
     ontop = false,
-    visible = true,
+    visible = false,
     opacity = 0,
     type = "desktop",
     input_passthrough = false,
@@ -400,7 +410,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     bg = beautiful.colors.blue,
     fg = beautiful.fg_normal,
     ontop = false,
-    visible = true,
+    visible = false,
     opacity = 0,
     type = "desktop",
     input_passthrough = false,
@@ -456,20 +466,19 @@ screen.connect_signal("request::desktop_decoration", function(s)
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
       { { layout = wibox.layout.fixed.horizontal,
-        s.rspace,
+        s.btcusd,
+        s.ethusd,
+        s.bchusd,
+        s.rspace, },
+      screen = 1,
+      widget = awful.widget.only_on_screen, },
+      { { layout = wibox.layout.fixed.horizontal,
         s.volw, 
         wibox.widget.systray(),
         s.rspace,
       },
       screen = 1,
       widget = awful.widget.only_on_screen },
-      { { layout = wibox.layout.fixed.horizontal,
-        s.btcusd,
-        s.ethusd,
-        s.bchusd,
-        s.rspace, },
-      screen = 3,
-      widget = awful.widget.only_on_screen, },
       { { layout = wibox.layout.fixed.horizontal,
         s.ltcusd,
         s.linkusd,
@@ -529,7 +538,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
 
   s.clb[3] = s.butt[3]
 
-  if s.index == 3 then
+  if s.index == 1 then
     s.btcusd:set_markup("<span background='#002B36' color='#839496'> btc </span>")
     s.ethusd:set_markup("<span background='#002B36' color='#839496'> eth </span>")
     s.bchusd:set_markup("<span background='#002B36' color='#839496'> bch </span>")
@@ -564,7 +573,7 @@ awful.keyboard.append_global_keybindings({
   -- z XF86Launch7
   awful.key({}, "XF86Launch7", function () awful.spawn("6m prev") end),
   -- x XF86Launch6
-  awful.key({}, "XF86Launch6", function () awful.spawn("6m next") end),
+  awful.key({}, "XF86Launch6", function () awful.spawn("6m add") end),
   -- v XF86Tools
   awful.key({}, "XF86Tools", function () awful.spawn("6m add") end),
   -- b XF86Launch5
@@ -796,6 +805,20 @@ client.connect_signal("request::default_mousebindings", function()
     end),
     awful.button({ modkey }, 3, function (c)
       c:activate { context = "mouse_click", action = "mouse_resize"}
+    end),
+    awful.button({ }, 6, function (c)
+      if c.class == "roxterm" or c.class == "terminator" or c.instance == "terminator" then
+        awful.spawn("xdotool key alt+Left")
+      else
+        awful.spawn("xdotool key shift+ctrl+Tab")
+      end
+    end),
+    awful.button({ }, 7, function (c)
+      if c.class == "roxterm" or c.class == "terminator" or c.instance == "terminator" then
+        awful.spawn("xdotool key alt+Right")
+      else
+        awful.spawn("xdotool key ctrl+Tab")
+      end
     end),
     awful.button({ }, 19, function (c)
       if c.class == "roxterm" or c.class == "terminator" or c.instance == "terminator" then
@@ -1041,6 +1064,7 @@ function initialplacement()
       end
     end)
   end
+  awful.spawn.with_shell(os.getenv("HOME") .. "/Profile/bin/desktop.target.sh")
 end
 
 if awesome.startup then

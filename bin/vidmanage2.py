@@ -32,7 +32,7 @@ import sys
 
 from datetime import date, datetime
 
-find_cmd = """ find -L /mnt/auto/1/share/Video -type f -size +100M  | grep -P -v "(crdownload|dtapart|fuse_hidden|3D|volnorm)" """
+find_cmd = """ find -L /mnt/auto/1/share/Video /mnt/auto/2share2/Video -type f -size +100M  | grep -P -v "(crdownload|dtapart|fuse_hidden|volnorm)" """
 icon = "/home/justin/Profile/python/vidmanage/vidmanage-128.png"
 
 

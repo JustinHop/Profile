@@ -59,7 +59,7 @@ def looplooper(data):
         local gears = require('gears')
         gears.protected_call(function()
             awful.screen.connect_for_each_screen(function(s)
-                if s.index == 3 then
+                if s.index == 1 then
                     s.btcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
                     s.ethusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
                     s.bchusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')

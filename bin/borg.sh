@@ -15,6 +15,7 @@ sudo nice ionice -c 3 borg create \
     --exclude-caches \
     --compression auto,lzma \
     --exclude '/home/*/.cache/*' \
+    --exclude '/home/*/Cache*/*' \
     --exclude '/home/*/.thumbnails/*' \
     --exclude '/home/*/Music/*' \
     --exclude '/home/*/mopidy/data/*' \
@@ -30,7 +31,12 @@ sudo nice ionice -c 3 borg create \
     --exclude '/home/wallet/.*/*db' \
     ${DIR}::'{hostname}-{now}' \
     /etc \
-    /home/justin /home/yield /home/trader /home/wallet /home/ethereum
+    /home/justin \
+    /home/yield \
+    /home/trader \
+    /home/wallet \
+    /home/additive \
+    /home/ethereum
 
 sudo nice ionice -c 3 borg prune \
     --save-space \
