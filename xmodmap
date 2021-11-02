@@ -3,3 +3,4 @@ keysym Caps_Lock = Control_L
 add Control = Control_L
 
 keycode 135 = Super_L
+keycode 248 = Super_R

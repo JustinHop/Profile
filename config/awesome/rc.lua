@@ -277,6 +277,7 @@ screen.connect_signal("request::wallpaper", function(s)
 end)
 
 
+-- Split up very wide displays
 local geo = screen[1].geometry
 if geo.width > 5000 then
   local new_width = math.ceil(geo.width/2)
@@ -944,11 +945,13 @@ ruled.client.connect_signal("request::rules", function()
       name    = { "mpv", }, },
     properties = { tiled = false, border_width = 0, fullscreen = true },
   }
+  --[[
   ruled.client.append_rule {
     id         = "krita",
     rule_any   = { class = { "krita", "Krita" } },
     properties = { screen = screen.instances, tag = "7" }
   }
+  --]]
   --[[ ruled.client.append_rule {
   id         = "inkscape",
   rule_any   = { class = { "inkscape", "Inkscape", "org.inkscape.Inkscape" } },
@@ -963,6 +966,11 @@ ruled.client.connect_signal("request::rules", function()
     id         = "zoom",
     rule_any   = { class = { "zoom", "Zoom" } },
     properties = { screen = 1, tag = "9" }
+  }
+  ruled.client.append_rule {
+    id         = "gcolor3",
+    rule_any   = { class = { "gcolor3", "Gcolor3" } },
+    properties = { floating = true, titlebars_enabled = true }
   }
 end)
 
