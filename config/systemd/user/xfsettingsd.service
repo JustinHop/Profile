@@ -1,11 +1,14 @@
 [Unit]
 Description=X Settings Manager for XFCE
+PartOf=graphical-session.target
 
 [Service]
+Restart=on-failure
+RestartSec=5s
 Type=dbus
 BusName=org.xfce.Xfconf
-Environment=XAUTHORITY=%h/.Xauthority
+#Environment=XAUTHORITY=%h/.Xauthority
 ExecStart=/usr/bin/xfsettingsd --no-daemon
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

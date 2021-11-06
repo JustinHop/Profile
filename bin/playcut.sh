@@ -7,4 +7,4 @@ find "$DIR" -type f -name '*vcp' | while read VIDEO ; do
     for VVV in ${BASE}* ; do
         echo $VVV
     done
-done | grep -vP '\.vcp$' | xargs mpv --profile=x
+done | grep -vP '\.vcp$' | xargs mpv 

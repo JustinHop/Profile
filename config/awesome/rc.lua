@@ -381,7 +381,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     bg = beautiful.bg_urgent,
     fg = beautiful.fg_normal,
     ontop = false,
-    visible = true,
+    visible = false,
     opacity = 0,
     type = "desktop",
     input_passthrough = false,
@@ -400,7 +400,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     bg = beautiful.colors.blue,
     fg = beautiful.fg_normal,
     ontop = false,
-    visible = true,
+    visible = false,
     opacity = 0,
     type = "desktop",
     input_passthrough = false,
@@ -564,7 +564,7 @@ awful.keyboard.append_global_keybindings({
   -- z XF86Launch7
   awful.key({}, "XF86Launch7", function () awful.spawn("6m prev") end),
   -- x XF86Launch6
-  awful.key({}, "XF86Launch6", function () awful.spawn("6m next") end),
+  awful.key({}, "XF86Launch6", function () awful.spawn("6m add") end),
   -- v XF86Tools
   awful.key({}, "XF86Tools", function () awful.spawn("6m add") end),
   -- b XF86Launch5
@@ -1041,6 +1041,8 @@ function initialplacement()
       end
     end)
   end
+  awful.spawn(os.getenv("HOME") .. "/Profile/bin/desktop.target.sh")
+
 end
 
 if awesome.startup then

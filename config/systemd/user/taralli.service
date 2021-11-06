@@ -1,7 +1,7 @@
 [Unit]
 Description=Screen Wrapper
 #After=awesome.service
-After=xfsettingsd.service
+#After=xfsettingsd.service
 PartOf=graphical-session.target
 
 [Service]
