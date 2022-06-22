@@ -264,3 +264,4 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+export PATH=/home/ubuntu/.nvm/versions/node/v16.6.0/bin:/usr/lib/go-1.17/bin:/home/ubuntu/.chefdk/gem/ruby/2.1.0/bin:/home/ubuntu/android-sdk-linux/platform-tools:/home/ubuntu/android-sdk-linux/tools:/home/ubuntu/go/bin:/snap/bin:/home/ubuntu/perl5/bin:/home/ubuntu/bin:/usr/bin:/home/ubuntu/.local/bin:/usr/local/enctools/bin:/home/ubuntu/Profile/bin:/home/justin/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/bin:/usr/games:/usr/local/games:/usr/bin/wrappers:/usr/local/svn/bin:/usr/local/mysql/bin:/usr/local/postfix/bin:/usr/local/postfix/sbin:/usr/local/websites/php/bin:/usr/local/websites/apache/bin:/usr/local/websites/lame/bin:/usr/local/websites/ffmpeg/bin:/home/ubuntu/profile/bin:/usr/lib/xscreensaver:/usr/local/nagios/libexec:/home/ubuntu/.npm/bin:/usr/X11R6/bin:/usr/X11/bin:$PATH

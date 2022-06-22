@@ -740,7 +740,7 @@ alias -g XX="|&xargs"
 
 alias ppp=playvid
 
-alias mytime="TZ=Asia/Bangkok undertime  --no-default-zone Asia/Bangkok UTC US/Pacific Australia/Tasmania"
+alias mytime="TZ=Asia/Bangkok undertime  --no-default-zone Asia/Bangkok UTC US/Eastern US/Central US/Pacific"
 
 if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
   source "$PWD"/bin/activate

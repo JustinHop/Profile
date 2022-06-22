@@ -487,21 +487,21 @@ screen.connect_signal("request::desktop_decoration", function(s)
       screen = 2,
       widget = awful.widget.only_on_screen, },
       { { id = "clock",
-        format = "%c %Z",
+        format = "%c",
         timezone = "Asia/Bangkok",
         refresh = 0.5,
         widget = wibox.widget.textclock },
       screen = 1,
       widget = awful.widget.only_on_screen, },
       { { id = "clock",
-        format = "%c %Z",
+        format = "%c",
         timezone = "UTC",
         refresh = 0.5,
         widget = wibox.widget.textclock },
       screen = 2,
       widget = awful.widget.only_on_screen, },
       { { id = "clock",
-        format = '%a %b %d %r %Z',
+        format = '%a %b %d %r',
         timezone = "Asia/Bangkok",
         refresh = 0.5,
         widget = wibox.widget.textclock, },
@@ -928,9 +928,9 @@ ruled.client.connect_signal("request::rules", function()
     id       = "floating",
     rule_any = {
       instance = { "copyq", "pinentry" },
-      class    = { "Arandr", "Blueman-manager", "Gpick", "Sxiv", "galculator", "Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer" },
+      class    = { "Arandr", "Blueman-manager", "Gpick", "Sxiv", "galculator", "Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer", "gnome-calculator", "Calculator" },
       name    = { "Event Tester", },
-      role    = { "AlarmWindow", "ConfigManager", "pop-up", } },
+      role    = { "AlarmWindow", "ConfigManager", "pop-up", "Calculator", "calculator" } },
     properties = { titlebars_enabled = true, floating = true }
   }
   ruled.client.append_rule {
@@ -1161,6 +1161,8 @@ gears.timer {
   callback = function () 
     gears.protected_call(function()
       awful.spawn.with_shell("systemctl --user restart taralli.service")
+      awful.spawn.with_shell("systemctl --user restart nitrogen")
+      awful.spawn.with_shell("systemctl --user restart conky")
       awful.spawn.with_shell("runonce signal-desktop")
     end)
   end

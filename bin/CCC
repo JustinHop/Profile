@@ -8,6 +8,7 @@ cp -rv ~/.config/clean-brave-config /tmp/brave
 
 exec brave-browser \
     --user-data-dir=/tmp/brave \
+     --proxy-server=http://desktop1:5555 \
     "$@"
     # --proxy-server=http://localhost:8118 \
     #--incognito \

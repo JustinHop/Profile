@@ -4,6 +4,7 @@ Description=XScreenSaver
 
 [Service]
 ExecStart=xscreensaver -nosplash
+Restart=on-failure
 
 [Install]
 WantedBy=desktop.target

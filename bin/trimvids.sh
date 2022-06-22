@@ -25,12 +25,10 @@ fi
 BEFORE=$(df -h | grep /mnt/auto | while read LINE ; do echo $(echo $LINE| awk 'NF{NF-=1};1'); done )
 
 #for M in 1 2 3 4 5 ; do
-for M in 1 2 ; do
-    if [ ! -d /mnt/auto/$M/share/Video ]; then
-        echo no /mnt/auto/$M/share/Video 
-        exit 1
-    fi
-done
+if [ ! -d /mnt/auto/2share2/Video ]; then
+    echo no /mnt/auto/2share2/Video
+    exit 1
+fi
 
 vidmanage show delete | xargs -r du -chs
 
