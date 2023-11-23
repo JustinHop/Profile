@@ -14,7 +14,7 @@ local local_themes_path = string.format("%s/.config/awesome/themes/", os.getenv(
 local theme = {}
 
 -- theme.font          = "Droid Sans Mono for Powerline 10"
-theme.font          = "Liberation Mono for Powerline Regular 13"
+theme.font          = "Liberation Mono for Powerline Regular 14"
 
 theme.colors = {}
 theme.colors.base3 = "#002b36ff"
@@ -48,7 +48,7 @@ theme.bg_minimize = theme.colors.base3
 theme.bg_systray = theme.bg_normal
 
 theme.useless_gap   = dpi(0)
-theme.border_width  = dpi(10)
+theme.border_width  = dpi(5)
 theme.border_normal = theme.bg_normal
 theme.border_focus = theme.bg_focus
 theme.border_marked = theme.bg_urgent
@@ -106,14 +106,14 @@ theme.calendar_shape_normal =
 theme.calendar_shape_focus = 
 ]]--
 
-theme.calendar_padding_year = 3
-theme.calendar_padding_month = 3
-theme.calendar_padding_yearheader = 3
-theme.calendar_padding_header = 3
-theme.calendar_padding_weekday = 3
-theme.calendar_padding_weeknumber = 3
-theme.calendar_padding_normal = 3
-theme.calendar_padding_focus = 3
+theme.calendar_padding_year = 1
+theme.calendar_padding_month = 1
+theme.calendar_padding_yearheader = 1
+theme.calendar_padding_header = 1
+theme.calendar_padding_weekday = 1
+theme.calendar_padding_weeknumber = 1
+theme.calendar_padding_normal = 1
+theme.calendar_padding_focus = 1
 
 --[[
 theme.calendar_border_width_year = 
@@ -148,7 +148,7 @@ theme.calendar_opacity_focus =
 
 
 -- Generate taglist squares:
-local taglist_square_size = dpi(4)
+local taglist_square_size = dpi(7)
 theme.taglist_squares_sel = theme_assets.taglist_squares_sel(
     taglist_square_size, theme.fg_normal
 )
@@ -161,6 +161,7 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 -- notification_[bg|fg]
 -- notification_[width|height|margin]
 -- notification_[border_color|border_width|shape|opacity]
+notification_opacity = 1
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
@@ -226,7 +227,7 @@ theme.awesome_icon = theme_assets.awesome_icon(
     theme.menu_height, theme.bg_focus, theme.fg_focus
 )
 
-systray_icon_spacing = 5
+systray_icon_spacing = 1
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.

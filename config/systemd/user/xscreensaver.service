@@ -6,4 +6,4 @@ Description=XScreenSaver
 ExecStart=xscreensaver -nosplash
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=desktop.target

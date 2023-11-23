@@ -1,8 +1,6 @@
 [Unit]
 Description=Desktop Stats Display for X
 #After=awesome.service
-After=nitrogen.service
-Requires=xfsettingsd.service
 
 [Service]
 #ExecStartPre=/bin/sleep 5

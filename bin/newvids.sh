@@ -5,7 +5,9 @@ IFS=$'\n\t'
 #set -x
 
 TORRENT=/mnt/auto/1/share/torrent
+TORRENT=/mnt/auto/2share2/sabnzbdplus/incoming
 NEW=/mnt/auto/1/share/Video/new
+NEW=/mnt/auto/2share2/Video/new
 VIDEOS=""
 SAFE=""
 MINSIZE=100000
@@ -36,7 +38,7 @@ $SAFE sudo chown -R justin:justin $TORRENT
 preloop() {
     cd $TORRENT
     $SAFE namenorm *(-/)
-    find $TORRENT -type f -name '*nzb' -exec $SAFE mv -v {} /mnt/auto/1/share/nzb/ \;
+    #find $TORRENT -type f -name '*nzb' -exec $SAFE mv -v {} /mnt/auto/1/share/nzb/ \;
     find $TORRENT -type f -name '*jpg' -exec $SAFE rm -v {} \;
     for DDD in *(-/) ; do
         pushd "$DDD"

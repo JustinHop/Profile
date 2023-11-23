@@ -381,7 +381,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     bg = beautiful.bg_urgent,
     fg = beautiful.fg_normal,
     ontop = false,
-    visible = true,
+    visible = false,
     opacity = 0,
     type = "desktop",
     input_passthrough = false,
@@ -400,7 +400,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     bg = beautiful.colors.blue,
     fg = beautiful.fg_normal,
     ontop = false,
-    visible = true,
+    visible = false,
     opacity = 0,
     type = "desktop",
     input_passthrough = false,
@@ -446,8 +446,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
     layout = wibox.layout.align.horizontal,
     { -- Left widgets
       layout = wibox.layout.fixed.horizontal,
-      s.mousebox_left,
-      s.lspace,
+      screen:count() > 1 and s.mousebox_left,
+      screen:count() > 1 and s.lspace,
       s.mytaglist,
       s.lspace,
       s.mypromptbox,
@@ -478,7 +478,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
       widget = awful.widget.only_on_screen, },
       { { id = "clock",
         format = "%c %Z",
-        timezone = "Asia/Bangkok",
+        timezone = "Asia/Singapore",
         refresh = 0.5,
         widget = wibox.widget.textclock },
       screen = 1,
@@ -492,15 +492,16 @@ screen.connect_signal("request::desktop_decoration", function(s)
       widget = awful.widget.only_on_screen, },
       { { id = "clock",
         format = '%a %b %d %r %Z',
-        timezone = "Asia/Bangkok",
+        timezone = "Asia/Singapore",
         refresh = 0.5,
         widget = wibox.widget.textclock, },
       screen = 3,
       widget = awful.widget.only_on_screen, },
       s.rspace,
       s.mylayoutbox,
-      s.rspace,
-      s.mousebox_right, } }
+      screen:count() > 1 and s.rspace,
+      screen:count() > 1 and s.mousebox_right,
+  } }
 
   s.cl = s.mywibox:get_children_by_id("clock")[s.index]
   s.calendar = awful.widget.calendar_popup.month({ screen = s.index,
@@ -510,6 +511,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     style_weekday = { border_color = beautiful.bg_normal },
     style_normal = { border_color = beautiful.bg_normal },
     style_focus = { border_color = beautiful.bg_focus, bg_color = beautiful.bg_normal },
+    start_sunday = true,
   })
   s.calendar:attach(s.cl, "tr")
 
@@ -521,8 +523,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
     elseif t == "America/Chicago" then
       s.cl.timezone = "UTC"
     elseif t == "UTC" then
-      s.cl.timezone = "Asia/Bangkok"
-    elseif t == "Asia/Bangkok" then
+      s.cl.timezone = "Asia/Singapore"
+    elseif t == "Asia/Singapore" then
       s.cl.timezone = "America/Los_Angeles"
     end
   end)
@@ -564,7 +566,7 @@ awful.keyboard.append_global_keybindings({
   -- z XF86Launch7
   awful.key({}, "XF86Launch7", function () awful.spawn("6m prev") end),
   -- x XF86Launch6
-  awful.key({}, "XF86Launch6", function () awful.spawn("6m next") end),
+  awful.key({}, "XF86Launch6", function () awful.spawn("6m add") end),
   -- v XF86Tools
   awful.key({}, "XF86Tools", function () awful.spawn("6m add") end),
   -- b XF86Launch5
@@ -1129,6 +1131,7 @@ gears.timer {
   callback = function () 
     gears.protected_call(function()
       awful.spawn.with_shell("systemctl --user restart taralli.service")
+      awful.spawn.with_shell("systemctl --user restart conky.service")
       awful.spawn.with_shell("runonce signal-desktop")
     end)
   end
