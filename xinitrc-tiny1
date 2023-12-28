@@ -1,0 +1,158 @@
+#!/bin/zsh
+
+if true ; then
+mv ~/.xsession-errors > ~/.xsession-errors-1
+echo > ~/.xsession-errors
+
+setopt allexport
+export TZ=Asia/Singapore
+#export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/dbus/user_bus_socket"
+#export XDG_RUNTIME_DIR=/run/user/1000
+#sudo mkdir $XDG_RUNTIME_DIR || true
+#sudo chown justin:justin $XDG_RUNTIME_DIR
+
+start=$(date +%s.%N)
+
+sudo modprobe nvidia
+
+
+{ echo level full-speed | sudo tee /proc/acpi/ibm/fan           ; } &
+
+/usr/bin/nvidia-settings --load-config-only || true
+nitrogen --restore &
+
+{ while true ; do xfsettingsd --no-daemon ; sleep 10s; done     ; } &
+#{ sleep 1s; exec xfce4-volumed                                 ; } &
+{ sleep 5s;
+      ulimit -v 1500000;
+      while true; do
+            xfce4-volumed --no-daemon
+            sleep 1m
+      done                                                     ; } &
+{ sleep 1s; exec xfce4-power-manager --no-daemon               ; } &
+if ! pgrep -u $(whoami) pulseaudio ; then
+      { sleep 5s; exec pulseaudio                                    ; } &
+fi
+
+echo "New Session on $HOSTNAME" | figlet -w 1000
+
+xgamma -gamma .8 &
+#{ exec compton --backend glx --config /dev/null                         ; } &
+{ exec xcompmgr -C -n                                          ; } &
+{ sleep 3m  ; exec ~/Profile/bin/revpn.sh                      ; } &
+#{ sleep 5s  ; while true ; do ~/Profile/bin/mpdprxy.sh ;
+#                                               sleep 5s; done  ; } &
+#{ sleep 1m  ;   ~/mopidy/daemon.sh                        ; } &
+#{ sleep 30s ; while true ; do mpdfavd        ; sleep 5s ; done ; } &
+#{ sleep 30s ; while true ; do mpdscribble --no-daemon ;
+#                                               sleep 5s ; done ; } &
+#{ sleep 60s ; exec ~/bin/popup.py -p 6601                      ; } &
+#{ sleep 60s ; exec ~/bin/popup.py -p 6602                      ; } &
+#{ sleep 30s ; google-drive-ocamlfuse ~/google                  ; } &
+
+#{ sleep 1m  ; exec conky > /dev/null       ; } &
+#{ sleep 10s ; exec workrave                ; } &
+#{ sleep 30s ; exec ~/src/taralli/taralli_w ; } &
+
+{ sleep 5s  ; nitrogen --restore           ; } &
+{ sleep 5s  ; xscreensaver -nosplash       ; } &
+{ while true ; do sleep 5m  ; nitrogen --restore ; done       ; } &
+
+{ sleep 1s  ; exec /usr/libexec/gpaste/gpaste-daemon ; } &
+{ sleep 10s  ; exec /usr/lib/gpaste/gpaste/gpaste-applet ; } &
+#{ sleep 5s  ; exec autocutsel -s PRIMARY             ; } &
+#{ sleep 5s  ; exec autocutsel -s CLIPBOARD           ; } &
+{ sleep 1s  ; exec solaar                            ; } &
+{ sleep 1s  ; xbacklight -set 80                     ; } &
+{ sleep 1s  ; exec nm-applet                         ; } &
+{ sleep 1s  ; exec cryptkeeper                       ; } &
+{ sleep 1s  ; exec keynav                            ; } &
+{ sleep 1s  ; exec pasystray                         ; } &
+#{ sleep 1s  ; exec fdpowermon                        ; } &
+{ sleep 1s  ; exec blueman-applet                    ; } &
+#{ sleep 5s  ; xrandr --output eDP-1 --brightness .8  ; } &
+#{ sleep 5s  ; xrandr --output HDMI-1 --brightness .8 ; } &
+#{ sleep 5s  ; xrandr --output DP-2-1 --brightness .8 ; } &
+#{ sleep 5s  ; xrandr --output DP-2-2 --brightness .8 ; } &
+#{ sleep 5s  ; xrandr --output DP-2-3 --brightness .8 ; } &
+
+#{ sleep 9s  ; exec ~/src/6m/6m.py tray               ; } &
+
+{ sleep 15s ; sudo systemctl restart bluetooth.service  ; } &
+
+#{ sleep 15s ; exec ~/Profile/bin/crypto.py           ; } &
+#{ sleep 15s ; exec ~/Profile/bin/btspeaker.sh        ; } &
+
+#{ sleep 5m   ; ~/src/youtube-subs2recentplaylist/cron.sh       ; } &
+# { sleep 60s  ; pidgin                                          ; } &
+#{ sleep 95s  ; exec ~/bin/pidgin_fortune                       ; } &
+# { sleep 10s  ; exec claws-mail  2>&1 | fold -w 80 -s           ; } &
+
+#{ sleep 10s  ; cd ~/src/noisy ; exec ./run.sh ;                } &
+
+#{ sleep 5m;  ; ~/Profile/bin/cleandocker.sh ;                  } &
+
+{ sleep 30s  ;
+      exec /opt/extras.ubuntu.com/calendar-indicator/bin/calendar-indicator 2>&1 \
+            > /dev/null ; } &
+
+#{ sleep 1m; ~/Profile/bin/castlongpause.sh  ;  } &
+
+echo "Session: setting Xdefaults and Xmodmap"
+[ -e ~/.Xdefaults ] && xrdb -merge ~/.Xdefaults
+[ -e ~/.Xmodmap ] && xmodmap ~/.Xmodmap > /dev/null 2>&1
+
+{ while true ; do
+      setxkbmap \
+         -option \
+         -option ctrl:nocaps \
+         -option terminate:ctrl_alt_bksp \
+         -option keypad:pointerkeys
+
+      #  -option ctrl:menu_rctrl \
+
+      xmodmap -e "keycode 133 = Super_L";
+      xmodmap -e "keycode 135 = Super_L";
+      xset r rate 350 50;
+      xset s 3600
+
+      # let GAP_Y=$(xrandr --current | grep primary | awk '{ print $4 }' | tr + ' ' | awk '{ print $3 }')+40
+      # sed "s/^gap_y.*/gap_y $GAP_Y/" < ~/Profile/conky-thinkpad1.conf > ~/tmp/conky-thinkpad1.conf
+
+      # if ! diff ~/Profile/conky-thinkpad1.conf ~/tmp/conky-thinkpad1.conf ; then
+      #       mv -v ~/tmp/conky-thinkpad1.conf ~/Profile/conky-thinkpad1.conf
+      # fi
+
+      sleep 10s;
+
+done ; } &
+
+numlockx
+
+date
+echo "New Session on $HOSTNAME" | figlet -w 1000
+
+end=$(date +%s.%N)
+let "duration = end - start"
+
+xhost +local:
+
+sleep 1s
+
+echo "###################################################"
+echo "Session began in $duration seconds"
+echo "###################################################"
+
+exec bash -c 'while true ; do awesome; sleep 1s; done;'
+else
+      { echo level full-speed | sudo tee /proc/acpi/ibm/fan           ; } &
+
+#     /usr/bin/nvidia-settings --load-config-only || true
+      nitrogen --restore &
+
+      #{ while true ; do xfsettingsd --no-daemon ; sleep 10s; done     ; } &
+      systemctl --user start gnome-keyring-ssh.service xfsettingd.service pulseaudio.service
+#     systemctl --user start awesome.service
+      systemctl --user start desktop.target
+      cat
+fi

@@ -741,7 +741,7 @@ alias -g XX="|&xargs"
 
 alias ppp=playvid
 
-alias mytime="TZ=Asia/Singapore undertime  --no-default-zone -t Asia/Singapore UTC US/Eastern Europe/Rome"
+alias mytime="TZ=Asia/Singapore undertime  --no-default-zone --no-overlap -t Asia/Singapore UTC US/Eastern Europe/Rome"
 
 if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
   source "$PWD"/bin/activate
@@ -751,8 +751,6 @@ if [[ -f "$PROFILE_DIR/zshrc.local.post" ]]; then
   source "$PROFILE_DIR/zshrc.local.post"
 fi
 
-alias bkkscreens="xrandr --output eDP-1 --mode 1920x1080 --primary --output DP-2-1 --mode 1920x1080 --rate 60 --right-of eDP-1 --output HDMI-1 --mode 1920x1080 --right-of DP-2-1"
-
 # vim:syn=zsh:ft=zsh
 
 #export NVM_DIR="$HOME/.nvm"
@@ -760,7 +758,7 @@ alias bkkscreens="xrandr --output eDP-1 --mode 1920x1080 --primary --output DP-2
 #[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-export PATH="$PATH:/usr/lib/go-1.19/bin"
+#export PATH="$PATH:/usr/lib/go-1.19/bin"
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/ubuntu/work/google-cloud-sdk/path.zsh.inc' ]; then . '/home/ubuntu/work/google-cloud-sdk/path.zsh.inc'; fi
 
@@ -774,3 +772,5 @@ if [ -f '/home/ubuntu/bin/aws_zsh_completer.sh' ]; then . '/home/ubuntu/bin/aws_
 if [ -f '/home/ubuntu/.asdf/asdf.sh' ]; then . '/home/ubuntu/.asdf/asdf.sh'; fi
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
+# yq
+if whence yq > /dev/null; then source <(yq shell-completion zsh); fi

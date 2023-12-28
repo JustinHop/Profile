@@ -220,7 +220,7 @@ if [ -d "$HOME/python" ]; then
     fi
 fi
 
-export GOPATH="$HOME/go"
-export PATH=$GOPATH/bin:$PATH
+#export GOPATH="$HOME/go"
+#export PATH=$GOPATH/bin:$PATH
 
 # vim:ft=zsh:syn=zsh

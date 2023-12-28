@@ -3,6 +3,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
+-- @DOC_REQUIRE_SECTION@
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -77,6 +78,7 @@ naughty.config.icon_dirs = awesome_paths.iconapps_dir
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
+-- @DOC_ERROR_HANDLING@
 naughty.connect_signal("request::display_error", function(message, startup)
   naughty.notification {
     urgency = "critical",
@@ -87,6 +89,7 @@ end)
 -- }}}
 
 -- {{{ Variable definitions
+-- @DOC_LOAD_THEME@
 -- Themes define colours, icons, font and wallpapers.
 -- beautiful.init(gears.filesystem.get_themes_dir() .. "justin/theme.lua")
 -- theme_path = "/themes/justin/theme.lua"
@@ -287,7 +290,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "1"))
     awful.layout.set(awful.layout.layouts[2],
-      awful.tag.find_by_name(screen[s.index], "6"))
+      awful.tag.find_by_name(screen[s.index], "3"))
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "9"))
     s.volw = volume_widget({display_notification = true})
@@ -457,7 +460,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
       layout = wibox.layout.fixed.horizontal,
       { { layout = wibox.layout.fixed.horizontal,
         s.rspace,
-        s.volw, 
+        -- s.volw, 
         wibox.widget.systray(),
         s.rspace,
       },
@@ -935,7 +938,7 @@ ruled.client.connect_signal("request::rules", function()
   }]]--
   ruled.client.append_rule {
     id         = "pidgin",
-    rule_any   = { class = { "pidgin", "Pidgin", "signal", "Signal" } },
+    rule_any   = { class = { "pidgin", "Pidgin", "signal", "Signal", "slack", "Slack" } },
     properties = { screen = 1, tag = "3" }
   }
   ruled.client.append_rule {
@@ -1133,6 +1136,8 @@ gears.timer {
       awful.spawn.with_shell("systemctl --user restart taralli.service")
       awful.spawn.with_shell("systemctl --user restart conky.service")
       awful.spawn.with_shell("runonce signal-desktop")
+      awful.spawn.with_shell("runonce slack")
+      -- awful.spawn.with_shell("runonce '/opt/Drata Agent/drata-agent'")
     end)
   end
 }
