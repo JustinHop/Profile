@@ -273,3 +273,4 @@ if [ -f '/home/ubuntu/work/google-cloud-sdk/completion.bash.inc' ]; then . '/hom
 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
+export GPG_TTY=$(tty)
