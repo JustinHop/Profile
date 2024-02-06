@@ -774,3 +774,5 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # yq
 if whence yq > /dev/null; then source <(yq shell-completion zsh); fi
+
+export GPG_TTY=$(tty)
