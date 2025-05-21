@@ -1,0 +1,10 @@
+[Unit]
+Description=Log Desktop Notifications
+#After=awesome.service
+
+[Service]
+#ExecStartPre=/bin/sleep 5
+ExecStart=%h/Profile/bin/log-notifications.py
+
+[Install]
+WantedBy=desktop.target

@@ -53,6 +53,7 @@ invert = -1
 
 lock_session = "xscreensaver-command -l"
 take_screenshot = "scrot -e 'mv -v $f ~/Pictures/screenshots/'"
+take_screenshot_selection = "scrot -s -e 'mv -v $f ~/Pictures/screenshots/'"
 
 -- Define global folders
 awesome_paths = {}
@@ -284,13 +285,17 @@ screen.connect_signal("request::desktop_decoration", function(s)
   -- set_wallpaper(s)
 
   -- Each screen has its own tag table.
-  awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.suit.tile)
+  awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.suit.max)
 
   if s.index == 1 then
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "1"))
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "3"))
+    awful.layout.set(awful.layout.layouts[2],
+      awful.tag.find_by_name(screen[s.index], "4"))
+    awful.layout.set(awful.layout.layouts[2],
+      awful.tag.find_by_name(screen[s.index], "5"))
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "9"))
     s.volw = volume_widget({display_notification = true})
@@ -299,19 +304,21 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.tag.find_by_name(screen[s.index], "1"))
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "7"))
-    s.ltcusd = wibox.widget.textbox()
-    s.ltcusd:set_markup("ltc")
+    s.solusd = wibox.widget.textbox()
+    s.solusd:set_markup("sol")
     s.linkusd = wibox.widget.textbox()
     s.linkusd:set_markup("link")
   elseif s.index == 3 then
     awful.layout.set(awful.layout.layouts[2],
       awful.tag.find_by_name(screen[s.index], "1"))
+    awful.layout.set(awful.layout.layouts[2],
+      awful.tag.find_by_name(screen[s.index], "9"))
     s.btcusd = wibox.widget.textbox()
     s.btcusd:set_markup("btc")
-    s.bchusd = wibox.widget.textbox()
-    s.bchusd:set_markup("bch")
     s.ethusd = wibox.widget.textbox()
     s.ethusd:set_markup("eth")
+    s.mkrusd = wibox.widget.textbox()
+    s.mkrusd:set_markup("mkr")
   end
 
   -- Create a promptbox for each screen
@@ -469,32 +476,32 @@ screen.connect_signal("request::desktop_decoration", function(s)
       { { layout = wibox.layout.fixed.horizontal,
         s.btcusd,
         s.ethusd,
-        s.bchusd,
+        s.mkrusd,
         s.rspace, },
       screen = 3,
       widget = awful.widget.only_on_screen, },
       { { layout = wibox.layout.fixed.horizontal,
-        s.ltcusd,
+        s.solusd,
         s.linkusd,
         s.rspace, },
       screen = 2,
       widget = awful.widget.only_on_screen, },
       { { id = "clock",
-        format = "%c %Z",
+        format = "%c",
         timezone = "Asia/Singapore",
         refresh = 0.5,
         widget = wibox.widget.textclock },
       screen = 1,
       widget = awful.widget.only_on_screen, },
       { { id = "clock",
-        format = "%c %Z",
+        format = "%c",
         timezone = "UTC",
         refresh = 0.5,
         widget = wibox.widget.textclock },
       screen = 2,
       widget = awful.widget.only_on_screen, },
       { { id = "clock",
-        format = '%a %b %d %r %Z',
+        format = '%c',
         timezone = "Asia/Singapore",
         refresh = 0.5,
         widget = wibox.widget.textclock, },
@@ -537,9 +544,9 @@ screen.connect_signal("request::desktop_decoration", function(s)
   if s.index == 3 then
     s.btcusd:set_markup("<span background='#002B36' color='#839496'> btc </span>")
     s.ethusd:set_markup("<span background='#002B36' color='#839496'> eth </span>")
-    s.bchusd:set_markup("<span background='#002B36' color='#839496'> bch </span>")
+    s.mkrusd:set_markup("<span background='#002B36' color='#839496'> mkr </span>")
   elseif s.index == 2 then
-    s.ltcusd:set_markup("<span background='#002B36' color='#839496'> ltc </span>")
+    s.solusd:set_markup("<span background='#002B36' color='#839496'> sol </span>")
     s.linkusd:set_markup("<span background='#002B36' color='#839496'> link </span>")
   end
 end)
@@ -585,7 +592,9 @@ awful.keyboard.append_global_keybindings({
   awful.key({}, "XF86ScreenSaver", function () awful.spawn(lock_session) end,
     {description = "Lock desktop session", group =  "awesome"}),
   awful.key({}, "Print",           function () awful.spawn(take_screenshot) end,
-    {description = "Lock desktop session", group =  "awesome"}),
+    {description = "Screenshot desktop", group =  "awesome"}),
+  awful.key({"Shift"}, "Print",           function () awful.spawn(take_screenshot_selection) end,
+    {description = "Screenshot desktop selection", group =  "awesome"}),
   awful.key({ modkey,}, "s",      hotkeys_popup.show_help,
     {description="show help", group="awesome"}),
   -- awful.key({ modkey,}, "w", function () mymainmenu:show() end,
@@ -916,7 +925,7 @@ ruled.client.connect_signal("request::rules", function()
   }
   ruled.client.append_rule {
     id       = "rawdog",
-    rule_any = { class    = { "screenruler", "kruler", "Kruler", "xscreenruler" }, name = { "Screen Ruler" } },
+    rule_any = { class    = { "screenruler", "kruler", "Kruler", "screenruler.rb", "xscreenruler" }, name = { "Screen Ruler" } },
     properties = { titlebars_enabled = false, fullscreen = false, border_width = 0, floating = true, opacity = 0.7 }, }
   ruled.client.append_rule {
     id       = "video",
@@ -926,20 +935,20 @@ ruled.client.connect_signal("request::rules", function()
       name    = { "mpv", }, },
     properties = { tiled = false, border_width = 0, fullscreen = true },
   }
-  ruled.client.append_rule {
-    id         = "krita",
-    rule_any   = { class = { "krita", "Krita" } },
-    properties = { screen = screen.instances, tag = "7" }
-  }
   --[[ ruled.client.append_rule {
   id         = "inkscape",
   rule_any   = { class = { "inkscape", "Inkscape", "org.inkscape.Inkscape" } },
   properties = { screen = screen.instances, tag = "8", maximized = true }
   }]]--
   ruled.client.append_rule {
-    id         = "pidgin",
-    rule_any   = { class = { "pidgin", "Pidgin", "signal", "Signal", "slack", "Slack" } },
+    id         = "workmessage",
+    rule_any   = { class = { "pidgin", "Pidgin", "slack", "Slack" } },
     properties = { screen = 1, tag = "3" }
+  }
+  ruled.client.append_rule {
+    id         = "personalmessage",
+    rule_any   = { class = { "signal", "Signal", "telegram-desktop", "TelegramDesktop", "whatsapp-for-linux", "Whatsapp-for-linux", "discord", "Discord" } },
+    properties = { screen = 1, tag = "4" }
   }
   ruled.client.append_rule {
     id         = "zoom",
@@ -1127,17 +1136,55 @@ client.connect_signal("request::manage", function (c, context, hints)
   end)
 end)
 
+naughty.connect_signal("button::press", function(button)
+  gears.protected_call(function(button)
+    gears.debug.dump("naughty button::press")
+    gears.debug.dump("button")
+    gears.debug.dump(button)
+  end)
+end)
+
+naughty.connect_signal("added", function(notification, args)
+  -- gears.debug.dump("naughty added")
+  -- gears.debug.dump(args)
+  local text = args.message
+  local title = args.title
+  -- gears.debug.dump("title")
+  -- gears.debug.dump(title)
+  -- gears.debug.dump("text")
+  -- gears.debug.dump(text)
+  if title == "You're presenting to everyone" or
+    title == "Update available for telegram-desktop." or
+    title == "Bounce keys" or
+    title == "Someone wants to join your meeting" then
+    args.destroy()
+  end
+end)
+
+-- Add notification button press handler to close notifications on middle or right click
+naughty.connect_signal("button::press", function(notification, button)
+  if button == 2 or button == 3 then  -- 2 is middle click, 3 is right click
+    notification:destroy()
+  end
+end)
+
 gears.timer {
-  timeout = 5,
+  timeout = 3,
   autostart = true,
   single_shot = true,
   callback = function () 
     gears.protected_call(function()
-      awful.spawn.with_shell("systemctl --user restart taralli.service")
       awful.spawn.with_shell("systemctl --user restart conky.service")
       awful.spawn.with_shell("runonce signal-desktop")
+      awful.spawn.with_shell("runonce telegram-desktop")
       awful.spawn.with_shell("runonce slack")
-      -- awful.spawn.with_shell("runonce '/opt/Drata Agent/drata-agent'")
+      awful.spawn.with_shell("runonce whatsapp-for-linux")
+      awful.spawn.with_shell("runonce discord")
+      if screen:count() > 1 then
+        awful.spawn.with_shell("systemctl --user restart taralli.service")
+      else
+        awful.spawn.with_shell("systemctl --user stop taralli.service")
+      end
     end)
   end
 }
