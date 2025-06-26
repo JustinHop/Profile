@@ -925,8 +925,14 @@ ruled.client.connect_signal("request::rules", function()
   }
   ruled.client.append_rule {
     id       = "rawdog",
-    rule_any = { class    = { "screenruler", "kruler", "Kruler", "screenruler.rb", "xscreenruler" }, name = { "Screen Ruler" } },
-    properties = { titlebars_enabled = false, fullscreen = false, border_width = 0, floating = true, opacity = 0.7 }, }
+    rule_any = { class    = { "screenruler", "kruler", "Kruler", "screenruler.rb", "xscreenruler", "solbox.py" }, name = { "Screen Ruler" } },
+    properties = { titlebars_enabled = false, fullscreen = false, border_width = 0, floating = true, opacity = 0.7 },
+  }
+  ruled.client.append_rule {
+    id       = "solbox",
+    rule_any = { class    = { "solbox.py", "Solbox.py" }, name = { "solbox.py" } },
+    properties = { titlebars_enabled = false, fullscreen = false, border_width = 0, floating = true },
+  }
   ruled.client.append_rule {
     id       = "video",
     rule_any = {
@@ -1013,7 +1019,33 @@ ruled.notification.connect_signal('request::rules', function()
 end)
 
 naughty.connect_signal("request::display", function(n)
-  naughty.layout.box { notification = n }
+  local box = naughty.layout.box {
+    notification = n,
+    screen = n.screen,
+    ontop = true,
+    visible = true,
+    input_passthrough = false
+  }
+
+  -- Get the actual wibox from the layout box
+  local w = box.widget or box
+
+  -- Add mouse bindings directly to the container
+  w:buttons(gears.table.join(
+    -- Let left click pass through
+    awful.button({}, 2, function() n:destroy() end), -- middle click
+    awful.button({}, 3, function() n:destroy() end)  -- right click
+  ))
+
+  -- Prevent propagation of right click
+  -- by assigning a full-size container widget
+  w.widget = wibox.widget {
+    widget = wibox.container.background,
+    buttons = gears.table.join(
+      awful.button({}, 2, function() n:destroy() end),
+      awful.button({}, 3, function() n:destroy() end)
+    )
+  }
 end)
 
 function initialplacement()
