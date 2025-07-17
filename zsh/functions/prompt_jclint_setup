@@ -30,7 +30,7 @@ prompt_jclint_setup () {
   pc['\(']="%F{$pcc[1]}("
   pc['\)']="%F{$pcc[1]})"
 
-  p_date="$pc['\[']%F{$pcc[2]}%D{%a %y/%m/%d %R %Z}$pc['\]']"
+  p_date="$pc['\[']%F{$pcc[2]}%D{%c}$pc['\]']"
   p_tty="$pc['\[']%F{$pcc[3]}%l$pc['\]']"
   p_plat="$pc['\[']%F{$pcc[2]}${MACHTYPE}/${OSTYPE}/$(uname -r)$pc['\]']"
 
