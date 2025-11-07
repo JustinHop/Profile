@@ -1,0 +1,6 @@
+[Unit]
+Description=Auto disable Bluetooth when idle
+
+[Service]
+Type=oneshot
+ExecStart=%h/Profile/bin/bluetooth-idle-down.sh

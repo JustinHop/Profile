@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Bluetooth auto-off periodically
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+Unit=bluetooth-idle-down.service
+
+[Install]
+WantedBy=timers.target
