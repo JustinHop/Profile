@@ -465,7 +465,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
       layout = wibox.layout.fixed.horizontal,
       { { layout = wibox.layout.fixed.horizontal,
         s.rspace,
-        -- s.volw, 
+        -- s.volw,
         wibox.widget.systray(),
         s.rspace,
       },
@@ -615,6 +615,14 @@ awful.keyboard.append_global_keybindings({
     {description = "run prompt", group = "launcher"}),
 -- awful.key({ modkey }, "p", function() menubar.show() end,
 --   {description = "show the menubar", group = "launcher"}),
+  awful.key({ modkey }, "d", function()
+    if #naughty.active > 0 then
+      naughty.active[1]:destroy(naughty.notification_closed_reason.dismissed_by_user, true)
+    end
+  end, {description = "dismiss notification", group = "awesome"}),
+  awful.key({ modkey, "Shift" }, "d", function()
+    naughty.destroy_all_notifications()
+  end, {description = "dismiss all notifications", group = "awesome"}),
 })
 
 -- Tags related keybindings
@@ -1178,10 +1186,19 @@ naughty.connect_signal("added", function(notification, args)
   end
 end)
 
--- Add notification button press handler to close notifications on middle or right click
+-- Close notifications on middle or right click WITHOUT focus change
 naughty.connect_signal("button::press", function(notification, button)
   if button == 2 or button == 3 then  -- 2 is middle click, 3 is right click
-    notification:destroy()
+    local prev_focus = client.focus
+    notification:destroy(naughty.notification_closed_reason.dismissed_by_user, true)
+    -- Restore focus after a tiny delay to let the notification wibox close
+    gears.timer.start_new(0.01, function()
+      if prev_focus and prev_focus.valid then
+        client.focus = prev_focus
+        prev_focus:raise()
+      end
+      return false  -- don't repeat
+    end)
   end
 end)
 
@@ -1189,7 +1206,7 @@ gears.timer {
   timeout = 10,
   autostart = true,
   single_shot = true,
-  callback = function () 
+  callback = function ()
     gears.protected_call(function()
       awful.spawn.with_shell("systemctl --user restart conky.service")
       awful.spawn.with_shell("runonce signal-desktop")
