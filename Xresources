@@ -1,20 +1,20 @@
-!rxvt.font: Lucida Console-14 
-!rxvt.boldFont: Lucida Console-14 
-!rxvt.scrollBar: False 
-!rxvt.visualBell: False 
-!rxvt.loginShell: True 
-!rxvt.background: Black 
-!rxvt.foreground: Green 
-!rxvt.saveLines: 3000 
-!rxvt.cursorColor: Red 
+!rxvt.font: Lucida Console-14
+!rxvt.boldFont: Lucida Console-14
+!rxvt.scrollBar: False
+!rxvt.visualBell: False
+!rxvt.loginShell: True
+!rxvt.background: Black
+!rxvt.foreground: Green
+!rxvt.saveLines: 3000
+!rxvt.cursorColor: Red
 !
 !
-!XTerm.VT100.font: -*-lucidatypewriter-medium-*-*-*-14-*-*-*-*-*-*-* 
-!XTerm.VT100.boldFont: -*-lucidatypewriter-bold-*-*-*-14-*-*-*-*-*-*-* 
-!XTerm.VT100.scrollBar: False 
-!XTerm.VT100.visualBell: False 
-!XTerm.VT100.loginShell: True 
-!XTerm.VT100.background: Black 
+!XTerm.VT100.font: -*-lucidatypewriter-medium-*-*-*-14-*-*-*-*-*-*-*
+!XTerm.VT100.boldFont: -*-lucidatypewriter-bold-*-*-*-14-*-*-*-*-*-*-*
+!XTerm.VT100.scrollBar: False
+!XTerm.VT100.visualBell: False
+!XTerm.VT100.loginShell: True
+!XTerm.VT100.background: Black
 !XTerm.VT100.foreground: Green
 !XTerm*titeInhibit: true
 
@@ -23,46 +23,46 @@
 !urxvt.background: black
 !urxvt.foreground: green
 ! make a scrollbar thats nearly black
-urxvt*scrollBar:     true
-urxvt*scrollBar_floating:    true
-urxvt*scrollBar_right:   false
-!urxvt*scrollColor:       #202020
-urxvt*termName:     xterm
-urxvt*urllauncher:           firefox
+urxvt*scrollBar: true
+urxvt*scrollBar_floating: true
+urxvt*scrollBar_right: false
+!urxvt*scrollColor: #202020
+urxvt*termName: xterm
+urxvt*urllauncher: firefox
 ! matcher.button # 3 is a right-click
-urxvt*matcher.button:        3
-urxvt*saveLines:              8192
-urxvt.perl-ext-common:         default,matcher,tabbed
+urxvt*matcher.button: 3
+urxvt*saveLines: 8192
+urxvt.perl-ext-common: default,matcher,tabbed
 
-*VT100*boldColors      : on
-*VT100*colorMode       : on
-*VT100*colorULMode     : on
-*VT100*dynamicColors   : on
-*VT100*metaSendsEscape : true
-*VT100*underline       : off
-*customization         : -color
-*ttyModes              : erase ^H
+*VT100*boldColors: on
+*VT100*colorMode: on
+*VT100*colorULMode: on
+*VT100*dynamicColors: on
+*VT100*metaSendsEscape: true
+*VT100*underline: off
+*customization: -color
+*ttyModes: erase ^H
 
-*VT100*translations   : #override \n\
-    Ctrl+   : larger-vt-font()\n\
-    Ctrl-   : smaller-vt-font()\n\
-    MetaF1       : set-vt-font(1)\n\
-    MetaF2       : set-vt-font(2)\n\
-    MetaF3       : set-vt-font(3)\n\
-    MetaF4       : set-vt-font(4)\n\
-    MetaF5       : set-vt-font(5)\n\
-    MetaF6       : set-vt-font(6)\n\
-    MetaF7       : set-vt-font(d)\n\
-    MetaF8       : set-reverse-video(toggle)\n\
-    MetaF9       : set-scrollbar(toggle)\n\
-    MetaF10      : set-autowrap(toggle)\n\
-    MetaF11      : insert-selection(CUT_BUFFER0, PRIMARY)\n\
-    MetaF12      : print()\n\
+*VT100*translations : #override \n\
+ Ctrl+ : larger-vt-font()\n\
+ Ctrl- : smaller-vt-font()\n\
+ MetaF1 : set-vt-font(1)\n\
+ MetaF2 : set-vt-font(2)\n\
+ MetaF3 : set-vt-font(3)\n\
+ MetaF4 : set-vt-font(4)\n\
+ MetaF5 : set-vt-font(5)\n\
+ MetaF6 : set-vt-font(6)\n\
+ MetaF7 : set-vt-font(d)\n\
+ MetaF8 : set-reverse-video(toggle)\n\
+ MetaF9 : set-scrollbar(toggle)\n\
+ MetaF10 : set-autowrap(toggle)\n\
+ MetaF11 : insert-selection(CUT_BUFFER0, PRIMARY)\n\
+ MetaF12 : print()\n\
 
-Xft.antialias : true
-Xft.rgba      : rgb
-Xft.hintstyle : hintfull
-Xft.hinting   : true
+Xft.antialias: true
+Xft.rgba: rgb
+Xft.hintstyle: hintfull
+Xft.hinting: true
 
 
 ! Solarized color scheme for the X Window System
@@ -72,67 +72,113 @@ Xft.hinting   : true
 
 ! Common
 
-#define S_yellow        #b58900
-#define S_orange        #cb4b16
-#define S_red           #dc322f
-#define S_magenta       #d33682
-#define S_violet        #6c71c4
-#define S_blue          #268bd2
-#define S_cyan          #2aa198
-#define S_green         #859900
+#define S_yellow #b58900
+#define S_orange #cb4b16
+#define S_red #dc322f
+#define S_magenta #d33682
+#define S_violet #6c71c4
+#define S_blue #268bd2
+#define S_cyan #2aa198
+#define S_green #859900
 
 
 ! Dark
 
-#define S_base03        #002b36
-#define S_base02        #073642
-#define S_base01        #586e75
-#define S_base00        #657b83
-#define S_base0         #839496
-#define S_base1         #93a1a1
-#define S_base2         #eee8d5
-#define S_base3         #fdf6e3
+#define S_base03 #002b36
+#define S_base02 #073642
+#define S_base01 #586e75
+#define S_base00 #657b83
+#define S_base0 #839496
+#define S_base1 #93a1a1
+#define S_base2 #eee8d5
+#define S_base3 #fdf6e3
 
 
 ! Light
 
-! #define S_base03        #fdf6e3
-! #define S_base02        #eee8d5
-! #define S_base01        #93a1a1
-! #define S_base00        #839496
-! #define S_base0         #657b83
-! #define S_base1         #586e75
-! #define S_base2         #073642
-! #define S_base3         #002b36
+! #define S_base03 #fdf6e3
+! #define S_base02 #eee8d5
+! #define S_base01 #93a1a1
+! #define S_base00 #839496
+! #define S_base0 #657b83
+! #define S_base1 #586e75
+! #define S_base2 #073642
+! #define S_base3 #002b36
 
 
 ! To only apply colors to your terminal, for example, prefix
 ! the color assignment statement with its name. Example:
 !
-! URxvt*background:            S_base03
+! URxvt*background: S_base03
 
-*background:              S_base03
-*foreground:              S_base0
-*fading:                  40
-*fadeColor:               S_base03
-*cursorColor:             S_base1
-*pointerColorBackground:  S_base01
-*pointerColorForeground:  S_base1
+*background: S_base03
+*foreground: S_base0
+*fading: 40
+*fadeColor: S_base03
+*cursorColor: S_base1
+*pointerColorBackground: S_base01
+*pointerColorForeground: S_base1
 
-*color0:                  S_base02
-*color1:                  S_red
-*color2:                  S_green
-*color3:                  S_yellow
-*color4:                  S_blue
-*color5:                  S_magenta
-*color6:                  S_cyan
-*color7:                  S_base2
-*color9:                  S_orange
-*color8:                  S_base03
-*color10:                 S_base01
-*color11:                 S_base00
-*color12:                 S_base0
-*color13:                 S_violet
-*color14:                 S_base1
-*color15:                 S_base3
+*color0: S_base02
+*color1: S_red
+*color2: S_green
+*color3: S_yellow
+*color4: S_blue
+*color5: S_magenta
+*color6: S_cyan
+*color7: S_base2
+*color9: S_orange
+*color8: S_base03
+*color10: S_base01
+*color11: S_base00
+*color12: S_base0
+*color13: S_violet
+*color14: S_base1
+*color15: S_base3
 
+
+! Overall dialog palette
+xscreensaver.Dialog.background: S_base03
+xscreensaver.Dialog.foreground: S_base2
+
+! Remove the old-school Motif bevel look
+xscreensaver.Dialog.topShadowColor: S_base03
+xscreensaver.Dialog.bottomShadowColor: S_base03
+xscreensaver.Dialog.borderWidth: 0
+xscreensaver.Dialog.internalBorderWidth: 32
+
+! Typography (match your Awesome font choice)
+!xscreensaver.Dialog.headingFont: xft:Liberation Mono for Powerline:size=96:weight=bold
+!xscreensaver.Dialog.bodyFont: xft:Liberation Mono for Powerline:size=32
+!xscreensaver.Dialog.labelFont: xft:Liberation Mono for Powerline:size=32
+!xscreensaver.Dialog.unameFont: xft:Liberation Mono for Powerline:size=32
+!xscreensaver.Dialog.buttonFont: xft:Liberation Mono for Powerline:size=32
+!xscreensaver.Dialog.passwdFont: xft:Liberation Mono for Powerline:size=32:weight=bold
+
+!xscreensaver.Dialog.headingFont: Sans:size=40:weight=bold
+!xscreensaver.Dialog.bodyFont: Sans:size=26
+!xscreensaver.Dialog.labelFont: Sans:size=26
+!xscreensaver.Dialog.unameFont: Sans:size=26
+!xscreensaver.Dialog.passwdFont: Sans:size=32:weight=bold
+
+! Prompt text
+xscreensaver.Dialog.prompt: Password
+
+! Date/time (clean, readable)
+xscreensaver.Dialog.showDate: true
+xscreensaver.Dialog.dateFormat: %Y-%m-%d %H:%M
+
+! Identity bits (keep minimal; adjust as you like)
+xscreensaver.Dialog.showUserName: true
+xscreensaver.Dialog.showHostname: false
+
+! Highlighting / accents (xscreensaver uses a small set of widgets;
+! these at least influence “active” elements and visibility)
+xscreensaver.Dialog.Button.foreground: S_base2
+xscreensaver.Dialog.Button.background: S_base02
+xscreensaver.Dialog.Button.activeForeground: S_base3
+xscreensaver.Dialog.Button.activeBackground: S_base01
+
+! Make the “caps lock” / warning-ish text pop (if shown)
+xscreensaver.Dialog.errorForeground: S_red
+xscreensaver.Dialog.infoForeground: S_blue

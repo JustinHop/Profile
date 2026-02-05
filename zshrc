@@ -547,19 +547,7 @@ if (( $ZSH_MAJOR >= 4 )); then
 
   zstyle ':completion:*:*:*:commands' ignored-patterns servertool serialver
 
-  # CLEAR OUT THAT DAMNED CD COMPLETION GARBAGE!!!
-  zstyle ':completion:*:*:*:users' ignored-patterns \
-    avahi \
-    adm bin daemon games gdm halt ident junkbust \
-    lp mail mailnull named news nscd colors \
-    ntp operator pcap postgres radvd rpc rpcuser rpm \
-    shutdown squid sshd sync uucp vcsa xfs backup  bind  \
-    dictd  gnats  identd  irc  man  messagebus  postfix \
-    proxy  sys  www-data colord bin sys sync games news uucp \
-    backup list irc gnats nobody libuuid messagebus usbmux whoopsie \
-    kernoops rtkit speech-dispatcher colord avahi hplip saned sshd \
-    gdm debian-tor statd ftp mpdscribble dnsmasq festival glances \
-    trader avahi-autoipd
+  zstyle ':completion:*' users $USER
 
 
   #compdef _ssh envssh
@@ -741,7 +729,7 @@ alias -g XX="|&xargs"
 
 alias ppp=playvid
 
-alias mytime="TZ=Asia/Singapore undertime  --no-default-zone --no-overlap -t Asia/Singapore UTC US/Eastern Europe/Rome"
+alias mytime="TZ=Asia/Singapore undertime  --no-default-zone --no-overlap -t Asia/Singapore UTC US/Eastern Europe/Rome Asia/Kolkata"
 
 if [ -z "$VIRTUAL_ENV" ] && [ -f "$PWD"/bin/activate ]; then
   source "$PWD"/bin/activate
@@ -750,6 +738,8 @@ fi
 if [[ -f "$PROFILE_DIR/zshrc.local.post" ]]; then
   source "$PROFILE_DIR/zshrc.local.post"
 fi
+
+alias k="kubectl"
 
 # vim:syn=zsh:ft=zsh
 
@@ -771,6 +761,17 @@ if [ -f '/home/ubuntu/bin/aws_zsh_completer.sh' ]; then . '/home/ubuntu/bin/aws_
 # asdf
 if [ -f '/home/ubuntu/.asdf/asdf.sh' ]; then . '/home/ubuntu/.asdf/asdf.sh'; fi
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+#. /home/ubuntu/.asdf/installs/rust/stable/env
+export PATH="$HOME/.cargo/bin:$PATH"
+
+export PATH="/home/ubuntu/.local/share/solana/install/active_release/bin:$PATH"
+export PATH="/home/ubuntu/.avm/bin:$PATH"
+
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
+
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 
 # yq
 if whence yq > /dev/null; then source <(yq shell-completion zsh); fi

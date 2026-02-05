@@ -5,6 +5,8 @@ Description=Desktop Stats Display for X
 [Service]
 #ExecStartPre=/bin/sleep 5
 ExecStart=%h/Profile/bin/conky
+Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=desktop.target

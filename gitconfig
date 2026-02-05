@@ -23,6 +23,7 @@ untracked = cyan
 [user]
 	name = Justin Hoppensteadt
 	email = justinrocksmadscience@gmail.com
+	signingkey = BC6311BEBE435A2A
 [branch]
 	autosetupmerge = true
 [push]
@@ -57,3 +58,10 @@ untracked = cyan
 	enabled = 1
 [init]
 	defaultBranch = master
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[commit]
+	gpgsign = true

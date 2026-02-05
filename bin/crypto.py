@@ -15,9 +15,8 @@ import os
 
 V = {
     'btcusd': 0.0,
-    'bchusd': 0.0,
+    'solusd': 0.0,
     'ethusd': 0.0,
-    'ltcusd': 0.0,
     'linkusd': 0.0,
 }
 
@@ -62,9 +61,8 @@ def looplooper(data):
                 if s.index == 3 then
                     s.btcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
                     s.ethusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
-                    s.bchusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
                 elseif s.index == 2 then
-                    s.ltcusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
+                    s.solusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
                     s.linkusd:set_markup('<span color=\\\"#{}\\\"> {:.2f} </span>')
                 end
             end)
@@ -72,8 +70,7 @@ def looplooper(data):
         '''.format(
             data['btcusd']['color'], data['btcusd']['last'],
             data['ethusd']['color'], data['ethusd']['last'],
-            data['bchusd']['color'], data['bchusd']['last'],
-            data['ltcusd']['color'], data['ltcusd']['last'],
+            data['solusd']['color'], data['solusd']['last'],
             data['linkusd']['color'], data['linkusd']['last'],
             AWESOME_CLIENT
         )
@@ -113,7 +110,7 @@ def looper():
 def main():
     while True:
         looper()
-        time.sleep(180)
+        time.sleep(90)
 
 
 if __name__ == "__main__":

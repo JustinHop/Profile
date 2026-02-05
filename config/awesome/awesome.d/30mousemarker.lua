@@ -18,11 +18,13 @@
 local awful = require("awful")
 local gears = require("gears")
 
+
+-- 🯀🗙🕱🕸☺☻☢☠☣ □ ■
 function mousemarker() 
     gears.protected_call(function()
         awful.screen.connect_for_each_screen(function(s)
-            local nosel = "_"
-            local yessel = "X"
+            local nosel = "□"
+            local yessel = "■"
             if s == mouse.screen then
                 -- mymousebox[s]:set_markup("<span background='#002B36' color='#839496'><b> ■ </b></span>")
                 if s['mousebox_right'] then

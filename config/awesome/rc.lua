@@ -317,8 +317,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
     s.btcusd:set_markup("btc")
     s.ethusd = wibox.widget.textbox()
     s.ethusd:set_markup("eth")
-    s.mkrusd = wibox.widget.textbox()
-    s.mkrusd:set_markup("mkr")
   end
 
   -- Create a promptbox for each screen
@@ -476,7 +474,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
       { { layout = wibox.layout.fixed.horizontal,
         s.btcusd,
         s.ethusd,
-        s.mkrusd,
         s.rspace, },
       screen = 3,
       widget = awful.widget.only_on_screen, },
@@ -544,7 +541,6 @@ screen.connect_signal("request::desktop_decoration", function(s)
   if s.index == 3 then
     s.btcusd:set_markup("<span background='#002B36' color='#839496'> btc </span>")
     s.ethusd:set_markup("<span background='#002B36' color='#839496'> eth </span>")
-    s.mkrusd:set_markup("<span background='#002B36' color='#839496'> mkr </span>")
   elseif s.index == 2 then
     s.solusd:set_markup("<span background='#002B36' color='#839496'> sol </span>")
     s.linkusd:set_markup("<span background='#002B36' color='#839496'> link </span>")
@@ -811,11 +807,25 @@ client.connect_signal("request::default_mousebindings", function()
     awful.button({ modkey }, 3, function (c)
       c:activate { context = "mouse_click", action = "mouse_resize"}
     end),
+    awful.button({ }, 6, function (c)
+      if c.class == "roxterm" or c.class == "terminator" or c.instance == "terminator" then
+        awful.spawn("xdotool key alt+Left")
+      else
+        awful.spawn("xdotool key shift+ctrl+Tab")
+      end
+    end),
     awful.button({ }, 19, function (c)
       if c.class == "roxterm" or c.class == "terminator" or c.instance == "terminator" then
         awful.spawn("xdotool key alt+Left")
       else
         awful.spawn("xdotool key shift+ctrl+Tab")
+      end
+    end),
+    awful.button({ }, 7, function (c)
+      if c.class == "roxterm" or c.class == "terminator" or c.instance == "terminator" then
+        awful.spawn("xdotool key alt+Right")
+      else
+        awful.spawn("xdotool key ctrl+Tab")
       end
     end),
     awful.button({ }, 20, function (c)
@@ -1019,33 +1029,7 @@ ruled.notification.connect_signal('request::rules', function()
 end)
 
 naughty.connect_signal("request::display", function(n)
-  local box = naughty.layout.box {
-    notification = n,
-    screen = n.screen,
-    ontop = true,
-    visible = true,
-    input_passthrough = false
-  }
-
-  -- Get the actual wibox from the layout box
-  local w = box.widget or box
-
-  -- Add mouse bindings directly to the container
-  w:buttons(gears.table.join(
-    -- Let left click pass through
-    awful.button({}, 2, function() n:destroy() end), -- middle click
-    awful.button({}, 3, function() n:destroy() end)  -- right click
-  ))
-
-  -- Prevent propagation of right click
-  -- by assigning a full-size container widget
-  w.widget = wibox.widget {
-    widget = wibox.container.background,
-    buttons = gears.table.join(
-      awful.button({}, 2, function() n:destroy() end),
-      awful.button({}, 3, function() n:destroy() end)
-    )
-  }
+  naughty.layout.box { notification = n }
 end)
 
 function initialplacement()
@@ -1188,6 +1172,7 @@ naughty.connect_signal("added", function(notification, args)
   if title == "You're presenting to everyone" or
     title == "Update available for telegram-desktop." or
     title == "Bounce keys" or
+    title == "Update available for Telegram." or
     title == "Someone wants to join your meeting" then
     args.destroy()
   end
@@ -1201,7 +1186,7 @@ naughty.connect_signal("button::press", function(notification, button)
 end)
 
 gears.timer {
-  timeout = 3,
+  timeout = 10,
   autostart = true,
   single_shot = true,
   callback = function () 

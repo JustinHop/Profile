@@ -117,8 +117,8 @@ def do_display():
                       ])
     x.add_row(['Market', 'BTCUSD',
                'ETHUSD', 'ETHBTC', 'ETHBTC2USD',
-               'LTCUSD', 'LTCBTC', 'LTCBTC2USD',
-               'BCHUSD', 'BCHBTC', 'BCHBTC2USD',
+               'MKRUSD', 'MKRBTC', 'MKRBTC2USD',
+               'SOLUSD', 'SOLBTC', 'SOLBTC2USD',
                'XRPUSD', 'XRPBTC', 'XRPBTC2USD',
                'Market',
                ])
@@ -129,14 +129,14 @@ def do_display():
          format_si(
              float(get_last('ethbtc', 'gdax')) *
              float(get_last('btcusd', 'gdax'))),
-         format_si(get_last('ltcusd', 'gdax')),
-         format_si(get_last('ltcbtc', 'gdax')) + "B",
+         format_si(get_last('mkrusd', 'gdax')),
+         format_si(get_last('mkrbtc', 'gdax')) + "B",
          format_si(
-             float(get_last('ltcbtc', 'gdax')) *
+             float(get_last('mkrbtc', 'gdax')) *
              float(get_last('btcusd', 'gdax'))),
-         get_last('bchusd', 'gdax'),
-         format_si(get_last('bchbtc', 'gdax')) + "B",
-         float(get_last('bchbtc', 'gdax')) *
+         get_last('solusd', 'gdax'),
+         format_si(get_last('solbtc', 'gdax')) + "B",
+         float(get_last('solbtc', 'gdax')) *
          float(get_last('btcusd', 'gdax')),
          'x', 'x', 'x', 'GDAX', ])
     x.add_row(
@@ -145,14 +145,14 @@ def do_display():
          format_si(get_last('ethbtc', 'bitstamp')) + "B",
          float(get_last('ethbtc', 'bitstamp')) *
          float(get_last('btcusd', 'bitstamp')),
-         format_si(get_last('ltcusd', 'bitstamp')),
-         format_si(get_last('ltcbtc', 'bitstamp')) + "B",
+         format_si(get_last('mkrusd', 'bitstamp')),
+         format_si(get_last('mkrbtc', 'bitstamp')) + "B",
          format_si(
-             float(get_last('ltcbtc', 'bitstamp')) *
+             float(get_last('mkrbtc', 'bitstamp')) *
              float(get_last('btcusd', 'bitstamp'))),
-         get_last('bchusd', 'bitstamp'),
-         format_si(get_last('bchbtc', 'bitstamp')) + "B",
-         float(get_last('bchbtc', 'bitstamp')) *
+         get_last('solusd', 'bitstamp'),
+         format_si(get_last('solbtc', 'bitstamp')) + "B",
+         float(get_last('solbtc', 'bitstamp')) *
          float(get_last('btcusd', 'bitstamp')),
          format_si(get_last('xrpusd', 'bitstamp')),
          format_si(get_last('xrpbtc', 'bitstamp')) + "B",
@@ -179,7 +179,7 @@ def do_display():
             format_si(get_last('ethbtc', 'cexio')) + "B",
             float(get_last('ethbtc', 'cexio')) *
             float(get_last('btcusd', 'cexio')),
-            'x', 'x', 'x', get_last('bchusd', 'cexio'),
+            'x', 'x', 'x', get_last('solusd', 'cexio'),
             'x', 'x', 'x', 'x', 'x', 'CEX.IO', ])
         x.add_row(
             ['Poloniex', get_last('btcusdt', 'poloniex'),
@@ -187,14 +187,14 @@ def do_display():
             format_si(get_last('ethbtc', 'poloniex')) + "B",
             float(get_last('ethbtc', 'poloniex')) *
             float(get_last('btcusdt', 'poloniex')),
-            format_si(get_last('ltcusdt', 'poloniex')),
-            format_si(get_last('ltcbtc', 'poloniex')) + "B",
+            format_si(get_last('mkrusdt', 'poloniex')),
+            format_si(get_last('mkrbtc', 'poloniex')) + "B",
             format_si(
-                float(get_last('ltcbtc', 'poloniex')) *
+                float(get_last('mkrbtc', 'poloniex')) *
                 float(get_last('btcusdt', 'poloniex'))),
-            get_last('bchusdt', 'poloniex'),
-            format_si(get_last('bchbtc', 'poloniex')) + "B",
-            float(get_last('bchbtc', 'poloniex')) *
+            get_last('solusdt', 'poloniex'),
+            format_si(get_last('solbtc', 'poloniex')) + "B",
+            float(get_last('solbtc', 'poloniex')) *
             float(get_last('btcusdt', 'poloniex')),
             format_si(get_last('xrpusdt', 'poloniex')),
             format_si(get_last('xrpbtc', 'poloniex')) + "B",
