@@ -51,7 +51,7 @@ stylusscreen3 = "HEAD-1"
 dostylus = 0
 invert = -1
 
-lock_session = "xscreensaver-command -l"
+lock_session = "xfce4-screensaver-command -l"
 take_screenshot = "scrot -e 'mv -v $f ~/Pictures/screenshots/'"
 take_screenshot_selection = "scrot -s -e 'mv -v $f ~/Pictures/screenshots/'"
 
@@ -315,6 +315,8 @@ screen.connect_signal("request::desktop_decoration", function(s)
       awful.tag.find_by_name(screen[s.index], "9"))
     s.btcusd = wibox.widget.textbox()
     s.btcusd:set_markup("btc")
+    s.paxgusd = wibox.widget.textbox()
+    s.paxgusd:set_markup("paxg")
     s.ethusd = wibox.widget.textbox()
     s.ethusd:set_markup("eth")
   end
@@ -473,6 +475,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
       widget = awful.widget.only_on_screen },
       { { layout = wibox.layout.fixed.horizontal,
         s.btcusd,
+        s.paxgusd,
         s.ethusd,
         s.rspace, },
       screen = 3,
@@ -485,7 +488,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
       widget = awful.widget.only_on_screen, },
       { { id = "clock",
         format = "%c",
-        timezone = "Asia/Singapore",
+        timezone = "America/Chicago",
         refresh = 0.5,
         widget = wibox.widget.textclock },
       screen = 1,
@@ -499,7 +502,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
       widget = awful.widget.only_on_screen, },
       { { id = "clock",
         format = '%c',
-        timezone = "Asia/Singapore",
+        timezone = "America/Chicago",
         refresh = 0.5,
         widget = wibox.widget.textclock, },
       screen = 3,
@@ -540,6 +543,7 @@ screen.connect_signal("request::desktop_decoration", function(s)
 
   if s.index == 3 then
     s.btcusd:set_markup("<span background='#002B36' color='#839496'> btc </span>")
+    s.paxgusd:set_markup("<span background='#002B36' color='#839496'> paxg </span>")
     s.ethusd:set_markup("<span background='#002B36' color='#839496'> eth </span>")
   elseif s.index == 2 then
     s.solusd:set_markup("<span background='#002B36' color='#839496'> sol </span>")
@@ -584,6 +588,8 @@ awful.keyboard.append_global_keybindings({
   awful.key({}, "Pause", function () awful.spawn(lock_session) end,
     {description = "Lock desktop session", group =  "awesome"}),
   awful.key({ modkey, }, "End", function () awful.spawn(lock_session) end,
+    {description = "Lock desktop session", group =  "awesome"}),
+  awful.key( { modkey, "Control", "Shift" }, "x", function () awful.spawn(lock_session) end,
     {description = "Lock desktop session", group =  "awesome"}),
   awful.key({}, "XF86ScreenSaver", function () awful.spawn(lock_session) end,
     {description = "Lock desktop session", group =  "awesome"}),
@@ -1213,7 +1219,7 @@ gears.timer {
       awful.spawn.with_shell("runonce telegram-desktop")
       awful.spawn.with_shell("runonce slack")
       awful.spawn.with_shell("runonce whatsapp-for-linux")
-      awful.spawn.with_shell("runonce discord")
+      -- awful.spawn.with_shell("runonce discord")
       if screen:count() > 1 then
         awful.spawn.with_shell("systemctl --user restart taralli.service")
       else
