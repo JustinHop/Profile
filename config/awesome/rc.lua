@@ -49,7 +49,7 @@ stylusscreen2 = "HEAD-2"
 stylusscreen3 = "HEAD-1"
 
 dostylus = 0
-invert = -1
+invert = 1
 
 lock_session = "xfce4-screensaver-command -l"
 take_screenshot = "scrot -e 'mv -v $f ~/Pictures/screenshots/'"
@@ -426,22 +426,22 @@ screen.connect_signal("request::desktop_decoration", function(s)
   s.mousebox_right:set_markup_silently("-")
   s.mousebox_right:buttons(gears.table.join(
     awful.button({ }, 1, function () stylusnextscreen() end),
-    awful.button({"Control"}, 1, function () stylusdesktop() end),
-    awful.button({"Shift"}, 1, function () stylusthisscreen() end),
+    awful.button({ "Control" }, 1, function () stylusdesktop() end),
+    awful.button({ "Shift" }, 1, function () stylusthisscreen() end),
     awful.button({ }, 3, function () stylusprevscreen() end),
-    awful.button({"Control"}, 3, function () stylusdesktop() end),
-    awful.button({"Shift"}, 3, function () stylusthisscreen() end)
+    awful.button({ "Control" }, 3, function () stylusdesktop() end),
+    awful.button({ "Shift" }, 3, function () stylusthisscreen() end)
   ))
 
   s.mousebox_left = wibox.widget.textbox()
   s.mousebox_left:set_markup_silently("-")
   s.mousebox_left:buttons(gears.table.join(
     awful.button({ }, 1, function () stylusprevscreen() end),
-    awful.button({"Control"}, 1, function () stylusdesktop() end),
-    awful.button({"Shift"}, 1, function () stylusthisscreen() end),
+    awful.button({ "Control" }, 1, function () stylusdesktop() end),
+    awful.button({ "Shift" }, 1, function () stylusthisscreen() end),
     awful.button({ }, 3, function () stylusnextscreen() end),
-    awful.button({"Control"}, 3, function () stylusdesktop() end),
-    awful.button({"Shift"}, 3, function () stylusthisscreen() end)
+    awful.button({ "Control" }, 3, function () stylusdesktop() end),
+    awful.button({ "Shift" }, 3, function () stylusthisscreen() end)
   ))
 
   s.lspace = wibox.widget.textbox()
@@ -541,6 +541,20 @@ screen.connect_signal("request::desktop_decoration", function(s)
 
   s.clb[3] = s.butt[3]
 
+  -- Middle button toggles the clock's strftime format.
+  s.fmtbutt = awful.button({mod=nil }, 2, function ()
+    if s.cl.format == "%c" then
+      s.cl.format = "%a %d %b %Y %T %Z"
+    else
+      s.cl.format = "%c"
+    end
+  end)
+
+  -- Register every lock-modifier variant so it fires regardless of NumLock/CapsLock.
+  for _, b in ipairs(s.fmtbutt) do
+    s.clb[#s.clb + 1] = b
+  end
+
   if s.index == 3 then
     s.btcusd:set_markup("<span background='#002B36' color='#839496'> btc </span>")
     s.paxgusd:set_markup("<span background='#002B36' color='#839496'> paxg </span>")
@@ -568,10 +582,10 @@ awful.mouse.append_global_mousebindings({
 
 -- General Awesome keys
 awful.keyboard.append_global_keybindings({
-  awful.key( {}, 'XF86AudioRaiseVolume', volume_widget.raise, {description = 'volume up', group = 'hotkeys'}),
-  awful.key( {}, 'XF86AudioLowerVolume', volume_widget.lower, {description = 'volume down', group = 'hotkeys'}),
-  awful.key( {}, 'XF86AudioMute', volume_widget.toggle, {description = 'toggle mute', group = 'hotkeys'}),
-  awful.key({ "Shift", "Control"}, "v", function () awful.spawn("gpaste-client ui") end),
+  awful.key({}, 'XF86AudioRaiseVolume', volume_widget.raise, {description = 'volume up', group = 'hotkeys'}),
+  awful.key({}, 'XF86AudioLowerVolume', volume_widget.lower, {description = 'volume down', group = 'hotkeys'}),
+  awful.key({}, 'XF86AudioMute', volume_widget.toggle, {description = 'toggle mute', group = 'hotkeys'}),
+  awful.key({ "Shift", "Control" }, "v", function () awful.spawn("gpaste-client ui") end),
   -- ErgoDox EZ Mode 2
   -- z XF86Launch7
   awful.key({}, "XF86Launch7", function () awful.spawn("6m prev") end),
@@ -586,20 +600,20 @@ awful.keyboard.append_global_keybindings({
   -- t XF86TouchpadToggle
   awful.key({}, "XF86TouchpadToggle", function () awful.spawn("6m voldown") end),
   awful.key({}, "Pause", function () awful.spawn(lock_session) end,
-    {description = "Lock desktop session", group =  "awesome"}),
+    {description = "Lock desktop session", group = "awesome"}),
   awful.key({ modkey, }, "End", function () awful.spawn(lock_session) end,
-    {description = "Lock desktop session", group =  "awesome"}),
-  awful.key( { modkey, "Control", "Shift" }, "x", function () awful.spawn(lock_session) end,
-    {description = "Lock desktop session", group =  "awesome"}),
+    {description = "Lock desktop session", group = "awesome"}),
+  awful.key({ modkey, "Control", "Shift" }, "x", function () awful.spawn(lock_session) end,
+    {description = "Lock desktop session", group = "awesome"}),
   awful.key({}, "XF86ScreenSaver", function () awful.spawn(lock_session) end,
-    {description = "Lock desktop session", group =  "awesome"}),
+    {description = "Lock desktop session", group = "awesome"}),
   awful.key({}, "Print",           function () awful.spawn(take_screenshot) end,
-    {description = "Screenshot desktop", group =  "awesome"}),
-  awful.key({"Shift"}, "Print",           function () awful.spawn(take_screenshot_selection) end,
-    {description = "Screenshot desktop selection", group =  "awesome"}),
-  awful.key({ modkey,}, "s",      hotkeys_popup.show_help,
+    {description = "Screenshot desktop", group = "awesome"}),
+  awful.key({ "Shift" }, "Print",           function () awful.spawn(take_screenshot_selection) end,
+    {description = "Screenshot desktop selection", group = "awesome"}),
+  awful.key({ modkey, }, "s",      hotkeys_popup.show_help,
     {description="show help", group="awesome"}),
-  -- awful.key({ modkey,}, "w", function () mymainmenu:show() end,
+  -- awful.key({ modkey, }, "w", function () mymainmenu:show() end,
   --   {description = "show main menu", group = "awesome"}),
   awful.key({ modkey, "Control" }, "r", awesome.restart,
     {description = "reload awesome", group = "awesome"}),
@@ -615,7 +629,7 @@ awful.keyboard.append_global_keybindings({
       }
     end,
     {description = "lua execute prompt", group = "awesome"}),
-  awful.key({ modkey,}, "Return", function () awful.spawn(terminal) end,
+  awful.key({ modkey, }, "Return", function () awful.spawn(terminal) end,
     {description = "open a terminal", group = "launcher"}),
   awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
     {description = "run prompt", group = "launcher"}),
@@ -633,15 +647,15 @@ awful.keyboard.append_global_keybindings({
 
 -- Tags related keybindings
 awful.keyboard.append_global_keybindings({
-  awful.key({ modkey,}, "Right",  function () awful.screen.focus_relative( 1 * invert); clienttagmouseupdate() end,
+  awful.key({ modkey, }, "Right",  function () awful.screen.focus_relative( 1 * invert); clienttagmouseupdate() end,
     {description = "view next screen", group = "awesome"}),
-  awful.key({ modkey,}, "Left",   function () awful.screen.focus_relative( -1 * invert); clienttagmouseupdate() end,
+  awful.key({ modkey, }, "Left",   function () awful.screen.focus_relative( -1 * invert); clienttagmouseupdate() end,
     {description = "view previous tag", group = "tag"}),
-  awful.key({ modkey,}, "Up",  function () awful.tag.viewnext(); clienttagmouseupdate() end,
+  awful.key({ modkey, }, "Up",  function () awful.tag.viewnext(); clienttagmouseupdate() end,
     {description = "view next tag", group = "tag"}),
-  awful.key({ modkey,}, "Down",   function () awful.tag.viewprev(); clienttagmouseupdate() end,
+  awful.key({ modkey, }, "Down",   function () awful.tag.viewprev(); clienttagmouseupdate() end,
     {description = "view previous screen", group = "awesome"}),
-  awful.key({ modkey,}, "Escape", function () awful.tag.history.restore(); clienttagmouseupdate() end,
+  awful.key({ modkey, }, "Escape", function () awful.tag.history.restore(); clienttagmouseupdate() end,
     {description = "go back", group = "tag"}),
 })
 
@@ -1012,9 +1026,9 @@ client.connect_signal("request::titlebars", function(c)
       { -- Title
         align  = "center",
         widget = awful.titlebar.widget.titlewidget(c)
-    },
-    buttons = buttons,
-    layout  = wibox.layout.flex.horizontal
+      },
+      buttons = buttons,
+      layout  = wibox.layout.flex.horizontal
     },
     { -- Right
       awful.titlebar.widget.floatingbutton (c),
@@ -1121,7 +1135,7 @@ client.connect_signal("request::manage", function (c, context, hints)
   gears.protected_call(function()
     local deets = {}
     for i, prop in pairs(cstats) do
-        deets[prop] = c[prop]
+      deets[prop] = c[prop]
     end
     gears.debug.dump({"deets", deets})
     mouse.object_under_pointer():activate { context = "mouse_enter", raise = false }
@@ -1153,7 +1167,7 @@ client.connect_signal("request::manage", function (c, context, hints)
           if #tags>0 then
             c:tags(tags)
           else
-          -- c.screen = awful.tag.getscreen(tags[1])
+            -- c.screen = awful.tag.getscreen(tags[1])
           end
           awful.placement.no_overlap(c)
           awful.placement.no_offscreen(c)
